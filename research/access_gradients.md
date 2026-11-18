@@ -10,10 +10,13 @@ history read from bcfishpass's docs and SQL and from fresh's and link's `paramet
 
 ## What link does, and what this asks
 
-link blocks a species above the first stretch of stream steeper than its access gradient, read over 100 m: 15 % for
-chinook, chum, coho, pink, sockeye, grayling and kokanee, 20 % for steelhead and westslope cutthroat, 25 % for bull
-trout, rainbow, cutthroat and Dolly Varden (link's `inst/extdata/configs/default/parameters_fresh.csv`). link's overrides
-lift some of these barriers where fish records or confirmed habitat sit above them, by rules that differ by species.
+link blocks a species above the first stretch of stream steeper than its access gradient, read over 100 m. Its
+parameter table (`inst/extdata/configs/default/parameters_fresh.csv`) sets 15 % for chinook, chum, coho, pink, sockeye,
+grayling and kokanee, 20 % for steelhead and westslope cutthroat, and 25 % for bull trout, rainbow, cutthroat and Dolly
+Varden. link's `default` models nine of them (bull trout, the five salmon, steelhead, westslope cutthroat and grayling);
+kokanee and rainbow are paused (since link 0.76.0, 2026-11-01) and keep their class for their return, and cutthroat and
+Dolly Varden are not modelled (`link::lnk_config("default")`, link 0.78.1). link's overrides lift some of these barriers
+where fish records or confirmed habitat sit above them, by rules that differ by species.
 Those cuts decide which water can hold habitat at all, and where link breaks streams. This file asks where each number came from,
 and whether what fish are measured or seen to pass supports it.
 
@@ -55,18 +58,18 @@ cutthroat, bull trout, Dolly Varden and sometimes rainbow above 20 %.
 
 ## What the sources give, by species
 
-| species | link's class | what the sources give | data rows |
+| species | link's class (paused or unmodelled in brackets) | what the sources give | data rows |
 |---|---:|---|---|
 | chinook, coho, sockeye | 15 % | pass to 16 % (WDFW 2019) | 1167, 1170, 1171 |
 | pink | 15 % | pass to 12 % (WDFW 2019) | 1172 |
 | chum | 15 % | pass to 5 % (WDFW 2019) | 1169 |
 | steelhead | 20 % | pass to 20 % (WDFW 2019) | 1168 |
 | bull trout | 25 % | found up to 30 % (Cannings and Ptolemy 1998, after P. Bech, pers. comm.), which WDFW 2019's Chapter 7 cites as "often found above 30%" (p. 7-4); 20 % used and passing to 33 % recognised (WDFW 2019 p. 10-7); well above 20 % in stepped-pool reaches (BC 1998) | 1156, 1160, 1163 |
-| Dolly Varden | 25 % | 20 % used, passing to 33 % recognised (WDFW 2019; its Chapter 7 does not name Dolly Varden); well above 20 % (BC 1998) | 1161, 1164 |
-| rainbow, cutthroat | 25 % | resident cutthroat/rainbow: 20 % used, passing to 33 % recognised, the 33 % being cutthroat's (WDFW 2009 and 2019, after Jauquet 2002); sea-run cutthroat pass to 20 % (WDFW 2019); well above 20 % (BC 1998; rainbow "sometimes") | 1155, 1159, 1162, 1165, 1166, 1189 |
+| Dolly Varden | (25 %, not modelled) | 20 % used, passing to 33 % recognised (WDFW 2019; its Chapter 7 does not name Dolly Varden); well above 20 % (BC 1998) | 1161, 1164 |
+| rainbow, cutthroat | (25 %: rainbow paused, cutthroat not modelled) | resident cutthroat/rainbow: 20 % used, passing to 33 % recognised, the 33 % being cutthroat's (WDFW 2009 and 2019, after Jauquet 2002); sea-run cutthroat pass to 20 % (WDFW 2019); well above 20 % (BC 1998; rainbow "sometimes") | 1155, 1159, 1162, 1165, 1166, 1189 |
 | westslope cutthroat | 20 % | no gradient limit found; a maximum swimming speed of 3.55 m/s in a flume | 1184, 1188 |
 | grayling | 15 % | no gradient limit found; 1.5 m/s in a 30.5 m culvert stopped every fish under 300 mm and all but 5 of 61 longer ones | 1185, 1186 |
-| kokanee | 15 % | nothing found | 1187 |
+| kokanee | (15 %, paused) | nothing found | 1187 |
 
 The basis the passage literature gives is a fish's leap and burst speed, not a gradient. Adult steelhead burst at 13.7
 to 26.5 ft/s and chinook, coho and sockeye at 10 to 22 ft/s, while pink and chum, at 7.7 to 15.0 ft/s, were estimated
@@ -85,7 +88,7 @@ speeds do not separate chum from pink.
   that is the track's next piece (the records above modelled gradient barriers).
 - **Resident trout and char.** Bull trout and cutthroat are recorded above 25 %, and cutthroat, bull trout, Dolly Varden
   and sometimes rainbow above 20 % (BC 1998); Washington still sets resident trout and bull trout/Dolly Varden use at
-  20 %. Whether link's 25 % blocks populations it should not is the same records
+  20 %. Whether link's 25 % for bull trout, the one species it now applies 25 % to, blocks populations it should not is the same records
   question, for #131's access gate.
 - **Not held:** Mesa et al. 2008 (bull trout sprint speeds) and Lauritzen et al. 2010 (kokanee jumping) are paywalled
   with no abstract to quote; Jauquet 2002, Reiser and Peacock 1985 and Bell 1973 are seen only as cited.
@@ -99,6 +102,7 @@ speeds do not separate chum from pink.
   as Table 10.1, p. 10-7, and Table 11.1, p. 11-4; crossed: passes, blank: impassable) and WDFW 2009's Table 9.2 (p. 9-7,
   hatched for passing, strata to 16-20 %), which agree for the seven anadromous species.
 - Capability rows carry no model parameter (`knw_literature_read()` refuses one), so they never fill an access cell;
-  `0280`'s access grid asks only that every species link models has an access-gradient row, a value or a `none`.
+  `0280`'s access grid asks only that every species link models or has paused (`link::lnk_config("default")`) has an
+  access-gradient row, a value or a `none`.
 - The evidence for bull trout's 25 % in `habitat_literature.md` ("BT has no cited source anywhere in bcfishpass") is
   this file's 25 % lineage, traced one step further back.

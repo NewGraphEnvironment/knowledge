@@ -38,7 +38,7 @@
 # (a value, or a `none` row saying what was searched). THERMAL is the same check
 # for temperature limits and degree-day totals, by species x cell (see below), and
 # FLOW for flow needs and the depth and velocity a fish meets. ACCESS asks, of every species link
-# models, whether its access gradient has been looked for (#234).
+# models or has paused, whether its access gradient has been looked for (#234).
 #
 # The intrinsic-potential model registry (data/ip_model_registry.csv, read with
 # knw_ip_read()) is gated the same way: each row's flow quote, and its validation
@@ -53,7 +53,7 @@
 # NEEDS   pdftotext; ocrmypdf for an OCR row; commonmark, xml2 and stringi for the research files
 # INPUT   data/literature_evidence.csv, data/ip_model_registry.csv,
 #         data/life_history_timing.csv,
-#         the installed link's configs/default/parameters_fresh.csv (the species the access grid asks about),
+#         link::lnk_config("default") (the modelled and paused species the access grid asks about),
 #         ~/Zotero/zotero.sqlite (a checked copy of the file and its -wal)
 # OUTPUT  scripts/logs/habitat/<yyyymmdd>_literature_verify.csv, one row per
 #         evidence row (status, PDF file, every PDF page the quote matches), and
@@ -80,17 +80,15 @@ COVERAGE <- list(
                 "rear_lake_ha_min", "rear_wetland_ha_min", "access_gradient_max",
                 "cluster_bridge_gradient", "cluster_bridge_distance"))
 
-# Each species link's default models has an access gradient (parameters_fresh.csv's access_gradient_max), so the
-# species are read from the installed link, as 0310 reads its config: a species link adds is asked about at once. A
+# Each species link's default models has an access gradient (parameters_fresh.csv's access_gradient_max). The species
+# come from link itself, as 0310 asks it (link::lnk_config("default")), not from re-reading its parameter table, which
+# also holds species link does not model: the modelled ones and the paused ones, which keep their class and return. A
 # species' cell is met by any row bearing on that parameter: a value, a qualitative statement, or a `none` row
 # saying what was searched. A standard for FISH, SALMON or SALMONIDS fills no species' cell.
-link_params <- utils::read.csv(system.file("extdata/configs/default/parameters_fresh.csv", package = "link",
-                                          mustWork = TRUE))
-# [[ ]] after the name check, never $: $ partial-matches, so a renamed column could answer for species_code
-if (!"species_code" %in% names(link_params)) stop("link's default parameters_fresh.csv has no species_code column", call. = FALSE)
-ACCESS <- list(species = link_params[["species_code"]], parameter = "access_gradient_max")
-if (!length(ACCESS$species) || anyNA(ACCESS$species) || any(!nzchar(ACCESS$species))) {
-  stop("link's default parameters_fresh.csv lists no species, or a blank one", call. = FALSE)
+link_cfg <- link::lnk_config("default")
+ACCESS <- list(species = unique(c(link_cfg[["species"]], link_cfg[["species_paused"]])), parameter = "access_gradient_max")
+if (!length(link_cfg[["species"]]) || anyNA(ACCESS$species) || any(!nzchar(ACCESS$species))) {
+  stop("link::lnk_config(\"default\") names no modelled species, or a blank one", call. = FALSE)
 }
 
 # A cell is a water-temperature limit or a degree-day total for one life stage. A valued
