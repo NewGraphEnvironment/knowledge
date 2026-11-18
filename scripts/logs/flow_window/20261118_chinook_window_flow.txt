@@ -1,6 +1,6 @@
-stop rule: research/chinook_window_flow.md at d6eff92f98876efa256ace0979cb2d4cd2d2c32f 
-HEAD:      d6eff92f98876efa256ace0979cb2d4cd2d2c32f 
-started:   2026-11-18T02:16:35Z 
+stop rule: research/chinook_window_flow.md at 33bd5d8b019ced84c3a2fd5976204854db41b325 
+HEAD:      fe4558de482440a05820b043aef50601b3085f30 
+started:   2026-11-18T02:57:10Z 
 
 published rule: mad>=0.75|g<=0.09|Q3@D1000 (run 20261103_0838 )
 flow load:      wet_db_load(): discharge/fwa/v1/segment_monthly, scenario historical last loaded from https://fresh-bc.s3.us-west-2.amazonaws.com/discharge/fwa/v1/manifest.json (built 2026-10-24T12:23:01Z, wet b4bbc50) 
@@ -13,16 +13,16 @@ median window / MAD: rearing at visits 0.5903, spawning at the 997 rivers found 
 matched thresholds: stream 0.4427 m3/s (for 0.75), river 3.1150 m3/s (for 3)
 
 duckdb keeps downloaded extensions and secrets in a temporary directory:
-ℹ /tmp/RtmpCbBxBC/duckdb
+ℹ /tmp/RtmpsgML9d/duckdb
 This is removed when the R session ends.
 • Extensions are re-downloaded each session.
 • Secrets are lost.
 ℹ Run duckdb(shared_home = TRUE) (or create ~/.duckdb) to keep them (suitable for most users).
 ℹ Run duckdb(shared_home = FALSE) to accept the temporary directory (and silence this message).
 ℹ See ?duckdb_storage for details and alternatives.
-parts (wet build 2026-11-15T21:39:06Z): one group (BABL) read in 14.0 s; 47 groups to read
+parts (wet build 2026-11-15T21:39:06Z): one group (BABL) read in 13.6 s; 47 groups to read
 duckdb keeps downloaded extensions and secrets in a temporary directory:
-ℹ /tmp/RtmpCbBxBC/duckdb
+ℹ /tmp/RtmpsgML9d/duckdb
 This is removed when the R session ends.
 • Extensions are re-downloaded each session.
 • Secrets are lost.
@@ -30,7 +30,7 @@ This is removed when the R session ends.
 ℹ Run duckdb(shared_home = FALSE) to accept the temporary directory (and silence this message).
 ℹ See ?duckdb_storage for details and alternatives.
 duckdb keeps downloaded extensions and secrets in a temporary directory:
-ℹ /tmp/RtmpCbBxBC/duckdb
+ℹ /tmp/RtmpsgML9d/duckdb
 This is removed when the R session ends.
 • Extensions are re-downloaded each session.
 • Secrets are lost.
@@ -55,4 +55,4 @@ daily, published parts: median spawning window / MAD at the rivers 0.9518; 0 riv
 
 verdict: CONTINUE: a reading reaches 5 % of visits or of visits with CH; file Phase 2 
 wrote data/tune/flow_window 
-finished: 2026-11-18T02:23:53Z 
+finished: 2026-11-18T03:03:20Z 
