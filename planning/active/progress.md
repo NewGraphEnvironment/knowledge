@@ -23,3 +23,6 @@
 - Filed #226 (#105 Phase 2, continue verdict), #227 (rest of #42: 7-day minimum and dry years), #228 (rest of #108); #42, #105, #108 bodies carry an outcome section. Research write-up of Phase 1 in `research/chinook_window_flow.md`.
 - Zotero: duplicate NuSEDS item trashed into `fisheriesandoceanscanadaNuSEDSNewSalmon` (collection, `dc:replaces`, snapshot moved); the Cottonwood item's creators split and its key cleared for Better BibTeX to derive (waiting on sync).
 - Docs: `scripts/README.md` (0340 in the run order; the timing section's NuSEDS rows and the segment window script), `CLAUDE.md` layout (`data/nuseds/`, `data/flow_window/`, `data/tune/flow_window/`). NEWS is written by the release commit at merge, so its text goes in the PR body.
+- Cottonwood item's key re-derived by Better BibTeX: `dolighan_britishcolumbiaconservationfoundation2013SummaryFisheries` (no `;`).
+- #42 table rebuilt over BULK, MORR, UFRA, COTR (2,020,158 rows; log `scripts/logs/flow_window/20261118_segment_window_flow.txt`); summary in `research/chinook_window_flow.md`. Monthly basis within 5 % of daily on 75 % of rows; drifts on short windows cutting fast-moving months; wet's two sources differ > 2x on 13-87 % of segments by window.
+- Full suite: 425 tests, 0 failed, 3 skipped (a schema this database lacks, KNW_CHECK_GRADES, the cut-points stage on m4).

@@ -61,7 +61,7 @@ No comments on #174 or its members. What exploration found that shapes the plan:
 
 ## Phase 1: Batch 8, timing table and NuSEDS (#31, #96, #108 piece 1)
 
-- [ ] **crate#74** (issue filed; PR from the `crate-nuseds` worktree, branch `nuseds-schema`): register
+- [x] **crate#74** (issue filed; PR NewGraphEnvironment/crate#75 open from the `crate-nuseds` worktree, branch `nuseds-schema`): register
   `dfo / nuseds_all_areas` with the `2026-06-01` variant as received (Latin-1, declared as the variant's
   `encoding`), lower snake canonical names, counts `double`, year, inspections and ids `integer`, dates as
   written strings. It carries crate#41's first fix (read every column as character) with a test that
@@ -87,7 +87,7 @@ No comments on #174 or its members. What exploration found that shapes the plan:
   upload, hand Al the bare command.
 - [x] `inst/NOTICE.md`: an OGL-Canada section for NuSEDS (DFO), naming the published prefix and the
   release record; `data/nuseds_README.md` carries the attribution.
-- [ ] Zotero: trash `canadaNuSEDSNewSalmon` (its relations merged into the kept item through the Web
+- [x] Zotero: trash `canadaNuSEDSNewSalmon` (its relations merged into the kept item through the Web
   API). Check no store names the Cottonwood item, then fix its creators so its key has no `;`.
 - [x] **#31:** read `officeofthewetsuweten2013WetsuwetenTitle` p. 24 from the PDF. Add the end date
   if the source gives one. If it does not, the row's note says the end is unsourced and consumers drop
@@ -134,10 +134,10 @@ No comments on #174 or its members. What exploration found that shapes the plan:
     timed on one group first, with wet's daily build recorded;
   - small tables to `data/tune/flow_window/` (tracked; `0325`, `0330` and `knw_thresholds_table()` never
     read it), and a log.
-- [ ] `data-raw/segment_window_flow.R` (#42 piece 1): every segment in each group of the timing table
+- [x] `data-raw/segment_window_flow.R` (#42 piece 1): every segment in each group of the timing table
   (BULK, MORR, UFRA, COTR), each complete stage window, both sources: the daily-basis window mean, with
   the monthly basis beside it, to ignored `data/flow_window/segment_windows.parquet`.
-- [ ] Write up `research/chinook_window_flow.md`: the plain-language walk (what the rule reads now, what
+- [x] Write up `research/chinook_window_flow.md`: the plain-language walk (what the rule reads now, what
   was asked, how judged, what came back), the spread and flips by group, the verdict against the rule set
   beforehand, the flow load, the caveats, and #42's summary by group and stage. Link it from
   `research/README.md` and from #42's and #105's bodies.
@@ -150,7 +150,8 @@ No comments on #174 or its members. What exploration found that shapes the plan:
 
 ## Phase 3: Wrap-up
 
-- [ ] `DESCRIPTION` crate floor (the release carrying #74), `NEWS.md`, `_pkgdown.yml` reference entries,
+- [x] `DESCRIPTION` crate floor (owed, below: the release carrying #74), `NEWS.md` (written by the release commit; its
+  line is drafted in the PR body), `_pkgdown.yml` reference entries,
   `scripts/README.md` run order (`0340`), `CLAUDE.md` layout lines (`data/nuseds/`,
   `data/nuseds_release.csv`, `data/nuseds_README.md`, `data/flow_window/`, `data/tune/flow_window/`).
 - [x] Tick batches 8 and 9 in `planning/backlog.md`: `/gh-pr-merge` step 9c ticks the move on merge, so the file is
@@ -158,13 +159,14 @@ No comments on #174 or its members. What exploration found that shapes the plan:
 
 ## Owed at the end (reported, done after merge)
 
-- [ ] crate release with NuSEDS registered, if it is still unmerged when the knowledge PR opens.
+- [ ] crate release with NuSEDS registered (NewGraphEnvironment/crate#75), then `crate (>= <that version>)` in
+  `DESCRIPTION`, if it is still unmerged when the knowledge PR opens.
 - [ ] `PUBLISH=TRUE Rscript scripts/0340-nuseds-build.R` once crate has released #74, so the receipt names a released
   crate (the local build ran 2026-11-18; nothing is uploaded yet).
 
 ## Validation
 
-- [ ] Tests pass
+- [x] Tests pass
 - [ ] `/code-check` clean (once over the branch with `/code-check branch`)
 - [ ] PWF checkboxes match landed work
 - [ ] `/planning-archive` on completion

@@ -127,6 +127,44 @@ reaches 3.11 m³/s in the spawning window but carries under 3 m³/s of MAD. That
 
 The result does not rest on the monthly approximation.
 
+## Window flow on every segment (#42)
+
+`data-raw/segment_window_flow.R` reads every complete window of `data/life_history_timing.csv` onto every FWA segment
+of its group. Both of wet's sources are kept, each from wet's published build of 2026-11-15, on the daily basis (the
+mean of the window's own days of the year) with the monthly basis beside it. It writes 2,020,158 rows to ignored
+`data/flow_window/segment_windows.parquet`:
+
+| group | segments with flow | windows |
+|---|---|---|
+| BULK | 30,037 | 11 |
+| MORR | 22,218 | 26 |
+| UFRA | 30,522 | 2 |
+| COTR | 20,480 | 2 |
+
+The BULK coho migration has no end (#31) and is skipped. There is no `pick` column, because wet's readers return
+none (NewGraphEnvironment/wet#177), and no 7-day minimum (#227: wet publishes mean days, not each year's days).
+
+**How far the monthly basis sits from the daily one.** Over every row, the monthly basis is within 5 % of the daily
+one on 75 %. For the chinook windows, the median and 90th-percentile gap over segments and both sources are:
+
+| group | stage | window | median gap | 90th percentile | segments whose two sources differ more than twofold |
+|---|---|---|---|---|---|
+| BULK | migration | 05-01 to 08-01 | 0.1 % | 0.2 % | 16.5 % |
+| BULK | spawning | 08-01 to 09-15 | 1.7 % | 3.8 % | 53.6 % |
+| BULK | fry migration | 07-15 to 09-07 | 10.4 % | 28.2 % | 48.5 % |
+| MORR | emergence | 03-15 to 04-15 | 27.8 % | 135.2 % | 50.1 % |
+| MORR | spawning | 09-01 to 10-07 | 1.3 % | 6.8 % | 46.2 % |
+| UFRA | migration | 04-01 to 08-10 | 1.6 % | 2.2 % | 12.7 % |
+| UFRA | spawning | 08-11 to 09-05 | 7.0 % | 16.8 % | 35.5 % |
+| COTR | migration | 04-01 to 08-09 | 0.2 % | 0.7 % | 35.2 % |
+| COTR | spawning | 08-10 to 09-06 | 6.4 % | 14.5 % | 86.7 % |
+
+The monthly basis holds for windows of whole months. It drifts for short windows that cut a month where flow is moving
+fast: spring emergence on the freshet's rise, and fry migration and the interior spawning windows on the late-summer
+fall. The two sources disagree more than the bases do. On spawning windows, a third to almost nine-tenths of
+segments differ more than twofold between wet's balance and PCIC's routed flow, so a window flow on one source alone
+says little about a small stream.
+
 ## Caveats
 
 - **Phase 1 counts flips; it does not score them.** A flip says the window reading takes a different set of visits.
