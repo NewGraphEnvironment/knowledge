@@ -1,3 +1,7 @@
+# knowledge 0.4.44
+
+* NuSEDS, DFO's salmon escapement records, read in one place through crate (`knw_nuseds_fetch()`, `knw_nuseds_records()`), each record saying what kind of evidence it is, and published as `knowledge/nuseds/v1` (#108). Chinook timing for the upper Fraser (UFRA, with Swift Creek) and the Cottonwood (COTR) from NuSEDS spawn dates and the literature (#96, #31). Late-summer flow against MAD in chinook rearing passes the stop rule set before the run, so a tuning on window flow follows (#105, #226); window flow on every segment for every timing window (#42). `research/chinook_window_flow.md`.
+
 # knowledge 0.4.43
 
 * The README's Ecosystem table is rendered from the shared ecosystem registry, between its `ecosystem.yml` markers, so each package's role reads the same in every New Graph package README and links that package's published site (#200).
