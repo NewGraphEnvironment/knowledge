@@ -110,3 +110,28 @@ been field verified as a predictor of fish habitat" (§2, text line ~127); and i
 maximum gradient for fish passage in Version 1 of the model and is still the gradient barrier threshold most often
 used." No species is named and no source is cited: 25 % is the provincial fish-habitat model's species-blind cut-off,
 which bcfishpass applies to BT, RB, CT and DV.
+
+## The outside literature (sourcing sweep, 2026-11-18)
+
+A background agent's sweep (50 sources, `scratchpad` file not tracked; read levels FULL, ABSTRACT, SECONDARY per
+source) and checks of its load-bearing quotes:
+- **Mount et al. 2011** (Streamline Watershed Management Bulletin 14(2), p. 9; checked in the PDF): "Typically,
+  grades exceeding 20% are considered a barrier for anadramous species (B.C. Ministry of Forests 1998).
+  Nevertheless, some species (e.g., Bull Trout and Dolly Varden/Cutthroat) can utilize reaches with a sustained
+  slope of 25–30% (Cannings and Ptolemy 1998). Considering these values, Stream Gradient Segments with slopes
+  greater than 25% were considered barriers." This is BC's 25 %, which Norris and Mount 2016 call Version 1's.
+- **BC Fish-stream Identification Guidebook 1998** (2nd ed., v2.1; the gov.bc.ca PDF 404s, read from the Wayback copy;
+  checked): "areas of ≥ 20% grade" are too steep for fish use; reaches "< 20% will be designated as fish streams by
+  default"; cutthroat, bull trout, Dolly Varden and sometimes rainbow "observed to occur in very steep streams, well
+  in excess of 20% gradient". No study cited for the 20 %.
+- **Cannings and Ptolemy 1998** is held (`cannings_ptolemy1998RareFreshwater`, two PDFs on one item: `N2IJDSIN`
+  Bib77170.pdf and `PWRE9XAM` the OCRed copy, md5s differ). Its only gradient statement found: "Bull trout can be
+  found in high gradient areas (up to 30%) where you would not expect to find other game fish species (P. Bech, pers.
+  comm.)". Nothing on Dolly Varden or cutthroat gradients was found in it, so Mount et al.'s "Bull Trout and Dolly
+  Varden/Cutthroat ... 25–30%" widens its source, and the source is a personal communication.
+- **Bjornn and Reiser 1991** Table 4.2 (held, a scan; OCR cached in `data/rag/ocr/0a10…ac4.txt`, so rows quote it as
+  `ocr`): darting speeds and maximum jump heights by species after Bell 1986 and Reiser and Peacock 1985.
+- **Powers and Orsborn 1985** Table 1 (BPA; checked): Bell's speeds by species; "Pink & Chum salmon values estimated
+  from leap heights of 3 to 4 ft at waterfalls".
+- No primary source gives 15 % for salmon (WDFW's 16 % is the nearest), or any limit for grayling or kokanee, or 25 %
+  for rainbow, or 20 % for westslope cutthroat.

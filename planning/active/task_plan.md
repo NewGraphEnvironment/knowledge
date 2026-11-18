@@ -65,11 +65,11 @@ passage reports but few swimming or leaping performance papers (Katopodis & Gerv
 
 ## Phase 3: the collection
 
-- [ ] `data/passage_limits_members.csv` (held items: the 12 keys behind the 35 rows and the held passage sources) and
+- [x] `data/passage_limits_members.csv` (held items: the 12 keys behind the 35 rows and the held passage sources) and
       `data/passage_limits_additions.csv` (new works: `itemType`, `title`, `creators`, `DOI` or grey-literature
       metadata, `pdf` URL or `none`, `why`; `override` where CrossRef is wrong). Check each DOI row's built title and
       creators against its PDF's title page before the live run.
-- [ ] One sitting with Al: merge `BUYCVFJG` into `VDT8YQJT` (WDFW 2009) and `9EAU75IL` into `TK4PDDE2` (Norris and
+- [x] One sitting with Al: merge `BUYCVFJG` into `VDT8YQJT` (WDFW 2009) and `9EAU75IL` into `TK4PDDE2` (Norris and
       Mount 2016) through `/zotero-api`; `0270 --collection passage_limits --parent ESNB4BQB` dry run, live, then a
       no-op dry run.
 
