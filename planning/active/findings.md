@@ -84,3 +84,19 @@ What each class should rest on, if the lineage is sound:
   in 323207783 (2026-05-02, link#107, "Derive species presence cols from CSV header"); fresh's own table gained KO in
   4325cd4c (2026-04-10, #121, SK/KO spawning-lake proximity). Neither commit names a source: both freshwater species
   ride the anadromous salmon class.
+
+## WDFW 2009, read directly (2026-11-18)
+
+`wdfw00061.pdf` (240 pages, fetched from WDFW's publications page into the ignored `data/rag/pdf/passage_limits/`):
+- **p. 6-1, natural barriers** "that would exclude most adult salmonids": a waterfall > 3.7 m, "a stream reach having
+  a sustained gradient exceeding 20% for 160 or more meters", or > 16 % for 160 m in a channel < 0.6 m wide (Western
+  Washington) or < 0.9 m (Eastern). Then: "bull trout are often found above 30% gradient (Cannings and Ptolemy 1998)
+  and cutthroat trout have been found in gradients up to 33% (Jauquet 2002), for purposes of this manual, the 20%
+  gradient threshold has been accepted as the upper limit for most adult salmonids."
+- **p. 9-7, Table 9.2** (PDF page 103, read from the rendered page: passability is drawn, not printed): the passable
+  strata end at 5 % for chum, 12 % for pink, 16 % for coho, sockeye and chinook, 20 % for steelhead and sea-run
+  cutthroat; bull trout (with Dolly Varden) and resident rainbow and cutthroat are shaded as using every stratum to
+  20 %, the table's top. p. 9-4: "coho salmon ... may ascend stream reaches up to16%".
+- So the 16 % that Rebellato et al. 2024 cite is WDFW's coho, sockeye and chinook stratum; WDFW's chum (5 %) and
+  pink (12 %) limits are lower than the 15 % class BC applies to them, which the existing CM and PK rows (Rebellato's
+  15 %) do not show. Gradients are over a sustained 160 m, not bcfishpass's 100 m.
