@@ -57,7 +57,7 @@ passage reports but few swimming or leaping performance papers (Katopodis & Gerv
       Myrick, Katopodis & Gervais, Peterson/Thompson-style leap studies), per species.
 - [x] Trace the classes' lineage: bcfishpass's docs and code, the provincial method (Norris & Mount 2016, held),
       and what each cites.
-- [ ] GR, KO, RB, CT and DV appear in no bcfishpass doc: trace their classes in fresh's and link's histories
+- [x] GR, KO, RB, CT and DV appear in no bcfishpass doc: trace their classes in fresh's and link's histories
       (`git log -S` on `parameters_fresh.csv`), and link `research/habitat_literature.md`'s BT trace rather than
       restating it.
 - [ ] `/lit-search` over `habitat_modelling` and `bull_trout_grayling` for passage values already held; web and

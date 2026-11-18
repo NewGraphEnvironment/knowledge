@@ -72,3 +72,15 @@ What each class should rest on, if the lineage is sound:
   Blank et al. 2020 (rainbow and westslope cutthroat in an open-channel flume), Trotter 2000 (last-fish gradients),
   D'Angelo and Muhlfeld 2011 (BT and WCT distribution, waterfall barriers), the Upper Fording River fish-passage
   stressor report (WCT movement, culvert and drying reach).
+
+## The classes for GR, KO, RB, CT and DV (2026-11-18)
+
+- **bcfishpass's code** carries more than its docs: `model/01_access/sql/model_access_ct_dv_rb.sql` blocks CT, DV
+  and RB at `GRADIENT_25` and `GRADIENT_30`, beside `model_access_bt.sql` (25 %), `model_access_st.sql` and
+  `model_access_wct.sql` (20 %) and `model_access_ch_cm_co_pk_sk.sql` (15 %). No file cites a source.
+- **fresh** first carried RB, CT and DV at 0.25 in aac96efe (2026-03-18, #56, the coho pipeline), as bcfishpass's
+  values; the commit names no source.
+- **GR and KO** have no bcfishpass access model. Both entered link's `configs/default/parameters_fresh.csv` at 0.15
+  in 323207783 (2026-05-02, link#107, "Derive species presence cols from CSV header"); fresh's own table gained KO in
+  4325cd4c (2026-04-10, #121, SK/KO spawning-lake proximity). Neither commit names a source: both freshwater species
+  ride the anadromous salmon class.
