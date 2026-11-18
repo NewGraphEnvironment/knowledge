@@ -23,8 +23,10 @@ newest the record lists.}
 }
 \value{
 A list: \code{path} (the zip), \code{release} (\code{YYYYMMDD}), \code{md5}, \code{url} (where
-it came from, \code{NA} when the release was already held) and \code{downloaded}
-(\code{TRUE} when this call fetched it).
+it came from) and \code{fetched} (when, UTC), both kept in \code{source.dcf} beside
+the zip when it was downloaded and read back from there when it is held
+(\code{NA} for a zip that has none), and \code{downloaded} (\code{TRUE} when this call
+fetched it).
 }
 \description{
 NuSEDS (Fisheries and Oceans Canada's New Salmon Escapement Database System)

@@ -39,9 +39,13 @@ test_that("the fetcher downloads the newest release once, then returns it held",
   expect_true(a$downloaded)
   expect_true(file.exists(a$path))
   expect_identical(a$md5, unname(tools::md5sum(a$path)))
+  expect_match(a$fetched, "^[0-9]{4}-[0-9]{2}-[0-9]{2}T")
   b <- knw_nuseds_fetch(dir)
   expect_false(b$downloaded)
   expect_identical(b$md5, a$md5)
+  # where and when it came from survive the download, whether or not a run recorded them
+  expect_identical(b$url, "https://example.invalid/20260601.zip")
+  expect_identical(b$fetched, a$fetched)
   expect_identical(got, "https://example.invalid/20260601.zip")
 })
 
@@ -54,6 +58,7 @@ test_that("a named release already held is returned without asking the portal", 
   x <- knw_nuseds_fetch(dir, release = "20251103")
   expect_false(x$downloaded)
   expect_identical(x$path, dest)
+  expect_true(is.na(x$url) && is.na(x$fetched))
 })
 
 test_that("a release the record does not list, or a malformed one, is refused", {

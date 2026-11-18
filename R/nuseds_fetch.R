@@ -19,8 +19,10 @@
 #' @param dataset `character(1)` the portal's dataset id for NuSEDS.
 #' @param url `character(1)` the CKAN site.
 #' @return A list: `path` (the zip), `release` (`YYYYMMDD`), `md5`, `url` (where
-#'   it came from, `NA` when the release was already held) and `downloaded`
-#'   (`TRUE` when this call fetched it).
+#'   it came from) and `fetched` (when, UTC), both kept in `source.dcf` beside
+#'   the zip when it was downloaded and read back from there when it is held
+#'   (`NA` for a zip that has none), and `downloaded` (`TRUE` when this call
+#'   fetched it).
 #' @export
 #' @examples
 #' \dontrun{
@@ -68,13 +70,19 @@ knw_nuseds_fetch <- function(dir = "data/nuseds", release = NULL,
          "), not one CSV", call. = FALSE)
   }
   dir.create(dirname(dest), recursive = TRUE, showWarnings = FALSE)
+  fetched <- format(Sys.time(), "%Y-%m-%dT%H:%M:%SZ", tz = "UTC")
+  # where and when, beside the zip, written before it: a run that stops after the download still knows both
+  write.dcf(data.frame(url = res$url[[pick]], fetched = fetched), file.path(dirname(dest), "source.dcf"))
   if (!file.copy(tmp, dest)) stop("could not write ", dest, call. = FALSE)
   list(path = dest, release = release, md5 = unname(tools::md5sum(dest)), url = res$url[[pick]],
-       downloaded = TRUE)
+       fetched = fetched, downloaded = TRUE)
 }
 
 .knw_nuseds_held <- function(path, release) {
-  list(path = path, release = release, md5 = unname(tools::md5sum(path)), url = NA_character_, downloaded = FALSE)
+  src <- file.path(dirname(path), "source.dcf")
+  s <- if (file.exists(src)) read.dcf(src, fields = c("url", "fetched"))[1, ] else c(url = NA, fetched = NA)
+  list(path = path, release = release, md5 = unname(tools::md5sum(path)), url = unname(s[["url"]]),
+       fetched = unname(s[["fetched"]]), downloaded = FALSE)
 }
 
 # the record's resources, name and url, through the CKAN API

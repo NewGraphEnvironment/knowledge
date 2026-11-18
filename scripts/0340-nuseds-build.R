@@ -98,11 +98,11 @@ if (f$release == "20260601") {
 dir_rel <- dirname(f$path)
 csv <- file.path(dir_rel, "nuseds_records.csv")
 utils::write.csv(x, csv, row.names = FALSE, na = "", fileEncoding = "UTF-8")
-# one row per release, rewritten on every run so it names the code that ran last (this commit, this crate); where
-# the zip was already held, the download's URL and date carry forward from the row before
+# one row per release, rewritten on every run so it names the code that ran last (this commit, this crate); the
+# download's URL and date come from source.dcf beside the zip (knw_nuseds_fetch()), else from the row before
 row <- data.frame(release = f$release, zip_md5 = f$md5, zip_url = if (is.na(f$url)) "" else f$url,
                   rows = as.character(nrow(x)), crate_schema = crate_schema,
-                  fetched = format(Sys.time(), "%Y-%m-%d", tz = "UTC"),
+                  fetched = if (is.na(f$fetched)) "" else substr(f$fetched, 1, 10),
                   knowledge_commit = knowledge_git$commit, stringsAsFactors = FALSE)
 old <- if (is.null(rec) || !nrow(rec)) rec[0, , drop = FALSE] else rec[rec$release == f$release, , drop = FALSE]
 if (nrow(old) > 1L) stop(path_record, " holds release ", f$release, " twice", call. = FALSE)
@@ -110,10 +110,9 @@ if (nrow(old)) {
   if (!identical(old$rows, row$rows)) {
     stop("release ", f$release, " gave ", row$rows, " rows; recorded ", old$rows, call. = FALSE)
   }
-  if (!f$downloaded) {
-    row$zip_url <- old$zip_url
-    row$fetched <- old$fetched
-  }
+  # a zip held from before the fetcher kept source.dcf: the row before is the only record of where and when
+  if (!nzchar(row$zip_url)) row$zip_url <- old$zip_url
+  if (!nzchar(row$fetched)) row$fetched <- old$fetched
 }
 rec <- rbind(if (is.null(rec)) NULL else rec[rec$release != f$release, , drop = FALSE], row)
 rec <- rec[order(rec$release), , drop = FALSE]
