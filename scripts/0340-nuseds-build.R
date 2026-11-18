@@ -51,7 +51,15 @@ knowledge_git <- .knw_git_state()
 # installed crate's version and the md5 of the schema it read
 crate_yaml <- system.file("extdata/schemas/dfo/nuseds_all_areas.yaml", package = "crate")
 if (!nzchar(crate_yaml)) stop("the installed crate has no dfo/nuseds_all_areas registration (crate#74)", call. = FALSE)
-crate_schema <- paste0("crate ", utils::packageVersion("crate"), " schema md5 ", unname(tools::md5sum(crate_yaml)))
+# a version string names a release, not the code that read the file (a branch build carries the last release's
+# number), so crate is named by its commit too; a publish refuses a crate with none (a local R CMD INSTALL)
+crate_sha <- utils::packageDescription("crate")$RemoteSha
+if (is.null(crate_sha) || !nzchar(crate_sha)) {
+  if (publish) stop("the installed crate has no RemoteSha: install it from GitHub before PUBLISH=TRUE", call. = FALSE)
+  crate_sha <- "none (a local build)"
+}
+crate_schema <- paste0("crate ", utils::packageVersion("crate"), " commit ", crate_sha, " schema md5 ",
+                       unname(tools::md5sum(crate_yaml)))
 cat("crate:", crate_schema, "\n")
 
 # ---- the release ----
@@ -90,22 +98,27 @@ if (f$release == "20260601") {
 dir_rel <- dirname(f$path)
 csv <- file.path(dir_rel, "nuseds_records.csv")
 utils::write.csv(x, csv, row.names = FALSE, na = "", fileEncoding = "UTF-8")
+# one row per release, rewritten on every run so it names the code that ran last (this commit, this crate); where
+# the zip was already held, the download's URL and date carry forward from the row before
 row <- data.frame(release = f$release, zip_md5 = f$md5, zip_url = if (is.na(f$url)) "" else f$url,
                   rows = as.character(nrow(x)), crate_schema = crate_schema,
                   fetched = format(Sys.time(), "%Y-%m-%d", tz = "UTC"),
                   knowledge_commit = knowledge_git$commit, stringsAsFactors = FALSE)
-# one row per release read through one crate schema: the same pair again must give the same rows
-same <- if (is.null(rec) || !nrow(rec)) logical() else rec$release == f$release & rec$crate_schema == crate_schema
-if (any(same)) {
-  keep <- rec[same, , drop = FALSE]
-  if (!identical(keep$rows, row$rows)) stop("release ", f$release, " gave ", row$rows, " rows; recorded ", keep$rows,
-                                           call. = FALSE)
-} else {
-  rec <- rbind(rec, row)
-  rec <- rec[order(rec$release), , drop = FALSE]
-  utils::write.csv(rec, path_record, row.names = FALSE, na = "")
-  cat("\nrecorded release", f$release, "in", path_record, "\n")
+old <- if (is.null(rec) || !nrow(rec)) rec[0, , drop = FALSE] else rec[rec$release == f$release, , drop = FALSE]
+if (nrow(old) > 1L) stop(path_record, " holds release ", f$release, " twice", call. = FALSE)
+if (nrow(old)) {
+  if (!identical(old$rows, row$rows)) {
+    stop("release ", f$release, " gave ", row$rows, " rows; recorded ", old$rows, call. = FALSE)
+  }
+  if (!f$downloaded) {
+    row$zip_url <- old$zip_url
+    row$fetched <- old$fetched
+  }
 }
+rec <- rbind(if (is.null(rec)) NULL else rec[rec$release != f$release, , drop = FALSE], row)
+rec <- rec[order(rec$release), , drop = FALSE]
+utils::write.csv(rec, path_record, row.names = FALSE, na = "")
+cat("\nrecorded release", f$release, "in", path_record, "(", knowledge_git$commit, ")\n")
 
 # ---- the published set ----
 tables <- data.frame(table = "nuseds_records", source = csv, script = "scripts/0340-nuseds-build.R",
