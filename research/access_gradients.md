@@ -3,7 +3,7 @@
 **Verified:** 2026-11-18 · **Issues:** #234 (this), the first piece of the access track (#132); split from backlog move 9
 (#178) · **Produced by:** `data/literature_evidence.csv` data rows 1154-1189, gated by
 `scripts/0280-literature-verify.R` (log `scripts/logs/habitat/20261118_literature_verify.csv`) and audited for meaning
-in rounds (`planning/active/audit-r*.md`, archived with #178); sources in the group
+in six rounds (`planning/archive/2026-11-issue-178-fish-passage-literature/audit-r*.md`); sources in the group
 library's `Fisheries/Fish Passage/passage_limits` collection (`data/passage_limits_{members,additions}.csv`, `scripts/0270`) and the `fish_passage` store; the classes'
 history read from bcfishpass's docs and SQL and from fresh's and link's `parameters_fresh.csv` histories ·
 **Status:** the literature half of #132; the records above modelled gradient barriers are the track's next piece.
