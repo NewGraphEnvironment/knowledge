@@ -72,12 +72,14 @@ knw_nuseds_kinds <- function() {
   surveyed <- filled(x$enumeration_methods) | filled(x$no_inspections_used)
   expert <- x$estimate_method %in% "Expert Opinion" & !surveyed
   pres <- toupper(trimws(as.character(x$adult_presence)))
-  out <- ifelse(pres %in% "NONE OBSERVED", "none_observed",
-         ifelse(pres %in% "NOT INSPECTED", "not_inspected",
-         ifelse(!pres %in% "PRESENT", "unknown",
-         ifelse(has_n & expert, "count_expert",
-         ifelse(has_n, "count",
-         ifelse(expert, "presence_expert",
-         ifelse(surveyed, "presence_survey", "presence_unrecorded")))))))
+  out <- rep("unknown", nrow(x))
+  present <- pres %in% "PRESENT"
+  out[present] <- "presence_unrecorded"
+  out[present & surveyed] <- "presence_survey"
+  out[present & expert] <- "presence_expert"
+  out[present & has_n] <- "count"
+  out[present & has_n & expert] <- "count_expert"
+  out[pres %in% "NONE OBSERVED"] <- "none_observed"
+  out[pres %in% "NOT INSPECTED"] <- "not_inspected"
   out
 }

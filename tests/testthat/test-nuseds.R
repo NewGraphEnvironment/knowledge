@@ -10,7 +10,7 @@ local_nuseds_offline <- function(env = parent.frame()) {
 
 # a zip at `dest` holding the files named in `files`
 write_zip <- function(dest, files) {
-  skip_if_not(nzchar(Sys.which("zip")))
+  testthat::skip_if_not(nzchar(Sys.which("zip")))
   d <- tempfile("nuseds_zip")
   dir.create(d)
   for (f in files) writeLines("AREA,WATERBODY", file.path(d, f))
@@ -91,15 +91,15 @@ test_that("evidence_kind follows its precedence", {
                         "Unknown Estimate Method", "Expert Opinion", "Not Applicable", NA, NA, "Expert Opinion"),
     stringsAsFactors = FALSE
   )
-  expect_identical(.knw_nuseds_kind(x), c("count", "count_expert", "presence_expert", "presence_survey",
-                                           "presence_unrecorded", "none_observed", "not_inspected", "unknown",
-                                           "unknown", "presence_survey"))
+  want <- c("count", "count_expert", "presence_expert", "presence_survey", "presence_unrecorded", "none_observed",
+            "not_inspected", "unknown", "unknown", "presence_survey")
+  expect_identical(.knw_nuseds_kind(x), want)
   expect_true(all(.knw_nuseds_kind(x) %in% knw_nuseds_kinds()))
 })
 
 nuseds_fixture <- function() {
   f <- system.file("extdata/examples/dfo/nuseds_all_areas_2026-06-01.csv", package = "crate")
-  skip_if_not(nzchar(f), "crate without the NuSEDS registration (crate#74)")
+  testthat::skip_if_not(nzchar(f), "crate without the NuSEDS registration (crate#74)")
   f
 }
 
