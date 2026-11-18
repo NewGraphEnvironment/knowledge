@@ -44,7 +44,8 @@ No comments on #174 or its members. What exploration found that shapes the plan:
   is a new registered variant, not a silent breakage.
 - **#105 stop rule (set now, before Phase 1 runs):** stop if fewer than 5 % of visits **and** fewer than
   5 % of CH detections flip; continue if either is 5 % or more. Made exact from the review (AC1) before
-  its commit: counted over the 7,823 visits and 235 detections the tuning scores; a flip is a visit the
+  its commit: counted over the 4,858 visits and 234 detections the tuning scores (45 groups with both
+  outcomes; the review's 7,823 is the population before that filter); a flip is a visit the
   window reading classifies differently from the MAD reading, either way; judged on the totals, not per
   group; each of three readings (stream, river, both) is judged, and Phase 2 is filed if any reading
   reaches either share.
@@ -108,23 +109,24 @@ No comments on #174 or its members. What exploration found that shapes the plan:
 
 ## Phase 2: Batch 9, flow in windows (#105 Phase 1, #42 piece 1)
 
-- [ ] Restore the published run's evidence: `PULL=TRUE KEYS=CH_rear Rscript scripts/0336-archive.R`, and
+- [x] Restore the published run's evidence: `PULL=TRUE KEYS=CH_rear Rscript scripts/0336-archive.R`, and
   check the visit tables' md5s against the CH rearing grade record's `evidence_md5`.
-- [ ] **Stop rule first:** create `research/chinook_window_flow.md` with the windows (rearing 08-01 to
+- [x] **Stop rule first:** create `research/chinook_window_flow.md` with the windows (rearing 08-01 to
   09-30 on the stream; spawning 08-15 to 09-15 on the downstream river), the matched thresholds' method and
   the stop rule as set at the gate, and commit it before any flip is computed.
 - [ ] `data-raw/chinook_window_flow.R` (#105 Phase 1), on this host (`knw_db_latency_check()`). It
   refuses unless the research file is committed, and logs HEAD and the stop rule's commit:
   - flow load from `knw_discharge_load()`, refused unless it equals the grade record's `discharge_load`;
-  - population: `.tune_population()` on the restored evidence with `knw_tune_run()`'s own defaults,
-    stopped unless 7,823 / 235 / 111 / 45;
+  - population: `.tune_population()` on the restored evidence with `knw_tune_run()`'s own defaults
+    (7,823 / 235 / 111), then `.tune_modelled()`, stopped unless 4,858 / 234 / 45;
   - window means from `discharge.fwa_v1_segment_monthly` through the connection, on each segment's `pick`
     source: at each visit's segment (`visits_link$pick_source`; the 26 visits whose flow came from a parent
     read the parent's, or are dropped and counted) and at each rung's river (`large_lfid`, `pick` from the
     table);
   - window / MAD spread by watershed group, at visits and at rivers;
-  - the MAD reading through `knw_rule_in()` first, stopped unless it reproduces the published rule's in/out
-    at every visit; then the window readings at matched thresholds (0.75 m³/s scaled by the median ratio at
+  - the MAD reading through `knw_rule_in()` first, stopped unless it reproduces the published rule's
+    `n_in` 1,400 and `n_detect_in` 197 (`data/tune/CH_rear_tune.csv`), and unless the recomputed MAD equals
+    `mad_pick` at every visit; then the window readings at matched thresholds (0.75 m³/s scaled by the median ratio at
     visit segments, 3 m³/s by the median at rivers): stream, river, both. Flips, both directions, of visits
     and CH detections, in total and by group. The river reading uses the ladder's rivers within 1 km: an
     approximation (a river smaller than the lowest rung is not seen), stated in the file;
