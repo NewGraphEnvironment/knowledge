@@ -89,7 +89,7 @@ passage reports but few swimming or leaping performance papers (Katopodis & Gerv
 
 ## Phase 5: the store and the write-up
 
-- [ ] Once the audit has settled the sources: `0150 ACTION=build STORE=fish_passage COLLECTIONS=<passage_limits
+- [x] Once the audit has settled the sources: `0150 ACTION=build STORE=fish_passage COLLECTIONS=<passage_limits
       key>`, query checks with expectations written first, push (`CONFIRM=TRUE`); `scripts/README.md`'s 0270 run
       order, 0150 build list and prose; CLAUDE.md's data-root list gains the collection's two files.
 - [ ] `research/access_gradients.md`: a plain-language walk (what link does, where each class comes from, what the
@@ -101,6 +101,7 @@ passage reports but few swimming or leaping performance papers (Katopodis & Gerv
 ## Owed at the end (reported, done after merge)
 
 - [ ] File the access track's next member (the records review) and point the backlog at it.
+- [ ] After #217 OCRs Bjornn and Reiser 1991, rebuild `fish_passage` (`ACTION=build ... OVERWRITE=TRUE`, then push) so it holds all 25 documents; until then it holds 24.
 
 ## Validation
 

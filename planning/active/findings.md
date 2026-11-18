@@ -135,3 +135,23 @@ source) and checks of its load-bearing quotes:
   from leap heights of 3 to 4 ft at waterfalls".
 - No primary source gives 15 % for salmon (WDFW's 16 % is the nearest), or any limit for grayling or kokanee, or 25 %
   for rainbow, or 20 % for westslope cutthroat.
+
+## The fish_passage store: expectations, written before the build (2026-11-18)
+
+Collection `HJZKI75D`: 25 items, 25 with a PDF (19 members, 6 additions). Expect 25 documents, none left out (no
+`pdf = none` row). Queries and the document expected in the top 3 of each:
+- "natural barrier sustained gradient 160 meters" → WDFW 2009 or WDFW 2019
+- "fish streams by default gradient" → the 1998 Fish-stream Identification Guidebook
+- "burst speed leap height waterfall" → Powers and Orsborn 1985 (or Bell 1986, Bjornn and Reiser 1991)
+- "bull trout high gradient areas" → Cannings and Ptolemy 1998
+- "Arctic grayling culvert velocity" → MacPhee and Watts 1976
+
+## The fish_passage store as built (2026-11-18)
+
+`ACTION=build STORE=fish_passage COLLECTIONS=HJZKI75D`: 25 keys, 24 documents, 6,325 chunks, nomic-embed-text, 7.7 min.
+Bjornn and Reiser 1991 was skipped ("no text": the scan #217 OCRs), so it joins at the next update after #217; WDFW
+2009 was read with pdftools because markitdown hit an embedded NUL. Query checks (hybrid, none degraded to BM25),
+against the expectations above: WDFW first for the natural-barrier query; WDFW and Powers and Orsborn for leap and burst
+speed; MacPhee and Watts first for grayling culverts. Two misses: the 1998 guidebook came 4th for "fish streams by
+default gradient" (behind Mount et al. and Norris and Mount, which restate it), and Cannings and Ptolemy was not in the
+top 5 for "bull trout high gradient areas" (its one sentence in a 255-page book; D'Angelo and Muhlfeld and Trotter led).
