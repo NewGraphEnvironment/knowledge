@@ -1,4 +1,4 @@
-started: 2026-11-18T03:38:16Z 
+started: 2026-11-18T03:45:37Z 
 crate: crate 0.19.0 commit none (a local build) schema md5 3a7f00fe28fba7f6fa970dec868a3132 
 release: 20260601 (held) 
 zip md5: 25bb43441645519f18eb4853dd1cf399 
@@ -26,7 +26,7 @@ Maxan Creek chinook, every year inspected:
                 <NA>                  NA          Expert Opinion
 (as #108 measured)
 
-recorded release 20260601 in data/nuseds_release.csv ( 0283d0f386f2d42ea24c8f3133dfd7f86d61b5fc )
+recorded release 20260601 in data/nuseds_release.csv ( a7c57a67631adcc0a0b5feb24abeb7cace6f14b8 )
 nuseds_records     421001 rows  52 cols    6.0 MB parquet
 PUBLISH is not TRUE: nothing uploaded
-finished: 2026-11-18T03:38:57Z 
+finished: 2026-11-18T03:46:19Z 
