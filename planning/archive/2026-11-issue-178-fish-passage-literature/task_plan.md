@@ -60,7 +60,7 @@ passage reports but few swimming or leaping performance papers (Katopodis & Gerv
 - [x] GR, KO, RB, CT and DV appear in no bcfishpass doc: trace their classes in fresh's and link's histories
       (`git log -S` on `parameters_fresh.csv`), and link `research/habitat_literature.md`'s BT trace rather than
       restating it.
-- [ ] `/lit-search` over `habitat_modelling` and `bull_trout_grayling` for passage values already held; web and
+- [x] `/lit-search` over `habitat_modelling` and `bull_trout_grayling` for passage values already held; web and
       publisher search for the rest; PDFs fetched and checked against their title pages.
 
 ## Phase 3: the collection
@@ -92,7 +92,7 @@ passage reports but few swimming or leaping performance papers (Katopodis & Gerv
 - [x] Once the audit has settled the sources: `0150 ACTION=build STORE=fish_passage COLLECTIONS=<passage_limits
       key>`, query checks with expectations written first, push (`CONFIRM=TRUE`); `scripts/README.md`'s 0270 run
       order, 0150 build list and prose; CLAUDE.md's data-root list gains the collection's two files.
-- [ ] `research/access_gradients.md`: a plain-language walk (what link does, where each class comes from, what the
+- [x] `research/access_gradients.md`: a plain-language walk (what link does, where each class comes from, what the
       measured passage limits say per species, what that leaves open for the records review), a table of each
       species' class beside its sources, the specification below; `research/README.md` row; added to `0280`'s
       `QUOTED_DEFAULT` if it quotes sources.
@@ -108,8 +108,8 @@ passage reports but few swimming or leaping performance papers (Katopodis & Gerv
 - [x] Tests pass (`devtools::test()`), lintr clean on touched files (429 tests; 5 failures in one test, `test-vignette-data.R`'s ignored-sources check, from this machine's October 17 evidence build, which the branch does not touch; the two lints on changed lines repeat main's patterns)
 - [x] `/code-check branch` clean (three-round floor): three rounds; rounds 2 and 3 each found a defect inside the previous fix, and an enumeration of the mechanism's reach ended it (`review-round3.md`)
 - [x] Public sweep of tracked files, issue bodies and commit messages (#56's `public_sweep.py`: no hit in any file, issue or commit this branch touched; the repo's other hits predate it)
-- [ ] PWF checkboxes match landed work
-- [ ] `/planning-archive` on completion
+- [x] PWF checkboxes match landed work
+- [x] `/planning-archive` on completion
 
 Acceptance: the store's build leaves out only `pdf = none` items and `log.json` names it; `0280` passes over every
 row (1,153 before) and the access grid; each of link's 13 species has an access row, valued or `none`.
