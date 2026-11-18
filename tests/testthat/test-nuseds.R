@@ -99,7 +99,9 @@ test_that("evidence_kind follows its precedence", {
 
 nuseds_fixture <- function() {
   f <- system.file("extdata/examples/dfo/nuseds_all_areas_2026-06-01.csv", package = "crate")
-  testthat::skip_if_not(nzchar(f), "crate without the NuSEDS registration (crate#74)")
+  # a failure, not a skip: knw_nuseds_records() cannot read anything on a crate without it, and a skip would keep
+  # CI green on an install that is broken
+  if (!nzchar(f)) testthat::fail("the installed crate has no dfo/nuseds_all_areas registration (crate#74)")
   f
 }
 

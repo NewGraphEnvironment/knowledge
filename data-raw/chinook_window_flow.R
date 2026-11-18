@@ -68,7 +68,7 @@ conn <- DBI::dbConnect(RPostgres::Postgres())
 lat <- knw_db_latency_check(conn)
 load <- knw_discharge_load(conn)
 if (!identical(load, rec$discharge_load)) stop("the database's flow load is not the grade record's:\n  ", load, call. = FALSE)
-cat("flow load:     ", load, "\n\n")
+cat("flow load:     ", load, "\nwet:           ", as.character(utils::packageVersion("wet")), "\n\n")
 
 vl <- readr::read_csv(f_ev[1], guess_max = 1e5, show_col_types = FALSE, progress = FALSE,
                       col_types = readr::cols(site_visit = "c", species_caught = "c", blocks_absence_of = "c",
@@ -135,9 +135,10 @@ mon <- DBI::dbGetQuery(conn, "
   params = list(paste0("{", paste(format(lfids, scientific = FALSE, trim = TRUE), collapse = ","), "}")))
 mon$linear_feature_id <- as.numeric(mon$linear_feature_id)
 n_mon <- table(factor(mon$linear_feature_id, levels = lfids))
-if (any(n_mon != 13L)) {
-  stop(sum(n_mon != 13L), " of the ", length(lfids), " segments read do not have 13 months on one pick source",
-       call. = FALSE)
+n_src <- tapply(mon$source, factor(mon$linear_feature_id, levels = lfids), function(v) length(unique(v)))
+if (any(n_mon != 13L) || any(n_src %in% c(NA, 0L) | n_src > 1L)) {
+  stop(sum(n_mon != 13L | is.na(n_src) | n_src != 1L), " of the ", length(lfids),
+       " segments read do not have 13 months on one pick source", call. = FALSE)
 }
 mad0 <- mon[mon$month == 0L, c("linear_feature_id", "q_m3s")]
 wf <- wet::wet_flow_window(mon, windows)
@@ -274,7 +275,9 @@ run <- data.frame(rule_file = rule_file, rule_commit = rule_commit, head = head_
                   evidence_md5 = md5, discharge_load = load, rule = pub$rule, visits = nrow(d), ch = sum(d$U),
                   groups = nlevels(d$wsg), med_rear_visit = med_v, med_spawn_river = med_r,
                   thr_stream = thr_stream, thr_river = thr_river, rivers_at_exc = length(riv3),
-                  daily_build = daily_build, verdict = if (go) "continue" else "stop")
+                  daily_build = daily_build, wet_version = as.character(utils::packageVersion("wet")),
+                  crate_version = as.character(utils::packageVersion("crate")),
+                  verdict = if (go) "continue" else "stop")
 dir.create(out_dir, showWarnings = FALSE, recursive = TRUE)
 utils::write.csv(run, file.path(out_dir, "ch_rear_run.csv"), row.names = FALSE, na = "")
 utils::write.csv(flips, file.path(out_dir, "ch_rear_flips.csv"), row.names = FALSE, na = "")

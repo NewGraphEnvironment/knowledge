@@ -101,6 +101,9 @@ receipt <- list(output = "nuseds",
                               config = list(settings = list(version = version, release = f$release)),
                               inputs = list(nuseds_zip = list(sha256 = .knw_sha256(f$path))), seed = NULL),
                 summary = list(rows = nrow(x)))
+# the published types are crate's, never a guess from the CSV: the ids and dates as text, counts as double
+sc <- crate::crt_schema_cols("dfo", "nuseds_all_areas")
+types <- c(stats::setNames(sc$type, sc$name), evidence_kind = "string")
 manifest <- knw_publish(
   tables, file.path(dir_rel, "publish"), id = s3_id,
   note = paste("NuSEDS release", f$release, "with evidence_kind (knowledge#108)."),
@@ -111,7 +114,13 @@ manifest <- knw_publish(
     source = paste("Fisheries and Oceans Canada, NuSEDS (New Salmon Escapement Database System), All Areas file,",
                    "https://open.canada.ca/data/en/dataset/c48669a3-045b-400d-b730-48aafe8c5ee6. Contains",
                    "information licensed under the Open Government Licence - Canada.")),
-  s3 = if (publish) "s3://fresh-bc/" else NULL, republish = republish, receipt = receipt)
+  s3 = if (publish) "s3://fresh-bc/" else NULL, republish = republish, receipt = receipt,
+  types = list(nuseds_records = types))
+sch <- manifest$files[[1]]$schema
+wrong <- names(types)[vapply(names(types), function(n) {
+  !identical(sch[[n]], c(string = "string", double = "double", integer = "int32")[[types[[n]]]])
+}, logical(1))]
+if (length(wrong)) stop("published types differ from crate's in ", paste(wrong, collapse = ", "), call. = FALSE)
 for (mf in manifest$files) cat(sprintf("%-16s %8d rows %3d cols %6.1f MB parquet\n", mf$table, mf$rows, mf$columns,
                                        mf$bytes / 1e6))
 if (!publish) {

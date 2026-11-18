@@ -30,6 +30,12 @@
 #'   under a Hive path `<table>/<key>=<value>/part.parquet` from the columns
 #'   `hive_keys` (one part per distinct key combination).
 #' @param hive_keys `character` the Hive key columns.
+#' @param types `NULL`, or a named `list` by table of named `character` column
+#'   types (`"string"`, `"double"`, `"integer"`), for a table whose types are
+#'   declared rather than guessed: every column of its CSV must be named, and
+#'   it is read with exactly those types (`int32`, `double`, `string`). A table
+#'   not in the list is read as arrow guesses it, with any column holding a
+#'   leading zero kept as text.
 #' @param receipt `NULL` (no receipt), or a list for the set's provenance
 #'   receipt in crate's shape (#154): `output`, the declaration it is held to
 #'   ([knw_receipt_keys()], `"thresholds"`, `"habitat_grade"`, `"fdis"` or `"nuseds"`);
@@ -54,7 +60,7 @@
 #' m$files[[1]]$rows
 knw_publish <- function(tables, dir_out, id, note, provenance = list(), supersedes = NULL, s3 = NULL,
                         republish = FALSE, no_sign = FALSE, hive = NULL, hive_keys = c("species_code", "stage"),
-                        receipt = NULL) {
+                        receipt = NULL, types = NULL) {
   chk::chk_data(tables)
   chk::check_names(tables, c("table", "source", "script", "description"))
   chk::chk_string(dir_out)
@@ -64,6 +70,10 @@ knw_publish <- function(tables, dir_out, id, note, provenance = list(), supersed
   chk::chk_null_or(s3, vld = chk::vld_string)
   chk::chk_null_or(hive, vld = chk::vld_character)
   chk::chk_null_or(receipt, vld = chk::vld_list)
+  chk::chk_null_or(types, vld = chk::vld_list)
+  if (!is.null(types) && (is.null(names(types)) || !all(names(types) %in% tables$table))) {
+    stop("types is a list named by the tables it declares", call. = FALSE)
+  }
   if (!is.null(receipt) && !setequal(names(receipt), c("output", "recipe", "summary"))) {
     stop("receipt names output, recipe and summary", call. = FALSE)
   }
@@ -77,8 +87,12 @@ knw_publish <- function(tables, dir_out, id, note, provenance = list(), supersed
   for (i in seq_len(nrow(tables))) {
     tb <- tables$table[i]
     src <- tables$source[i]
-    x <- arrow::read_csv_arrow(src, as_data_frame = FALSE)
     raw <- utils::read.csv(src, colClasses = "character", na.strings = character(), check.names = FALSE)
+    x <- if (tb %in% names(types)) {
+      .knw_read_csv_typed(src, names(raw), types[[tb]])
+    } else {
+      arrow::read_csv_arrow(src, as_data_frame = FALSE)
+    }
     for (nm in names(raw)[vapply(raw, function(a) any(grepl("^[-+]?0[0-9]", a)), logical(1))]) {
       if (inherits(x[[nm]]$type, "StringType")) next
       a <- raw[[nm]]
@@ -237,4 +251,21 @@ knw_publish <- function(tables, dir_out, id, note, provenance = list(), supersed
     if (!all(ok)) bad <- c(bad, sprintf("%s (%d rows)", nm, sum(!ok)))
   }
   bad
+}
+
+# a CSV read with declared types: every column named, each read as exactly its type, so the Parquet's schema is the
+# declaration's and never a guess from the first rows
+.knw_read_csv_typed <- function(src, cols, types) {
+  chk::chk_character(types)
+  map <- list(string = arrow::string(), double = arrow::float64(), integer = arrow::int32())
+  bad <- setdiff(unique(types), names(map))
+  if (length(bad)) stop("types must be string, double or integer, not ", paste(bad, collapse = ", "), call. = FALSE)
+  missing_type <- setdiff(cols, names(types))
+  if (length(missing_type)) {
+    stop(src, ": no declared type for ", paste(missing_type, collapse = ", "), call. = FALSE)
+  }
+  extra <- setdiff(names(types), cols)
+  if (length(extra)) stop(src, ": declared columns not in the CSV: ", paste(extra, collapse = ", "), call. = FALSE)
+  sch <- arrow::schema(stats::setNames(lapply(types[cols], function(t) map[[t]]), cols))
+  arrow::read_csv_arrow(src, schema = sch, skip = 1L, as_data_frame = FALSE)
 }

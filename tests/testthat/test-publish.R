@@ -21,6 +21,28 @@ test_that("tables round-trip to Parquet with a manifest, codes kept as text", {
   expect_null(j$supersedes)
 })
 
+test_that("declared types are the Parquet's, never arrow's guess from the CSV", {
+  skip_if_not_installed("arrow")
+  skip_if_not_installed("jsonlite")
+  tmp <- withr::local_tempdir()
+  csv <- file.path(tmp, "t.csv")
+  # an id past 2^31 that arrow would read as int64, counts it would read as int64, and a year
+  utils::write.csv(data.frame(id = c("2146955744", "125"), n = c("50", "7"), yr = c("1988", "1993")), csv,
+                   row.names = FALSE, na = "")
+  tables <- data.frame(table = "t", source = csv, script = "example", description = "two rows")
+  m <- knw_publish(tables, file.path(tmp, "out"), id = "example/v1", note = "typed",
+                   types = list(t = c(id = "string", n = "double", yr = "integer")))
+  expect_identical(unlist(m$files[[1]]$schema), c(id = "string", n = "double", yr = "int32"))
+  pq <- arrow::read_parquet(file.path(tmp, "out", "t.parquet"))
+  expect_identical(pq$id, c("2146955744", "125"))
+  m0 <- knw_publish(tables, file.path(tmp, "guessed"), id = "example/v1", note = "guessed")
+  expect_identical(m0$files[[1]]$schema$id, "int64")
+  expect_error(knw_publish(tables, file.path(tmp, "x"), id = "e/v1", note = "n", types = list(t = c(id = "string"))),
+               "no declared type for n, yr")
+  expect_error(knw_publish(tables, file.path(tmp, "x"), id = "e/v1", note = "n", types = list(u = c(id = "string"))),
+               "named by the tables")
+})
+
 test_that("a Hive-partitioned table writes one part per key and lists them", {
   skip_if_not_installed("arrow")
   tmp <- withr::local_tempdir()

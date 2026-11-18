@@ -28,6 +28,12 @@ options(warn = 1)
 if (!requireNamespace("arrow", quietly = TRUE)) stop("install arrow", call. = FALSE)
 
 out_dir <- "data/flow_window"
+dirty <- system2("git", c("status", "--porcelain", "--", "data-raw/segment_window_flow.R", "R",
+                          "data/life_history_timing.csv"), stdout = TRUE)
+if (!is.null(attr(dirty, "status"))) stop("git status failed", call. = FALSE)
+if (length(dirty)) {
+  stop("commit first, so the run record's commit reproduces the run: ", paste(dirty, collapse = "; "), call. = FALSE)
+}
 timing <- knw_timing_read("data/life_history_timing.csv")
 groups <- if (nzchar(Sys.getenv("WSG"))) strsplit(Sys.getenv("WSG"), ",")[[1]] else sort(unique(timing$wsg_code))
 cat("started:", format(Sys.time(), "%Y-%m-%dT%H:%M:%SZ", tz = "UTC"), "\n")
