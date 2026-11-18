@@ -78,7 +78,7 @@ passage reports but few swimming or leaping performance papers (Katopodis & Gerv
 - [x] Add `leap_height` and `swim_speed` (settled 2026-11-18: `swim_speed` with a metric `burst`, `prolonged`, `sustained`, `critical` or `unstated`, as `fish_length` names its length type, in place of a `burst_speed` variable)
 - [x] A guard: a `leap_height` or `swim_speed` row carries no `parameter` or `model_id` (else 0280's coverage counts it
       as an access row); test first. The variable notes in `scripts/README.md` and CLAUDE.md's data-root list.
-- [x] `0280` gains an access grid over link's 13 species: each met by an `access_gradient_max` value, a `qual` row or
+- [x] `0280` gains an access grid over the species link models or has paused (`link::lnk_config("default")`, 11; the plan said 13, the rows of link's parameter table, corrected in code-check round 3): each met by an `access_gradient_max` value, a `qual` row or
       a `none` row naming the search.
 - [x] Append rows (never insert; cite rows by data row, file line N + 1): `access_gradient_max` per species and stage
       stated, citing originals (no restatement of the 35 rows' Rebellato and Norris statements), each limit's leap or
@@ -106,7 +106,7 @@ passage reports but few swimming or leaping performance papers (Katopodis & Gerv
 ## Validation
 
 - [x] Tests pass (`devtools::test()`), lintr clean on touched files (429 tests; 5 failures in one test, `test-vignette-data.R`'s ignored-sources check, from this machine's October 17 evidence build, which the branch does not touch; the two lints on changed lines repeat main's patterns)
-- [ ] `/code-check branch` clean (three-round floor)
+- [x] `/code-check branch` clean (three-round floor): three rounds; rounds 2 and 3 each found a defect inside the previous fix, and an enumeration of the mechanism's reach ended it (`review-round3.md`)
 - [x] Public sweep of tracked files, issue bodies and commit messages (#56's `public_sweep.py`: no hit in any file, issue or commit this branch touched; the repo's other hits predate it)
 - [ ] PWF checkboxes match landed work
 - [ ] `/planning-archive` on completion

@@ -76,3 +76,25 @@ declares something the engine ignores." Here the config already declares four sp
 
 Nothing else in the diff restates a fact owned elsewhere. Tests, lint and the vignette-data failure are as the brief
 accepts.
+
+## Fix and enumeration (session, 2026-11-18)
+
+Fixed: 0280's ACCESS species are `unique(c(link::lnk_config("default")$species, $species_paused))` (11: BT CH CM CO PK SK
+ST WCT GR, then KO RB), as 0310 asks link; the research file's premise now says link models nine, pauses KO and RB, and
+does not model CT or DV. `0280` exits 0, access 11 of 11.
+
+Enumeration, the mechanism being a fact link owns held here by reading link's input instead of asking link: every place
+the branch states or reads such a fact, with the owner it now rests on.
+- Which species link models and pauses (0280's ACCESS; research file premise, table column, Specification):
+  `link::lnk_config("default")`, link 0.78.1.
+- Each species' class value (research file premise and table): link's parameter table, which `lnk_config()` does not
+  carry (its fields: name, dir, description, rules, dimensions, species, species_paused, files, pipeline, provenance,
+  extends, chain), so the table is link's own source for the values; 13 of 13 match.
+- The 100 m window (research file): fresh's `frs_break()`, `distance = 100L`.
+- The overrides (research file): link's `parameters_fresh.csv` observation columns and `R/lnk_barrier_overrides.R`
+  (the `habitat` argument), read in the meaning audit's closing enumeration.
+- When GR and KO entered link's configuration (rows 1186-1187; research Specification): link 323207783 (2026-05-02);
+  pausing: link e333ec97 (2026-11-01, 0.76.0).
+- 25 % applied to bull trout alone (research "What it leaves open"): follows from the two items above (RB paused, CT and
+  DV unmodelled).
+Nothing sits above its owner.
