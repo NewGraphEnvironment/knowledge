@@ -159,7 +159,7 @@ No comments on #174 or its members. What exploration found that shapes the plan:
 
 ## Owed at the end (reported, done after merge)
 
-- [ ] crate release with NuSEDS registered (NewGraphEnvironment/crate#75), then `crate (>= <that version>)` in
+- [x] crate release with NuSEDS registered (NewGraphEnvironment/crate#75), then `crate (>= <that version>)` in
   `DESCRIPTION`, if it is still unmerged when the knowledge PR opens.
 - [ ] `PUBLISH=TRUE Rscript scripts/0340-nuseds-build.R` once crate has released #74, so the receipt names a released
   crate (the local build ran 2026-11-18; nothing is uploaded yet).

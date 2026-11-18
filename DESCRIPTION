@@ -31,7 +31,7 @@ Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.3.3
 Imports:
     chk,
-    crate (>= 0.15.0),
+    crate (>= 0.20.0),
     DBI,
     dplyr,
     lubridate,

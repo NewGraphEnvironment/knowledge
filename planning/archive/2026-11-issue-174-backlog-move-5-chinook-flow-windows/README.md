@@ -81,7 +81,7 @@ What was learned:
 
 ## Owed
 
-- crate release with NuSEDS registered (NewGraphEnvironment/crate#75), then `crate (>= <that version>)` in
+- crate release with NuSEDS registered (NewGraphEnvironment/crate#75), then `crate (>= <that version>)` in: done, crate v0.20.0 (2026-11-18), floor raised
 - `PUBLISH=TRUE Rscript scripts/0340-nuseds-build.R` once crate has released #74, so the receipt names a released
 
 Closed by: PR (opened from branch `174-backlog-move-5-chinook-flow-windows-and`)
