@@ -36,7 +36,7 @@ split piece, or one filed since the last pass): run `/backlog-sweep` to place it
 | - [ ] 6 | #175 | 10, 18: location error against flow resolution, the FDIS load's outputs (4 issues) | open: start here | A | — | opus |
 | - [ ] 7 | #176 | 11, 12: FISS parser, gradient and PINE; layers for report repos (6 issues) | open | B | — | opus |
 | - [ ] 8 | #177 | 13, 23: promotion cargo, tuning-code fixes (4 issues) | **waiting** on Al's word for the next full retune | E | 12 | opus |
-| - [ ] 9 | #178 | 14: fish-passage literature, the access track's first piece (1 issue) | open | C | — | fable then opus |
+| - [x] 9 | #178 | 14: fish-passage literature, the access track's first piece (1 issue) | done: https://github.com/NewGraphEnvironment/knowledge/pull/237 | C | — | fable then opus |
 | - [ ] 10 | #179 | 16, 22: library, keys and our own prose; OCR of the scanned PDFs (4 issues) | open | C | 9 | opus |
 | - [ ] 11 | #180 | 17: report-priority pipeline for any group (3 issues) | **waiting** on Al's word to resume the report-priority work, parked 2026-09-04 | C | 10 | opus |
 | - [ ] 12 | #231 | 19: article wording and one method-bundle rebuild (3 issues) | open | E | — | opus |
@@ -210,7 +210,7 @@ recorded edge types: `0330`, `0325`, `0322`'s `done_rule()` and `data-raw/vignet
 
 ### 14. Fish-passage literature
 
-- [ ] Carried by move 9, #178
+- [x] Carried by move 9, #178 (merged in https://github.com/NewGraphEnvironment/knowledge/pull/237)
 
 #234, the access track's first piece (split from #132 at move 9's gate, 2026-11-18): the classes' lineage, a
 `Fisheries/Fish Passage/passage_limits` collection and its own `fish_passage` store, `access_gradient_max` rows per species with the
