@@ -1,5 +1,24 @@
 # Changelog
 
+## knowledge 0.4.45
+
+- Where link’s access gradients come from, and what the sources say fish
+  pass
+  ([\#234](https://github.com/NewGraphEnvironment/knowledge/issues/234)):
+  none of the classes is a measured passage limit, and only 15 % has
+  been checked against fish records. A `fish_passage` store from the
+  group’s new `Fisheries/Fish Passage/passage_limits` collection,
+  evidence variables `leap_height` and `swim_speed`
+  ([`knw_literature_read()`](https://newgraphenvironment.github.io/knowledge/reference/knw_literature_read.md)
+  keeps them off model parameters), an access grid in `0280` over the
+  species link models or has paused, and 36 evidence rows;
+  `research/access_gradients.md`. Backlog move 9 split into the access
+  ([\#132](https://github.com/NewGraphEnvironment/knowledge/issues/132))
+  and gradient
+  ([\#70](https://github.com/NewGraphEnvironment/knowledge/issues/70))
+  tracks
+  ([\#178](https://github.com/NewGraphEnvironment/knowledge/issues/178)).
+
 ## knowledge 0.4.44
 
 - NuSEDS, DFO’s salmon escapement records, read in one place through
