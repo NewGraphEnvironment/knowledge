@@ -1,3 +1,7 @@
+# knowledge 0.4.45
+
+* Where link's access gradients come from, and what the sources say fish pass (#234): none of the classes is a measured passage limit, and only 15 % has been checked against fish records. A `fish_passage` store from the group's new `Fisheries/Fish Passage/passage_limits` collection, evidence variables `leap_height` and `swim_speed` (`knw_literature_read()` keeps them off model parameters), an access grid in `0280` over the species link models or has paused, and 36 evidence rows; `research/access_gradients.md`. Backlog move 9 split into the access (#132) and gradient (#70) tracks (#178).
+
 # knowledge 0.4.44
 
 * NuSEDS, DFO's salmon escapement records, read in one place through crate (`knw_nuseds_fetch()`, `knw_nuseds_records()`), each record saying what kind of evidence it is, and published as `knowledge/nuseds/v1` (#108). Chinook timing for the upper Fraser (UFRA, with Swift Creek) and the Cottonwood (COTR) from NuSEDS spawn dates and the literature (#96, #31). Late-summer flow against MAD in chinook rearing passes the stop rule set before the run, so a tuning on window flow follows (#105, #226); window flow on every segment for every timing window (#42). `research/chinook_window_flow.md`.
