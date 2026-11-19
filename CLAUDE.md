@@ -437,11 +437,16 @@ point join needs a deterministic tiebreak (`0290`).
 
 ### link's access: gate on `streams_access`, not the habitat tables' `accessible`
 
-`streams_habitat_<sp>.accessible` and `streams_access.access_<sp>` disagree in link's `default` builds, and did before
-the province-wide run: about 2 % of habitat-accessible segments for most species, 17–27 % for RB and 90 % for KO, with
-rearing and spawning set on segments `streams_access` blocks (NewGraphEnvironment/link#349, cause not established).
-Gate on `streams_access`, as `0290` does with `access_bt`, re-gate the habitat flags on it, and record the
-cross-tabulation per species with each build (#57).
+`streams_habitat_<sp>.accessible` and `streams_access.access_<sp>` disagreed in link's `default` builds up to #92's
+(`fresh_default_20261017`): about 2 % of habitat-accessible segments for most species, 17–27 % for RB and 90 % for KO,
+with rearing and spawning set on segments `streams_access` blocks (NewGraphEnvironment/link#349). link#360 (2026-10-20)
+traced it to four causes and since then settles the habitat flags on `streams_access` (`lnk_habitat_gate()`): on the
+published build (run `20261103_163715-269b585a`) no segment is `accessible` where `streams_access` blocks it, and 123 to
+666 segments per species are the reverse, none rearing and at most 3 spawning (`knw_link_access_check()`, 2026-11-16).
+Still gate on `streams_access`, as `0290` does with `access_bt`, re-gate the habitat flags on it, and record the
+cross-tabulation per species with each build (#57), so an older build reads the same way.
+link 0.78.1's `default` models nine species (BT CH CM CO PK SK ST WCT GR), pauses KO and RB, and models neither CT nor DV:
+read the set from `link::lnk_config("default")` (`species`, `species_paused`), never from its parameter table (#178).
 
 ### link's CH rearing: regenerate it, never compare to the stored flags
 
@@ -586,8 +591,10 @@ check to fail when it differs. `0325` publishes the comment as `discharge_load_a
 time is #72.
 wet writes one comment per table, naming only the scenario loaded last, while the walk and the grade read only
 `historical`, so `knw_discharge_load()` refuses a comment that does not name `scenario historical`: after an ssp load
-the comment no longer identifies the historical rows, and the walk cache would serve walks made on an older load
-(NewGraphEnvironment/wet#88 is the load table that would fix it).
+the comment no longer identifies the historical rows, and the walk cache would serve walks made on an older load.
+wet 0.4.36 records each loaded part in `discharge.wet_load`, keyed by dataset, scenario and part, and an ssp load leaves
+the historical rows' record in place (NewGraphEnvironment/wet#88), so a reader can key on the historical load itself;
+`knw_discharge_load()` still reads the comment, and a database last loaded by an older wet has no such table.
 
 The walk (`inst/sql/ch_dist_profile.sql`) ends at a double-line river's bank, by fresh 0.42.0's rule (#73): a
 connector (edge 1400/1450) is never a target, the connector run and the jump's crossing inside the target's polygon
