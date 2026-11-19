@@ -74,6 +74,11 @@ age-0 fish's size at the onset of its first winter, say), not a habitat
 dimension. It reads in \code{mm}, and its \code{metric} says which length the source
 measured: \code{fork_length}, \code{total_length}, or \code{unstated}.
 
+\code{leap_height} and \code{swim_speed} are what a fish can do, the basis a source
+gives for a passage limit: the height it can leap, and the speed it can
+swim, whose \code{metric} says which (\code{burst}, \code{prolonged}, \code{sustained},
+\code{critical}, or \code{unstated}). \code{velocity} stays the water a fish meets at a site.
+
 \code{groundwater} covers upwelling, hyporheic exchange and springs. It takes no
 unit, so a groundwater row carries no value: no source read so far gives an
 upwelling measure (a vertical hydraulic gradient, say).

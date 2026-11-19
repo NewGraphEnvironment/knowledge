@@ -382,6 +382,78 @@ test_that("a fish length reads in mm and names which length it is", {
   expect_error(knw_literature_read(write_literature(y)), "metric fork_length does not fit variable temperature")
 })
 
+test_that("a leap height reads in a length and carries no metric", {
+  x <- literature_fixture()
+  x$species_code[1] <- "CO"
+  x$life_stage[1] <- "access"
+  x$variable[1] <- "leap_height"
+  x$parameter[1] <- NA
+  x$model_id[1] <- NA
+  x$bound[1] <- "max"
+  x$value_min[1] <- NA
+  x$value_max[1] <- "2.2"
+  x$unit[1] <- "m"
+  x$metric[1] <- NA
+  x$kind[1] <- "lab"
+  out <- knw_literature_read(write_literature(x), variable = "leap_height")
+  expect_equal(out$variable, "leap_height")
+  y <- x
+  y$unit[1] <- "m/s"
+  expect_error(knw_literature_read(write_literature(y)), "unit m/s does not fit variable leap_height")
+  y <- x
+  y$metric[1] <- "burst"
+  expect_error(knw_literature_read(write_literature(y)), "metric burst on variable leap_height")
+})
+
+test_that("a leap or swimming-speed row is a fish's capability, never a model parameter", {
+  x <- literature_fixture()
+  x$species_code[1] <- "CO"
+  x$life_stage[1] <- "access"
+  x$variable[1] <- "leap_height"
+  x$parameter[1] <- "access_gradient_max"
+  x$model_id[1] <- NA
+  x$bound[1] <- "max"
+  x$value_min[1] <- NA
+  x$value_max[1] <- "2.2"
+  x$unit[1] <- "m"
+  x$metric[1] <- NA
+  x$kind[1] <- "lab"
+  expect_error(knw_literature_read(write_literature(x)), "leap_height row is a fish's capability.*data row 1")
+  x$variable[1] <- "swim_speed"
+  x$unit[1] <- "m/s"
+  x$metric[1] <- "burst"
+  expect_error(knw_literature_read(write_literature(x)), "swim_speed row is a fish's capability.*data row 1")
+  x$parameter[1] <- NA
+  x$model_id[1] <- "some_model"
+  expect_error(knw_literature_read(write_literature(x)), "swim_speed row is a fish's capability.*data row 1")
+})
+
+test_that("a swimming speed is a fish's, names which speed, and is not a water velocity", {
+  x <- literature_fixture()
+  x$species_code[1] <- "WCT"
+  x$life_stage[1] <- "access"
+  x$variable[1] <- "swim_speed"
+  x$parameter[1] <- NA
+  x$model_id[1] <- NA
+  x$bound[1] <- "max"
+  x$value_min[1] <- NA
+  x$value_max[1] <- "3.1"
+  x$unit[1] <- "m/s"
+  x$metric[1] <- "burst"
+  x$kind[1] <- "lab"
+  out <- knw_literature_read(write_literature(x), variable = "swim_speed")
+  expect_equal(out$metric, "burst")
+  y <- x
+  y$metric[1] <- NA
+  expect_error(knw_literature_read(write_literature(y)), "swim_speed value needs a metric.*data row 1")
+  y <- x
+  y$unit[1] <- "m"
+  expect_error(knw_literature_read(write_literature(y)), "unit m does not fit variable swim_speed")
+  y <- x
+  y$variable[1] <- "velocity"
+  expect_error(knw_literature_read(write_literature(y)), "metric burst on variable velocity")
+})
+
 test_that("the metric vocabulary holds the temperature metrics and the degree-day windows", {
   m <- knw_literature_vocab()$metric
   expect_true(all(c("daily_max", "mwmt", "7dadm", "mwat", "7dec", "august_mean", "constant", "unstated",
@@ -390,6 +462,8 @@ test_that("the metric vocabulary holds the temperature metrics and the degree-da
   expect_true(all(c("degree_days", "air_temperature") %in% knw_literature_vocab()$variable))
   expect_true(all(c("fork_length", "total_length") %in% m))
   expect_true("fish_length" %in% knw_literature_vocab()$variable)
+  expect_true(all(c("leap_height", "swim_speed") %in% knw_literature_vocab()$variable))
+  expect_true(all(c("burst", "prolonged", "sustained", "critical") %in% m))
   expect_true("lab" %in% knw_literature_vocab()$kind)
 })
 

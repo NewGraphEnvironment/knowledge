@@ -37,7 +37,8 @@
 # and that every species x model parameter in COVERAGE has at least one row
 # (a value, or a `none` row saying what was searched). THERMAL is the same check
 # for temperature limits and degree-day totals, by species x cell (see below), and
-# FLOW for flow needs and the depth and velocity a fish meets.
+# FLOW for flow needs and the depth and velocity a fish meets. ACCESS asks, of every species link
+# models or has paused, whether its access gradient has been looked for (#234).
 #
 # The intrinsic-potential model registry (data/ip_model_registry.csv, read with
 # knw_ip_read()) is gated the same way: each row's flow quote, and its validation
@@ -52,6 +53,7 @@
 # NEEDS   pdftotext; ocrmypdf for an OCR row; commonmark, xml2 and stringi for the research files
 # INPUT   data/literature_evidence.csv, data/ip_model_registry.csv,
 #         data/life_history_timing.csv,
+#         link::lnk_config("default") (the modelled and paused species the access grid asks about),
 #         ~/Zotero/zotero.sqlite (a checked copy of the file and its -wal)
 # OUTPUT  scripts/logs/habitat/<yyyymmdd>_literature_verify.csv, one row per
 #         evidence row (status, PDF file, every PDF page the quote matches), and
@@ -60,7 +62,7 @@
 #         a summary on stdout.
 #         OCR text is cached in data/rag/ocr/ (gitignored), keyed by PDF md5.
 #         Exits non-zero when any row, registry quote, model link, timing source,
-#         coverage cell, thermal cell or flow cell fails.
+#         coverage cell, thermal cell, flow cell or access cell fails.
 # ---------------------------------------------------------------------------
 pkgload::load_all(quiet = TRUE)   # the source tree, not an installed copy
 
@@ -77,6 +79,17 @@ COVERAGE <- list(
                 "spawn_mad_min", "rear_gradient_max", "rear_channel_width_min", "rear_mad_min",
                 "rear_lake_ha_min", "rear_wetland_ha_min", "access_gradient_max",
                 "cluster_bridge_gradient", "cluster_bridge_distance"))
+
+# Each species link's default models has an access gradient (parameters_fresh.csv's access_gradient_max). The species
+# come from link itself, as 0310 asks it (link::lnk_config("default")), not from re-reading its parameter table, which
+# also holds species link does not model: the modelled ones and the paused ones, which keep their class and return. A
+# species' cell is met by any row bearing on that parameter: a value, a qualitative statement, or a `none` row
+# saying what was searched. A standard for FISH, SALMON or SALMONIDS fills no species' cell.
+link_cfg <- link::lnk_config("default")
+ACCESS <- list(species = unique(c(link_cfg[["species"]], link_cfg[["species_paused"]])), parameter = "access_gradient_max")
+if (!length(link_cfg[["species"]]) || anyNA(ACCESS$species) || any(!nzchar(ACCESS$species))) {
+  stop("link::lnk_config(\"default\") names no modelled species, or a blank one", call. = FALSE)
+}
 
 # A cell is a water-temperature limit or a degree-day total for one life stage. A valued
 # row meets an upper cell with bound max or range and a lower cell with min or range;
@@ -720,6 +733,9 @@ cov <- expand.grid(species_code = COVERAGE$species, parameter = COVERAGE$paramet
                    stringsAsFactors = FALSE)
 cov$rows <- mapply(function(s, p) sum(ev$species_code == s & ev$parameter %in% p),
                    cov$species_code, cov$parameter)
+access <- data.frame(species_code = ACCESS$species, stringsAsFactors = FALSE)
+access$rows <- vapply(access$species_code, function(s) sum(ev$species_code == s & ev$parameter %in% ACCESS$parameter),
+                      integer(1))
 
 valued <- !is.na(ev$value_min) | !is.na(ev$value_max)
 meets <- function(sp, cell) {
@@ -783,6 +799,8 @@ cat(sprintf("flow: %d of %d species x cells have a row\n", sum(flow$rows > 0), n
 if (any(flow$rows == 0)) {
   print(flow[flow$rows == 0, c("species_code", "variable", "life_stage", "side")], row.names = FALSE)
 }
+cat(sprintf("access: %d of %d species have an access-gradient row\n", sum(access$rows > 0), nrow(access)))
+if (any(access$rows == 0)) cat("  none for:", paste(access$species_code[access$rows == 0], collapse = ", "), "\n")
 cat("wrote", log_csv, ",", reg_log, "and", res_log, "\n")
 if (any(!pass) || any(!reg_pass) || any(!res_pass) || length(unregistered) || length(unread) || length(t_bad) ||
-    any(cov$rows == 0) || any(thermal$rows == 0) || any(flow$rows == 0)) quit(status = 1)
+    any(cov$rows == 0) || any(thermal$rows == 0) || any(flow$rows == 0) || any(access$rows == 0)) quit(status = 1)

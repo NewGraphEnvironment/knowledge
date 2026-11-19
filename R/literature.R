@@ -63,6 +63,11 @@
 #' dimension. It reads in `mm`, and its `metric` says which length the source
 #' measured: `fork_length`, `total_length`, or `unstated`.
 #'
+#' `leap_height` and `swim_speed` are what a fish can do, the basis a source
+#' gives for a passage limit: the height it can leap, and the speed it can
+#' swim, whose `metric` says which (`burst`, `prolonged`, `sustained`,
+#' `critical`, or `unstated`). `velocity` stays the water a fish meets at a site.
+#'
 #' `groundwater` covers upwelling, hyporheic exchange and springs. It takes no
 #' unit, so a groundwater row carries no value: no source read so far gives an
 #' upwelling measure (a vertical hydraulic gradient, say).
@@ -79,7 +84,8 @@ knw_literature_vocab <- function() {
     variable = c("gradient", "channel_width", "stream_order", "discharge", "lake_area",
                  "wetland_area", "bridge_distance", "temperature", "substrate", "depth",
                  "velocity", "timing", "valley_width_index", "drainage_area", "elevation",
-                 "air_temperature", "degree_days", "groundwater", "instream_flow", "fish_length"),
+                 "air_temperature", "degree_days", "groundwater", "instream_flow", "fish_length",
+                 "leap_height", "swim_speed"),
     parameter = c("spawn_gradient_max", "spawn_gradient_min", "spawn_channel_width_min",
                   "spawn_mad_min", "rear_gradient_max", "rear_channel_width_min", "rear_mad_min",
                   "rear_mad_max", "rear_lake_ha_min", "rear_wetland_ha_min", "access_gradient_max",
@@ -96,7 +102,7 @@ knw_literature_vocab <- function() {
 }
 
 # Which metrics each variable takes: a statistic of temperature, the window a
-# degree-day total accumulates over, the statistic a flow need is held to, or
+# degree-day total accumulates over, the statistic a flow need is held to, which speed a swimming speed is, or
 # which body length a fish length is.
 # Variables not named here carry no metric.
 .knw_metric_fits <- function() {
@@ -106,7 +112,8 @@ knw_literature_vocab <- function() {
        degree_days = c("growing_season", "to_hatch", "to_emergence", "annual", "unstated"),
        instream_flow = c("instantaneous", "daily_mean", "7day_low", "monthly_mean", "monthly_median",
                          "unstated"),
-       fish_length = c("fork_length", "total_length", "unstated"))
+       fish_length = c("fork_length", "total_length", "unstated"),
+       swim_speed = c("burst", "prolonged", "sustained", "critical", "unstated"))
 }
 
 #' Read the literature evidence table, filtered by species and variable
@@ -127,7 +134,7 @@ knw_literature_vocab <- function() {
 #' channel width, and so on) and a bound must sit on its value: `min` on
 #' `value_min`, `max` on `value_max`, `range` on both. A text quote is at least
 #' 20 characters, so that a check against the PDF can tell it apart from noise.
-#' A `temperature`, `air_temperature`, `degree_days`, `instream_flow` or `fish_length` value needs a `metric`
+#' A `temperature`, `air_temperature`, `degree_days`, `instream_flow`, `fish_length` or `swim_speed` value needs a `metric`
 #' that fits its variable, and a `none` row may name the metric it searched
 #' for; every other row leaves `metric` blank. A cited
 #' `degree_days` row needs a `note`, which gives the base temperature.
@@ -273,6 +280,12 @@ knw_literature_read <- function(path, species_code = NULL, variable = NULL) {
     stop("an instream_flow row is a flow need, not a model parameter: parameter and model_id ",
          "stay blank", first(modelled), call. = FALSE)
   }
+  # 0280's coverage counts any row by its parameter, so a leap tagged access_gradient_max would fill an access cell.
+  ability <- x$variable %in% c("leap_height", "swim_speed") & (!is.na(x$parameter) | !is.na(x$model_id))
+  if (any(ability)) {
+    stop("a ", x$variable[ability][1], " row is a fish's capability, the basis of a limit, not a model parameter: ",
+         "parameter and model_id stay blank", first(ability), call. = FALSE)
+  }
   mad_off <- grepl("_mad_", x$parameter) & x$variable != "discharge"
   if (any(mad_off)) {
     stop("parameter ", x$parameter[mad_off][1], " belongs to discharge rows, not ",
@@ -287,7 +300,7 @@ knw_literature_read <- function(path, species_code = NULL, variable = NULL) {
                drainage_area = c("km2", "mi2"), elevation = c("m", "ft"),
                air_temperature = "degC", degree_days = "degC-day",
                instream_flow = c("m3/s", "cfs", "percent MAD", "percentile", "percent exceedance"),
-               fish_length = "mm",
+               fish_length = "mm", leap_height = c("m", "cm", "ft"), swim_speed = c("m/s", "cm/s", "ft/s"),
                # Qualitative until a source gives an upwelling measure: no unit fits, so no value can.
                groundwater = character(0))
   misfit <- !is.na(x$unit) & !mapply(function(v, u) u %in% fits[[v]], x$variable, x$unit)

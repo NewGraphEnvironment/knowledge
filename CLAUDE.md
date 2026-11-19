@@ -92,7 +92,7 @@ Issue and PR numbers in the seeded history and in `planning/archive/2026-07-*` r
   then hand-edited; read with `knw_timing_read()`), `literature_evidence.csv` (cited habitat-threshold
   values with verbatim quotes, read with `knw_literature_read()`, gated by `0280`; a row stating an
   intrinsic-potential model's threshold carries that model's `model_id`; a temperature, air-temperature or
-  degree-day value names its `metric`; a `fish_length` row is a body length tied to first-winter survival, in `mm`, whose `metric` names the length type (#47); a `groundwater` row is a statement with no value; `discharge` is stream
+  degree-day value names its `metric`; a `fish_length` row is a body length tied to first-winter survival, in `mm`, whose `metric` names the length type (#47); a `groundwater` row is a statement with no value; a `leap_height` or `swim_speed` row is what a fish can do, the basis of a passage limit, and carries no model parameter (#234); `discharge` is stream
   size and `instream_flow` a flow need: a valued one names its `metric`, and none carries a model parameter),
   `ip_model_registry.csv` (one row
   per IP model × species × stage: how it sizes streams, its confinement variable, its validation, with its
@@ -122,6 +122,9 @@ Issue and PR numbers in the seeded history and in `planning/archive/2026-07-*` r
   `westslope_cutthroat_{members,additions}.csv` (the same for `species/westslope_cutthroat`, the sole input of the
   `westslope_cutthroat` store: the management and recovery documents, East Kootenay monitoring and the Environmental
   Damages Fund's Elk Valley reports; #190), and
+  `passage_limits_{members,additions}.csv` (what `0270 --collection passage_limits --parent ESNB4BQB` puts in
+  `Fisheries/Fish Passage/passage_limits`, the sole input of the `fish_passage` store: the sources of link's access
+  gradients and the leap and speed behind them; the rest of `Fisheries/Fish Passage` stays out; #234), and
   `statistics_{members,additions}.csv` (what `0270 --collection statistics --parent top` puts in the top-level
   `statistics` collection: the texts the method is read against; #95), and `detection_{members,additions}.csv` (what
   `0270 --collection detection --parent LP4R4VYR` puts in `statistics/detection`: the methods literature for
