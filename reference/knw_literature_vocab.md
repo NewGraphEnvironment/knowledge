@@ -82,6 +82,12 @@ depth is stream size, and is written in `m bankfull`.
 habitat dimension. It reads in `mm`, and its `metric` says which length
 the source measured: `fork_length`, `total_length`, or `unstated`.
 
+`leap_height` and `swim_speed` are what a fish can do, the basis a
+source gives for a passage limit: the height it can leap, and the speed
+it can swim, whose `metric` says which (`burst`, `prolonged`,
+`sustained`, `critical`, or `unstated`). `velocity` stays the water a
+fish meets at a site.
+
 `groundwater` covers upwelling, hyporheic exchange and springs. It takes
 no unit, so a groundwater row carries no value: no source read so far
 gives an upwelling measure (a vertical hydraulic gradient, say).
@@ -96,5 +102,6 @@ knw_literature_vocab()$variable
 #> [10] "depth"              "velocity"           "timing"            
 #> [13] "valley_width_index" "drainage_area"      "elevation"         
 #> [16] "air_temperature"    "degree_days"        "groundwater"       
-#> [19] "instream_flow"      "fish_length"       
+#> [19] "instream_flow"      "fish_length"        "leap_height"       
+#> [22] "swim_speed"        
 ```

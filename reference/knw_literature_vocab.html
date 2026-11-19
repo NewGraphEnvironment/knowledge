@@ -160,6 +160,10 @@ size, and is written in <code>m bankfull</code>.</p>
 age-0 fish's size at the onset of its first winter, say), not a habitat
 dimension. It reads in <code>mm</code>, and its <code>metric</code> says which length the source
 measured: <code>fork_length</code>, <code>total_length</code>, or <code>unstated</code>.</p>
+<p><code>leap_height</code> and <code>swim_speed</code> are what a fish can do, the basis a source
+gives for a passage limit: the height it can leap, and the speed it can
+swim, whose <code>metric</code> says which (<code>burst</code>, <code>prolonged</code>, <code>sustained</code>,
+<code>critical</code>, or <code>unstated</code>). <code>velocity</code> stays the water a fish meets at a site.</p>
 <p><code>groundwater</code> covers upwelling, hyporheic exchange and springs. It takes no
 unit, so a groundwater row carries no value: no source read so far gives an
 upwelling measure (a vertical hydraulic gradient, say).</p>
@@ -174,7 +178,8 @@ upwelling measure (a vertical hydraulic gradient, say).</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [10] "depth"              "velocity"           "timing"            </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [13] "valley_width_index" "drainage_area"      "elevation"         </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [16] "air_temperature"    "degree_days"        "groundwater"       </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [19] "instream_flow"      "fish_length"       </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [19] "instream_flow"      "fish_length"        "leap_height"       </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [22] "swim_speed"        </span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
