@@ -38,7 +38,8 @@ table (link models nine species, pauses KO and RB, and does not model CT or DV, 
 
 ## Owed
 
-- File the access track's next member (the records review) and point the backlog at it.
+The records review is filed as #238 and the backlog points at it (done before the merge).
+
 - After #217 OCRs Bjornn and Reiser 1991, rebuild `fish_passage` (`ACTION=build ... OVERWRITE=TRUE`, then push) so it holds all 25 documents; until then it holds 24.
 
 Closed by: PR (to follow) for #178 and #234

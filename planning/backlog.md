@@ -47,7 +47,7 @@ Tracks are separate efforts, not moves: baselines (#139, `track:baselines`: #140
 #101; its umbrella is in the skills repository), provenance (`track:provenance`: #162; #165 done in PR #206, #197 in PR #207; umbrella likewise) and
 minimal-run (#120, `track:minimal-run`: closed 2026-11-18, its waiting setups owed in #132 and #70) and publish (#220,
 `track:publish`: #219 next; its upload of `knowledge/fdis/v3` is the moment batch 18's per-pass tables can join v3
-without a new version), access (#132, `track:access`: #234 first, in move 9; #131 a member) and gradient (#70,
+without a new version), access (#132, `track:access`: #234 first, in move 9, then #238, the records above modelled gradient barriers; #131 a member) and gradient (#70,
 `track:gradient`: #235 first, in move 15; #71 a member; its windows and lidar wait on fresh#257). Move 9 split into the
 two on 2026-11-18, at its gate.
 

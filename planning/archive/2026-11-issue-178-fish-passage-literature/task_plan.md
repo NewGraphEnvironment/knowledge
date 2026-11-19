@@ -100,7 +100,7 @@ passage reports but few swimming or leaping performance papers (Katopodis & Gerv
 
 ## Owed at the end (reported, done after merge)
 
-- [ ] File the access track's next member (the records review) and point the backlog at it.
+- [x] File the access track's next member (the records review) and point the backlog at it. (#238, before the merge)
 - [ ] After #217 OCRs Bjornn and Reiser 1991, rebuild `fish_passage` (`ACTION=build ... OVERWRITE=TRUE`, then push) so it holds all 25 documents; until then it holds 24.
 
 ## Validation
