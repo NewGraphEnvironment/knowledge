@@ -29,7 +29,7 @@ Backlog: `planning/backlog.md`, move 9. Plan it with `/planning-init <this issue
 
 | Error | Resolution |
 |-------|------------|
-| `mcp__zotero__zotero_search_items`: missing ZOTERO_LIBRARY_ID and ZOTERO_API_KEY | Not a route (soul#590; kdot#42 removes the server). Read the group library from `zotero.sqlite` read-only, or through `/zotero-lookup`, `/zotero-api`, `/lit-search` |
+| `mcp__zotero__zotero_search_items`: missing ZOTERO_LIBRARY_ID and ZOTERO_API_KEY | Not a route: an unconfigured server in the agent setup, whose removal is tracked outside this repo. Read the group library from `zotero.sqlite` read-only, or through `/zotero-lookup`, `/zotero-api`, `/lit-search` |
 
 ## PSCIS gradient fields (2026-11-18)
 
