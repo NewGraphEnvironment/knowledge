@@ -22,7 +22,7 @@
 
 | issue | title |
 |---|---|
-| #17 | Cross-group NFC roll-up plus a coverage layer, synced so rtj can load it by manifest |
+| #17 | Cross-group NFC roll-up plus a coverage layer, synced so report repos can load it by manifest |
 | #2 | Snapshot consumer: pull a layer at a recorded knowledge SHA into a report repo |
 | #1 | Planning-method vignette for reports to port as an appendix |
 
