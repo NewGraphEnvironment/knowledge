@@ -83,19 +83,24 @@ test_that("knw_fiss_select() drops the template's key-only rows and fills missin
 test_that("knw_fiss_parse_step() names why each step of each layout yields what it does", {
   f <- c("template_v2.xls", "pre2012_step_banner.xls", "pre2012_header17.xlsx", "individual_fish.xls",
          "tissue.xls")
-  got <- do.call(rbind, lapply(f, function(w) do.call(rbind, lapply(steps, function(s) {
+  one <- function(w, s) {
     lg <- knw_fiss_parse_step(fx(w), "77", s)$log
     data.frame(file = w, step = s, status = lg$status, header_row = lg$header_row, kept = lg$rows_after_filter)
-  }))))
+  }
+  grid <- expand.grid(s = steps, w = f, stringsAsFactors = FALSE)
+  got <- do.call(rbind, Map(one, grid$w, grid$s))
+  rownames(got) <- NULL
   want <- data.frame(
-    file = rep(f, each = 4), step = rep(steps, 5),
+    file = rep(f, each = 4),
+    step = rep(steps, 5),
     status = c("ok", "ok", "ok", "ok",
                "ok", "ok", "ok", "no_rows",
                "ok", "ok", "no_header", "empty_sheet",
                "no_sheet_match", "fish_layout", "ok", "no_sheet_match",
                rep("no_sheet_match", 4)),
     header_row = c(31L, 23L, 18L, 20L, 26L, 6L, 6L, 6L, 17L, 6L, NA, NA, NA, 4L, 4L, NA, rep(NA_integer_, 4)),
-    kept = c(3L, 4L, 2L, 2L, 3L, 4L, 2L, 0L, 1L, 1L, 0L, 0L, 0L, 0L, 3L, 0L, rep(0L, 4)))
+    kept = c(3L, 4L, 2L, 2L, 3L, 4L, 2L, 0L, 1L, 1L, 0L, 0L, 0L, 0L, 3L, 0L, rep(0L, 4))
+  )
   expect_identical(got, want)
 })
 

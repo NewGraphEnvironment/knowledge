@@ -13,12 +13,14 @@
     "soak_time", "date_in", "date_out", "time_in", "time_out",
     "length_m", "width_m",
     "temperature_c", "conductivity_m_s_cm", "turbidity", "haul_pass",
-    "species", "stage", "total_number", "min_length_mm", "max_length_mm", "comments"),
+    "species", "stage", "total_number", "min_length_mm", "max_length_mm", "comments"
+  ),
   # Step 3 is one row per fish. It carries no date or coordinates: those come from the
   # Step 1 site through site_key, and the sampling event from method_number + haul_pass.
   step3_indiv_fish = c(
     "sampling_method", "method_number", "haul_pass",
-    "species", "length_mm", "weight_g", "sex", "maturity", "age", "comments"),
+    "species", "length_mm", "weight_g", "sex", "maturity", "age", "comments"
+  ),
   step4_site_data = c(
     "utm_zone", "utm_easting", "utm_northing",
     "channel_width_m", "channel_width_m_2", "channel_width_m_3", "channel_width_m_4",
@@ -26,7 +28,8 @@
     "wetted_width_m", "wetted_width_m_2", "wetted_width_m_3", "wetted_width_m_4",
     "wetted_width_m_5", "wetted_width_m_6", "wetted_width_m_7", "avg_wetted_width_m",
     "average_gradient_percent",
-    "temperature_c", "conductivity_m_s_cm", "comments")
+    "temperature_c", "conductivity_m_s_cm", "comments"
+  )
 )
 
 # Name variants across template editions -> canonical. The pre-2012 edition writes species as a code under
@@ -49,7 +52,8 @@
   step1_ref_loc    = "step.?1|ref.*loc|location",
   step2_fish_coll  = "step.?2|fish.?coll|collection.?form",
   step3_indiv_fish = "step.?3|indiv",
-  step4_site_data  = "step.?4|stream.?site|site.?data|site.?card|site.?coll")
+  step4_site_data  = "step.?4|stream.?site|site.?data|site.?card|site.?coll"
+)
 
 .knw_fiss_num <- function(x) suppressWarnings(as.numeric(as.character(x)))
 
@@ -142,8 +146,8 @@ knw_fiss_match_sheet <- function(sheets, step) {
 knw_fiss_read_step <- function(path, sheet) {
   chk::chk_file(path)
   chk::chk_string(sheet)
-  raw <- as.data.frame(suppressWarnings(suppressMessages(
-    readxl::read_excel(path, sheet = sheet, col_names = FALSE, .name_repair = "minimal"))))
+  read <- function() readxl::read_excel(path, sheet = sheet, col_names = FALSE, .name_repair = "minimal")
+  raw <- as.data.frame(suppressWarnings(suppressMessages(read())))
   out <- list(status = "ok", header_row = NA_integer_, banner = NA_character_,
               rows_raw = 0L, data = NULL)
   if (!nrow(raw)) {
@@ -167,10 +171,12 @@ knw_fiss_read_step <- function(path, sheet) {
   out$rows_raw   <- nrow(raw) - hdr
   # janitor warns on every "µS/cm" label; it writes "m" for the "µ", which is the name the column list reads
   # (`conductivity_m_s_cm`), so that one warning is muffled and any other passes through
-  nm <- withCallingHandlers(
-    janitor::make_clean_names(ifelse(is.na(as.character(unlist(raw[hdr, ]))), "",
-                                     as.character(unlist(raw[hdr, ])))),
-    warning = function(w) if (grepl("mu or micro symbol", conditionMessage(w))) invokeRestart("muffleWarning"))
+  labels <- as.character(unlist(raw[hdr, ]))
+  labels[is.na(labels)] <- ""
+  muffle_mu <- function(w) {
+    if (grepl("mu or micro symbol", conditionMessage(w))) invokeRestart("muffleWarning")
+  }
+  nm <- withCallingHandlers(janitor::make_clean_names(labels), warning = muffle_mu)
   dat <- raw[(hdr + 1L):nrow(raw), , drop = FALSE]
   names(dat) <- nm
   dat <- dat[, nm != "" & !stringr::str_detect(nm, "^x(_[0-9]+)?$"), drop = FALSE]

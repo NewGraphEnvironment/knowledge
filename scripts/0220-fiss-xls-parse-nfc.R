@@ -205,7 +205,7 @@ if (n_zone_nonnum) message(sprintf("  %d utm_zone value(s) carry no digits and w
 
 # ---- Step 2 effort + NFC roll-up to site ------------------------------------
 # zero-catch codes from the provincial code table (NFC, ZZZ), not a literal here; the roll-up and its NFC rule are
-# knw_fiss_nfc() (R/fiss_nfc.R)
+# in the package, in R/fiss_nfc.R
 species_codes <- readr::read_csv("data/fdis_species_codes.csv", col_types = readr::cols(.default = "c"), na = "")
 step2_site <- knw_fiss_nfc(step2, species_codes)
 

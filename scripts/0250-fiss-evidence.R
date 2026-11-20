@@ -414,7 +414,8 @@ reconcile <- bind_rows(
       note = "a percent-formatted cell stores a fraction; a value above 1 is not one"),
   # the workbook gradient against the FWA line's at the same sites, both in percent: a unit slip moves the median
   # ratio by 100x, far outside the band (stated before the first run, #34)
-  chk("site_gradient_vs_fwa_median_ratio", "0.25-4", grad_ratio, pass = is.na(grad_ratio) || (grad_ratio >= 0.25 && grad_ratio <= 4),
+  chk("site_gradient_vs_fwa_median_ratio", "0.25-4", grad_ratio,
+      pass = is.na(grad_ratio) || (grad_ratio >= 0.25 && grad_ratio <= 4),
       note = sprintf("%d sites with both gradients above 0", grad_n)),
   chk("evidence_sites_unplaced", NA, sum(is.na(evidence$blue_line_key) & evidence$site_visit %in% pts$site_key), pass = TRUE,
       note = "placeable sites fwa_indexpoint found no stream for within 500 m"),

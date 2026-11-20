@@ -46,7 +46,7 @@ knw_fiss_nfc <- function(step2, codes) {
   chk::check_names(codes, c("code", "catch_class"))
   zero_catch_codes <- codes$code[codes$catch_class %in% "zero_catch"]
   if (!length(zero_catch_codes)) stop("codes has no zero_catch code", call. = FALSE)
-  num <- .knw_fiss_num
+  num <- function(x) .knw_fiss_num(x)
   s2 <- dplyr::mutate(
     step2,
     total_number = num(.data$total_number),
