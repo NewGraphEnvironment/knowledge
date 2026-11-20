@@ -91,17 +91,17 @@ What exploration found:
 ## Phase 3: the site span and where the record sits (#23, cut)
 
 - [x] File the split issue (age-class counts per visit; the workbook second source after #21's parser), naming move 6. Rewrite #23's body to the cut scope, with a link to it.
-- [ ] `0240` writes the pass CSVs only where `0230`'s passes are present, and says to rerun `0230` otherwise (review
+- [x] `0240` writes the pass CSVs only where `0230`'s passes are present, and says to rerun `0230` otherwise (review
   item 4); rerun `0240` once on the published `sites.rds` and confirm every tracked output byte-identical (item 5).
-- [ ] The span, in the checks (gate, 2026-11-20): `knw_fdis_span()`, tested first (capped at the blue line's top,
+- [x] The span, in the checks (gate, 2026-11-20): `knw_fdis_span()`, tested first (capped at the blue line's top,
   missing or sentinel length), `downstream_route_measure + fished_length_m` capped at the line's top with a flag.
-- [ ] `data-raw/fdis_downstream_end_check.R` runs on the published `fdis_sites.csv` and a `bcfishobs_fdis_match` regenerated with `knw_bcfishobs_match()` from the published sites and catch (review item 2; the bcfishobs snapshot logged), reading the blue lines' top measures:
+- [x] `data-raw/fdis_downstream_end_check.R` runs on the published `fdis_sites.csv` and a `bcfishobs_fdis_match` regenerated with `knw_bcfishobs_match()` from the published sites and catch (review item 2; the bcfishobs snapshot logged), reading the blue lines' top measures:
   - match rates by species and class;
   - for one-to-one matches on the same blue line, where the bcfishobs point sits against the visit's span (below it, at the downstream end within 5 m, inside it, above it), with offsets as a share of fished length;
   - logged to `scripts/logs/fdis/<date>_fdis_downstream_end_check.txt`;
   - says what it can show (review item 10): FDIS-keyed bcfishobs points likely carry the visit's own UTM, so their
     offset measures two snaps, and #137 rests on the fished span instead.
-- [ ] `research/fdis_export.md`: a section on the site span and where a record sits, with the match rates and the check's verdict.
+- [x] `research/fdis_export.md`: a section on the site span and where a record sits, with the match rates and the check's verdict.
 
 ## Phase 4: one flow per segment (#137)
 
