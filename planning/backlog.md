@@ -17,6 +17,10 @@ waited on, closed 2026-11-17; link#460, the minimal-run track's last wait, close
 `data-raw/timing_nuseds.R` reads the local csv for two fixed groups); wet's open work that reads the timing rows · move
 16 (#244) carries #240 and #230; #243 becomes the `track:timing` umbrella; no closures
 
+**Verified:** 2026-11-20 against 67 open issues · **Produced by:** a read of the 2 open issues the file did not name, both
+filed during move 6 (#175, merged in PR #247) · #245, split from move 6's #23, joins move 7 as batch 27; #246 joins the
+provenance track; no closures, no new move
+
 How to use this file: `/backlog-sweep` writes it. Take the first move in **Moves** that is not
 ticked and not **waiting**; `/planning-init <umbrella>` plans it, one phase per batch, one PR.
 When the plan finds that a batch, or one of its members, is more than one PR's work, it carries the first piece and
@@ -40,7 +44,7 @@ split piece, or one filed since the last pass): run `/backlog-sweep` to place it
 | - [x] 4 | #173 | 6, 7: maps out of the comparison, one research page per key (4 issues) | done: https://github.com/NewGraphEnvironment/knowledge/pull/212 (batch 6; batch 7 split to #211) | — | — | — |
 | - [x] 5 | #174 | 8, 9: timing table and NuSEDS, flow in windows (5 issues) | done: https://github.com/NewGraphEnvironment/knowledge/pull/229 | — | — | — |
 | - [x] 6 | #175 | 10, 18: location error against flow resolution, the FDIS load's outputs (4 issues) | done: https://github.com/NewGraphEnvironment/knowledge/pull/247 | A | — | opus |
-| - [ ] 7 | #176 | 11, 12: FISS parser, gradient and PINE; layers for report repos (6 issues) | open | B | — | opus |
+| - [ ] 7 | #176 | 11, 12, 27: FISS parser, gradient and PINE; layers for report repos; FDIS age classes and the workbook source (7 issues) | open | B | — | opus |
 | - [ ] 8 | #177 | 13, 23: promotion cargo, tuning-code fixes (4 issues) | **waiting** on Al's word for the next full retune | E | 12 | opus |
 | - [x] 9 | #178 | 14: fish-passage literature, the access track's first piece (1 issue) | done: https://github.com/NewGraphEnvironment/knowledge/pull/237 | C | — | fable then opus |
 | - [ ] 10 | #179 | 16, 22: library, keys and our own prose; OCR of the scanned PDFs (4 issues) | open | C | 9 | opus |
@@ -51,7 +55,7 @@ split piece, or one filed since the last pass): run `/backlog-sweep` to place it
 | - [ ] 15 | #236 | 24: PSCIS stream slope against link's gradient, the gradient track's first piece (1 issue) | open | F | — | opus |
 | - [ ] 16 | #244 | 25, 26: NuSEDS windows for every group, the timing track's first piece; a publish that runs as documented (2 issues) | open | H | — | opus |
 Tracks are separate efforts, not moves: baselines (#139, `track:baselines`: #140 next), speed (`track:speed`: #85,
-#101; its umbrella is in the skills repository), provenance (`track:provenance`: #162; #165 done in PR #206, #197 in PR #207; umbrella likewise) and
+#101; its umbrella is in the skills repository), provenance (`track:provenance`: #162, then #246, the placement ties a rerun of `0230` meets on another database; #165 done in PR #206, #197 in PR #207; umbrella likewise) and
 minimal-run (#120, `track:minimal-run`: closed 2026-11-18, its waiting setups owed in #132 and #70) and publish (#220,
 `track:publish`: #219 next; its upload of `knowledge/fdis/v3` is the moment batch 18's per-pass tables can join v3
 without a new version), access (#132, `track:access`: #234 first, in move 9, then #238, the records above modelled gradient barriers; #131 a member) and gradient (#70,
@@ -95,6 +99,7 @@ link's own pass: link#468, a backlog pass for link that carries the link issues 
 | 24 | #236 | PSCIS stream slope against link's gradient: #235 (from #70) | 1 | what `STREAM_SLOPE` measures | the gradient track's first piece, beside #121's FDIS check |
 | 25 | #244 | NuSEDS windows for every group: #240 (from #243) | 1 | the mainstem rule; whether a NuSEDS window alone may become a row | the timing track's first piece; #241 and #242 start from its windows |
 | 26 | #244 | a publish that runs as documented: #230 | 1 | log outside the repo then copied in, or the log directory exempt | #240 reads the published parquet; one sitting on the NuSEDS source |
+| 27 | #176 | FDIS age classes and the workbook source: #245 (from #23, move 6) | 1 | one PR or two (age classes are FDIS-side, the workbook source FISS-side) | the workbook half reads batch 11's tested parser and regenerates the FISS outputs with it |
 
 ### 1. Evidence-build and test fixes
 
@@ -373,6 +378,19 @@ no literature exists yet. Two open wet issues read the timing rows and rerun whe
 goes outside the repo and is copied in after the run (keeps the check whole), or `scripts/logs/nuseds/` is exempt.
 
 **Touches:** `scripts/0340-nuseds-build.R`, `scripts/README.md`
+
+### 27. FDIS age classes and the workbook source
+
+- [ ] Carried by move 7, #176
+
+#245, split from #23 at move 6's gate: counts per age class per visit (and per pass, beside `knw_fdis_passes()`), and
+the Fish Data Submission workbooks as a second source beside bcfishobs, each site classed in the export, in bcfishobs
+only, or new. The workbook half reads batch 11's tested `knw_fiss_*` parser and the same regeneration of the FISS
+outputs, so it follows batch 11 in the plan. Gate: one PR or two; the age classes touch the FDIS load, the workbook
+source the FISS scripts.
+
+**Touches:** `scripts/0230-fdis-load.R`, `R/fdis_passes.R`, `scripts/0250-fiss-evidence.R`, `data/fiss_evidence.csv`, and
+a new workbook-against-bcfishobs check
 
 ## Singles
 
