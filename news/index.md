@@ -1,5 +1,39 @@
 # Changelog
 
+## knowledge 0.4.47
+
+- The Fish Data Submission workbook parser is tested package code
+  ([\#7](https://github.com/NewGraphEnvironment/knowledge/issues/7)):
+  [`knw_fiss_parse_step()`](https://newgraphenvironment.github.io/knowledge/reference/knw_fiss_parse_step.md),
+  [`knw_fiss_read_step()`](https://newgraphenvironment.github.io/knowledge/reference/knw_fiss_read_step.md),
+  [`knw_fiss_match_sheet()`](https://newgraphenvironment.github.io/knowledge/reference/knw_fiss_match_sheet.md),
+  [`knw_fiss_select()`](https://newgraphenvironment.github.io/knowledge/reference/knw_fiss_select.md),
+  [`knw_fiss_columns()`](https://newgraphenvironment.github.io/knowledge/reference/knw_fiss_columns.md),
+  [`knw_fiss_utm_zone()`](https://newgraphenvironment.github.io/knowledge/reference/knw_fiss_utm_zone.md)
+  and the Step 2 no-fish roll-up
+  [`knw_fiss_nfc()`](https://newgraphenvironment.github.io/knowledge/reference/knw_fiss_nfc.md),
+  tested on six synthetic workbooks in `inst/testdata/fiss/`, one per
+  layout found across the five groups (`inst/NOTICE.md` says what they
+  copy from the provincial template). `0220` is now a driver over them,
+  and rerun on all five groups it wrote every output as before. Every
+  V2.0 template banner from 2012 to 2022 shares one layout; the
+  header-26 layout is the pre-2012 edition. PINE was re-fetched onto the
+  keyed fetch-log schema, so its reconcile checks URL sets, its tables
+  unchanged
+  ([\#10](https://github.com/NewGraphEnvironment/knowledge/issues/10)).
+  `0250` writes the workbook site gradient in percent, as
+  `fdis_evidence.csv` does: the template’s cell is percent-formatted and
+  stores 2.5 % as 0.025, so 31 values in `data/fiss_evidence.csv` moved
+  ×100, and a raw value above 1 or a median ratio to the FWA gradient
+  outside 0.25–4 now fails its reconcile
+  ([\#34](https://github.com/NewGraphEnvironment/knowledge/issues/34)).
+  Backlog move 7
+  ([\#176](https://github.com/NewGraphEnvironment/knowledge/issues/176))
+  carried this; its other two batches went to
+  [\#248](https://github.com/NewGraphEnvironment/knowledge/issues/248)
+  and
+  [\#245](https://github.com/NewGraphEnvironment/knowledge/issues/245).
+
 ## knowledge 0.4.46
 
 - The FDIS load keeps its electrofishing passes
