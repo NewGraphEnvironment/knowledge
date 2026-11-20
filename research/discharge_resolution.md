@@ -53,8 +53,8 @@ flow is really set at its outlet, which this measure does not try to model.
 A bcfishobs record matched to an FDIS visit lies at the visit's own point: 58 % carry the visit's UTM, and of the rest
 that lie on the visit's stream 81 % are within 5 m of its point (`research/fdis_export.md`, "The site span"). That point
 is usually the site's downstream end, and the fish came from anywhere along the fished stretch above it: over the
-19,349 visits of the placed one-to-one records a median 100 m, 200 m at the upper quartile and 800 m at the 90th
-percentile. That stretch, not the record's point, is the location error the evidence carries.
+19,349 visits of the placed one-to-one records, the 17,550 that record a length (1,799 do not) fished a median 100 m,
+200 m at the upper quartile and 800 m at the 90th percentile. That stretch, not the record's point, is the location error the evidence carries.
 
 ## The two errors side by side
 
@@ -82,8 +82,8 @@ visits:
 | CO rearing | 0.10 | 6,840 | 1.2 % | 1.7 % | 5.9 % |
 | WCT rearing | 0.03 | 7,644 | 2.1 % | 2.8 % | 7.9 % |
 
-The smaller the minimum, the more a point flow would move, because small streams gather a larger share of their flow
-along each segment; even at westslope cutthroat's 0.03 m³/s it moves a quarter to a third as many visits as the source choice.
+At the two smallest minimums, coho's and westslope cutthroat's, a point flow moves several times as many visits as at
+the others, because small streams gather a larger share of their flow along each segment; even at westslope cutthroat's 0.03 m³/s it moves a quarter to a third as many visits as the source choice.
 A segment's own fall at a visit runs larger than its span's (a median 11 % on single-line streams) because 59 % of
 those visits on single-line streams sit on segments under 0.1 m³/s, headwaters whose modelled flow runs to nothing at
 their head (Q1); the fished span takes in only part of a segment.

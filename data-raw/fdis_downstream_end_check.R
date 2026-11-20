@@ -19,7 +19,8 @@
 # OUTPUT: scripts/logs/fdis/<yyyymmdd>_fdis_downstream_end_check[-<n>].txt
 # RUN:    Rscript data-raw/fdis_downstream_end_check.R   (from the repo root, on the published build: PULL=TRUE
 #         scripts/0336-archive.R restores sites.rds and fdis_sites.csv, and PLACE=FALSE scripts/0230-fdis-load.R adds
-#         catch.rds, which the archive does not hold)
+#         catch.rds, which the archive does not hold; catch.rds is held to the ledger by md5, so it must be written by
+#         the R that wrote the build, since an RDS header carries the R version)
 # ---------------------------------------------------------------------------
 suppressMessages({
   library(dplyr)
@@ -55,7 +56,7 @@ if (!identical(led$note[led$step == "md5_sites"], md5_sites)) {
 }
 if (!identical(led$note[led$step == "md5_catch"], unname(tools::md5sum(f_catch)))) {
   stop(f_catch, " is not the published build's (", rec$evidence_ledger, "): rebuild it with ",
-       "PLACE=FALSE scripts/0230-fdis-load.R")
+       "PLACE=FALSE scripts/0230-fdis-load.R under the R that wrote the build (an RDS header carries the R version)")
 }
 .knw_archive_sites_check(f_table, f_sites)
 sites <- readRDS(f_sites)

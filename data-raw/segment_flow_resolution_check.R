@@ -23,7 +23,7 @@
 #       key) changes when flow is read at the record's point, or at the middle of its span, instead of the segment's
 #       value; beside the share that changes when the other source replaces the pick.
 #
-# INPUT:  EVIDENCE_DIR/{visits_link,fdis_sites}.csv (default data/fdis/derived), held to the published tables'
+# INPUT:  EVIDENCE_DIR/visits_link.csv (default data/fdis/derived), held to the published tables'
 #         evidence_md5 (data/thresholds.csv); data/thresholds.csv; the database (PG* env vars): whse_basemapping
 #         (streams, fundamental watersheds, their upstream areas) and discharge.fwa_v1_segment_monthly, whose comment
 #         (the flow load) is logged

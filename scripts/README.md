@@ -39,7 +39,7 @@ wf_farm_priority.js                          farm priority/crossing tables out o
       also keeps the passes: data/fdis/build/{passes,pass_catch}.rds, knw_fdis_passes() (#225). PLACE=FALSE writes
       only what precedes placement (catch, fish, passes) and stops, with no database: the remedy on a restored build
 0240  size classes + CH / char evidence + summary vs thresholds -> data/fdis_*.csv; fdis_sites.csv and the passes
-      as fdis_passes.csv / fdis_pass_catch.csv (data/fdis/derived, for 0299)
+      as fdis_passes.csv / fdis_pass_catch.csv (data/fdis/derived, for 0299); ONLY=passes writes the pass CSVs alone
 
 --- FISS individual fish -> size-class evidence (after 0220 on each group, and 0230) ---
 0250  Step 3 fish + Step 2 counts, deduped against FDIS -> data/fiss_evidence.csv (fwapg database (PG* env vars))
@@ -356,7 +356,8 @@ and maturity, per-pass effort, measured channel width and gradient, and explicit
 - Checks on the built tables: `data-raw/fdis_downstream_end_check.R` (#23: where a bcfishobs record sits against
   its visit's fished span) and `data-raw/segment_flow_resolution_check.R` (#137: how far flow grows within a segment,
   against where records sit), each on the published build: `0336 PULL=TRUE` restores `sites.rds`, `fish.rds` and
-  the visit tables, and `PLACE=FALSE 0230` adds `catch.rds` and the passes, which the archive does not hold.
+  the visit tables, `PLACE=FALSE 0230` adds `catch.rds` and the passes, which the archive does not hold, and
+  `ONLY=passes 0240` writes the pass CSVs without rewriting the restored `fdis_sites.csv`.
 - Logs: `scripts/logs/fdis/` (the flow check's in `scripts/logs/flow/`).
 
 ## 0200 / 0210 / 0220 — FISS `.xls` → No-Fish-Captured layer
