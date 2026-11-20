@@ -145,7 +145,7 @@ The plan does them in one order, so the FISS outputs are regenerated once and di
       `pkgdown::check_pkgdown()` passes with the new exports in the reference index.
 - [x] `/code-check` clean (once over the branch with `/code-check branch`)
 - [x] PWF checkboxes match landed work
-- [ ] `/planning-archive` on completion
+- [x] `/planning-archive` on completion
 
 How each change is proved:
 
