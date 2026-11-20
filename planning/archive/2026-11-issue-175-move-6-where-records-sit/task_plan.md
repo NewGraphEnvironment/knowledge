@@ -130,7 +130,7 @@ Declined at the review: #225's workbook passes (`knw_fiss_visits()`), which are 
 
 - [x] Update `CLAUDE.md`'s FDIS and archive lines, `scripts/README.md` (`0230` and `0240` outputs, the two data-raw checks) and `research/README.md`.
 - [x] `/code-check branch` (three-round floor); `lintr` per-file diff against main; `devtools::test()`; `pkgdown::check_pkgdown()` for the new export.
-- [ ] `/planning-archive`, then `/gh-pr-push`.
+- [x] `/planning-archive`, then `/gh-pr-push`.
 
 ## Owed at the end (reported, done after merge)
 
@@ -141,7 +141,7 @@ Declined at the review: #225's workbook passes (`knw_fiss_visits()`), which are 
 - [x] Tests pass
 - [x] `/code-check` clean (once over the branch with `/code-check branch`)
 - [x] PWF checkboxes match landed work
-- [ ] `/planning-archive` on completion
+- [x] `/planning-archive` on completion
 
 How each change is proved:
 
