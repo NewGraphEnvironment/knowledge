@@ -1,0 +1,8 @@
+Fetching 77 files for PINE ...
+Status counts:
+# A tibble: 2 × 2
+  status        n
+  <chr>     <int>
+1 converted    33
+2 ok           44
+Wrote data/pine/fiss_xls_fetch_log.csv

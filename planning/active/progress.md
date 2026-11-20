@@ -12,3 +12,4 @@
 - Phase 1: five layouts measured (findings); template terms read (all rights reserved: fixtures copy labels and banners only, noted on #76); gradient cells are `0.0%`-formatted in both editions; FDIS build is the published one; baseline `0220` on all five groups reproduces every tracked CSV and every GeoPackage's content, so the baseline is the refactor's reference (`scripts/logs/fiss/` gets the refactor's run logs)
 - Plan review returned (no blockers, 14 findings): written to `review-plan.md`, corrections folded into the plan (5f360a34)
 - Phase 2: `knw_fiss_*` in `R/fiss_parse.R` and `R/fiss_nfc.R`, six fixtures, 82 assertions over two test files (51b9e7c5); refactored `0220` byte-identical to the baseline on all five groups; eight restored bugs each turn the tests red; `scripts/README.md` updated
+- Phase 3: PINE re-fetched (77 files, 44 ok / 33 converted); site and step tables byte-identical; reconcile holds the URL-set check

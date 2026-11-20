@@ -102,10 +102,10 @@ The plan does them in one order, so the FISS outputs are regenerated once and di
 
 ## Phase 3: #10, re-fetch PINE
 
-- [ ] Move `data/pine/fiss_xls/` into the scratchpad (never a sibling under `data/pine/`, which `.gitignore` does not
+- [x] Move `data/pine/fiss_xls/` into the scratchpad (never a sibling under `data/pine/`, which `.gitignore` does not
       cover: review finding 11), then run `WSG_TARGET=PINE FISS_FETCH=TRUE Rscript scripts/0210-fiss-xls-fetch.R`
       (77 files), then `0220` for PINE. Log both.
-- [ ] Read the reconcile: `manifest_urls_vs_fetch_log_urls` should replace the count-only check. The site, step2 and
+- [x] Read the reconcile: `manifest_urls_vs_fetch_log_urls` should replace the count-only check. The site, step2 and
       step3 tables must be byte-identical. The parse log should differ only in `path` (converted names gain the idx too); the
       fetch log gains `idx` and `xls_url` and reorders its columns; the reconcile moves in three rows (the check renamed to
       `_urls`, the `workbooks_with_no_step` note's file names, `clip_polygon_source`). Anything else, a 4xx from ACAT

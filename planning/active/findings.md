@@ -121,3 +121,19 @@ change is committed.
 All 25 reports that carry a workbook gradient were read (the 10 `.xls` converted with soffice into the scratchpad,
 read with tidyxl): 24 store it in cells formatted `0.0%`; one, report 48876 (11 values, max 0.05), stores it in
 `General` cells.
+Read as fractions (x100), report 48876's values are 0.5 to 5 % on small Peace-lowland tributaries, where the report's
+other sites carry FWA gradients of 0 to 0.91 %; read as percents they would be 0.005 to 0.05 %, implausibly flat.
+So its submitter typed fractions into unformatted cells, the same stored value a `0.0%` cell holds, and x100 is right
+for all 25 reports.
+
+## Phase 3: PINE re-fetched (#10, 2026-11-20)
+
+`0210` fetched all 77 files onto the `<report>_<idx>__` layout: 44 read directly, 33 converted, the same split as
+July's fetch (log `scripts/logs/fiss/20261120_fiss_fetch_pine.log`; the old folder went to the session scratchpad,
+outside the repo). `0220` (`20261120_fiss_parse_pine_refetch.log`) then wrote PINE's site, step-2 and step-3 tables
+byte-identical to the baseline and a GeoPackage of identical content (restored). What moved, all expected:
+- the fetch log gains `idx` and `xls_url`;
+- the parse log differs only in `path` (308 rows, equal once the idx is stripped);
+- the reconcile's `manifest_urls_vs_fetch_log_rows` (count only) becomes `manifest_urls_vs_fetch_log_urls` (URL sets
+  equal, 77), the `workbooks_with_no_step` note's file names carry the idx, and the two database rows name this run's
+  database.
