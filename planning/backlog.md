@@ -39,7 +39,7 @@ split piece, or one filed since the last pass): run `/backlog-sweep` to place it
 | - [x] 3 | #172 | 4, 5: Zotero library writes, new sources into the stores (5 issues) | done: https://github.com/NewGraphEnvironment/knowledge/pull/189 | — | — | — |
 | - [x] 4 | #173 | 6, 7: maps out of the comparison, one research page per key (4 issues) | done: https://github.com/NewGraphEnvironment/knowledge/pull/212 (batch 6; batch 7 split to #211) | — | — | — |
 | - [x] 5 | #174 | 8, 9: timing table and NuSEDS, flow in windows (5 issues) | done: https://github.com/NewGraphEnvironment/knowledge/pull/229 | — | — | — |
-| - [ ] 6 | #175 | 10, 18: location error against flow resolution, the FDIS load's outputs (4 issues) | open: start here | A | — | opus |
+| - [x] 6 | #175 | 10, 18: location error against flow resolution, the FDIS load's outputs (4 issues) | done: https://github.com/NewGraphEnvironment/knowledge/pull/247 | A | — | opus |
 | - [ ] 7 | #176 | 11, 12: FISS parser, gradient and PINE; layers for report repos (6 issues) | open | B | — | opus |
 | - [ ] 8 | #177 | 13, 23: promotion cargo, tuning-code fixes (4 issues) | **waiting** on Al's word for the next full retune | E | 12 | opus |
 | - [x] 9 | #178 | 14: fish-passage literature, the access track's first piece (1 issue) | done: https://github.com/NewGraphEnvironment/knowledge/pull/237 | C | — | fable then opus |
@@ -175,7 +175,7 @@ rearing streams better than MAD). Phase 2 of #105 and anything that publishes wa
 
 ### 10. Location error against flow resolution
 
-- [ ] Carried by move 6, #175
+- [x] Carried by move 6, #175 (merged in https://github.com/NewGraphEnvironment/knowledge/pull/247)
 
 #23 (the site-visit table: join key, span, the downstream-end check) and #137 (whether one discharge per FWA segment is
 fine enough).
@@ -263,7 +263,7 @@ and the flag on table-dense reports that were skipped, which `0154` takes from t
 
 ### 18. The FDIS load's outputs
 
-- [ ] Carried by move 6, #175
+- [x] Carried by move 6, #175 (merged in https://github.com/NewGraphEnvironment/knowledge/pull/247)
 
 #225 (publish the per-pass electrofishing tables the load already builds: one row per pass, one per pass and species)
 and #214 (archive `fish.rds` with the build and restore it on `PULL=TRUE`, and check whether `0230` rewrites it
