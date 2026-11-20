@@ -1,4 +1,4 @@
-FDIS downstream-end check (knowledge#23, move 6), 2026-11-20 04:17 UTC.
+FDIS downstream-end check (knowledge#23, move 6), 2026-11-20 05:12 UTC.
 Build: scripts/logs/habitat/20261103_evidence_build_ledger-derived_minimal.csv (sites.rds 39f751b174aea4a14eb0dc0d3e3b126d, the ledger of link run 20261102_203300-60ab009d); 51587 site visits.
 bcfishobs.observations: 375,962 records, newest dated 2026-10-10 (the snapshot this database holds).
 
@@ -15,6 +15,7 @@ bcfishobs.observations: 375,962 records, newest dated 2026-10-10 (the snapshot t
            SK              11    0     3171    86       921
            ST              13    0    13945   323      2266
           WCT              90   69     4388  1491       739
+Unmatched records: 34,372; of them on a collection the load dropped as a repeat copy (#35, no kept visit): 508.
 Records matched to exactly one visit: 24,163 of 60,098 FDIS-keyed records (40.2 %).
 
 ## One-to-one records: is the record's reported UTM the visit's own?
@@ -27,7 +28,7 @@ Records matched to exactly one visit: 24,163 of 60,098 FDIS-keyed records (40.2 
  the visit's line 13218
  visit not placed    43
 
-Placed one-to-one records: 24,088; on the visit's own blue line: 22,593 (93.8 %); capped spans: 487.
+Placed one-to-one records: 24,088; on the visit's own blue line: 22,593 (93.8 %); their visits: 19,349, 338 with a span capped.
 
 ## Where the record sits against the visit's span (same blue line)
                     where same_utm     n share
@@ -42,6 +43,6 @@ Placed one-to-one records: 24,088; on the visit's own blue line: 22,593 (93.8 %)
  same_utm    n   p10 p50 p90 share_of_length_p50
     FALSE 1796 -39.5   6  49               -0.01
 
-## Fished length of the matched visits (m): the stretch a record's fish came from
+## Fished length of the matched visits (m, each visit once): the stretch a record's fish came from
      n missing p25 p50 p75 p90
- 24088    2318  39 100 200 950
+ 19349    1799  38 100 200 800

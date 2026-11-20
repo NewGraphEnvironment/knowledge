@@ -51,9 +51,9 @@ flow is really set at its outlet, which this measure does not try to model.
 ## How far a record sits from where its fish were
 
 A bcfishobs record matched to an FDIS visit lies at the visit's own point: 58 % carry the visit's UTM, and of the rest
-81 % lie within 5 m of its point on its stream (`research/fdis_export.md`, "The site span"). That point is usually the
-site's downstream end, and the fish came from anywhere along the fished stretch above it: a median 100 m, 200 m at the
-upper quartile and 950 m at the 90th percentile for matched visits. That stretch, not the record's point, is the
+that lie on the visit's stream 81 % are within 5 m of its point (`research/fdis_export.md`, "The site span"). That point
+is usually the site's downstream end, and the fish came from anywhere along the fished stretch above it: over the
+19,349 matched visits a median 100 m, 200 m at the upper quartile and 800 m at the 90th percentile. That stretch, not the record's point, is the
 location error the evidence carries.
 
 ## The two errors side by side

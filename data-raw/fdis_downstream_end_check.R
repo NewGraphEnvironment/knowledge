@@ -72,6 +72,14 @@ bm <- knw_bcfishobs_match(conn, sites |> select(site_visit, date), catch |> sele
 block("bcfishobs records by species and match class (knw_bcfishobs_match(), knw_species())",
       tidyr::pivot_wider(bm$summary, names_from = match, values_from = n_records, values_fill = 0))
 one <- bm$matched |> filter(match == "one")
+# an unmatched record's collection may be one the load dropped as a repeat copy of a survey (#35), which the export
+# holds
+rep_map <- utils::read.csv("data/fdis_repeat_surveys.csv", colClasses = "character")
+coll <- function(sv) suppressWarnings(as.integer(sub("_.*$", "", sv)))
+coll_dropped <- setdiff(coll(rep_map$site_visit[rep_map$status == "dropped"]), coll(sites$site_visit))
+um <- bm$matched |> filter(match == "unmatched", !duplicated(observation_key))
+say("Unmatched records: %s; of them on a collection the load dropped as a repeat copy (#35, no kept visit): %s.",
+    format(nrow(um), big.mark = ","), format(sum(um$fshclctn_id %in% coll_dropped), big.mark = ","))
 say("Records matched to exactly one visit: %s of %s FDIS-keyed records (%.1f %%).", format(nrow(one), big.mark = ","),
     format(sum(bm$matched$match != "not_fdis" & !duplicated(bm$matched$observation_key)), big.mark = ","),
     100 * nrow(one) / sum(bm$matched$match != "not_fdis" & !duplicated(bm$matched$observation_key)))
@@ -125,9 +133,11 @@ on$where <- case_when(abs(on$offset_m) <= at_end_m ~ "at the downstream end",
                       on$downstream_route_measure <= on$v_urm ~ "inside the span",
                       TRUE ~ "above the span")
 say("")
-say("Placed one-to-one records: %s; on the visit's own blue line: %s (%.1f %%); capped spans: %s.",
+s_vis <- s[!duplicated(s$site_visit), ]   # a visit matched by several species' records counts once
+say(paste("Placed one-to-one records: %s; on the visit's own blue line: %s (%.1f %%); their visits: %s, %s with a",
+          "span capped."),
     format(nrow(s), big.mark = ","), format(nrow(on), big.mark = ","), 100 * nrow(on) / nrow(s),
-    format(sum(s$flag_span_capped), big.mark = ","))
+    format(nrow(s_vis), big.mark = ","), format(sum(s_vis$flag_span_capped), big.mark = ","))
 block("Where the record sits against the visit's span (same blue line)",
       on |> count(where, same_utm) |> group_by(same_utm) |> mutate(share = round(n / sum(n), 3)) |> ungroup())
 block("Offset (record measure - visit measure, m) where they differ by more than the end window",
@@ -137,12 +147,12 @@ block("Offset (record measure - visit measure, m) where they differ by more than
         summarise(n = n(), p10 = round(stats::quantile(offset_m, 0.1), 1), p50 = round(stats::median(offset_m), 1),
                   p90 = round(stats::quantile(offset_m, 0.9), 1),
                   share_of_length_p50 = round(stats::median(offset_m / fished_length_m, na.rm = TRUE), 2)))
-block("Fished length of the matched visits (m): the stretch a record's fish came from",
-      s |> summarise(n = n(), missing = sum(is.na(fished_length_m)),
-                     p25 = stats::quantile(fished_length_m, 0.25, na.rm = TRUE),
-                     p50 = stats::median(fished_length_m, na.rm = TRUE),
-                     p75 = stats::quantile(fished_length_m, 0.75, na.rm = TRUE),
-                     p90 = stats::quantile(fished_length_m, 0.9, na.rm = TRUE)))
+block("Fished length of the matched visits (m, each visit once): the stretch a record's fish came from",
+      s_vis |> summarise(n = n(), missing = sum(is.na(fished_length_m)),
+                         p25 = stats::quantile(fished_length_m, 0.25, na.rm = TRUE),
+                         p50 = stats::median(fished_length_m, na.rm = TRUE),
+                         p75 = stats::quantile(fished_length_m, 0.75, na.rm = TRUE),
+                         p90 = stats::quantile(fished_length_m, 0.9, na.rm = TRUE)))
 if (sum(table(on$where)) != nrow(on)) stop("the classes do not partition the records on the visit's line")
 
 dir.create(dirname(path_log), showWarnings = FALSE, recursive = TRUE)

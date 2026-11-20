@@ -243,8 +243,9 @@ published build's visits (`knw_bcfishobs_match()`, this database's bcfishobs sna
 2026-10-10) and asked where each record sits against its visit.
 
 - **Matches.** 24,163 of the 60,098 FDIS-keyed records (40.2 %) match exactly one visit by collection, species and
-  date. Most of the rest name a collection the electrofishing export does not hold (`unmatched`: the collection was
-  sampled by another method, or not exported), and a few match several visits of one collection on one date.
+  date. Most of the rest (34,372) name a collection no kept visit holds (`unmatched`): one sampled by another method or
+  not exported, or, for 508, a repeat copy of a survey the load dropped (#35); a few match several visits of one
+  collection on one date.
 - **A record's point is the visit's point.** 58.2 % of the one-to-one records (14,056) carry the visit's own UTM:
   13,218 of them lie on the visit's blue line, every one within 5 m of its placed point; 795 were snapped by bcfishobs
   to another line (the same UTM, placed two ways), and 43 belong to visits `0230` could not place. The rest sit a median 13 m from the visit's UTM (90th
@@ -252,8 +253,8 @@ published build's visits (`knw_bcfishobs_match()`, this database's bcfishobs sna
   its span, 2 % above it, and 2 % above a point whose visit records no fished length.
 - **What that cannot show.** Both points come from the UTM a crew reported, so their agreement says the two
   placements of one survey coincide, not that the point is the site's downstream end, nor where along the site a fish
-  was caught. That is set by the fished span: for the matched visits a median 100 m (quartiles 39 and 200 m, 90th
-  percentile 950 m; 2,318 of 24,088 record no length), and 487 spans run past their blue line's top. A fish caught on
+  was caught. That is set by the fished span: over the 19,349 matched visits, each once, a median 100 m (quartiles 38
+  and 200 m, 90th percentile 800 m; 1,799 record no length), and 338 spans run past their blue line's top. A fish caught on
   a visit came from anywhere in that stretch, which is the location error #137 weighs one discharge per segment
   against.
 - The span is computed in the checks, not published on `fdis_sites`, whose md5 the methodology bundle pins; it joins

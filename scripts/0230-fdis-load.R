@@ -69,6 +69,10 @@ suppressMessages({
   library(sf); library(DBI); library(RPostgres)
 })
 pkgload::load_all(quiet = TRUE)
+# PLACE=FALSE stops before placement (#246); anything but unset, TRUE or FALSE refuses here, since the full run it would
+# otherwise fall to rewrites a restored sites.rds (review of move 6, round 2)
+place <- Sys.getenv("PLACE", "TRUE")
+if (!place %in% c("TRUE", "FALSE")) stop("PLACE is '", place, "': write TRUE (the default) or FALSE")
 
 cache  <- "data/fdis"
 build  <- file.path(cache, "build")
@@ -470,10 +474,40 @@ message("Passes: ", nrow(pp$passes), " passes, ", nrow(pp$pass_catch), " pass x 
         sum(pc_sum$n_pass_sum > pc_sum$n_caught, na.rm = TRUE),
         "; below it: ", sum(pc_sum$n_pass_sum < pc_sum$n_caught, na.rm = TRUE))
 
+# ---- checks on what precedes placement -------------------------------------
+# above the PLACE=FALSE gate, so the outputs it writes are checked as a full run's are (review of move 6, round 2)
+n_counts_fish <- sum(counts$n[!counts$species_code %in% c(zero_catch_codes, nonfish_codes)], na.rm = TRUE)
+dmap <- repeat_map[repeat_map$status == "dropped", ]
+unclassified <- setdiff(unique(c(counts$species_code, fish$species_code)), species_codes$code)
+if (length(unclassified)) stop("species codes missing from data/fdis_species_codes.csv: ",
+                               paste(unclassified, collapse = ", "))
+if (nrow(fish_raw) != nrow(fish) + n_fish_dropped) stop("fish rows lost")
+if (sum(sites$n_pass) + n_pass_dropped != nrow(visits)) stop("site roll-up lost passes")
+if (anyDuplicated(rep_cand$sig[rep_cand$sig %in% rep_groups$sig & rep_cand$site_visit %in% sites$site_visit])) {
+  stop("a repeated survey kept two copies")
+}
+if (!all(repeat_map$kept_site_visit %in% sites$site_visit)) stop("a repeated survey kept no copy")
+# value by value: no habitat value a dropped copy held is missing from the copy kept
+hab_lost <- unlist(lapply(unlist(lapply(cols_hab_value, `[`, 1)), function(cc) {
+  dv <- rep_hab[[cc]][match(dmap$site_visit, rep_hab$site_visit)]
+  kv <- sites[[cc]][match(dmap$kept_site_visit, sites$site_visit)]
+  dmap$kept_site_visit[!is.na(dv) & is.na(kv)]
+}))
+if (length(hab_lost)) stop("habitat dropped with a repeated copy: ", paste(unique(hab_lost), collapse = ", "))
+if (any(dmap$n_measured > rep_cand$n_measured_all[match(dmap$kept_site_visit, rep_cand$site_visit)])) {
+  stop("a dropped copy holds more measured fish than the copy kept")
+}
+if (!isTRUE(all.equal(n_counts_fish + n_counted_dropped, n_counted_all))) stop("counted fish lost in the repeat drop")
+if (sum(catch$n_measured) != sum(!fish$is_nfc & !fish$species_code %in% nonfish_codes)) stop("measured fish lost in the catch roll-up")
+# rows dropped as "0 caught, nothing measured" carry n_counted 0, so the sum is unchanged
+if (!isTRUE(all.equal(sum(catch$n_counted, na.rm = TRUE), n_counts_fish))) stop("counted fish lost in the catch roll-up")
+if (sum(sites$catch_status == "fish") + sum(sites$catch_status == "zero") +
+    sum(sites$catch_status == "unknown") != nrow(sites)) stop("catch status does not partition sites")
+
 # ---- PLACE=FALSE: the outputs built before placement, and stop ---------------
 # catch, fish and the passes are final here and read no database, so they come out byte-identical to the build's;
 # sites.rds, reconcile.csv and data/fdis_repeat_surveys.csv are left as they are (#246)
-if (identical(Sys.getenv("PLACE"), "FALSE")) {
+if (place == "FALSE") {
   saveRDS(catch, file.path(build, "catch.rds"))
   saveRDS(fish,  file.path(build, "fish.rds"))
   saveRDS(pp$passes, file.path(build, "passes.rds"))
@@ -565,7 +599,6 @@ sites <- sites |>
   select(-fwa_gradient)
 
 # ---- reconcile -------------------------------------------------------------
-n_counts_fish <- sum(counts$n[!counts$species_code %in% c(zero_catch_codes, nonfish_codes)], na.rm = TRUE)
 rec <- tibble(check = character(), n = numeric())
 add <- function(check, n) rec <<- bind_rows(rec, tibble(check = check, n = as.numeric(n)))
 add("passes", nrow(passes)); add("site_visits", nrow(sites))
@@ -606,7 +639,6 @@ add("catch_pairs_count_unknown", sum(is.na(catch$n_caught)))
 add("counts_fish_total", n_counts_fish); add("counts_sentinel_rows", sum(counts$flag_count_sentinel))
 add("catch_pairs_counts_lt_measured", sum(catch$flag_counts_lt_measured))
 add("repeat_groups", nrow(rep_groups)); add("repeat_visits_dropped", length(dropped))
-dmap <- repeat_map[repeat_map$status == "dropped", ]
 add("repeat_dropped_fish", sum(dmap$catch_status == "fish"))
 add("repeat_dropped_zero", sum(dmap$catch_status == "zero"))
 add("repeat_dropped_unknown", sum(dmap$catch_status == "unknown"))
@@ -626,31 +658,6 @@ add("repeat_groups_one_collection_kept", n_distinct(rep_cand$sig[rep_cand$status
 add("repeat_groups_site_differs_kept", n_distinct(rep_cand$sig[rep_cand$status == "kept_site_differs"]))
 print(rec, n = Inf)
 
-unclassified <- setdiff(unique(c(counts$species_code, fish$species_code)), species_codes$code)
-if (length(unclassified)) stop("species codes missing from data/fdis_species_codes.csv: ",
-                               paste(unclassified, collapse = ", "))
-if (nrow(fish_raw) != nrow(fish) + n_fish_dropped) stop("fish rows lost")
-if (sum(sites$n_pass) + n_pass_dropped != nrow(visits)) stop("site roll-up lost passes")
-if (anyDuplicated(rep_cand$sig[rep_cand$sig %in% rep_groups$sig & rep_cand$site_visit %in% sites$site_visit])) {
-  stop("a repeated survey kept two copies")
-}
-if (!all(repeat_map$kept_site_visit %in% sites$site_visit)) stop("a repeated survey kept no copy")
-# value by value: no habitat value a dropped copy held is missing from the copy kept
-hab_lost <- unlist(lapply(unlist(lapply(cols_hab_value, `[`, 1)), function(cc) {
-  dv <- rep_hab[[cc]][match(dmap$site_visit, rep_hab$site_visit)]
-  kv <- sites[[cc]][match(dmap$kept_site_visit, sites$site_visit)]
-  dmap$kept_site_visit[!is.na(dv) & is.na(kv)]
-}))
-if (length(hab_lost)) stop("habitat dropped with a repeated copy: ", paste(unique(hab_lost), collapse = ", "))
-if (any(dmap$n_measured > rep_cand$n_measured_all[match(dmap$kept_site_visit, rep_cand$site_visit)])) {
-  stop("a dropped copy holds more measured fish than the copy kept")
-}
-if (!isTRUE(all.equal(n_counts_fish + n_counted_dropped, n_counted_all))) stop("counted fish lost in the repeat drop")
-if (sum(catch$n_measured) != sum(!fish$is_nfc & !fish$species_code %in% nonfish_codes)) stop("measured fish lost in the catch roll-up")
-# rows dropped as "0 caught, nothing measured" carry n_counted 0, so the sum is unchanged
-if (!isTRUE(all.equal(sum(catch$n_counted, na.rm = TRUE), n_counts_fish))) stop("counted fish lost in the catch roll-up")
-if (sum(sites$catch_status == "fish") + sum(sites$catch_status == "zero") +
-    sum(sites$catch_status == "unknown") != nrow(sites)) stop("catch status does not partition sites")
 
 write_csv(rec, file.path(build, "reconcile.csv"))
 write_csv(repeat_map, "data/fdis_repeat_surveys.csv", na = "")
