@@ -326,7 +326,7 @@ if (nrow(steep_large) > 0) {
 # ---- FISS workbook spawner rows (reported, not modelled) -----------------------------------
 fiss <- read_csv("data/fiss_evidence.csv", show_col_types = FALSE, col_types = cols(site_visit = "c")) |>
   filter(species_group == "char", size_class == "spawner_evidence")
-block("FISS workbook char spawner-evidence rows (site gradient_pct is a fraction, #34; fwa_gradient_pct is percent)",
+block("FISS workbook char spawner-evidence rows (gradient_pct and fwa_gradient_pct in percent; a fraction before #34)",
       fiss |> select(site_visit, species_code, n, watershed_group_code, month, year,
                      gradient_pct, fwa_gradient_pct, method))
 

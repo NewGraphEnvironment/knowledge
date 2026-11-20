@@ -114,20 +114,20 @@ The plan does them in one order, so the FISS outputs are regenerated once and di
 
 ## Phase 4: #34, percent gradients in `0250`
 
-- [ ] Read the gradient cell's number format in every report that carries one (25; review finding 6).
-- [ ] Run `0250` unchanged first and diff its four tables against the tracked ones, so any drift (the database's
+- [x] Read the gradient cell's number format in every report that carries one (25; review finding 6).
+- [x] Run `0250` unchanged first and diff its four tables against the tracked ones, so any drift (the database's
       placement, #91's `sites.rds`) is seen apart from #34 (finding 2).
-- [ ] `0250`: `gradient_pct = 100 * num(average_gradient_percent)`. A raw value above 1 cannot be a percent-formatted
+- [x] `0250`: `gradient_pct = 100 * num(average_gradient_percent)`. A raw value above 1 cannot be a percent-formatted
       cell, so it becomes NA and is counted in the reconcile. A plausibility row compares the median ratio to
       `fwa_gradient_pct` against a band stated before the rerun.
-- [ ] Rerun `0250`. Diff its four tables against the unchanged run: only `gradient_pct` and the reconcile's new rows may
+- [x] Rerun `0250`. Diff its four tables against the unchanged run: only `gradient_pct` and the reconcile's new rows may
       move. If any other column or file moves (for
       example a placement tie on this database), stop and report it.
-- [ ] Record the consequence. `fiss_evidence` is a recipe input of the evidence receipt (`inst/receipt/evidence.yaml`),
+- [x] Record the consequence. `fiss_evidence` is a recipe input of the evidence receipt (`inst/receipt/evidence.yaml`),
       so a later `0310` rebuild compares as recipe-`different` against the published build. `knw_fiss_visits()` does not
       read `gradient_pct`, so the derived tables do not change. Grep for any reader that refuses when the tracked file's
       sha moves, and say what was found.
-- [ ] Update the gradient's readers: `scripts/0293`'s heading and `research/bt_spawning.md` (finding 3). `scripts/README.md`
+- [x] Update the gradient's readers: `scripts/0293`'s heading and `research/bt_spawning.md` (finding 3). `scripts/README.md`
       says the per-group tables keep the raw fraction under `average_gradient_percent`, and #248's body carries
       converting it before those layers are published (finding 4).
 

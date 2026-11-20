@@ -8,6 +8,8 @@ reports_parsed_differently_across_groups,0,0,TRUE,
 buckets,,classed=1283; focal_no_length=3; in_fdis=100297; no_step1_site=851; not_focal=72610; species_unmapped=370,TRUE,
 species_labels_unmapped,,11,TRUE,WSC=783; Trout Perch=100; PMC=29; YSU=16; SC=9; Lamprey=4; LNS=1; LSC=1; MU=1; Unidentified Species=1; unidentified species=1
 sites_undated,,32,TRUE,
+site_gradient_raw_above_1_set_na,,0,TRUE,a percent-formatted cell stores a fraction; a value above 1 is not one
+site_gradient_vs_fwa_median_ratio,0.25-4,0.925,TRUE,16 sites with both gradients above 0
 evidence_sites_unplaced,,16,TRUE,placeable sites fwa_indexpoint found no stream for within 500 m
 evidence_sites_not_placeable,,1,TRUE,
 fdis_overlap_sites,,2952,TRUE,

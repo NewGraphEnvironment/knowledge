@@ -137,3 +137,20 @@ byte-identical to the baseline and a GeoPackage of identical content (restored).
 - the reconcile's `manifest_urls_vs_fetch_log_rows` (count only) becomes `manifest_urls_vs_fetch_log_urls` (URL sets
   equal, 77), the `workbooks_with_no_step` note's file names carry the idx, and the two database rows name this run's
   database.
+
+## Phase 4: percent gradients (#34, 2026-11-20)
+
+- **Before the fix**, `0250` run unchanged against the same database and the published FDIS build reproduced all four
+  of its tracked tables byte for byte (9 s), so nothing drifted under #91's `sites.rds` or the database.
+- **After the fix** (`gradient_pct = round(100 * raw, 4)`, a raw value above 1 set NA): only `gradient_pct` moved in
+  `data/fiss_evidence.csv`, on 31 rows (0.005 -> 0.5, 0.025 -> 2.5, 0.12 -> 12 and so on); `fiss_fdis_overlap.csv`
+  and `fiss_stage_vs_class.csv` are unchanged; the reconcile gains two rows: 0 raw values above 1, and a median ratio to
+  `fwa_gradient_pct` of 0.925 over 16 sites, inside the band of 0.25 to 4 stated before the run. Log
+  `scripts/logs/fiss/20261120_fiss_evidence.log`.
+- **The receipt.** `fiss_evidence` is a recipe input of the evidence receipt (`inst/receipt/evidence.yaml`, hashed by
+  `0310`), so the next `0310` rebuild names a new `recipe_id` although `knw_fiss_visits()` reads no gradient and the
+  derived tables come out the same; grade receipts and fdis v3, which name the evidence by that `recipe_id`, will
+  read it as another input. Nothing else reads the hash (grep over `R/`, `tests/`, `data-raw/`, `vignettes/`,
+  `inst/`), so nothing refuses at merge. The step-2 CSVs (`fiss_workbooks`) did not move.
+- **Readers updated:** `scripts/0293`'s heading, `research/bt_spawning.md`; `scripts/README.md` describes the
+  conversion; #248's body carries converting the per-group column before those layers are published.

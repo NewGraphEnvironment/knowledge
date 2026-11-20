@@ -13,3 +13,4 @@
 - Plan review returned (no blockers, 14 findings): written to `review-plan.md`, corrections folded into the plan (5f360a34)
 - Phase 2: `knw_fiss_*` in `R/fiss_parse.R` and `R/fiss_nfc.R`, six fixtures, 82 assertions over two test files (51b9e7c5); refactored `0220` byte-identical to the baseline on all five groups; eight restored bugs each turn the tests red; `scripts/README.md` updated
 - Phase 3: PINE re-fetched (77 files, 44 ok / 33 converted); site and step tables byte-identical; reconcile holds the URL-set check
+- Phase 4: 25 reports' gradient formats read (24 `0.0%`, one General holding fractions); unchanged `0250` reproduces its tables; the fix moves only `gradient_pct` (31 rows), median ratio to FWA 0.925; readers and README updated; #248 carries the per-group column
