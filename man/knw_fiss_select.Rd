@@ -23,9 +23,9 @@ Takes the key columns, the step's columns (see \code{\link[=knw_fiss_columns]{kn
 names on hundreds of blank entry rows, so a row is kept only when at least one non-key cell is filled.
 }
 \examples{
-df <- data.frame(reference_number = c("1", "2"), gazetted_name = "Lucas Creek",
-                 utm_zone = c("10", NA), utm_easting = c("612000", NA), utm_northing = c("5980000", NA),
-                 site_comments = c(NA, NA))
+df <- data.frame(reference_number = c("1", "2"), gazetted_name = "Test Creek",
+                 utm_zone = c("10", NA), utm_easting = c("612000", NA),
+                 utm_northing = c("5980000", NA), site_comments = c(NA, NA))
 # row 2 carries only keys
 knw_fiss_select(df, "step1_ref_loc")
 }

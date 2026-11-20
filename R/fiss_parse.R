@@ -211,9 +211,9 @@ knw_fiss_read_step <- function(path, sheet) {
 #' @return `df`'s wanted columns, then any other comment columns, with the key-only rows dropped.
 #' @export
 #' @examples
-#' df <- data.frame(reference_number = c("1", "2"), gazetted_name = "Lucas Creek",
-#'                  utm_zone = c("10", NA), utm_easting = c("612000", NA), utm_northing = c("5980000", NA),
-#'                  site_comments = c(NA, NA))
+#' df <- data.frame(reference_number = c("1", "2"), gazetted_name = "Test Creek",
+#'                  utm_zone = c("10", NA), utm_easting = c("612000", NA),
+#'                  utm_northing = c("5980000", NA), site_comments = c(NA, NA))
 #' # row 2 carries only keys
 #' knw_fiss_select(df, "step1_ref_loc")
 knw_fiss_select <- function(df, step, cols = knw_fiss_columns()$wanted) {

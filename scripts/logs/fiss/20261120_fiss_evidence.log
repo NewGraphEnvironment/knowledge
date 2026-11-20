@@ -19,7 +19,7 @@ Note: method with signature ‘DBIObject#sf’ chosen for function ‘dbDataType
 7  buckets                                                <NA>    
 8  species_labels_unmapped                                <NA>    
 9  sites_undated                                          <NA>    
-10 site_gradient_raw_above_1_set_na                       <NA>    
+10 site_gradient_raw_above_1_set_na                       0       
 11 site_gradient_vs_fwa_median_ratio                      0.25-4  
 12 evidence_sites_unplaced                                <NA>    
 13 evidence_sites_not_placeable                           <NA>    
@@ -67,7 +67,7 @@ Note: method with signature ‘DBIObject#sf’ chosen for function ‘dbDataType
 7                                                                                                                               
 8  WSC=783; Trout Perch=100; PMC=29; YSU=16; SC=9; Lamprey=4; LNS=1; LSC=1; MU=1; Unidentified Species=1; unidentified species=1
 9                                                                                                                               
-10 a percent-formatted cell stores a fraction; a value above 1 is not one                                                       
+10 a percent-formatted cell stores a fraction; a value above 1 is not one: read that workbook's cells                           
 11 16 sites with both gradients above 0                                                                                         
 12 placeable sites fwa_indexpoint found no stream for within 500 m                                                              
 13                                                                                                                              
