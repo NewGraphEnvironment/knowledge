@@ -65,6 +65,7 @@ reference:
       - knw_size_class
       - knw_species
       - knw_fdis_passes
+      - knw_fdis_span
       - knw_fdis_place
       - knw_fdis_quality
       - knw_fdis_species

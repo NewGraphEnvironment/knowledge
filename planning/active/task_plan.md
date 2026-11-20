@@ -78,9 +78,9 @@ What exploration found:
 - [x] Update `scripts/0336-archive.R`'s header and the `CLAUDE.md` line saying PULL does not restore `fish.rds`. Name `0230` as the only remedy for a build archived before this change.
 - [x] **Rerun `0230` then `0240` on this host's database.** (2026-11-20: fish.rds and catch.rds byte-identical to the ledgers; sites.rds not: 245 visits placed differently, recorded in findings; the published sites.rds restored here) Confirm byte-identical `sites.rds`, `catch.rds` and `fish.rds` against the published run's ledger (`md5_sites`, `md5_fish`; `catch.rds` against the current file).
   - If `sites.rds` differs, stop: placement is not reproducing on this database, and nothing is archived or published from the rerun. The finding goes to #214 and the PR.
-- [ ] Before any put (review item 6): compress each restored grade table with `.knw_zstd()` and compare with the
+- [x] Before any put (review item 6): compress each restored grade table with `.knw_zstd()` and compare with the
   index's `object_md5`; stop if one differs (a put would re-send it and leave the published batch noncurrent).
-- [ ] **Re-archive** the published evidence (review item 1: `PULL=TRUE GRADES=TRUE` in the worktree, run from its root):
+- [x] **Re-archive** the published evidence (review item 1: `PULL=TRUE GRADES=TRUE` in the worktree, run from its root):
   1. Make a scratch worktree at the branch tip.
   2. Restore evidence `3d907629…` with `PULL=TRUE` there.
   3. Copy in the verified `fish.rds`.
