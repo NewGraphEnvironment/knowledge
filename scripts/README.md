@@ -397,9 +397,12 @@ fishless. Run on five groups (PINE, COTR, UNTH, LNTH, UPCE; #5).
   joins the manifest by key (`file_name` collides across attachments), one row per manifest URL,
   `status` ok / converted / unreadable / download_failed. Two dead links (HTTP 404 on ACAT's side)
   are the only failures across ~230 files.
-- `0220` — column set is **passed config** (`wanted_cols`), not hardcoded. Header is auto-detected by
-  anchoring on the `REFERENCE NUMBER` label row (rows 26, 31 or 17 across the 2009–2022 editions),
-  because row 1 of the provincial template is a title banner. UTM zone is parsed as its leading
+- `0220` — the driver over the package's tested parser (#7): `knw_fiss_parse_step()` per workbook and step,
+  `knw_fiss_nfc()` for the Step 2 roll-up, on fixtures in `inst/testdata/fiss/` (`data-raw/fiss_fixtures.R`). The
+  column set is **passed config** (`wanted_cols`, from `knw_fiss_columns()`), not hardcoded. Header is auto-detected
+  by anchoring on the `REFERENCE NUMBER` label row, because row 1 of the provincial template is a title banner: Step
+  1 sits at row 31 in the V2.0 template (every banner from 2012 to 2022) and at 26 or 17 in the pre-2012 edition, and
+  Steps 2 to 4 at 23, 18 and 20 (V2.0) or 6 (pre-2012). UTM zone is parsed as its leading
   digits (`"11U"` is common on North Thompson submissions and used to drop the site). NFC is taken
   from the sheet's own `No Fish Caught` value, or a zero-catch code from `data/fdis_species_codes.csv`
   (`NFC`, `ZZZ`) in the editions that record codes (`nfc_source = "submitted"`); a real zero count

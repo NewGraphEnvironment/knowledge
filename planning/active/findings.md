@@ -91,3 +91,33 @@ stamp); each reconcile differs only in `enumerate_db_source`'s expected column a
 the database that ran. Group totals: COTR 736 sites (394 no fish), LNTH 1,427 (207), UNTH 989 (181), UPCE 7,023 (419),
 PINE 1,610 (209). The baseline outputs are the refactor's reference; the tracked files were restored so no content-free
 change is committed.
+
+## Phase 2: the refactor's proof (2026-11-20)
+
+- **Byte-identical.** The refactored `0220` (the driver over `knw_fiss_parse_step()` and `knw_fiss_nfc()`), run on the
+  five groups against the same database, wrote all 45 non-GeoPackage outputs byte-identical to the baseline run,
+  reconciles included; every GeoPackage holds identical rows, attributes, geometry and CRS. Logs:
+  `scripts/logs/fiss/20261120_fiss_parse_<wsg>.log`. The tracked files were restored afterwards (no content moved).
+- **Guards fire.** Each bug the script had fixed, restored in turn, turns the fixture tests red:
+
+  | restored bug | tests red |
+  |---|---|
+  | `species_code` variant removed | 5 |
+  | `"11U"` read as a plain number | 1 |
+  | variant renamed over a canonical name already present | 2 |
+  | a blank count read as zero | 2 |
+  | no Step 3 fallback to a per-fish Step 2 sheet | 2 |
+  | no reference-number filter | 1 |
+  | `date_yyyy_mm_day` variant removed | 2 |
+  | zero-catch codes not read as no fish | 3 |
+
+- **Tests asserted wrongly once:** the first janitor-names test expected `width_m` from the V2.0 Step 2, which has no
+  plain `Width (m)` column (the pre-2012 edition does). The test now pins that difference.
+- **janitor's micro-sign warning** fires on every `µS/cm` label; it writes "m" for "µ", the name the column list
+  reads (`conductivity_m_s_cm`), so `knw_fiss_read_step()` muffles that one warning.
+
+## #34: every report's gradient format
+
+All 25 reports that carry a workbook gradient were read (the 10 `.xls` converted with soffice into the scratchpad,
+read with tidyxl): 24 store it in cells formatted `0.0%`; one, report 48876 (11 values, max 0.05), stores it in
+`General` cells.

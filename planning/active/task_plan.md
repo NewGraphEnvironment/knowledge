@@ -61,7 +61,7 @@ The plan does them in one order, so the FISS outputs are regenerated once and di
 
 ## Phase 2: #7, graduate the parser into the package
 
-- [ ] Add `R/fiss_parse.R` with these exports, each with `chk` checks and a runnable example on an `inst/testdata/fiss/`
+- [x] Add `R/fiss_parse.R` with these exports, each with `chk` checks and a runnable example on an `inst/testdata/fiss/`
       fixture:
   - `knw_fiss_match_sheet(sheets, step)`;
   - `knw_fiss_read_step(path, sheet)`, which returns status, header_row, banner, rows_raw and data;
@@ -73,12 +73,12 @@ The plan does them in one order, so the FISS outputs are regenerated once and di
   `knw_fiss_columns()`. `knw_fiss_select()` and `knw_fiss_parse_step()` take `cols = knw_fiss_columns()$wanted`, so
   a consumer such as #245 can read a column the driver does not (review finding 10). A site-table function is out
   of scope.
-- [ ] Add `R/fiss_nfc.R`, `knw_fiss_nfc(step2, zero_catch_codes)`: the Step 2 roll-up to a site, covering `submitted` vs
+- [x] Add `R/fiss_nfc.R`, `knw_fiss_nfc(step2, zero_catch_codes)`: the Step 2 roll-up to a site, covering `submitted` vs
       `derived`, blank counts never read as zero, `nfc_conflict`, and `NA` when there is no Step 2 record. Codes are
       passed in, because `data/` does not ship.
-- [ ] `DESCRIPTION`: `readxl` and `janitor` go into Imports. The column names depend on `make_clean_names()`'s exact
+- [x] `DESCRIPTION`: `readxl` and `janitor` go into Imports. The column names depend on `make_clean_names()`'s exact
       output.
-- [ ] Add `data-raw/fiss_fixtures.R`. It writes a small xlsx per layout with openxlsx, and converts the `.xls` ones with
+- [x] Add `data-raw/fiss_fixtures.R`. It writes a small xlsx per layout with openxlsx, and converts the `.xls` ones with
       `soffice --convert-to xls`, so both readxl backends are tested. Output goes to `inst/testdata/fiss/`. The layouts
       are the ones Phase 1 measured (the plan review's finding 7 corrected the list first drafted here):
   - `template_v2.xls`: the V2.0 template, Step 1/2/3/4 at rows 31/23/18/20, both banner spellings, a `"11U"` zone,
@@ -90,13 +90,13 @@ The plan does them in one order, so the FISS outputs are regenerated once and di
   - `individual_fish.xls`: a per-fish sheet Step 2 sets aside (`fish_layout`) and Step 3 reads;
   - `tissue.xls`: no sheet matches (`no_sheet_match`);
   - review finding 9: a sheet whose rows carry no reference number (`no_rows` by the reference-number filter).
-- [ ] Add `tests/testthat/test-fiss_parse.R` and `test-fiss_nfc.R`. They assert counts and exact values, never
+- [x] Add `tests/testthat/test-fiss_parse.R` and `test-fiss_nfc.R`. They assert counts and exact values, never
       `all(grepl())`, numbers after `as.numeric()` (review finding 8). A test runs `janitor::make_clean_names()`
       over each layout's labels and expects the wanted names (finding 13). Prove the guards fire: restore each bug the script has fixed (the `species_code` variant, the
       `"11U"` zone, the duplicate canonical column, blank counts read as zero) and watch the test go red.
-- [ ] `scripts/0220` becomes a thin driver: it calls the package, and keeps the reconcile, placement, clip and writes.
+- [x] `scripts/0220` becomes a thin driver: it calls the package, and keeps the reconcile, placement, clip and writes.
       Update the `scripts/README.md` entry.
-- [ ] Rerun `0220` for COTR, LNTH, UNTH, UPCE and PINE, still on PINE's old layout. Every output must be byte-identical
+- [x] Rerun `0220` for COTR, LNTH, UNTH, UPCE and PINE, still on PINE's old layout. Every output must be byte-identical
       to the baseline run's (Phase 1), the `.gpkg` compared as content; then restore every file whose content did not
       change. Logs go to `scripts/logs/fiss/`, checked for home paths.
 
