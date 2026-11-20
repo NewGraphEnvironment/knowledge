@@ -54,6 +54,29 @@ vocabularies.
   : Fish Data Submission workbook sites as visits, with the effort they
   recorded
 
+- [`knw_fiss_parse_step()`](https://newgraphenvironment.github.io/knowledge/reference/knw_fiss_parse_step.md)
+  : Parse one step of one workbook, naming why it yielded nothing
+
+- [`knw_fiss_read_step()`](https://newgraphenvironment.github.io/knowledge/reference/knw_fiss_read_step.md)
+  : Read one step sheet, finding its header row
+
+- [`knw_fiss_match_sheet()`](https://newgraphenvironment.github.io/knowledge/reference/knw_fiss_match_sheet.md)
+  : Find a workbook's sheet for one step
+
+- [`knw_fiss_select()`](https://newgraphenvironment.github.io/knowledge/reference/knw_fiss_select.md)
+  : Keep a step's wanted columns and drop rows that carry only keys
+
+- [`knw_fiss_columns()`](https://newgraphenvironment.github.io/knowledge/reference/knw_fiss_columns.md)
+  : The columns, name variants and sheet patterns the workbook parser
+  reads
+
+- [`knw_fiss_utm_zone()`](https://newgraphenvironment.github.io/knowledge/reference/knw_fiss_utm_zone.md)
+  : Read a UTM zone as entered
+
+- [`knw_fiss_nfc()`](https://newgraphenvironment.github.io/knowledge/reference/knw_fiss_nfc.md)
+  : Roll Fish Data Submission Step 2 records up to sites, flagging no
+  fish caught
+
 - [`knw_bcfishobs_match()`](https://newgraphenvironment.github.io/knowledge/reference/knw_bcfishobs_match.md)
   : Match bcfishobs records to the FDIS site visits they came from
 
