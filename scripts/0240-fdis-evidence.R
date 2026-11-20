@@ -74,7 +74,9 @@ write_passes <- function(site_visits) {
   invisible(TRUE)
 }
 if (only == "passes") {
-  if (write_passes(sites$site_visit)) message("ONLY=passes: wrote fdis_passes.csv and fdis_pass_catch.csv; nothing else")
+  if (write_passes(sites$site_visit)) {
+    message("ONLY=passes: wrote fdis_passes.csv and fdis_pass_catch.csv; nothing else")
+  }
   quit(save = "no", status = 0)
 }
 catch <- readRDS(file.path(build, "catch.rds"))
