@@ -70,51 +70,74 @@ The plan does them in one order, so the FISS outputs are regenerated once and di
     fish layout;
   - `knw_fiss_utm_zone(x)`.
   `wanted_cols`, `variant_map` and `step_pat` become internal package objects, readable through
-  `knw_fiss_columns()`.
+  `knw_fiss_columns()`. `knw_fiss_select()` and `knw_fiss_parse_step()` take `cols = knw_fiss_columns()$wanted`, so
+  a consumer such as #245 can read a column the driver does not (review finding 10). A site-table function is out
+  of scope.
 - [ ] Add `R/fiss_nfc.R`, `knw_fiss_nfc(step2, zero_catch_codes)`: the Step 2 roll-up to a site, covering `submitted` vs
       `derived`, blank counts never read as zero, `nfc_conflict`, and `NA` when there is no Step 2 record. Codes are
       passed in, because `data/` does not ship.
 - [ ] `DESCRIPTION`: `readxl` and `janitor` go into Imports. The column names depend on `make_clean_names()`'s exact
       output.
 - [ ] Add `data-raw/fiss_fixtures.R`. It writes a small xlsx per layout with openxlsx, and converts the `.xls` ones with
-      `soffice --convert-to xls`, so both readxl backends are tested. Output goes to `inst/testdata/fiss/`. The layouts:
-  - the 2012 edition (header 31);
-  - one 2016+ edition (header 26);
-  - the header-17 layout;
-  - a step-name banner;
-  - a tissue workbook (`no_sheet_match`);
-  - a Step 2 sheet in fish layout;
-  - a sheet with no `REFERENCE NUMBER` row (`no_header`);
-  - template blank rows that have to filter to `no_rows`;
-  - a `"11U"` zone.
+      `soffice --convert-to xls`, so both readxl backends are tested. Output goes to `inst/testdata/fiss/`. The layouts
+      are the ones Phase 1 measured (the plan review's finding 7 corrected the list first drafted here):
+  - `template_v2.xls`: the V2.0 template, Step 1/2/3/4 at rows 31/23/18/20, both banner spellings, a `"11U"` zone,
+    blank entry rows, the three no-fish cases, a percent-formatted gradient;
+  - `pre2012_step_banner.xls`: Step 1 at row 26 and the others at 6, the edition's variant names, an NFC beside a
+    catch, and a Step 4 of key-only rows (`no_rows` by the payload filter);
+  - `pre2012_header17.xlsx`: Step 1 at row 17, a Step 2 naming both `Species` and `Species Code`, a Step 3 with no
+    `REFERENCE NUMBER` (`no_header`), an empty Step 4 (`empty_sheet`);
+  - `individual_fish.xls`: a per-fish sheet Step 2 sets aside (`fish_layout`) and Step 3 reads;
+  - `tissue.xls`: no sheet matches (`no_sheet_match`);
+  - review finding 9: a sheet whose rows carry no reference number (`no_rows` by the reference-number filter).
 - [ ] Add `tests/testthat/test-fiss_parse.R` and `test-fiss_nfc.R`. They assert counts and exact values, never
-      `all(grepl())`. Prove the guards fire: restore each bug the script has fixed (the `species_code` variant, the
+      `all(grepl())`, numbers after `as.numeric()` (review finding 8). A test runs `janitor::make_clean_names()`
+      over each layout's labels and expects the wanted names (finding 13). Prove the guards fire: restore each bug the script has fixed (the `species_code` variant, the
       `"11U"` zone, the duplicate canonical column, blank counts read as zero) and watch the test go red.
 - [ ] `scripts/0220` becomes a thin driver: it calls the package, and keeps the reconcile, placement, clip and writes.
       Update the `scripts/README.md` entry.
 - [ ] Rerun `0220` for COTR, LNTH, UNTH, UPCE and PINE, still on PINE's old layout. Every output must be byte-identical
-      to Phase 1's md5s, the `.gpkg` read as content. Logs go to `scripts/logs/fiss/`.
+      to the baseline run's (Phase 1), the `.gpkg` compared as content; then restore every file whose content did not
+      change. Logs go to `scripts/logs/fiss/`, checked for home paths.
 
 ## Phase 3: #10, re-fetch PINE
 
-- [ ] Move `data/pine/fiss_xls/` aside, then run `WSG_TARGET=PINE FISS_FETCH=TRUE Rscript scripts/0210-fiss-xls-fetch.R`
+- [ ] Move `data/pine/fiss_xls/` into the scratchpad (never a sibling under `data/pine/`, which `.gitignore` does not
+      cover: review finding 11), then run `WSG_TARGET=PINE FISS_FETCH=TRUE Rscript scripts/0210-fiss-xls-fetch.R`
       (77 files), then `0220` for PINE. Log both.
 - [ ] Read the reconcile: `manifest_urls_vs_fetch_log_urls` should replace the count-only check. The site, step2 and
-      step3 tables must be byte-identical. The parse log should differ only in `path`, and the fetch log gains `idx` and
-      `xls_url`. Anything else stops the phase, and I report it.
+      step3 tables must be byte-identical. The parse log should differ only in `path` (converted names gain the idx too); the
+      fetch log gains `idx` and `xls_url` and reorders its columns; the reconcile moves in three rows (the check renamed to
+      `_urls`, the `workbooks_with_no_step` note's file names, `clip_polygon_source`). Anything else, a 4xx from ACAT
+      above all, stops the phase and is reported. Rollback: `git checkout` the PINE outputs and move the old folder
+      back.
 
 ## Phase 4: #34, percent gradients in `0250`
 
-- [ ] `0250`: `gradient_pct = 100 * num(average_gradient_percent)`. It refuses (`stop()`) when any raw value exceeds 1,
-      because mixed units cannot be told apart. A plausibility check against `fwa_gradient_pct` (a median ratio within
-      a stated band) is logged in the reconcile.
-- [ ] Rerun `0250`. Diff `data/fiss_evidence.csv`: only `gradient_pct` may move. If any other column or file moves (for
+- [ ] Read the gradient cell's number format in every report that carries one (25; review finding 6).
+- [ ] Run `0250` unchanged first and diff its four tables against the tracked ones, so any drift (the database's
+      placement, #91's `sites.rds`) is seen apart from #34 (finding 2).
+- [ ] `0250`: `gradient_pct = 100 * num(average_gradient_percent)`. A raw value above 1 cannot be a percent-formatted
+      cell, so it becomes NA and is counted in the reconcile. A plausibility row compares the median ratio to
+      `fwa_gradient_pct` against a band stated before the rerun.
+- [ ] Rerun `0250`. Diff its four tables against the unchanged run: only `gradient_pct` and the reconcile's new rows may
+      move. If any other column or file moves (for
       example a placement tie on this database), stop and report it.
 - [ ] Record the consequence. `fiss_evidence` is a recipe input of the evidence receipt (`inst/receipt/evidence.yaml`),
       so a later `0310` rebuild compares as recipe-`different` against the published build. `knw_fiss_visits()` does not
       read `gradient_pct`, so the derived tables do not change. Grep for any reader that refuses when the tracked file's
       sha moves, and say what was found.
-- [ ] Update `research/fdis_export.md` where it describes the workbook gradient.
+- [ ] Update the gradient's readers: `scripts/0293`'s heading and `research/bt_spawning.md` (finding 3). `scripts/README.md`
+      says the per-group tables keep the raw fraction under `average_gradient_percent`, and #248's body carries
+      converting it before those layers are published (finding 4).
+
+## Open decisions
+
+- **The template's terms (review finding 12).** The province's copyright page reserves all rights, which the gate's
+  decision on fixtures did not know. The fixtures copy only the column labels and the banner line, every value made
+  up, and install with the package. Recommended: keep them as built, with a line in `inst/NOTICE.md` saying what was
+  copied; the alternative is labels paraphrased by hand, so no template text ships. Asked of Al in the PR; the PR does
+  not merge until answered.
 
 ## Owed at the end (reported, done after merge)
 
