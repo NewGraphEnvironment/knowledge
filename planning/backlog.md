@@ -44,7 +44,7 @@ split piece, or one filed since the last pass): run `/backlog-sweep` to place it
 | - [x] 4 | #173 | 6, 7: maps out of the comparison, one research page per key (4 issues) | done: https://github.com/NewGraphEnvironment/knowledge/pull/212 (batch 6; batch 7 split to #211) | — | — | — |
 | - [x] 5 | #174 | 8, 9: timing table and NuSEDS, flow in windows (5 issues) | done: https://github.com/NewGraphEnvironment/knowledge/pull/229 | — | — | — |
 | - [x] 6 | #175 | 10, 18: location error against flow resolution, the FDIS load's outputs (4 issues) | done: https://github.com/NewGraphEnvironment/knowledge/pull/247 | A | — | opus |
-| - [ ] 7 | #176 | 11, 12, 27: FISS parser, gradient and PINE; layers for report repos; FDIS age classes and the workbook source (7 issues) | open | B | — | opus |
+| - [ ] 7 | #176 | 11: FISS parser, gradient and PINE (3 issues; batch 12 split to #248 and batch 27's #245 left unplaced at the gate) | open | B | — | opus |
 | - [ ] 8 | #177 | 13, 23: promotion cargo, tuning-code fixes (4 issues) | **waiting** on Al's word for the next full retune | E | 12 | opus |
 | - [x] 9 | #178 | 14: fish-passage literature, the access track's first piece (1 issue) | done: https://github.com/NewGraphEnvironment/knowledge/pull/237 | C | — | fable then opus |
 | - [ ] 10 | #179 | 16, 22: library, keys and our own prose; OCR of the scanned PDFs (4 issues) | open | C | 9 | opus |
@@ -67,6 +67,10 @@ groups, the BULK and MORR chinook rows among them) and #242 (Fraser and Thompson
 9 into the access and gradient tracks; #234 placed in batch 14 (move 9) and #235 in batch 24 (move 15, #236) by that
 decision, against the header's rule that split pieces wait for the next sweep
 
+**Verified:** 2026-11-20, a hand edit at move 7's gate (#176), not a sweep · **Produced by:** the plan's measure of batch 11 (#7, #34, #10) as one
+PR's work · batch 12 (#17, #2, #1) split to #248, with its two gate questions open; batch 27 (#245) left as its own
+issue; both are out of this file until the next sweep places them, after move 7 merges
+
 link's own pass: link#468, a backlog pass for link that carries the link issues moves 8 and 9 and the baselines and minimal-run tracks wait on, so link's backlog can place them knowing what they hold up.
 
 ## Order
@@ -84,7 +88,6 @@ link's own pass: link#468, a backlog pass for link that carries the link issues 
 | 9 | #174 | flow in windows: #42, #105 | 2 | #105's stop rule, set before Phase 1 | #105's Phase 1 needs #42's window means |
 | 10 | #175 | location error against flow resolution: #23, #137 | 2 | cut #23 to what #137 needs (its link consumer closed) | #23's downstream-end check is #137's oracle |
 | 11 | #176 | FISS parser, gradient and PINE: #7, #34, #10 | 3 | fixtures from the provincial template | one regeneration of the FISS outputs |
-| 12 | #176 | layers for report repos: #17, #2, #1 | 3 | whether #2 and #1 are still wanted | #17 rolls up batch 11's outputs |
 | 13 | #177 | promotion cargo: #63, #148, #72 | 3 | #63's tie-break; #85 and #162 ride the same retune or not | each changes what only a promotion may |
 | 14 | #178 | fish-passage literature: #234 (from #132) | 1 | its own store; gradient rows with their leap and speed basis (both decided 2026-11-18) | the access track's first piece; the records review needs its literature |
 | 15 | #178 | gradient on the ground: #70, #71 | 2 | split 2026-11-18: the gradient track, first piece batch 24 | — |
@@ -99,7 +102,6 @@ link's own pass: link#468, a backlog pass for link that carries the link issues 
 | 24 | #236 | PSCIS stream slope against link's gradient: #235 (from #70) | 1 | what `STREAM_SLOPE` measures | the gradient track's first piece, beside #121's FDIS check |
 | 25 | #244 | NuSEDS windows for every group: #240 (from #243) | 1 | the mainstem rule; whether a NuSEDS window alone may become a row | the timing track's first piece; #241 and #242 start from its windows |
 | 26 | #244 | a publish that runs as documented: #230 | 1 | log outside the repo then copied in, or the log directory exempt | #240 reads the published parquet; one sitting on the NuSEDS source |
-| 27 | #176 | FDIS age classes and the workbook source: #245 (from #23, move 6) | 1 | one PR or two (age classes are FDIS-side, the workbook source FISS-side) | the workbook half reads batch 11's tested parser and regenerates the FISS outputs with it |
 
 ### 1. Evidence-build and test fixes
 
@@ -197,17 +199,6 @@ file on discharge resolution
 
 **Touches:** `R/fiss_visits.R`, `scripts/0220-fiss-xls-parse-nfc.R`, `scripts/0250-fiss-evidence.R`, `data/pine/`,
 `data/fiss_evidence.csv`, and new knw_fiss files with their tests and fixtures
-
-### 12. Layers for report repos
-
-- [ ] Carried by move 7, #176
-
-#17 (cross-group no-fish-captured roll-up and a coverage layer, synced for the manifest), #2 (a snapshot pull at a
-recorded commit) and #1 (a planning-method vignette). Gate: whether #17's commit stamp makes #2 unnecessary, and
-whether #1 is still wanted.
-
-**Touches:** `vignettes/planning-method.Rmd` (new), `_pkgdown.yml`, and a new cross-group no-fish layer and its
-manifest under the data tier
 
 ### 13. Promotion cargo
 
@@ -378,19 +369,6 @@ no literature exists yet. Two open wet issues read the timing rows and rerun whe
 goes outside the repo and is copied in after the run (keeps the check whole), or `scripts/logs/nuseds/` is exempt.
 
 **Touches:** `scripts/0340-nuseds-build.R`, `scripts/README.md`
-
-### 27. FDIS age classes and the workbook source
-
-- [ ] Carried by move 7, #176
-
-#245, split from #23 at move 6's gate: counts per age class per visit (and per pass, beside `knw_fdis_passes()`), and
-the Fish Data Submission workbooks as a second source beside bcfishobs, each site classed in the export, in bcfishobs
-only, or new. The workbook half reads batch 11's tested `knw_fiss_*` parser and the same regeneration of the FISS
-outputs, so it follows batch 11 in the plan. Gate: one PR or two; the age classes touch the FDIS load, the workbook
-source the FISS scripts.
-
-**Touches:** `scripts/0230-fdis-load.R`, `R/fdis_passes.R`, `scripts/0250-fiss-evidence.R`, `data/fiss_evidence.csv`, and
-a new workbook-against-bcfishobs check
 
 ## Singles
 

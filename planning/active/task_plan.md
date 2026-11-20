@@ -31,11 +31,11 @@ The plan does them in one order, so the FISS outputs are regenerated once and di
 
 ## Phase 0: Split the move
 
-- [ ] File the batch 12 issue: "If we do it / If we never do" from #17, members #17 #2 #1, the two open gate questions,
+- [x] File the batch 12 issue (#248): "If we do it / If we never do" from #17, members #17 #2 #1, the two open gate questions,
       and "split from #176 (move 7)". Batch 12's Touches go into its body.
-- [ ] Edit #245's body: split from #176 at its gate; it reads this PR's `knw_fiss_*` parser, so it follows this merge.
-- [ ] Edit #176's body: carries batch 11, with batch 12 split to the new issue and batch 27 to #245.
-- [ ] `planning/backlog.md`:
+- [x] Edit #245's body: split from #176 at its gate; it reads this PR's `knw_fiss_*` parser, so it follows this merge.
+- [x] Edit #176's body: carries batch 11, with batch 12 split to the new issue and batch 27 to #245.
+- [x] `planning/backlog.md`:
   - move 7's row reads batch 11 (3 issues);
   - the sections for batches 12 and 27 are removed;
   - a `Verified` line says why.
