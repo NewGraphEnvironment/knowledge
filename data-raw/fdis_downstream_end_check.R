@@ -13,14 +13,14 @@
 # What it can show: where the two placements of one survey agree. A record carrying the visit's own UTM measures how
 # two snaps of one point differ, not where a fish was caught; the fished span is the location error #137 weighs.
 #
-# INPUT:  data/fdis/build/{sites,catch}.rds and data/fdis/derived/fdis_sites.csv, held to the published run's evidence
-#         ledger (the one data/tune/CH_rear_grades_record.csv names) and to each other; the database (PG* env vars):
+# INPUT:  data/fdis/build/{sites,catch}.rds and data/fdis/derived/fdis_sites.csv: sites.rds held to the published run's
+#         evidence ledger (the one data/tune/CH_rear_grades_record.csv names), fdis_sites.csv and catch.rds (its species
+#         per site) to sites.rds; the database (PG* env vars):
 #         bcfishobs.observations and whse_basemapping.fwa_stream_networks_sp (each blue line's top measure)
 # OUTPUT: scripts/logs/fdis/<yyyymmdd>_fdis_downstream_end_check[-<n>].txt
 # RUN:    Rscript data-raw/fdis_downstream_end_check.R   (from the repo root, on the published build: PULL=TRUE
 #         scripts/0336-archive.R restores sites.rds and fdis_sites.csv, and PLACE=FALSE scripts/0230-fdis-load.R adds
-#         catch.rds, which the archive does not hold; catch.rds is held to the ledger by md5, so it must be written by
-#         the R that wrote the build, since an RDS header carries the R version)
+#         catch.rds, which the archive does not hold; catch.rds is held to sites.rds by its species per site)
 # ---------------------------------------------------------------------------
 suppressMessages({
   library(dplyr)
@@ -54,13 +54,20 @@ if (!identical(led$note[led$step == "md5_sites"], md5_sites)) {
   stop(f_sites, " (", md5_sites, ") is not the published build's (", rec$evidence_ledger, "): restore it with ",
        "PULL=TRUE scripts/0336-archive.R")
 }
-if (!identical(led$note[led$step == "md5_catch"], unname(tools::md5sum(f_catch)))) {
-  stop(f_catch, " is not the published build's (", rec$evidence_ledger, "): rebuild it with ",
-       "PLACE=FALSE scripts/0230-fdis-load.R under the R that wrote the build (an RDS header carries the R version)")
-}
 .knw_archive_sites_check(f_table, f_sites)
 sites <- readRDS(f_sites)
 catch <- readRDS(f_catch)
+# the match reads catch.rds's species per visit only, so that is what is held to the build: each site's species in
+# catch.rds are the species_caught the ledger's sites.rds records (by contents, not md5, whose RDS bytes carry the
+# writing R; review of move 6, round 5). A catch visit with no site is a KEY with no visits.csv row, which the match
+# drops
+sp_catch <- split(catch$species_code, factor(catch$site_visit, levels = sites$site_visit))
+sp_sites <- strsplit(ifelse(is.na(sites$species_caught), "", sites$species_caught), ";", fixed = TRUE)
+off <- sites$site_visit[!mapply(setequal, lapply(sp_catch, unique), sp_sites)]
+if (length(off)) {
+  stop(f_catch, "'s species disagree with ", f_sites, "'s species_caught at ", length(off), " sites (", off[1],
+       "...): remove it, then rebuild it with PLACE=FALSE scripts/0230-fdis-load.R")
+}
 tab <- utils::read.csv(f_table, colClasses = c(site_visit = "character"))
 say("FDIS downstream-end check (knowledge#23, move 6), %s UTC.", format(Sys.time(), "%Y-%m-%d %H:%M", tz = "UTC"))
 say("Build: %s (sites.rds %s, the ledger of link run %s); %d site visits.", rec$evidence_ledger, md5_sites,

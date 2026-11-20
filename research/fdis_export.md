@@ -57,7 +57,7 @@ which is **one electrofishing pass**. A **site visit** is the first three parts.
 - **The passes are kept as well (#225).** `knw_fdis_passes()` writes one row per pass of a kept visit (one method
   number and haul, indexed by method then haul) and one per pass and species code caught, by the visit table's
   count rule applied per pass (`data/fdis/build/{passes,pass_catch}.rds` from `0230`, as CSV from `0240`, in
-  `knowledge/fdis/v3`). On the published build (2026-11-20, `scripts/logs/fdis/20261119_fdis_load_passes.txt`): 61,388
+  `knowledge/fdis/v3`). On the published build (2026-11-20, `scripts/logs/fdis/20261119_fdis_load-place-false.log`): 61,388
   passes and 73,567 pass x species rows; 35,642
   passes caught a fish, 25,279 recorded only "no fish caught" and 467 have no catch record (unknown, never zero).
   Every kept visit's passes number its `n_pass` and sum to its fishing time and area. 885 visit x species caught have

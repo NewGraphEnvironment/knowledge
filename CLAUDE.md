@@ -312,7 +312,8 @@ The visit tables sum over passes; the passes themselves are `0230`'s `passes.rds
 and read no database, so `PLACE=FALSE 0230` rebuilds them, `catch.rds` and `fish.rds` and stops before placement: it
 writes the ones absent (a restore brings back `fish.rds` but not `catch.rds` or the passes), keeps any present whose
 contents match, so their bytes stay the build's, and refuses any that differ; then `ONLY=passes 0240` writes the pass
-CSVs and nothing else (a full `0240` would rewrite the restored, md5-pinned `fdis_sites.csv`). A full run also rewrites `sites.rds`,
+CSVs and nothing else (a full `0240` would rewrite the restored, md5-pinned `fdis_sites.csv`). A full `0230` also
+rewrites `sites.rds`,
 which need not reproduce: on 2026-11-20 a rerun on another database and fresh 0.53.0 placed 245 of 51,587 visits
 differently from the published build (#246). Restore the published placement with `0336 PULL=TRUE`, never by
 rerunning `0230` in full.

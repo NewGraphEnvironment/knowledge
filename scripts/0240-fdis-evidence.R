@@ -63,6 +63,7 @@ write_passes <- function(site_visits) {
     return(invisible(FALSE))
   }
   pass_tab <- readRDS(f_pass[1])
+  pass_catch_tab <- readRDS(f_pass[2])   # both read before either is written, so a failed read splits no pair
   if (!setequal(pass_tab$site_visit, site_visits)) {
     unlink(file.path(derived, c("fdis_passes.csv", "fdis_pass_catch.csv")))
     stop("passes.rds is not the passes of sites.rds (older pass CSVs removed): remove passes.rds and pass_catch.rds, ",
@@ -70,13 +71,13 @@ write_passes <- function(site_visits) {
   }
   dir.create(derived, showWarnings = FALSE)
   write_csv(pass_tab, file.path(derived, "fdis_passes.csv"), na = "")
-  write_csv(readRDS(f_pass[2]), file.path(derived, "fdis_pass_catch.csv"), na = "")
+  write_csv(pass_catch_tab, file.path(derived, "fdis_pass_catch.csv"), na = "")
   invisible(TRUE)
 }
+# first on both paths (site_out below holds sites.rds's visits), so a mismatch stops before anything else is written
+wrote_passes <- write_passes(sites$site_visit)
 if (only == "passes") {
-  if (write_passes(sites$site_visit)) {
-    message("ONLY=passes: wrote fdis_passes.csv and fdis_pass_catch.csv; nothing else")
-  }
+  if (wrote_passes) message("ONLY=passes: wrote fdis_passes.csv and fdis_pass_catch.csv; nothing else")
   quit(save = "no", status = 0)
 }
 catch <- readRDS(file.path(build, "catch.rds"))
@@ -191,7 +192,7 @@ site_out <- sites |>
 # data/fdis/derived/ (ignored); 0299 publishes the site table (see scripts/README.md)
 dir.create(derived, showWarnings = FALSE)
 write_csv(site_out, file.path(derived, "fdis_sites.csv"), na = "")
-write_passes(site_out$site_visit)
+if (!setequal(site_out$site_visit, sites$site_visit)) stop("the site table lost or gained visits")
 site_pts <- site_out |> filter(!flag_no_utm) |> group_split(utm_zone) |>
   lapply(\(d) sf::st_transform(sf::st_as_sf(d, coords = c("utm_easting", "utm_northing"),
                                            crs = 32600 + d$utm_zone[1], remove = FALSE), 3005)) |>
