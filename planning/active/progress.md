@@ -15,3 +15,4 @@
 - Phase 3: PINE re-fetched (77 files, 44 ok / 33 converted); site and step tables byte-identical; reconcile holds the URL-set check
 - Phase 4: 25 reports' gradient formats read (24 `0.0%`, one General holding fractions); unchanged `0250` reproduces its tables; the fix moves only `gradient_pct` (31 rows), median ratio to FWA 0.925; readers and README updated; #248 carries the per-group column
 - Code-check rounds 1-2: round 1 made the gradient checks fail on a unit slip; round 2 found the fixtures naming the session's login as author: fixed, regenerated, and the unpushed branch rewritten so no commit holds the old fixtures (SHA map in findings)
+- Code-check round 3: the round-2 review record quoted the login; scrubbed and the two commits rewritten; enumeration of every commit, fixture blob and the sweep's modes ends the loop (3 rounds)

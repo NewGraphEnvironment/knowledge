@@ -177,4 +177,17 @@ The branch was unpushed, so it was rewritten (`git filter-branch --tree-filter`,
 fixtures) to carry the clean fixtures in every commit; a scan of every commit's fixtures finds no login, and the final
 tree is identical to the one before the rewrite. Commits from `51b9e7c5` on changed SHA: 51b9e7c5 -> 21d75f71,
 ab6aaa3f -> ca058140, 20faaddd -> a3e6e545, 25558fc2 -> 163a5065, 795bfb6a -> c6fad908, 74724c24 -> 5c763223,
-6b4b25b6 -> d6633384, dc741b51 -> 5e6c8f48.
+6b4b25b6 -> d6633384, dc741b51 -> 5e6c8f48 (then 6d7e5eb1, below).
+
+## Code-check round 3 (2026-11-20)
+
+One finding, inside round 2's fix: `review-round2.md`, the record of that fix, quoted the login it reported, in plain
+text the public sweep's `local_path` class catches (the sweep run read-only on the branch found it independently). It
+now reads `<login>`, and the two commits that held it were rewritten (5e6c8f48 -> 6d7e5eb1, b75e69a4 -> 58dd1519).
+The reviewer named the mechanism behind all three findings: an artifact carries what a step does when nobody told it
+(a check's default pass, a library's default author, a review quoting what it found), and the branch had assumed text
+it did not write was not in the artifact.
+
+**Enumeration that ended the loop:** everything the branch would publish. 13 commits: no patch or message line holds
+the login or a home path; the 6 distinct fixture blobs on the branch hold neither, read raw, as UTF-16 and unzipped;
+`public_sweep.py tree` adds no hit over `origin/main` and `public_sweep.py commits` finds none.
