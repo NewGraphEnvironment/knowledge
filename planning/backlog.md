@@ -44,7 +44,7 @@ split piece, or one filed since the last pass): run `/backlog-sweep` to place it
 | - [x] 4 | #173 | 6, 7: maps out of the comparison, one research page per key (4 issues) | done: https://github.com/NewGraphEnvironment/knowledge/pull/212 (batch 6; batch 7 split to #211) | — | — | — |
 | - [x] 5 | #174 | 8, 9: timing table and NuSEDS, flow in windows (5 issues) | done: https://github.com/NewGraphEnvironment/knowledge/pull/229 | — | — | — |
 | - [x] 6 | #175 | 10, 18: location error against flow resolution, the FDIS load's outputs (4 issues) | done: https://github.com/NewGraphEnvironment/knowledge/pull/247 | A | — | opus |
-| - [ ] 7 | #176 | 11: FISS parser, gradient and PINE (3 issues; batch 12 split to #248 and batch 27's #245 left unplaced at the gate) | open | B | — | opus |
+| - [x] 7 | #176 | 11: FISS parser, gradient and PINE (3 issues; batch 12 split to #248 and batch 27's #245 left unplaced at the gate) | done: https://github.com/NewGraphEnvironment/knowledge/pull/249 | B | — | opus |
 | - [ ] 8 | #177 | 13, 23: promotion cargo, tuning-code fixes (4 issues) | **waiting** on Al's word for the next full retune | E | 12 | opus |
 | - [x] 9 | #178 | 14: fish-passage literature, the access track's first piece (1 issue) | done: https://github.com/NewGraphEnvironment/knowledge/pull/237 | C | — | fable then opus |
 | - [ ] 10 | #179 | 16, 22: library, keys and our own prose; OCR of the scanned PDFs (4 issues) | open | C | 9 | opus |
@@ -192,7 +192,7 @@ file on discharge resolution
 
 ### 11. FISS parser, gradient and PINE
 
-- [ ] Carried by move 7, #176
+- [x] Carried by move 7, #176 (merged in https://github.com/NewGraphEnvironment/knowledge/pull/249)
 
 #7 (graduate the `.xls` parser into `R/` as tested `knw_fiss_*`), #34 (site gradient read as a fraction in `0250`) and
 #10 (re-fetch PINE onto the keyed schema).
