@@ -1,4 +1,4 @@
-# Review round 2: branch 176-backlog-move-7-fiss-workbooks-a-tested-p (base 8535ae0f, HEAD 6b4b25b6)
+# Review round 2: branch 176-backlog-move-7-fiss-workbooks-a-tested-p (base 8535ae0f, HEAD 6b4b25b6, d6633384 after the branch was rewritten to clean the fixtures)
 
 ## Checklist read
 

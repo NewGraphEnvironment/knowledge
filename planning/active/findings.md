@@ -163,3 +163,18 @@ left 4 sites and passed. Now the above-1 count fails the reconcile and the ratio
 any NA rule. A copy of `0250` reading every gradient x100 stops on both rows (exit 1, "Reconciliation FAILED:
 site_gradient_raw_above_1_set_na, site_gradient_vs_fwa_median_ratio"); the real run still passes, `fiss_evidence.csv`
 unchanged.
+
+## Code-check round 2 (2026-11-20)
+
+The round-1 fix holds (the reviewer checked `gradient_raw` stays out of the written table and both rows fail on a
+slip). One new finding, real: the fixtures named the session's login as their author. openxlsx writes `USER` as the
+creator and last modifier, and LibreOffice carried it into the converted `.xls` (compressed in the `.xlsx`, so the
+public sweep's patterns could not see it). `data-raw/fiss_fixtures.R` now creates each workbook with
+`creator = "knowledge"` and converts on a fresh LibreOffice profile; the regenerated fixtures carry no login, host or
+home path (unzipped `.xlsx` and both byte encodings of each `.xls` scanned), and the tests pass on them.
+
+The branch was unpushed, so it was rewritten (`git filter-branch --tree-filter`, from the commit that added the
+fixtures) to carry the clean fixtures in every commit; a scan of every commit's fixtures finds no login, and the final
+tree is identical to the one before the rewrite. Commits from `51b9e7c5` on changed SHA: 51b9e7c5 -> 21d75f71,
+ab6aaa3f -> ca058140, 20faaddd -> a3e6e545, 25558fc2 -> 163a5065, 795bfb6a -> c6fad908, 74724c24 -> 5c763223,
+6b4b25b6 -> d6633384, dc741b51 -> 5e6c8f48.
