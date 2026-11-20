@@ -17,12 +17,17 @@
 }
 # an evidence build: the visit tables 0310 builds and the placement tables 0230 builds that the bundles read. `dir` is
 # where a restore puts a file, `from` where the archive reads it: fdis_sites.csv is 0240's, read where 0240 writes it
-# and never from a tagged EVIDENCE_DIR, since it is built from sites.rds and reads no link schema (#136). The row order
-# is the MANIFEST's, which names an archived build
+# and never from a tagged EVIDENCE_DIR, since it is built from sites.rds and reads no link schema (#136). fish.rds is
+# 0230's measured fish, which 0320 (bull trout's spawner evidence) and the methodology bundle read (#214); a build
+# archived before it lacks the file, and a restore of one rebuilds it with PLACE=FALSE 0230, which leaves the restored
+# sites.rds alone (#246). The row order is the MANIFEST's, which
+# names an archived build
 .knw_archive_evidence_files <- data.frame(file = c("visits_link.csv", "visits_species.csv", "walks.csv",
-                                                   "fdis_sites.csv", "reconcile.csv", "sites.rds"),
-                                          dir = c("derived", "derived", "derived", "derived", "build", "build"),
-                                          from = c("evidence", "evidence", "evidence", "sites", "build", "build"),
+                                                   "fdis_sites.csv", "reconcile.csv", "sites.rds", "fish.rds"),
+                                          dir = c("derived", "derived", "derived", "derived", "build", "build",
+                                                  "build"),
+                                          from = c("evidence", "evidence", "evidence", "sites", "build", "build",
+                                                   "build"),
                                           stringsAsFactors = FALSE)
 # 0240 writes fdis_sites.csv from sites.rds, and nothing else ties the table to a build: it is held to the sites.rds the
 # run's ledger records, one row per site and every column the two share equal as 0240 wrote it (a date as text, a
@@ -224,13 +229,14 @@ knw_archive_plan <- function(keys, tune_dir, compare_dir, evidence_dir, build_di
         stop(k, ": the grade table's receipt (", rcp, ") does not name the table its record describes", call. = FALSE)
       }
     }
-    # the build directory is 0230's: its sites.rds is the one the run's evidence ledger records (round 2 of the
-    # review: a BUILD_DIR left at another build's would archive a mixed evidence build)
+    # the build directory is 0230's: its sites.rds and fish.rds are the ones the run's evidence ledger records (round 2
+    # of the review: a BUILD_DIR left at another build's would archive a mixed evidence build; #214 for fish.rds)
     if (file.exists(rec$evidence_ledger)) {
       led <- utils::read.csv(rec$evidence_ledger, colClasses = "character")
-      sites_md5 <- ev$source_md5[ev$file == "sites.rds"]
-      if (!identical(led$note[led$step == "md5_sites"], sites_md5)) {
-        stop(k, ": ", build_dir, "/sites.rds is not the one ", rec$evidence_ledger, " records", call. = FALSE)
+      for (b in c("sites", "fish")) {
+        if (!identical(led$note[led$step == paste0("md5_", b)], ev$source_md5[ev$file == paste0(b, ".rds")])) {
+          stop(k, ": ", build_dir, "/", b, ".rds is not the one ", rec$evidence_ledger, " records", call. = FALSE)
+        }
       }
     } else {
       stop(k, ": the run's evidence ledger ", rec$evidence_ledger, " is not here to hold the evidence to",

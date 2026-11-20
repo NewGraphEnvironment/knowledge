@@ -1,10 +1,11 @@
 # FDIS electrofishing export: contents, defects, and what it adds
 
-**Verified:** 2026-09-26 (Provenance: 2026-10-16; Where it lives: 2026-11-01; Repeated surveys and the evidence table: 2026-10-17; Placement: 2026-10-27; Measured vs modelled gradient: 2026-10-30) · **Issues:** #18 (built from), #56 (published), #35 (repeated surveys), #91 (placement), #121 (gradient), NewGraphEnvironment/link#284 (consumer) ·
+**Verified:** 2026-09-26 (Provenance: 2026-10-16; Where it lives: 2026-11-01; Repeated surveys and the evidence table: 2026-10-17; Placement: 2026-10-27; Measured vs modelled gradient: 2026-10-30; Passes, and where a record sits: 2026-11-20) · **Issues:** #18 (built from), #56 (published), #35 (repeated surveys), #91 (placement), #121 (gradient), #225 (passes), #23 (span and record), #214 (fish.rds archived), NewGraphEnvironment/link#284 (consumer) ·
 **Produced by:** direct reads of `s3://fresh-bc/fdis/` and the public BCGW layers (WFS
 `DescribeFeatureType`, local `whse_fish`); placement by `data-raw/snap_candidate_check.R` and
 `data-raw/snap_limit_sensitivity.R` (`scripts/logs/fdis/20261027_snap_*`); gradient by `data-raw/site_gradient_check.R`
-(`scripts/logs/habitat/20261030_site_gradient_check.txt`) · **Status:** evidence built (`scripts/0230`, `scripts/0240`); first calibration read below.
+(`scripts/logs/habitat/20261030_site_gradient_check.txt`); where a record sits by `data-raw/fdis_downstream_end_check.R`
+(`scripts/logs/fdis/20261119_fdis_downstream_end_check.txt`) · **Status:** evidence built (`scripts/0230`, `scripts/0240`); first calibration read below.
 
 ## Provenance
 
@@ -53,6 +54,16 @@ which is **one electrofishing pass**. A **site visit** is the first three parts.
 - **Passes per site visit:** 53,018 site visits in the export, before repeated surveys are dropped (below). 47,270 have one pass; the rest have 2–8
   (depletion passes). Distributions built per pass would weight multi-pass sites up to 8×, so the
   evidence grain is the site visit, with effort summed over its passes.
+- **The passes are kept as well (#225).** `knw_fdis_passes()` writes one row per pass of a kept visit (one method
+  number and haul, indexed by method then haul) and one per pass and species code caught, by the visit table's
+  count rule applied per pass (`data/fdis/build/{passes,pass_catch}.rds` from `0230`, as CSV from `0240`, in
+  `knowledge/fdis/v3`). On the published build (2026-11-20, `scripts/logs/fdis/20261119_fdis_load-place-false.log`): 61,388
+  passes and 73,567 pass x species rows; 35,642
+  passes caught a fish, 25,279 recorded only "no fish caught" and 467 have no catch record (unknown, never zero).
+  Every kept visit's passes number its `n_pass` and sum to its fishing time and area. 885 visit x species caught have
+  no pass row, because their catch sits on a `KEY` with no `visits.csv` row; 161 sum above the visit's `n_caught` over
+  their passes, because a pass's count is short of its measured fish and the larger is taken per pass. The workbook
+  passes (`knw_fiss_visits()`) stay summed: they are #245's second source.
 
 ## Units and codes
 
@@ -223,6 +234,34 @@ bound `data/fdis_evidence.csv` and `data/fiss_evidence.csv` is not one placement
 tie rule between two segments of one stream; the probe's 29 `tie` visits lie at equal distance from two
 different streams, so that rule does not reach them; a tie between two segments of one stream falls in `same_segment`
 or `same_stream`.
+
+## The site span, and where a bcfishobs record sits (#23, 2026-11-20)
+
+A bcfishobs record is one species on one date at one point, and is usually read as the downstream end of a 100 to
+500 m site. The visit it came from fished a stretch: `knw_fdis_span()` runs it upstream from the visit's placed point
+for the fished length, cut at the blue line's top. `data-raw/fdis_downstream_end_check.R` matched the records to the
+published build's visits (`knw_bcfishobs_match()`, this database's bcfishobs snapshot, 375,962 records, newest dated
+2026-10-10) and asked where each record sits against its visit.
+
+- **Matches.** 24,163 of the 60,098 FDIS-keyed records (40.2 %) match exactly one visit by collection, species and
+  date. Most of the rest (34,372) name a collection no kept visit holds (`unmatched`): one sampled by another method or
+  not exported, or, for 508, a repeat copy of a survey the load dropped (#35); 1,163 name a kept collection but match
+  none of its visits by species and date (`collection_only`), and 400 match several visits of one collection on one
+  date.
+- **A record's point is the visit's point.** 58.2 % of the one-to-one records (14,056) carry the visit's own UTM:
+  13,218 of them lie on the visit's blue line, every one within 5 m of its placed point; 795 were snapped by bcfishobs
+  to another line (the same UTM, placed two ways), and 43 belong to visits `0230` could not place. The rest sit a median 13 m from the visit's UTM (90th
+  percentile 80 m); on the visit's blue line 81 % of them still lie within 5 m of its point, 9 % below it, 6 % inside
+  its span, 2 % above it, and 2 % above a point whose visit records no fished length.
+- **What that cannot show.** Both points come from the UTM a crew reported, so their agreement says the two
+  placements of one survey coincide, not that the point is the site's downstream end, nor where along the site a fish
+  was caught. That is set by the fished span: over the 19,349 visits of the placed one-to-one records, each once, a
+  median 100 m (quartiles 38
+  and 200 m, 90th percentile 800 m; 1,799 record no length), and 338 spans run past their blue line's top. A fish caught on
+  a visit came from anywhere in that stretch, which is the location error #137 weighs one discharge per segment
+  against.
+- The span is computed in the checks, not published on `fdis_sites`, whose md5 the methodology bundle pins; it joins
+  the table at that bundle's next rebuild (#231).
 
 ## What this adds over the public layers
 

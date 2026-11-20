@@ -23,11 +23,13 @@
 #     while data/fiss_evidence.csv (0250), which binds with it by row, keeps 100 m on
 #     fwa_indexpoint(): one column, two placements.
 #
-# INPUT:  data/fdis/build/{sites,catch,fish}.rds (from 0230), data/fdis_size_breaks.csv
+# INPUT:  data/fdis/build/{sites,catch,fish,passes,pass_catch}.rds (from 0230), data/fdis_size_breaks.csv
 #         Size classing is knw_size_class() from the package (shared with 0250).
 # OUTPUT: data/fdis/derived/fdis_sites.{csv,gpkg}  one row per site visit: placement, measured
 #                                        and modelled habitat, effort, catch status, focal
 #                                        counts (ignored; 0299 publishes the csv)
+#         data/fdis/derived/fdis_passes.csv      one row per pass of a kept visit (#225; ignored, 0299 publishes)
+#         data/fdis/derived/fdis_pass_catch.csv  pass x species code caught (#225; ignored, 0299 publishes)
 #         data/fdis_evidence.csv         site visit x focal species x size class (measured
 #                                        fish), plus counted-but-unmeasured and spawner rows;
 #                                        `source`/`method` match data/fiss_evidence.csv (0250)
@@ -35,12 +37,49 @@
 #                                        width by species x class, against current thresholds
 #         data/fdis_maturity_check.csv   size class x maturity code agreement
 # RUN:    Rscript scripts/0240-fdis-evidence.R   (after 0230, from the repo root)
+#         ONLY=passes Rscript scripts/0240-fdis-evidence.R   writes fdis_passes.csv and fdis_pass_catch.csv alone, from
+#                 0230's passes, and nothing else: on a build restored from the archive (0336 PULL=TRUE, then
+#                 PLACE=FALSE 0230), whose fdis_sites.csv and tracked tables a full run would rewrite (#246)
 # ---------------------------------------------------------------------------
 suppressMessages({ library(dplyr); library(readr); library(tidyr); library(DBI); library(RPostgres) })
 pkgload::load_all(quiet = TRUE)
 
 build <- "data/fdis/build"
+derived <- "data/fdis/derived"
+only <- Sys.getenv("ONLY")
+if (!only %in% c("", "passes")) stop("ONLY is '", only, "': leave it unset, or write passes")
 sites <- readRDS(file.path(build, "sites.rds"))
+
+# the passes as 0230 kept them (knw_fdis_passes(), #225), for 0299 to publish beside the site table. A build restored
+# from the archive (0336 PULL=TRUE) holds no passes: PLACE=FALSE 0230 rebuilds them from the export before placement
+# with no database and leaves the restored sites.rds alone (#246). Without them, or with passes of other visits, any
+# older pass CSVs are removed, so 0299 refuses a v3 rather than publish passes of another build
+write_passes <- function(site_visits) {
+  f_pass <- file.path(build, c("passes.rds", "pass_catch.rds"))
+  if (!all(file.exists(f_pass))) {
+    unlink(file.path(derived, c("fdis_passes.csv", "fdis_pass_catch.csv")))
+    message("No passes in ", build, " (a build restored from the archive?): run PLACE=FALSE scripts/0230, then ",
+            "ONLY=passes scripts/0240, to write fdis_passes.csv and fdis_pass_catch.csv")
+    return(invisible(FALSE))
+  }
+  pass_tab <- readRDS(f_pass[1])
+  pass_catch_tab <- readRDS(f_pass[2])   # both read before either is written, so a failed read splits no pair
+  if (!setequal(pass_tab$site_visit, site_visits)) {
+    unlink(file.path(derived, c("fdis_passes.csv", "fdis_pass_catch.csv")))
+    stop("passes.rds is not the passes of sites.rds (older pass CSVs removed): remove passes.rds and pass_catch.rds, ",
+         "then run PLACE=FALSE scripts/0230 and ONLY=passes scripts/0240")
+  }
+  dir.create(derived, showWarnings = FALSE)
+  write_csv(pass_tab, file.path(derived, "fdis_passes.csv"), na = "")
+  write_csv(pass_catch_tab, file.path(derived, "fdis_pass_catch.csv"), na = "")
+  invisible(TRUE)
+}
+# first on both paths (site_out below holds sites.rds's visits), so a mismatch stops before anything else is written
+wrote_passes <- write_passes(sites$site_visit)
+if (only == "passes") {
+  if (wrote_passes) message("ONLY=passes: wrote fdis_passes.csv and fdis_pass_catch.csv; nothing else")
+  quit(save = "no", status = 0)
+}
 catch <- readRDS(file.path(build, "catch.rds"))
 fish  <- readRDS(file.path(build, "fish.rds"))
 breaks <- read_csv("data/fdis_size_breaks.csv", col_types = "cccccc") |>
@@ -151,9 +190,9 @@ site_out <- sites |>
          ws50_checked)
 # the site table (~17 MB) and its points are too large to churn in git: they go to
 # data/fdis/derived/ (ignored); 0299 publishes the site table (see scripts/README.md)
-derived <- "data/fdis/derived"
 dir.create(derived, showWarnings = FALSE)
 write_csv(site_out, file.path(derived, "fdis_sites.csv"), na = "")
+if (!setequal(site_out$site_visit, sites$site_visit)) stop("the site table lost or gained visits")
 site_pts <- site_out |> filter(!flag_no_utm) |> group_split(utm_zone) |>
   lapply(\(d) sf::st_transform(sf::st_as_sf(d, coords = c("utm_easting", "utm_northing"),
                                            crs = 32600 + d$utm_zone[1], remove = FALSE), 3005)) |>

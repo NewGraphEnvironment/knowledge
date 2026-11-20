@@ -26,7 +26,9 @@
 #         the bucket. PULL: the checkout's records and data/archive_index.csv.
 # OUTPUT: archive: the objects under s3://fresh-bc/archive/knowledge/, rows appended to data/archive_index.csv.
 #         PULL: data/tune/<key>_{curve.rds,grades.csv}, data/compare/<key>_segments.rds, data/fdis/derived/*.csv and
-#         data/fdis/build/{reconcile.csv,sites.rds}, each md5-checked.
+#         data/fdis/build/{reconcile.csv,sites.rds,fish.rds}, each md5-checked (fish.rds only for a build archived
+#         from #214 on: an earlier one lacks it, and PLACE=FALSE 0230 rebuilds it, leaving sites.rds alone, #246). BUILD_DIR's sites.rds and fish.rds are held to
+#         the run's evidence ledger (md5_sites, md5_fish).
 # RUN:    Rscript scripts/0336-archive.R                  (from the repo root: the published tables, every key with a
 #                                                          record; KEYS=CH_rear,BT_rear for some; DRY=1 lists)
 #         RUN=<run> Rscript scripts/0336-archive.R        (a candidate under data/{tune,compare}/candidate/<run>/)

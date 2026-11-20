@@ -1,0 +1,48 @@
+FDIS downstream-end check (knowledge#23, move 6), 2026-11-20 05:55 UTC.
+Build: scripts/logs/habitat/20261103_evidence_build_ledger-derived_minimal.csv (sites.rds 39f751b174aea4a14eb0dc0d3e3b126d, the ledger of link run 20261102_203300-60ab009d); 51587 site visits.
+bcfishobs.observations: 375,962 records, newest dated 2026-10-10 (the snapshot this database holds).
+
+## bcfishobs records by species and match class (knw_bcfishobs_match(), knw_species())
+ species_code collection_only many not_fdis   one unmatched
+           BT             230  130     3194  4321      3504
+           CH              42   38     4384  1286      3294
+           CM               4    0     3787    57      1052
+           CO             132    7    10834  2810      8759
+           GR              49   21     1329  1322       577
+           KO              16    0     6665   901      2083
+           PK               8    0     3176    15       636
+           RB             568  135    97088 11551     10541
+           SK              11    0     3171    86       921
+           ST              13    0    13945   323      2266
+          WCT              90   69     4388  1491       739
+Unmatched records: 34,372; of them on a collection the load dropped as a repeat copy (#35, no kept visit): 508.
+Records matched to exactly one visit: 24,163 of 60,098 FDIS-keyed records (40.2 %).
+
+## One-to-one records: is the record's reported UTM the visit's own?
+ records n_same_utm share_same other_zone_or_missing apart_p50_m apart_p90_m
+   24163      14056      0.582                     1          13        79.6
+
+## Records carrying the visit's own UTM: the line each placement took
+             line     n
+     another line   795
+ the visit's line 13218
+ visit not placed    43
+
+Placed one-to-one records: 24,088; on the visit's own blue line: 22,593 (93.8 %); their visits: 19,349, 338 with a span capped.
+
+## Where the record sits against the visit's span (same blue line)
+                    where same_utm     n share
+ above the point, no span    FALSE   194 0.021
+           above the span    FALSE   159 0.017
+    at the downstream end    FALSE  7579 0.808
+    at the downstream end     TRUE 13218 1.000
+           below the site    FALSE   878 0.094
+          inside the span    FALSE   565 0.060
+
+## Offset (record measure - visit measure, m) where they differ by more than the end window
+ same_utm    n   p10 p50 p90 share_of_length_p50
+    FALSE 1796 -39.5   6  49               -0.01
+
+## Fished length of the matched visits (m, each visit once): the stretch a record's fish came from
+     n missing p25 p50 p75 p90
+ 19349    1799  38 100 200 800

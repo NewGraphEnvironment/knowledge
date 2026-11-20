@@ -19,6 +19,8 @@
 #   - v3, unpublished, also places the visits with fresh's snap and the 1:50k code (#91): fdis_sites
 #     gains snap_method, snap_confirmed, snap_moved and nearest_distance_m, and its blue_line_key,
 #     measure, distance and flags are the new placement's. v3 has not been published, so no bump.
+#     It also carries the passes (#225): fdis_passes and fdis_pass_catch, one row per pass of a kept visit and one per
+#     pass and species code caught, written by 0240 from 0230's passes.rds and pass_catch.rds.
 #   - Republishing to a version that exists refuses when any table's sha256 or row count differs
 #     from the published manifest, unless REPUBLISH=TRUE: a published version is not rewritten by
 #     accident, including by a change of meaning that keeps the schema.
@@ -44,6 +46,7 @@
 #     for 0291-0298. NO_SIGN=TRUE reads without AWS credentials: the prefix is public.
 #
 # INPUT:  data/fdis/derived/{fdis_sites,bt_use_visits,ch_mad_visits,ch_rule_visits,ch_rule_walks}.csv
+#         and for v3 data/fdis/derived/{fdis_passes,fdis_pass_catch}.csv (0240)
 #         (scripts/0240, 0290, 0294, 0296), data/fdis_README.md; for v3 also 0310's tables and its
 #         evidence_receipt.json, and data/fdis/MANIFEST.md5 (0230)
 # OUTPUT: data/fdis/publish/ (ignored): <table>.parquet, manifest.json, and for v3 receipt.json
@@ -106,7 +109,16 @@ tables_v3 <- rbind(
       "bcfishobs records matched to the FDIS visit they came from by collection, species and date, with the match class (#57, #23).",
       "link#349's cross-tabulation of streams_habitat_<sp>.accessible against streams_access.access_<sp> per species and watershed group (#57, #120), on the build's link run."),
     stringsAsFactors = FALSE),
-  tables_v2[tables_v2$table %in% c("bt_use_visits", "ch_mad_visits", "ch_rule_visits", "ch_rule_walks"), ])
+  tables_v2[tables_v2$table %in% c("bt_use_visits", "ch_mad_visits", "ch_rule_visits", "ch_rule_walks"), ],
+  # the passes (#225): what a removal estimate or a repeat-survey model reads, which the visit tables sum away
+  data.frame(
+    table = c("fdis_passes", "fdis_pass_catch"),
+    source = file.path(dir_in, c("fdis_passes.csv", "fdis_pass_catch.csv")),
+    script = "scripts/0230-fdis-load.R",
+    description = c(
+      "One row per electrofishing pass (one method number and haul) of a kept FDIS site visit: its index within the visit (by method, then haul), date, fishing time, fished length, width and area, and whether the pass caught a fish, recorded only no fish caught, or has no catch record, which is unknown, never zero (#225).",
+      "One row per pass and species code caught, as recorded (a code that hides a species' absence included): the counted number with age rows summed, the measured fish, and the caught number by the visit table's rule applied per pass, so a visit's passes can sum above its n_caught where a pass's count is short of its measured fish. Which passes form one closed population is the caller's choice (#225)."),
+    stringsAsFactors = FALSE))
 tables_v3$description[tables_v3$table %in% c("bt_use_visits", "ch_mad_visits", "ch_rule_visits", "ch_rule_walks")] <-
   paste(tables_v3$description[tables_v3$table %in% c("bt_use_visits", "ch_mad_visits", "ch_rule_visits", "ch_rule_walks")],
         "From v3 written from visits_link by its script, on the province-wide link run; bt_use_visits no longer carries the held-out role, step-5 class or score284 columns (#57).")
@@ -211,7 +223,8 @@ manifest <- knw_publish(
   } else {
     paste("v3 is the one evidence build for every species on the province-wide link default run (knowledge#57):",
           "visits_link, visits_species, walks, bcfishobs_fdis_match and access_check are new, and the four",
-          "species tables are written from visits_link. v2 stays as published for the scripts frozen on it.")
+          "species tables are written from visits_link; fdis_passes and fdis_pass_catch keep the passes the visit",
+          "tables sum (knowledge#225). v2 stays as published for the scripts frozen on it.")
   },
   provenance = list(
     published_from_commit = commit,

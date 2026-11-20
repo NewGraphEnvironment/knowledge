@@ -1,0 +1,4 @@
+Cache verified: 26 files match MANIFEST.md5
+Repeated surveys: 1431 visits dropped from 1308 groups
+Passes: 61388 passes, 73567 pass x species rows; status fish 35642, nfc 25279, no_record 467; visit x species caught with no pass row (catch on a KEY with no visits.csv row): 885; visit x species whose passes sum above the visit's n_caught (counts short of measured on some pass): 161; below it: 0
+PLACE=FALSE: wrote catch.rds, passes.rds, pass_catch.rds; kept fish.rds (contents equal); sites.rds and reconcile.csv untouched in data/fdis/build

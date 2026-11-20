@@ -3,9 +3,10 @@
 # with other tables, and carries none. Every table is fingerprinted from its CSV as text, so held exact, except
 # access_check's km, read as a number and held to the evidence build's rounding (inst/receipt/evidence.yaml says why).
 # Five of its tables are the evidence build's (visits_link, visits_species, walks, bcfishobs_fdis_match, access_check),
-# which #165 found exact but access_check's km across two databases. The other six, fdis_sites (0240) and
-# fdis_repeat_surveys (0230) and the tables 0290, 0294 and 0296 build from the evidence, have not been compared across
-# databases, so holding them exact is provisional.
+# which #165 found exact but access_check's km across two databases. The other eight, fdis_sites (0240),
+# fdis_repeat_surveys (0230), the passes fdis_passes and fdis_pass_catch (0230, #225) and the tables 0290, 0294 and 0296
+# build from the evidence, have not been compared across databases, so holding them exact is provisional (the passes
+# read no database).
 receipt_keys: 1
 output: fdis
 recipe:
@@ -29,5 +30,7 @@ result:
     ch_mad_visits: {}
     ch_rule_visits: {}
     ch_rule_walks: {}
+    fdis_passes: {}
+    fdis_pass_catch: {}
   summary:
     visits: {}
