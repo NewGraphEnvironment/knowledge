@@ -105,7 +105,7 @@ What exploration found:
 
 ## Phase 4: one flow per segment (#137)
 
-- [ ] `data-raw/segment_flow_resolution_check.R` runs on this host's database: the published build's network, the flow load read from the table comment and logged, and a logged `pg_stat_activity` check.
+- [x] `data-raw/segment_flow_resolution_check.R` runs on this host's database: the published build's network, the flow load read from the table comment and logged, and a logged `pg_stat_activity` check.
   - **Question 1** (method from review item 11). A reach is the segments sharing `blue_line_key` and local code
     between confluences; its local area is every polygon with that watershed and local code, and upstream area is
     interpolated linearly by measure along it, so each segment gets an area, and an area-scaled MAD, at its bottom and
@@ -118,7 +118,7 @@ What exploration found:
     (WCT included). Near-river flow flips are declined (review item 14).
   - Visits from the restored published `visits_link` and `fdis_sites` (item 12); the network from `whse_basemapping`.
   - Batched queries; logged to `scripts/logs/flow/<date>_segment_flow_resolution_check.txt`.
-- [ ] `research/discharge_resolution.md` (new), led by a plain-language walk then the numbers:
+- [x] `research/discharge_resolution.md` (new), led by a plain-language walk then the numbers:
   - whether segment resolution adds error beyond placement and source error;
   - what point flow would move.
 
@@ -128,7 +128,7 @@ Declined at the review: #225's workbook passes (`knw_fiss_visits()`), which are 
 
 ## Phase 5: close out
 
-- [ ] Update `CLAUDE.md`'s FDIS and archive lines, `scripts/README.md` (`0230` and `0240` outputs, the two data-raw checks) and `research/README.md`.
+- [x] Update `CLAUDE.md`'s FDIS and archive lines, `scripts/README.md` (`0230` and `0240` outputs, the two data-raw checks) and `research/README.md`.
 - [ ] `/code-check branch` (three-round floor); `lintr` per-file diff against main; `devtools::test()`; `pkgdown::check_pkgdown()` for the new export.
 - [ ] `/planning-archive`, then `/gh-pr-push`.
 

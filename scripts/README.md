@@ -36,7 +36,9 @@ wf_farm_priority.js                          farm priority/crossing tables out o
 --- FDIS electrofishing export (province-wide, not per group) ---
 0230  sync s3://fresh-bc/fdis/, QA, roll passes to site visits, place on FWA with fresh's snap and the 1:50k code
       (#91; fwapg database (PG* env vars), fresh >= 0.40.0; SNAP_LIMIT / SNAP_LIMIT_CODE override the limits)
-0240  size classes + CH / char evidence + summary vs thresholds -> data/fdis_*.csv
+      also keeps the passes: data/fdis/build/{passes,pass_catch}.rds, knw_fdis_passes() (#225)
+0240  size classes + CH / char evidence + summary vs thresholds -> data/fdis_*.csv; fdis_sites.csv and the passes
+      as fdis_passes.csv / fdis_pass_catch.csv (data/fdis/derived, for 0299)
 
 --- FISS individual fish -> size-class evidence (after 0220 on each group, and 0230) ---
 0250  Step 3 fish + Step 2 counts, deduped against FDIS -> data/fiss_evidence.csv (fwapg database (PG* env vars))
@@ -133,7 +135,7 @@ wf_farm_priority.js                          farm priority/crossing tables out o
       fdis_sites.csv comes from SITES_DIR (data/fdis/derived, where 0240 writes it) for a tagged EVIDENCE_DIR too,
       held to BUILD_DIR's sites.rds (#136); a staged BUILD_DIR refuses without SITES_DIR
       PULL=TRUE restores into a checkout's ignored data/ the run its records name, by version id, md5-checked
-      (evidence, curves, segments; GRADES=TRUE adds the grade tables)
+      (evidence with 0230's fish.rds from #214, curves, segments; GRADES=TRUE adds the grade tables)
 0340  DFO's NuSEDS escapement records (#108): knw_nuseds_fetch() keeps each release of the All Areas zip in
       data/nuseds/<release>/ (ignored), knw_nuseds_records() reads it through crate (dfo/nuseds_all_areas) and adds
       evidence_kind -> nuseds_records.csv there, a row of data/nuseds_release.csv (tracked; a recorded release that
@@ -336,7 +338,9 @@ with the Province's agreement; `research/fdis_export.md` documents it). Electrof
 and maturity, per-pass effort, measured channel width and gradient, and explicit zero catch
 (`NFC`): none of it is in the public FISS layers.
 
-- **Grain is the site visit**, not the pass: depletion passes repeat one population.
+- **Grain is the site visit**, not the pass: depletion passes repeat one population. The passes are kept beside
+  it (#225): one row per pass of a kept visit and one per pass and species code caught, for removal estimates
+  and repeat-survey models (`knw_fdis_passes()`; `fdis_passes` and `fdis_pass_catch` in `knowledge/fdis/v3`).
 - **Abundance comes from `counts`**; `details` is a length subsample (87% of counted CH have no length).
 - **Placement (#91):** `fresh::frs_point_snap()` (500 m radius), to the nearest stream and to each stream
   FDIS's own 1:50k watershed code names; `knw_fdis_place()` takes the nearest named stream in reach, else the
@@ -345,9 +349,13 @@ and maturity, per-pass effort, measured channel width and gradient, and explicit
 - **CH gives rearing evidence only**; EF caught no adult CH. Char spawner evidence is maturity
   (SP/ST, or M in Aug–Oct), not length.
 - Outputs: `data/fdis_evidence.csv`, `data/fdis_summary_ch_bt.csv`, `data/fdis_size_breaks.csv`,
-  `data/fdis_maturity_check.csv` (tracked), and `fdis_sites.{csv,gpkg}` (17 MB each, ignored), which `0299`
-  publishes as Parquet to `s3://fresh-bc/knowledge/fdis/v2/`.
-- Logs: `scripts/logs/fdis/`.
+  `data/fdis_maturity_check.csv` (tracked), and `fdis_sites.{csv,gpkg}` (17 MB each, ignored) and
+  `fdis_passes.csv` / `fdis_pass_catch.csv` (ignored), which `0299` publishes as Parquet under
+  `s3://fresh-bc/knowledge/fdis/<version>/` (the passes from v3).
+- Checks on the built tables: `data-raw/fdis_downstream_end_check.R` (#23: where a bcfishobs record sits against
+  its visit's fished span) and `data-raw/segment_flow_resolution_check.R` (#137: how far flow grows within a segment,
+  against where records sit), each on a restored published build.
+- Logs: `scripts/logs/fdis/` (the flow check's in `scripts/logs/flow/`).
 
 ## 0200 / 0210 / 0220 — FISS `.xls` → No-Fish-Captured layer
 

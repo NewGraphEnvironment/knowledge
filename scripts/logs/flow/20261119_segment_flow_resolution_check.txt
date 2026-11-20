@@ -1,0 +1,77 @@
+Segment flow resolution check (knowledge#137, move 6), 2026-11-20 04:32 UTC.
+Visits: visits_link.csv of a restored build (md5 c746c5829c605fb7711feba0ec9d4d93, the published evidence); thresholds: data/thresholds.csv (link run 20261102_203300-60ab009d).
+Flow load: wet_db_load(): discharge/fwa/v1/segment_monthly, scenario historical last loaded from https://fresh-bc.s3.us-west-2.amazonaws.com/discharge/fwa/v1/manifest.json (built 2026-10-24T12:23:01Z, wet b4bbc50)
+Other active sessions on the database at start: 4.
+
+Q1 took 5.1 min. Segments in the province: 4,907,441; on their own blue line (reaches): 4,659,924.
+
+## Q1. Fall in area-scaled flow from a segment's bottom to its top (share of the bottom's), by edges and the segment's annual flow (m3/s, wet's pick)
+                    edges mad_class segments      km fall_p50 fall_p90
+        double-line river      <0.1   207392   41999   0.0402   0.3604
+        double-line river     0.1-1    32279    8033   0.0018   0.0275
+        double-line river      >=10    90321   28142   0.0001   0.0010
+        double-line river      1-10    80279   23009   0.0004   0.0042
+        double-line river   no flow      547      67   0.1135   0.4739
+ lake or wetland skeleton      <0.1   453684   66344   0.2493   1.0000
+ lake or wetland skeleton     0.1-1    59806   11238   0.0069   0.1865
+ lake or wetland skeleton      >=10    13431    4354   0.0002   0.0028
+ lake or wetland skeleton      1-10    18453    4755   0.0019   0.0241
+ lake or wetland skeleton   no flow    39517    4280   1.0000   1.0000
+                    other      <0.1     2114     993   0.3858   1.0000
+                    other     0.1-1      496     293   0.0137   0.3531
+                    other      >=10        8       3   0.0001   0.0011
+                    other      1-10       69      31   0.0008   0.0343
+                    other   no flow        1       0   0.2276   0.2276
+       single-line stream      <0.1  2832294 1448540   0.7435   1.0000
+       single-line stream     0.1-1   455171  182164   0.0085   0.1473
+       single-line stream      >=10     2761     882   0.0004   0.0042
+       single-line stream      1-10   134134   44492   0.0013   0.0161
+       single-line stream   no flow     2750     573   0.4218   1.0000
+ share_over_10pct share_over_25pct
+           0.3255           0.1599
+           0.0304           0.0083
+           0.0003           0.0002
+           0.0008           0.0005
+           0.5576           0.2687
+           0.6145           0.4997
+           0.1450           0.0844
+           0.0023           0.0016
+           0.0299           0.0193
+           0.9698           0.9403
+           0.6750           0.5591
+           0.2298           0.1371
+           0.0000           0.0000
+           0.0870           0.0580
+           1.0000           0.0000
+           0.7320           0.6247
+           0.1347           0.0649
+           0.0065           0.0043
+           0.0091           0.0037
+           0.7313           0.6022
+
+Q2. Visits on their own line's flow: 45,503 of 45,529; with an area along their line: 43,774; with a span (a fished length): 42,059.
+
+## Q2. Fall in area-scaled flow over the visit's segment and over its fished span, against the two sources' disagreement (|log routed / balance|, as a factor) on the same visits
+              edges visits segment_fall_p50 segment_fall_p90 span_fall_p50
+  double-line river   9414           0.0001           0.0061        0.0001
+              other    864           0.1090           1.0000        0.0411
+ single-line stream  31605           0.0743           0.9131        0.0256
+ span_fall_p90 share_span_fall_over_10pct sources_factor_p50 sources_factor_p90
+        0.0100                     0.0457               1.10               1.69
+        0.9996                     0.3426               1.24              78.65
+        0.3282                     0.2675               1.34               3.43
+Yardstick: wet's pick against gauges, annual mean absolute error 23.0 % (research/modelled_discharge.md).
+
+## Q3. Share of visits whose class at each key's minimum flow changes when flow is read at the record's point or the span's middle instead of the segment's value, beside the other source replacing the pick
+      key rear_mad_min visits within_x2_of_threshold flip_at_point
+  BT_rear         0.35  37834                   5555        0.0027
+  CH_rear         0.75  37834                   4791        0.0015
+  CO_rear         0.10  37834                   7607        0.0133
+  ST_rear         0.50  37834                   5088        0.0019
+ WCT_rear         0.03  37834                   7342        0.0196
+ flip_at_span_middle flip_other_source
+              0.0049            0.0363
+              0.0029            0.0279
+              0.0181            0.0668
+              0.0034            0.0304
+              0.0268            0.0867

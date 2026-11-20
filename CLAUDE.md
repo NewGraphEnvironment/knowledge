@@ -306,6 +306,12 @@ The 2022 `Details*` files contain every 2020 fish row, and exact duplicate rows 
 `counts` is the abundance table; `details` is a length subsample. `scripts/0230`–`0240` build
 from it, and `research/fdis_export.md` is the reference. The FWA "field measurement" channel
 widths are these same sites, so never score the width model against them.
+The visit tables sum over passes; the passes themselves are `0230`'s `passes.rds` and `pass_catch.rds`
+(`knw_fdis_passes()`, #225), published as `fdis_passes` and `fdis_pass_catch` in v3. They are built before placement
+and read no database, so a rerun of `0230` reproduces them, `fish.rds` and `catch.rds` byte for byte, while its
+`sites.rds` need not: on 2026-11-20 a rerun on another database and fresh 0.53.0 placed 245 of 51,587 visits
+differently from the published build (#246). Restore the published placement with `0336 PULL=TRUE`, never by
+rerunning `0230`.
 Some surveys were loaded under two to four collection ids (same UTM, date, per-pass effort and
 catch). `0230` keeps one copy, the one with the most measured fish, because the fish often sit on
 the later id only, and lists the rest in `data/fdis_repeat_surveys.csv` (#35). Downstream scripts
