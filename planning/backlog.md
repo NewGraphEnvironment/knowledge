@@ -18,7 +18,7 @@ waited on, closed 2026-11-17; link#460, the minimal-run track's last wait, close
 16 (#244) carries #240 and #230; #243 becomes the `track:timing` umbrella; no closures
 
 **Verified:** 2026-11-20 against 67 open issues · **Produced by:** a read of the 2 open issues the file did not name, both
-filed during move 6 (#175, merged in PR #247) · #245, split from move 6's #23, joins move 7 as batch 27; #246 joins the
+filed during move 6 (#175, merged in PR #247) · the age-class and workbook-source issue split from move 6's #23 joins move 7 as batch 27 (left unplaced at move 7's gate); #246 joins the
 provenance track; no closures, no new move
 
 How to use this file: `/backlog-sweep` writes it. Take the first move in **Moves** that is not
@@ -44,7 +44,7 @@ split piece, or one filed since the last pass): run `/backlog-sweep` to place it
 | - [x] 4 | #173 | 6, 7: maps out of the comparison, one research page per key (4 issues) | done: https://github.com/NewGraphEnvironment/knowledge/pull/212 (batch 6; batch 7 split to #211) | — | — | — |
 | - [x] 5 | #174 | 8, 9: timing table and NuSEDS, flow in windows (5 issues) | done: https://github.com/NewGraphEnvironment/knowledge/pull/229 | — | — | — |
 | - [x] 6 | #175 | 10, 18: location error against flow resolution, the FDIS load's outputs (4 issues) | done: https://github.com/NewGraphEnvironment/knowledge/pull/247 | A | — | opus |
-| - [x] 7 | #176 | 11: FISS parser, gradient and PINE (3 issues; batch 12 split to #248 and batch 27's #245 left unplaced at the gate) | done: https://github.com/NewGraphEnvironment/knowledge/pull/249 | B | — | opus |
+| - [x] 7 | #176 | 11: FISS parser, gradient and PINE (3 issues; batches 12 and 27 left unplaced at the gate, recorded in #176's body) | done: https://github.com/NewGraphEnvironment/knowledge/pull/249 | B | — | opus |
 | - [ ] 8 | #177 | 13, 23: promotion cargo, tuning-code fixes (4 issues) | **waiting** on Al's word for the next full retune | E | 12 | opus |
 | - [x] 9 | #178 | 14: fish-passage literature, the access track's first piece (1 issue) | done: https://github.com/NewGraphEnvironment/knowledge/pull/237 | C | — | fable then opus |
 | - [ ] 10 | #179 | 16, 22: library, keys and our own prose; OCR of the scanned PDFs (4 issues) | open | C | 9 | opus |
@@ -67,9 +67,9 @@ groups, the BULK and MORR chinook rows among them) and #242 (Fraser and Thompson
 9 into the access and gradient tracks; #234 placed in batch 14 (move 9) and #235 in batch 24 (move 15, #236) by that
 decision, against the header's rule that split pieces wait for the next sweep
 
-**Verified:** 2026-11-20, a hand edit at move 7's gate (#176), not a sweep · **Produced by:** the plan's measure of batch 11 (#7, #34, #10) as one
-PR's work · batch 12 (#17, #2, #1) split to #248, with its two gate questions open; batch 27 (#245) left as its own
-issue; both are out of this file until the next sweep places them, after move 7 merges
+**Verified:** 2026-11-20, a hand edit at move 7's gate (#176), not a sweep · **Produced by:** the plan's measure of batch 11
+(#7, #34, #10) as one PR's work · batches 12 and 27 were left out of this file so the next sweep places them; #176's
+body names the issues
 
 link's own pass: link#468, a backlog pass for link that carries the link issues moves 8 and 9 and the baselines and minimal-run tracks wait on, so link's backlog can place them knowing what they hold up.
 
