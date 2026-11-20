@@ -69,6 +69,8 @@ run_fx <- function(root, run = "20261027_0000", tokens = c(cut = NA, acc = NA, g
                       downstream_route_measure = c(10.5, 123456.789), date = as.Date(c("2020-08-01", NA)),
                       blocks_absence_of = c(NA, "BT"), gnis_name = c("Rivi\u00e8re Bleue", NA), mad_m3s = c(1, Inf))
   saveRDS(sites, file.path(db, "sites.rds"))
+  # 0230's measured fish, which 0320 and the methodology bundle read (#214)
+  saveRDS(data.frame(site_visit = "s1", species_code = "BT", length_mm = 120), file.path(db, "fish.rds"))
   utils::write.csv(cbind(sites, n_bt = 1:2), file.path(dv, "fdis_sites.csv"), row.names = FALSE, na = "",
                    fileEncoding = "UTF-8")
   ev <- paste(unname(tools::md5sum(file.path(dv, c("visits_link.csv", "visits_species.csv", "walks.csv")))),
@@ -83,8 +85,9 @@ run_fx <- function(root, run = "20261027_0000", tokens = c(cut = NA, acc = NA, g
                               curve_grad = "segment_gradient"), g, row.names = FALSE)
   # the run's evidence ledger records the build's sites.rds, which the plan holds the build directory to
   ledger <- file.path(root, "ledger.csv")
-  utils::write.csv(data.frame(kind = "info", step = "md5_sites", n = 0,
-                              note = unname(tools::md5sum(file.path(db, "sites.rds")))), ledger, row.names = FALSE)
+  utils::write.csv(data.frame(kind = "info", step = c("md5_sites", "md5_fish"), n = 0,
+                              note = unname(tools::md5sum(file.path(db, c("sites.rds", "fish.rds"))))), ledger,
+                   row.names = FALSE)
   knw_grade_record_write(g, tune_run = run, evidence_ledger = ledger, knowledge_commit = "abc",
                          link = c(version = "0.66.0", sha = "def"), tokens = tokens, rows = 2)
   saveRDS(list(curve = run), file.path(tn, "CH_rear_curve.rds"))
@@ -133,7 +136,7 @@ test_that("the plan names every object, holds the grades to their record and the
   x <- run_fx(root)
   p <- plan_of(x)
   expect_identical(sum(p$kind == "tune"), 4L)
-  expect_identical(sum(p$kind == "evidence"), 6L)
+  expect_identical(sum(p$kind == "evidence"), 7L)
   expect_identical(p$object[p$kind == "tune"][1],
                    "archive/knowledge/tune/CH_rear/untokened/20261027_0000/CH_rear_grades.csv.zst")
   expect_identical(p$target[p$kind == "tune"],
@@ -142,7 +145,8 @@ test_that("the plan names every object, holds the grades to their record and the
   # the evidence folder is named by its MANIFEST's md5, which lists every file's md5
   m <- attr(p, "manifest")
   expect_identical(p$evidence_id[1], .knw_md5_text(m))
-  expect_match(m, "  sites.rds\n$")
+  expect_match(m, "  sites.rds\n[0-9a-f]{32}  fish.rds\n$")
+  expect_identical(p$target[p$kind == "evidence" & basename(p$source) == "fish.rds"], "data/fdis/build/fish.rds")
   expect_identical(unique(p$setup[p$kind == "evidence"]), paste0("evidence/", p$evidence_id[1]))
   cat("3,0.1\n", file = file.path(x$tune, "CH_rear_grades.csv"), append = TRUE)
   expect_error(plan_of(x), "CH_rear: .*not the table the record describes")
@@ -151,6 +155,12 @@ test_that("the plan names every object, holds the grades to their record and the
   expect_error(plan_of(x), "CH_rear: graded on evidence .*, not the build in")
   unlink(file.path(x$build, "sites.rds"))
   expect_error(plan_of(x), "the evidence build lacks .*sites.rds")
+  # fish.rds is held to the run's ledger as sites.rds is (#214), and a build without it is refused
+  x <- run_fx(root)
+  saveRDS(data.frame(site_visit = "s2"), file.path(x$build, "fish.rds"))
+  expect_error(plan_of(x), "CH_rear: .*fish.rds is not the one .* records")
+  unlink(file.path(x$build, "fish.rds"))
+  expect_error(plan_of(x), "the evidence build lacks .*fish.rds")
 })
 
 test_that("an archive stores every object once with its version id, and refuses an unversioned bucket", {
@@ -162,14 +172,14 @@ test_that("an archive stores every object once with its version id, and refuses 
   expect_false(file.exists(idx))
   b <- mock_bucket()
   rows <- knw_archive_put(plan_of(x), idx)
-  expect_identical(nrow(rows), 11L)   # four tune objects, six evidence files and the MANIFEST
-  expect_identical(b$puts, 11L)
+  expect_identical(nrow(rows), 12L)   # four tune objects, seven evidence files and the MANIFEST
+  expect_identical(b$puts, 12L)
   expect_true(all(grepl("^v[0-9]{3}$", rows$version_id)))
   expect_identical(rows$source[1], "data/tune/CH_rear_grades.csv")
   expect_identical(knw_archive_index_read(idx)$version_id, rows$version_id)
   # nothing changed: nothing is sent again, and the versions are recorded as they stand
   rows2 <- knw_archive_put(plan_of(x), idx)
-  expect_identical(b$puts, 11L)
+  expect_identical(b$puts, 12L)
   expect_identical(rows2$version_id, rows$version_id)
 })
 
@@ -530,17 +540,17 @@ test_that("the evidence build's receipt is archived with it and restored, and a 
   id_before <- plan_of(x)$evidence_id[1]
   evidence_receipt_of(x$evidence)
   p <- plan_of(x)
-  expect_identical(sum(p$kind == "evidence"), 7L)
+  expect_identical(sum(p$kind == "evidence"), 8L)
   # stored in the build's folder, outside its MANIFEST: the id is the tables', and a receipt rewritten over the same
   # tables (its write time moves its bytes) keeps it
   expect_false(grepl("evidence_receipt", attr(p, "manifest")))
   expect_identical(p$evidence_id[1], id_before)
-  expect_identical(p$object[p$kind == "evidence"][7],
+  expect_identical(p$object[p$kind == "evidence"][8],
                    paste("archive/knowledge/evidence", id_before, "evidence_receipt.json", sep = "/"))
   Sys.sleep(1.1)
   evidence_receipt_of(x$evidence)
   expect_identical(plan_of(x)$evidence_id[1], id_before)
-  expect_identical(p$target[p$kind == "evidence"][7], "data/fdis/derived/evidence_receipt.json")
+  expect_identical(p$target[p$kind == "evidence"][8], "data/fdis/derived/evidence_receipt.json")
   # the receipt is the one beside these tables, or the archive refuses
   other <- withr::local_tempdir()
   for (f in c("visits_link", "visits_species", "walks")) {
@@ -554,13 +564,16 @@ test_that("the evidence build's receipt is archived with it and restored, and a 
   idx <- file.path(root, "index.csv")
   b <- mock_bucket()
   rows <- knw_archive_put(plan_of(x), idx)
-  expect_identical(nrow(rows), 12L)   # four tune objects, six evidence files, the receipt and the MANIFEST
+  expect_identical(nrow(rows), 13L)   # four tune objects, seven evidence files, the receipt and the MANIFEST
   dest <- withr::local_tempdir()
   dir.create(file.path(dest, "data", "tune"), recursive = TRUE)
   file.copy(file.path(x$tune, "CH_rear_grades_record.csv"), file.path(dest, "data", "tune"))
   knw_archive_pull("CH_rear", dest, index = idx)
   expect_identical(unname(tools::md5sum(file.path(dest, "data", "fdis", "derived", "evidence_receipt.json"))),
                    unname(tools::md5sum(file.path(x$evidence, "evidence_receipt.json"))))
+  # and fish.rds, which 0320 and the methodology bundle read (#214)
+  expect_identical(unname(tools::md5sum(file.path(dest, "data", "fdis", "build", "fish.rds"))),
+                   unname(tools::md5sum(file.path(x$build, "fish.rds"))))
   # without its receipt the build is the one archived before, under its id
   unlink(file.path(x$evidence, "evidence_receipt.json"))
   expect_identical(plan_of(x)$evidence_id[1], id_before)

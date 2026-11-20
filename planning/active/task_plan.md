@@ -64,14 +64,14 @@ What exploration found:
 
 ## Phase 2: archive fish.rds (#214)
 
-- [ ] Tests first in `test-archive.R`:
+- [x] Tests first in `test-archive.R`:
   - `fish.rds` in the evidence MANIFEST;
   - a plan refused when `fish.rds`'s md5 is not the run ledger's `md5_fish`;
   - a pull that restores it.
 
   Update the fixture and the 6-row and MANIFEST-tail expectations.
-- [ ] `R/archive.R`: add `fish.rds` (build) to `.knw_archive_evidence_files`, held to the ledger's `md5_fish` as `sites.rds` is held to `md5_sites`.
-- [ ] Update `scripts/0336-archive.R`'s header and the `CLAUDE.md` line saying PULL does not restore `fish.rds`. Name `0230` as the only remedy for a build archived before this change.
+- [x] `R/archive.R`: add `fish.rds` (build) to `.knw_archive_evidence_files`, held to the ledger's `md5_fish` as `sites.rds` is held to `md5_sites`.
+- [x] Update `scripts/0336-archive.R`'s header and the `CLAUDE.md` line saying PULL does not restore `fish.rds`. Name `0230` as the only remedy for a build archived before this change.
 - [ ] **Rerun `0230` then `0240` on this host's database.** Confirm byte-identical `sites.rds`, `catch.rds` and `fish.rds` against the published run's ledger (`md5_sites`, `md5_fish`; `catch.rds` against the current file).
   - If `sites.rds` differs, stop: placement is not reproducing on this database, and nothing is archived or published from the rerun. The finding goes to #214 and the PR.
 - [ ] **Re-archive** the published evidence:
