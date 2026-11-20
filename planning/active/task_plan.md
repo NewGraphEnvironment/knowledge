@@ -28,6 +28,10 @@ The plan does them in one order, so the FISS outputs are regenerated once and di
   places them after this PR merges. The #176 body says what it now carries.
 - **Fixtures come from the provincial template** (decided in the umbrella body). The labels and banners are the
   template's text, and every data value is synthetic. No submission row is copied.
+- **The template's terms** (Al, 2026-11-20, asked mid-run after the plan review's finding 12): the province's
+  copyright page reserves all rights and the template's page carries no licence. Keep the fixtures as built
+  (labels and banner lines only, values made up), with a line in `inst/NOTICE.md` saying what was copied; #76 keeps
+  the licence question.
 
 ## Phase 0: Split the move
 
@@ -131,24 +135,16 @@ The plan does them in one order, so the FISS outputs are regenerated once and di
       says the per-group tables keep the raw fraction under `average_gradient_percent`, and #248's body carries
       converting it before those layers are published (finding 4).
 
-## Open decisions
-
-- **The template's terms (review finding 12).** The province's copyright page reserves all rights, which the gate's
-  decision on fixtures did not know. The fixtures copy only the column labels and the banner line, every value made
-  up, and install with the package. Recommended: keep them as built, with a line in `inst/NOTICE.md` saying what was
-  copied; the alternative is labels paraphrased by hand, so no template text ships. Asked of Al in the PR; the PR does
-  not merge until answered.
-
 ## Owed at the end (reported, done after merge)
 
 - [ ] The next `/backlog-sweep` places the batch 12 issue and #245, which `/compact-prep` names.
 
 ## Validation
 
-- [ ] Tests pass (`devtools::test()`), `lintr` per file against `origin/main`, and `devtools::document()`.
+- [x] Tests pass (`devtools::test()`), `lintr` per file against `origin/main`, and `devtools::document()`.
       `pkgdown::check_pkgdown()` passes with the new exports in the reference index.
-- [ ] `/code-check` clean (once over the branch with `/code-check branch`)
-- [ ] PWF checkboxes match landed work
+- [x] `/code-check` clean (once over the branch with `/code-check branch`)
+- [x] PWF checkboxes match landed work
 - [ ] `/planning-archive` on completion
 
 How each change is proved:
