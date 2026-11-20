@@ -465,7 +465,8 @@ if (!isTRUE(all.equal(pv$fishing_time_s, sites$fishing_time_s)) || !isTRUE(all.e
 # a catch row on a KEY with no visits.csv row is on no pass: count the visit x species it leaves without pass rows
 pcv <- distinct(pp$pass_catch, site_visit, species_code)
 no_pass <- anti_join(catch, pcv, by = c("site_visit", "species_code"))
-pc_sum <- pp$pass_catch |> group_by(site_visit, species_code) |>
+pc_sum <- pp$pass_catch |>
+  group_by(site_visit, species_code) |>
   summarise(n_pass_sum = if (all(is.na(n_caught))) NA_real_ else sum(n_caught, na.rm = TRUE), .groups = "drop") |>
   inner_join(catch |> select(site_visit, species_code, n_caught), by = c("site_visit", "species_code"))
 message("Passes: ", nrow(pp$passes), " passes, ", nrow(pp$pass_catch), " pass x species rows; status ",
