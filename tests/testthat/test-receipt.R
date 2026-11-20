@@ -132,7 +132,7 @@ test_that("the declared tolerances are the ones written down, so changing one ch
                    c("visits_link", "visits_species", "walks", "bcfishobs_fdis_match", "access_check",
                      "workbook_sites", "workbook_species"))
   expect_equal(tol("fdis"), c(access_check.km = 1e-6))
-  expect_length(knw_receipt_keys("fdis")$tables, 11L)
+  expect_length(knw_receipt_keys("fdis")$tables, 13L)
   # a grade names the evidence build as one input (#160)
   expect_identical(knw_receipt_keys("grade")$inputs, c("link_build", "flow", "evidence"))
 })

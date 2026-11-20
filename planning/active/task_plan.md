@@ -35,12 +35,12 @@ What exploration found:
 
 ## Phase 1: per-pass tables (#225)
 
-- [ ] Read the private consumer's reader and its pass-table design before fixing columns. It needs:
+- [x] Read the private consumer's reader and its pass-table design before fixing columns. It needs:
   - a "no fish caught" pass told apart from a pass with no catch record;
   - the raw species code, so its blocking rules apply per pass.
 
   Nothing private is named in tracked text.
-- [ ] Tests first: `tests/testthat/test-fdis_passes.R`, on hand-written passes covering:
+- [x] Tests first: `tests/testthat/test-fdis_passes.R`, on hand-written passes covering:
   - two passes of one visit;
   - a multi-method visit;
   - a pass with only NFC;
@@ -49,14 +49,14 @@ What exploration found:
   - a count below the measured fish;
   - age rows summed;
   - a dropped repeat visit absent.
-- [ ] `R/fdis_passes.R`: `knw_fdis_passes(visits, counts, fish, keep)` returns two frames.
+- [x] `R/fdis_passes.R`: `knw_fdis_passes(visits, counts, fish, keep)` returns two frames.
   - `passes`: one row per kept pass, with site_visit, method_number, haul_or_pass, date, fishing_time_s, fished_length_m, width_m, area_m2, the effort sentinel flag, `catch_record` and `no_fish_caught`.
   - `pass_catch`: one row per pass × species code with `n_caught > 0`. It applies the visit table's missing-or-short rule per pass, after summing age rows, and carries `n_measured` and the flags.
   - Roxygen states that summing `pass_catch` over passes need not equal the visit's `n_caught`, because a maximum of sums is not a sum of maxima.
   - A runnable example.
-- [ ] `0230` calls it on the kept visits and writes `data/fdis/build/{passes,pass_catch}.rds`. `sites`, `catch` and `fish` are untouched.
-- [ ] `0240` writes `data/fdis/derived/{fdis_passes,fdis_pass_catch}.csv`.
-- [ ] Wire the tables into v3:
+- [x] `0230` calls it on the kept visits and writes `data/fdis/build/{passes,pass_catch}.rds`. `sites`, `catch` and `fish` are untouched.
+- [x] `0240` writes `data/fdis/derived/{fdis_passes,fdis_pass_catch}.csv`.
+- [x] Wire the tables into v3:
   - two rows in `0299`'s `tables_v3`, plus its header and note;
   - two tables in `inst/receipt/fdis.yaml` (exact);
   - `test-receipt.R` 11 → 13;

@@ -32,11 +32,17 @@ the extract; it and that record are kept privately.)
 ## Built from it
 
 Visit-level tables (passes rolled to site visits, placed on the FWA stream network, joined to modelled
-segments) are published as Parquet under `knowledge/fdis/v2/`, with a `manifest.json`. The bucket does not
-list, so start from that manifest:
-`https://fresh-bc.s3.us-west-2.amazonaws.com/knowledge/fdis/v2/manifest.json`.
-`knowledge/fdis/v1/` is the earlier release, before surveys loaded under several collection ids were
-kept once.
+segments) are published as Parquet under `knowledge/fdis/<version>/`, each with a `manifest.json`. The bucket does
+not list, so start from a version's manifest:
+`https://fresh-bc.s3.us-west-2.amazonaws.com/knowledge/fdis/v3/manifest.json`.
+
+- `v3` places the visits on the province-wide stream network and carries the evidence the habitat tuning reads.
+  It also keeps the passes the visit tables sum: `fdis_passes`, one row per electrofishing pass (one method number
+  and haul) of a kept visit, and `fdis_pass_catch`, one row per pass and species code caught, for a removal
+  estimate or a model that treats passes as repeat surveys. Which passes form one closed population is the
+  caller's choice.
+- `v2` is the release before it, and `v1` the one before surveys loaded under several collection ids were kept
+  once.
 
 How the extract was read, its defects and what it adds over the public layers:
 <https://github.com/NewGraphEnvironment/knowledge/blob/main/research/fdis_export.md>.

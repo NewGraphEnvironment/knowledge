@@ -7,6 +7,9 @@
 #   - GRAIN IS THE SITE VISIT (first three KEY parts). KEY is one electrofishing pass,
 #     and 5,748 of 53,018 site visits have 2-8 depletion passes of the same population,
 #     so per-pass rows would weight those sites up to 8x. Catch and effort sum over passes.
+#     The passes are kept too (#225): passes.rds and pass_catch.rds, one row per pass of a kept visit and
+#     one per pass and species code caught (knw_fdis_passes()), for removal and repeat-survey models;
+#     nothing in the visit tables reads them.
 #   - ABUNDANCE COMES FROM `counts`, NOT `details`. `details` is a length subsample:
 #     36,446 of 41,916 CH counted are in pass x species pairs with no measured fish.
 #     Measured fish give size-class proportions only (0240).
@@ -51,6 +54,8 @@
 # OUTPUT: data/fdis/build/sites.rds    one row per site visit
 #         data/fdis/build/catch.rds    site visit x species: n counted, n measured
 #         data/fdis/build/fish.rds     one row per measured fish, keyed to site visit
+#         data/fdis/build/passes.rds   one row per pass of a kept visit (#225)
+#         data/fdis/build/pass_catch.rds  pass x species code caught (#225)
 #         data/fdis/build/reconcile.csv
 #         data/fdis_repeat_surveys.csv   each dropped copy, the copy kept, and what differs
 # RUN:    Rscript scripts/0230-fdis-load.R   (from the repo root)
@@ -149,7 +154,10 @@ passes <- visits |>
     area_m2 = nodata(num(FISHING_AREA_LENGTH), hi = sentinel_min - 1e-9) *
               nodata(num(FISHING_AREA_WIDTH), hi = sentinel_min - 1e-9),
     fished_length_m = nodata(num(FISHING_AREA_LENGTH), hi = sentinel_min - 1e-9),
-    agency = NAME
+    agency = NAME,
+    # the per-pass tables' columns (#225); the visit roll-up below names its columns, so it never reads them
+    method_number = as.integer(METHOD_NUMBER), haul_or_pass = as.integer(HAUL_OR_PASS),
+    fished_width_m = nodata(num(FISHING_AREA_WIDTH), hi = sentinel_min - 1e-9)
   )
 
 sites <- passes |>
@@ -431,6 +439,33 @@ fish   <- fish   |> filter(!site_visit %in% dropped)
 counts <- counts |> filter(!site_visit %in% dropped)
 message("Repeated surveys: ", length(dropped), " visits dropped from ", nrow(rep_groups), " groups")
 
+# ---- passes of the kept visits (#225) ----------------------------------------
+# after the repeat drop, so a dropped copy's passes are not kept
+pp <- knw_fdis_passes(passes, counts, fish, keep = sites$site_visit, codes = species_codes)
+pv <- pp$passes |>
+  group_by(site_visit) |>
+  summarise(n = n(),
+            fishing_time_s = if (all(is.na(fishing_time_s))) NA_real_ else sum(fishing_time_s, na.rm = TRUE),
+            area_m2 = if (all(is.na(area_m2))) NA_real_ else sum(area_m2, na.rm = TRUE), .groups = "drop")
+pv <- pv[match(sites$site_visit, pv$site_visit), ]
+if (!identical(pv$n, sites$n_pass)) stop("the passes of a kept visit are not its n_pass")
+# all.equal: the passes sum in method and haul order, the visit roll-up in file order
+if (!isTRUE(all.equal(pv$fishing_time_s, sites$fishing_time_s)) || !isTRUE(all.equal(pv$area_m2, sites$area_m2))) {
+  stop("the passes' fishing time or area does not sum to the visit's")
+}
+# a catch row on a KEY with no visits.csv row is on no pass: count the visit x species it leaves without pass rows
+pcv <- distinct(pp$pass_catch, site_visit, species_code)
+no_pass <- anti_join(catch, pcv, by = c("site_visit", "species_code"))
+pc_sum <- pp$pass_catch |> group_by(site_visit, species_code) |>
+  summarise(n_pass_sum = if (all(is.na(n_caught))) NA_real_ else sum(n_caught, na.rm = TRUE), .groups = "drop") |>
+  inner_join(catch |> select(site_visit, species_code, n_caught), by = c("site_visit", "species_code"))
+message("Passes: ", nrow(pp$passes), " passes, ", nrow(pp$pass_catch), " pass x species rows; status ",
+        paste(names(table(pp$passes$pass_status)), table(pp$passes$pass_status), sep = " ", collapse = ", "),
+        "; visit x species caught with no pass row (catch on a KEY with no visits.csv row): ", nrow(no_pass),
+        "; visit x species whose passes sum above the visit's n_caught (counts short of measured on some pass): ",
+        sum(pc_sum$n_pass_sum > pc_sum$n_caught, na.rm = TRUE),
+        "; below it: ", sum(pc_sum$n_pass_sum < pc_sum$n_caught, na.rm = TRUE))
+
 # ---- place site visits on the network --------------------------------------
 if (!requireNamespace("fresh", quietly = TRUE) || packageVersion("fresh") < fresh_min) {
   stop("needs fresh >= ", fresh_min, " (frs_point_snap() on a dataset, with col_blk): ",
@@ -605,4 +640,6 @@ write_csv(repeat_map, "data/fdis_repeat_surveys.csv", na = "")
 saveRDS(sites, file.path(build, "sites.rds"))
 saveRDS(catch, file.path(build, "catch.rds"))
 saveRDS(fish,  file.path(build, "fish.rds"))
-message("Wrote sites.rds, catch.rds, fish.rds, reconcile.csv to ", build)
+saveRDS(pp$passes, file.path(build, "passes.rds"))
+saveRDS(pp$pass_catch, file.path(build, "pass_catch.rds"))
+message("Wrote sites.rds, catch.rds, fish.rds, passes.rds, pass_catch.rds, reconcile.csv to ", build)

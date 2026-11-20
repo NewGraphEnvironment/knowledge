@@ -23,11 +23,13 @@
 #     while data/fiss_evidence.csv (0250), which binds with it by row, keeps 100 m on
 #     fwa_indexpoint(): one column, two placements.
 #
-# INPUT:  data/fdis/build/{sites,catch,fish}.rds (from 0230), data/fdis_size_breaks.csv
+# INPUT:  data/fdis/build/{sites,catch,fish,passes,pass_catch}.rds (from 0230), data/fdis_size_breaks.csv
 #         Size classing is knw_size_class() from the package (shared with 0250).
 # OUTPUT: data/fdis/derived/fdis_sites.{csv,gpkg}  one row per site visit: placement, measured
 #                                        and modelled habitat, effort, catch status, focal
 #                                        counts (ignored; 0299 publishes the csv)
+#         data/fdis/derived/fdis_passes.csv      one row per pass of a kept visit (#225; ignored, 0299 publishes)
+#         data/fdis/derived/fdis_pass_catch.csv  pass x species code caught (#225; ignored, 0299 publishes)
 #         data/fdis_evidence.csv         site visit x focal species x size class (measured
 #                                        fish), plus counted-but-unmeasured and spawner rows;
 #                                        `source`/`method` match data/fiss_evidence.csv (0250)
@@ -154,6 +156,12 @@ site_out <- sites |>
 derived <- "data/fdis/derived"
 dir.create(derived, showWarnings = FALSE)
 write_csv(site_out, file.path(derived, "fdis_sites.csv"), na = "")
+# the passes as 0230 kept them (knw_fdis_passes(), #225), for 0299 to publish beside the site table
+pass_tab <- readRDS(file.path(build, "passes.rds"))
+pass_catch_tab <- readRDS(file.path(build, "pass_catch.rds"))
+if (!setequal(pass_tab$site_visit, site_out$site_visit)) stop("passes.rds is not the passes of sites.rds: rerun 0230")
+write_csv(pass_tab, file.path(derived, "fdis_passes.csv"), na = "")
+write_csv(pass_catch_tab, file.path(derived, "fdis_pass_catch.csv"), na = "")
 site_pts <- site_out |> filter(!flag_no_utm) |> group_split(utm_zone) |>
   lapply(\(d) sf::st_transform(sf::st_as_sf(d, coords = c("utm_easting", "utm_northing"),
                                            crs = 32600 + d$utm_zone[1], remove = FALSE), 3005)) |>
