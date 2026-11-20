@@ -30,6 +30,12 @@ vocabularies.
 - [`knw_species()`](https://newgraphenvironment.github.io/knowledge/reference/knw_species.md)
   : The species the habitat evidence is built for
 
+- [`knw_fdis_passes()`](https://newgraphenvironment.github.io/knowledge/reference/knw_fdis_passes.md)
+  : FDIS electrofishing passes and the catch on each
+
+- [`knw_fdis_span()`](https://newgraphenvironment.github.io/knowledge/reference/knw_fdis_span.md)
+  : The stretch of stream an FDIS site visit fished
+
 - [`knw_fdis_place()`](https://newgraphenvironment.github.io/knowledge/reference/knw_fdis_place.md)
   : Pick each FDIS site visit's stream from the nearest snap and the
   streams its 1:50k code names
