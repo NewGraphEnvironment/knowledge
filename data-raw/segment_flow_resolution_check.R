@@ -184,6 +184,10 @@ v$fall_span <- 1 - v$a_span_top / v$a_point
 v$q_point <- v$mad_pick * v$a_point / v$a_seg_bot
 v$q_mid <- v$mad_pick * v$a_span_mid / v$a_seg_bot
 v$source_ratio <- abs(log(v$mad_routed / v$mad_balance))
+# Q2 and Q3 count one population for every column: visits with both sources' flow, an area at the point and the span's
+# middle, and a fall over the span (review of move 6, round 3: a column with na.rm counted fewer)
+v$both <- !is.na(v$mad_routed) & !is.na(v$mad_balance) & v$mad_routed > 0 & v$mad_balance > 0
+v$cmp <- v$both & !is.na(v$q_point) & !is.na(v$q_mid) & !is.na(v$fall_span)
 v$edges <- ifelse(v$edge_type %in% c(1000, 1050), "single-line stream",
                   ifelse(v$edge_type %in% c(1250, 1450), "double-line river", "other"))
 say("")
@@ -193,7 +197,7 @@ say(paste("Q2. Visits on their own line's flow: %s of %s; with an area along the
 block(paste("Q2. Fall in area-scaled flow over the visit's segment and over its fished span, against the two sources'",
             "disagreement (|log routed / balance|, as a factor) on the same visits"),
       v |>
-        filter(!is.na(fall_span)) |>
+        filter(cmp) |>
         group_by(edges) |>
         summarise(visits = n(), segment_fall_p50 = round(q(fall_segment, 0.5), 4),
                   segment_fall_p90 = round(q(fall_segment, 0.9), 4), span_fall_p50 = round(q(fall_span, 0.5), 4),
@@ -201,19 +205,25 @@ block(paste("Q2. Fall in area-scaled flow over the visit's segment and over its 
                   share_span_fall_over_10pct = round(mean(fall_span > 0.1), 4),
                   sources_factor_p50 = round(exp(q(source_ratio, 0.5)), 2),
                   sources_factor_p90 = round(exp(q(source_ratio, 0.9)), 2)))
+say(paste("Q2 and Q3 population: %s visits with both sources' flow (of the %s with an area along their line), an",
+          "area at the point and the span's middle, and a fall over the span: %s."),
+    format(sum(v$both & !is.na(v$a_point)), big.mark = ","), format(sum(!is.na(v$a_point)), big.mark = ","),
+    format(sum(v$cmp), big.mark = ","))
+say("Of them on single-line streams, the share on a segment under 0.1 m3/s: %.3f.",
+    mean(v$mad_pick[v$cmp & v$edges == "single-line stream"] < 0.1))
 say("Yardstick: wet's pick against gauges, annual mean absolute error 23.0 %% (research/modelled_discharge.md).")
 
 # ---- Q3: flips at the published thresholds -----------------------------------------------------------------------
 other <- ifelse(v$mad_pick == v$mad_routed, v$mad_balance, v$mad_routed)
 flips <- do.call(rbind, lapply(seq_len(nrow(mad_min)), function(i) {
   t <- mad_min$value[i]
-  ok <- !is.na(v$q_point) & !is.na(v$q_mid)
+  ok <- v$cmp
   seg_in <- v$mad_pick[ok] >= t
   data.frame(key = paste(mad_min$species_code[i], mad_min$stage[i], sep = "_"), rear_mad_min = t, visits = sum(ok),
              within_x2_of_threshold = sum(v$mad_pick[ok] >= t / 2 & v$mad_pick[ok] < t * 2),
              flip_at_point = round(mean(seg_in != (v$q_point[ok] >= t)), 4),
              flip_at_span_middle = round(mean(seg_in != (v$q_mid[ok] >= t)), 4),
-             flip_other_source = round(mean(seg_in != (other[ok] >= t), na.rm = TRUE), 4))
+             flip_other_source = round(mean(seg_in != (other[ok] >= t)), 4))
 }))
 block(paste("Q3. Share of visits whose class at each key's minimum flow changes when flow is read at the record's",
             "point or the span's middle instead of the segment's value, beside the other source replacing the pick"),

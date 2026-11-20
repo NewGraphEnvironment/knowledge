@@ -1,4 +1,4 @@
-FDIS downstream-end check (knowledge#23, move 6), 2026-11-20 05:12 UTC.
+FDIS downstream-end check (knowledge#23, move 6), 2026-11-20 05:28 UTC.
 Build: scripts/logs/habitat/20261103_evidence_build_ledger-derived_minimal.csv (sites.rds 39f751b174aea4a14eb0dc0d3e3b126d, the ledger of link run 20261102_203300-60ab009d); 51587 site visits.
 bcfishobs.observations: 375,962 records, newest dated 2026-10-10 (the snapshot this database holds).
 

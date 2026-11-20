@@ -13,9 +13,9 @@ Every Freshwater Atlas segment carries one annual flow, and link and the tuning 
 record sits on the segment. Water does gather along a segment, but at the sizes the habitat definitions are drawn at it
 gathers little: on single-line streams of 0.1 to 1 m³/s, a segment's flow at its top is typically within 1 % of its
 bottom's. At the published fish records, reading flow at the record's own point, or at the middle of the stretch the
-crew fished, instead of the segment's value, changes which side of a key's minimum flow a visit falls on for 0.14 to
-3.1 % of visits. Choosing the other of wet's two flow sources changes it for 2.5 to 8.6 %, roughly three to eighteen
-times as many for each key.
+crew fished, instead of the segment's value, changes which side of a key's minimum flow a visit falls on for 0.13 to
+2.8 % of visits. Choosing the other of wet's two flow sources changes it for 2.4 to 7.9 % of the same visits, roughly
+three to twenty times as many for each key.
 The error a segment's single value adds is small beside the error already in the modelled flow, so there is nothing to
 gain yet from giving flow at a point.
 
@@ -53,38 +53,39 @@ flow is really set at its outlet, which this measure does not try to model.
 A bcfishobs record matched to an FDIS visit lies at the visit's own point: 58 % carry the visit's UTM, and of the rest
 that lie on the visit's stream 81 % are within 5 m of its point (`research/fdis_export.md`, "The site span"). That point
 is usually the site's downstream end, and the fish came from anywhere along the fished stretch above it: over the
-19,349 matched visits a median 100 m, 200 m at the upper quartile and 800 m at the 90th percentile. That stretch, not the record's point, is the
-location error the evidence carries.
+19,349 visits of the placed one-to-one records a median 100 m, 200 m at the upper quartile and 800 m at the 90th
+percentile. That stretch, not the record's point, is the location error the evidence carries.
 
 ## The two errors side by side
 
-Of the 45,503 published visits whose flow is their own segment's (26 take a parent's), 41,952 have an area at both
-ends of a fished span:
+Of the 45,503 visits in the published visit table whose flow is their own segment's (26 take a parent's), 37,506 have
+both of wet's sources (39,321 of the 43,843 with an area along their line), an area at the record's point and at the
+middle of its fished span, and a fall over the span; every figure below is over those:
 
 | visits on | visits | segment fall, median (p90) | fall over the fished span, median (p90) | span fall over 10 % | the two sources differ by, median (p90) |
 |---|---:|---:|---:|---:|---:|
-| single-line streams | 31,671 | 11 % (100 %) | 2.6 % (33 %) | 27 % | ×1.34 (×3.4) |
-| double-line rivers | 9,417 | 0.02 % (0.9 %) | 0.01 % (1.0 %) | 4.6 % | ×1.10 (×1.7) |
+| single-line streams | 28,001 | 11 % (100 %) | 2.6 % (34 %) | 27 % | ×1.33 (×2.8) |
+| double-line rivers | 8,852 | 0.01 % (0.9 %) | under 0.01 % (0.8 %) | 4.2 % | ×1.10 (×1.6) |
 
-Wet's pick is off its gauges by 23 % on average (annual mean absolute error, `research/modelled_discharge.md`). The flow
-gathered over a fished span is a ninth of that at the median, and the two sources part by more than the span gathers,
-at the median and at the 90th percentile alike.
+Wet's pick is off its gauges by 23 % on average (annual mean absolute error, `research/modelled_discharge.md`). On single-line
+streams the flow gathered over a fished span is a ninth of that at the median, and on both kinds of edge the two sources
+part by more than the span gathers, at the median and at the 90th percentile alike.
 
-Read against the published minimum flows (every key's `rear_mad_min` in `data/thresholds.csv`), over the 41,983
-visits with an area at both the point and the span's middle:
+Read against the published minimum flows (every key's `rear_mad_min` in `data/thresholds.csv`), over the same 37,506
+visits:
 
 | key | minimum flow (m³/s) | visits within a factor of 2 of it | class changes at the record's point | at the span's middle | with the other source |
 |---|---:|---:|---:|---:|---:|
-| CH rearing | 0.75 | 4,795 | 0.14 % | 0.26 % | 2.5 % |
-| ST rearing | 0.50 | 5,117 | 0.17 % | 0.31 % | 2.8 % |
-| BT rearing | 0.35 | 5,603 | 0.26 % | 0.46 % | 3.3 % |
-| CO rearing | 0.10 | 7,993 | 1.3 % | 1.7 % | 6.2 % |
-| WCT rearing | 0.03 | 8,701 | 2.3 % | 3.1 % | 8.6 % |
+| CH rearing | 0.75 | 4,098 | 0.15 % | 0.28 % | 2.4 % |
+| ST rearing | 0.50 | 4,377 | 0.13 % | 0.27 % | 2.6 % |
+| BT rearing | 0.35 | 4,802 | 0.21 % | 0.39 % | 3.1 % |
+| CO rearing | 0.10 | 6,840 | 1.2 % | 1.7 % | 5.9 % |
+| WCT rearing | 0.03 | 7,644 | 2.1 % | 2.8 % | 7.9 % |
 
 The smaller the minimum, the more a point flow would move, because small streams gather a larger share of their flow
 along each segment; even at westslope cutthroat's 0.03 m³/s it moves a quarter to a third as many visits as the source choice.
-A segment's own fall at a visit runs larger than its span's (a median 11 % on single-line streams) because 57 % of
-the visits on single-line streams sit on segments under 0.1 m³/s, headwaters whose modelled flow runs to nothing at
+A segment's own fall at a visit runs larger than its span's (a median 11 % on single-line streams) because 59 % of
+those visits on single-line streams sit on segments under 0.1 m³/s, headwaters whose modelled flow runs to nothing at
 their head (Q1); the fished span takes in only part of a segment.
 
 ## What this does not say
@@ -95,7 +96,8 @@ their head (Q1); the fished span takes in only part of a segment.
 - **Area is spread evenly along a reach.** Local area enters where side streams too small for the Atlas come in, not
   evenly; a check against `fwa_watershedatmeasure()` at a few points would test it.
 - **Mean annual flow only.** A seasonal window (#105, #226) gathers along a segment by the same area share.
-- **Counts are over every placed visit,** not each key's scoring population (its range, its groups with both outcomes);
-  they size the effect, they do not regrade anything.
+- **Counts are over the published visit table** (the visits that passed the evidence build's quality filter), not each
+  key's scoring population (its range, its groups with both outcomes); they size the effect, they do not regrade
+  anything.
 - The near-river exception reads the flow of the river a walk reaches, not the visit's own segment, and is not counted
   here; its rivers are 1 m³/s and up, where a single-line segment's median gain is 0.13 % and a double-line river's 0.04 %.

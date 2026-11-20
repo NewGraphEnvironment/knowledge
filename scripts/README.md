@@ -350,12 +350,13 @@ and maturity, per-pass effort, measured channel width and gradient, and explicit
 - **CH gives rearing evidence only**; EF caught no adult CH. Char spawner evidence is maturity
   (SP/ST, or M in Aug–Oct), not length.
 - Outputs: `data/fdis_evidence.csv`, `data/fdis_summary_ch_bt.csv`, `data/fdis_size_breaks.csv`,
-  `data/fdis_maturity_check.csv` (tracked), and `fdis_sites.{csv,gpkg}` (17 MB each, ignored) and
+  `data/fdis_maturity_check.csv` (tracked), and `fdis_sites.{csv,gpkg}` (about 19 and 16 MB, ignored) and
   `fdis_passes.csv` / `fdis_pass_catch.csv` (ignored), which `0299` publishes as Parquet under
   `s3://fresh-bc/knowledge/fdis/<version>/` (the passes from v3).
 - Checks on the built tables: `data-raw/fdis_downstream_end_check.R` (#23: where a bcfishobs record sits against
   its visit's fished span) and `data-raw/segment_flow_resolution_check.R` (#137: how far flow grows within a segment,
-  against where records sit), each on a restored published build.
+  against where records sit), each on the published build: `0336 PULL=TRUE` restores `sites.rds`, `fish.rds` and
+  the visit tables, and `PLACE=FALSE 0230` adds `catch.rds` and the passes, which the archive does not hold.
 - Logs: `scripts/logs/fdis/` (the flow check's in `scripts/logs/flow/`).
 
 ## 0200 / 0210 / 0220 — FISS `.xls` → No-Fish-Captured layer

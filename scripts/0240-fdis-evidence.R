@@ -165,7 +165,8 @@ if (all(file.exists(f_pass))) {
   pass_tab <- readRDS(f_pass[1])
   pass_catch_tab <- readRDS(f_pass[2])
   if (!setequal(pass_tab$site_visit, site_out$site_visit)) {
-    stop("passes.rds is not the passes of sites.rds: rerun PLACE=FALSE scripts/0230")
+    unlink(file.path(derived, c("fdis_passes.csv", "fdis_pass_catch.csv")))
+    stop("passes.rds is not the passes of sites.rds (older pass CSVs removed): rerun PLACE=FALSE scripts/0230")
   }
   write_csv(pass_tab, file.path(derived, "fdis_passes.csv"), na = "")
   write_csv(pass_catch_tab, file.path(derived, "fdis_pass_catch.csv"), na = "")

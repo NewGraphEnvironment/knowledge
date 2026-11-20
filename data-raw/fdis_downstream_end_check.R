@@ -17,8 +17,9 @@
 #         ledger (the one data/tune/CH_rear_grades_record.csv names) and to each other; the database (PG* env vars):
 #         bcfishobs.observations and whse_basemapping.fwa_stream_networks_sp (each blue line's top measure)
 # OUTPUT: scripts/logs/fdis/<yyyymmdd>_fdis_downstream_end_check[-<n>].txt
-# RUN:    Rscript data-raw/fdis_downstream_end_check.R   (from the repo root; a restored published build:
-#         PULL=TRUE scripts/0336-archive.R, then rerun 0240 there if fdis_sites.csv is absent)
+# RUN:    Rscript data-raw/fdis_downstream_end_check.R   (from the repo root, on the published build: PULL=TRUE
+#         scripts/0336-archive.R restores sites.rds and fdis_sites.csv, and PLACE=FALSE scripts/0230-fdis-load.R adds
+#         catch.rds, which the archive does not hold)
 # ---------------------------------------------------------------------------
 suppressMessages({
   library(dplyr)
@@ -51,6 +52,10 @@ md5_sites <- unname(tools::md5sum(f_sites))
 if (!identical(led$note[led$step == "md5_sites"], md5_sites)) {
   stop(f_sites, " (", md5_sites, ") is not the published build's (", rec$evidence_ledger, "): restore it with ",
        "PULL=TRUE scripts/0336-archive.R")
+}
+if (!identical(led$note[led$step == "md5_catch"], unname(tools::md5sum(f_catch)))) {
+  stop(f_catch, " is not the published build's (", rec$evidence_ledger, "): rebuild it with ",
+       "PLACE=FALSE scripts/0230-fdis-load.R")
 }
 .knw_archive_sites_check(f_table, f_sites)
 sites <- readRDS(f_sites)
