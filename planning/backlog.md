@@ -11,6 +11,12 @@ whose `planning/archive/` holds the read
 waited on, closed 2026-11-17; link#460, the minimal-run track's last wait, closed 2026-11-13 · the table gains `lane`,
 `waits on` and `model`; #115 moves from batch 13 to batch 19, which rebuilds the method bundle
 
+**Verified:** 2026-11-19 against 69 open issues · **Produced by:** a read of the 6 open issues the file did not name
+(#230, #239, #240, #241, #242, #243) and their comments; each premise checked against `origin/main` (`0340`'s documented
+`tee` into a tracked log against its clean-tree check; `knw_discharge_load()` still reads the table comment;
+`data-raw/timing_nuseds.R` reads the local csv for two fixed groups); wet's open work that reads the timing rows · move
+16 (#244) carries #240 and #230; #243 becomes the `track:timing` umbrella; no closures
+
 How to use this file: `/backlog-sweep` writes it. Take the first move in **Moves** that is not
 ticked and not **waiting**; `/planning-init <umbrella>` plans it, one phase per batch, one PR.
 When the plan finds that a batch, or one of its members, is more than one PR's work, it carries the first piece and
@@ -43,13 +49,15 @@ split piece, or one filed since the last pass): run `/backlog-sweep` to place it
 | - [ ] 13 | #232 | 20: one research page per key (3 issues) | open | E | 10, 12 | fable then opus |
 | - [ ] 14 | #233 | 21: window flow follow-ups (2 issues) | open | G | — | fable then opus |
 | - [ ] 15 | #236 | 24: PSCIS stream slope against link's gradient, the gradient track's first piece (1 issue) | open | F | — | opus |
+| - [ ] 16 | #244 | 25, 26: NuSEDS windows for every group, the timing track's first piece; a publish that runs as documented (2 issues) | open | H | — | opus |
 Tracks are separate efforts, not moves: baselines (#139, `track:baselines`: #140 next), speed (`track:speed`: #85,
 #101; its umbrella is in the skills repository), provenance (`track:provenance`: #162; #165 done in PR #206, #197 in PR #207; umbrella likewise) and
 minimal-run (#120, `track:minimal-run`: closed 2026-11-18, its waiting setups owed in #132 and #70) and publish (#220,
 `track:publish`: #219 next; its upload of `knowledge/fdis/v3` is the moment batch 18's per-pass tables can join v3
 without a new version), access (#132, `track:access`: #234 first, in move 9, then #238, the records above modelled gradient barriers; #131 a member) and gradient (#70,
 `track:gradient`: #235 first, in move 15; #71 a member; its windows and lidar wait on fresh#257). Move 9 split into the
-two on 2026-11-18, at its gate.
+two on 2026-11-18, at its gate. Timing (#243, `track:timing`, 2026-11-19): #240 first, in move 16; then #241 (Skeena
+groups, the BULK and MORR chinook rows among them) and #242 (Fraser and Thompson groups), each after #240.
 
 **Verified:** 2026-11-18, a hand edit at move 9's gate, not a sweep · **Produced by:** the gate's decision to split move
 9 into the access and gradient tracks; #234 placed in batch 14 (move 9) and #235 in batch 24 (move 15, #236) by that
@@ -85,6 +93,8 @@ link's own pass: link#468, a backlog pass for link that carries the link issues 
 | 22 | #179 | OCR of the scanned PDFs: #217 | 1 | none | rides #14's rebuild of every store |
 | 23 | #177 | tuning-code fixes: #203 | 1 | nest `honest` or rename it | the curve change regrades every key, which only a promotion publishes |
 | 24 | #236 | PSCIS stream slope against link's gradient: #235 (from #70) | 1 | what `STREAM_SLOPE` measures | the gradient track's first piece, beside #121's FDIS check |
+| 25 | #244 | NuSEDS windows for every group: #240 (from #243) | 1 | the mainstem rule; whether a NuSEDS window alone may become a row | the timing track's first piece; #241 and #242 start from its windows |
+| 26 | #244 | a publish that runs as documented: #230 | 1 | log outside the repo then copied in, or the log directory exempt | #240 reads the published parquet; one sitting on the NuSEDS source |
 
 ### 1. Evidence-build and test fixes
 
@@ -341,6 +351,29 @@ measures.
 
 **Touches:** `data-raw/site_gradient_check.R`, `R/pscis.R`, and a new research file for the gradient track
 
+### 25. NuSEDS windows for every group
+
+- [ ] Carried by move 16, #244
+
+#240, the timing track's first piece (#243): `data-raw/timing_nuseds.R` takes groups and species as arguments (default
+every group and species with dated records), reads the published `knowledge/nuseds/v1` parquet rather than the local
+csv, writes the windows to a tracked log, and compares every row of `data/life_history_timing.csv` with its group's
+NuSEDS window, reporting each disagreement (BULK and MORR chinook among them). Gate: a mainstem rule that holds for every
+group (the script now drops the Bulkley and Morice mainstems), and whether a NuSEDS window alone may become a row where
+no literature exists yet. Two open wet issues read the timing rows and rerun when they move.
+
+**Touches:** `data-raw/timing_nuseds.R`, `data/life_history_timing.csv`, and a new tracked timing log under `scripts/logs/`
+
+### 26. A publish that runs as documented
+
+- [ ] Carried by move 16, #244
+
+#230: `scripts/0340-nuseds-build.R`'s documented RUN line tees into a tracked log, which `tee` truncates at launch, so
+`PUBLISH=TRUE`'s clean-tree check refuses (#174's publish of `knowledge/nuseds/v1` moved the log by hand). Gate: the log
+goes outside the repo and is copied in after the run (keeps the check whole), or `scripts/logs/nuseds/` is exempt.
+
+**Touches:** `scripts/0340-nuseds-build.R`, `scripts/README.md`
+
 ## Singles
 
 - #51: age-0 length against degree-days, its own analysis of FDIS lengths and station temperatures
@@ -356,6 +389,8 @@ measures.
 - #209: access requests for three restricted bull trout reports and two papers; waits on the report owners
 - #210: `knw_compare_mapgl()` on gq's mapgl helpers (gq 0.24.0 has them); one function
 - #223: the `statistics` store rebuilt under ragnar 0.4.0; blocked on cred#43 (which ragnar cred supports)
+- #239: `knw_discharge_load()` reads wet's `discharge.wet_load`; waits until a database holding a build is reloaded by
+  wet 0.4.36 or later, so the table exists there (the published build's database had none on 2026-11-16)
 
 ## Closed and transferred
 
