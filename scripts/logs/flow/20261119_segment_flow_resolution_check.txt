@@ -1,9 +1,9 @@
-Segment flow resolution check (knowledge#137, move 6), 2026-11-20 04:32 UTC.
+Segment flow resolution check (knowledge#137, move 6), 2026-11-20 04:50 UTC.
 Visits: visits_link.csv of a restored build (md5 c746c5829c605fb7711feba0ec9d4d93, the published evidence); thresholds: data/thresholds.csv (link run 20261102_203300-60ab009d).
 Flow load: wet_db_load(): discharge/fwa/v1/segment_monthly, scenario historical last loaded from https://fresh-bc.s3.us-west-2.amazonaws.com/discharge/fwa/v1/manifest.json (built 2026-10-24T12:23:01Z, wet b4bbc50)
-Other active sessions on the database at start: 4.
+Other active sessions on the database at start: 0.
 
-Q1 took 5.1 min. Segments in the province: 4,907,441; on their own blue line (reaches): 4,659,924.
+Q1 took 5.5 min. Segments in the province: 4,907,441; on their own blue line (reaches): 4,659,924.
 
 ## Q1. Fall in area-scaled flow from a segment's bottom to its top (share of the bottom's), by edges and the segment's annual flow (m3/s, wet's pick)
                     edges mad_class segments      km fall_p50 fall_p90
@@ -49,29 +49,29 @@ Q1 took 5.1 min. Segments in the province: 4,907,441; on their own blue line (re
            0.0091           0.0037
            0.7313           0.6022
 
-Q2. Visits on their own line's flow: 45,503 of 45,529; with an area along their line: 43,774; with a span (a fished length): 42,059.
+Q2. Visits on their own line's flow: 45,503 of 45,529; with an area along their line: 43,843; with a span (a fished length): 42,059.
 
 ## Q2. Fall in area-scaled flow over the visit's segment and over its fished span, against the two sources' disagreement (|log routed / balance|, as a factor) on the same visits
               edges visits segment_fall_p50 segment_fall_p90 span_fall_p50
-  double-line river   9414           0.0001           0.0061        0.0001
-              other    864           0.1090           1.0000        0.0411
- single-line stream  31605           0.0743           0.9131        0.0256
+  double-line river   9417           0.0002           0.0092        0.0001
+              other    864           0.1274           1.0000        0.0411
+ single-line stream  31671           0.1082           1.0000        0.0257
  span_fall_p90 share_span_fall_over_10pct sources_factor_p50 sources_factor_p90
-        0.0100                     0.0457               1.10               1.69
+        0.0101                     0.0457               1.10               1.70
         0.9996                     0.3426               1.24              78.65
-        0.3282                     0.2675               1.34               3.43
+        0.3299                     0.2683               1.34               3.43
 Yardstick: wet's pick against gauges, annual mean absolute error 23.0 % (research/modelled_discharge.md).
 
 ## Q3. Share of visits whose class at each key's minimum flow changes when flow is read at the record's point or the span's middle instead of the segment's value, beside the other source replacing the pick
       key rear_mad_min visits within_x2_of_threshold flip_at_point
-  BT_rear         0.35  37834                   5555        0.0027
-  CH_rear         0.75  37834                   4791        0.0015
-  CO_rear         0.10  37834                   7607        0.0133
-  ST_rear         0.50  37834                   5088        0.0019
- WCT_rear         0.03  37834                   7342        0.0196
+  BT_rear         0.35  41983                   5603        0.0026
+  CH_rear         0.75  41983                   4795        0.0014
+  CO_rear         0.10  41983                   7993        0.0129
+  ST_rear         0.50  41983                   5117        0.0017
+ WCT_rear         0.03  41983                   8701        0.0226
  flip_at_span_middle flip_other_source
-              0.0049            0.0363
-              0.0029            0.0279
-              0.0181            0.0668
-              0.0034            0.0304
-              0.0268            0.0867
+              0.0046            0.0330
+              0.0026            0.0253
+              0.0174            0.0619
+              0.0031            0.0275
+              0.0309            0.0861

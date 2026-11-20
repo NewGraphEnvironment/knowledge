@@ -249,7 +249,7 @@ published build's visits (`knw_bcfishobs_match()`, this database's bcfishobs sna
   13,218 of them lie on the visit's blue line, every one within 5 m of its placed point; 795 were snapped by bcfishobs
   to another line (the same UTM, placed two ways), and 43 belong to visits `0230` could not place. The rest sit a median 13 m from the visit's UTM (90th
   percentile 80 m); on the visit's blue line 81 % of them still lie within 5 m of its point, 9 % below it, 6 % inside
-  its span and 2 % above it.
+  its span, 2 % above it, and 2 % above a point whose visit records no fished length.
 - **What that cannot show.** Both points come from the UTM a crew reported, so their agreement says the two
   placements of one survey coincide, not that the point is the site's downstream end, nor where along the site a fish
   was caught. That is set by the fished span: for the matched visits a median 100 m (quartiles 39 and 200 m, 90th

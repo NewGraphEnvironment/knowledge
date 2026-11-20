@@ -161,7 +161,9 @@ area_at <- function(b, m) {
     i <- which(b == k & !is.na(m))
     r <- reach[reach$blue_line_key == k, ]
     if (!nrow(r)) next
-    j <- findInterval(m[i], r$m_bot, rightmost.closed = TRUE)
+    # left-closed: a measure on a reach's foot belongs to that reach (rightmost.closed would put the top reach's foot
+    # in the reach below it, and a one-reach line's foot nowhere: review round 1)
+    j <- findInterval(m[i], r$m_bot)
     j[j == 0 | m[i] > r$m_top[pmax(j, 1)] + 1e-3] <- NA
     out[i] <- r$up_ha[j] - r$local_ha[j] * (m[i] - r$m_bot[j]) / (r$m_top[j] - r$m_bot[j])
   }

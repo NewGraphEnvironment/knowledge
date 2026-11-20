@@ -157,18 +157,22 @@ derived <- "data/fdis/derived"
 dir.create(derived, showWarnings = FALSE)
 write_csv(site_out, file.path(derived, "fdis_sites.csv"), na = "")
 # the passes as 0230 kept them (knw_fdis_passes(), #225), for 0299 to publish beside the site table. A build restored
-# from the archive (0336 PULL=TRUE) holds no passes: 0230 rebuilds them from the export before placement, reading no
-# database, and 0299 refuses a v3 without them
+# from the archive (0336 PULL=TRUE) holds no passes: PLACE=FALSE 0230 rebuilds them from the export before placement
+# with no database and leaves the restored sites.rds alone (#246). Without them any older pass CSVs are removed, so 0299
+# refuses a v3 rather than publish passes of another build
 f_pass <- file.path(build, c("passes.rds", "pass_catch.rds"))
 if (all(file.exists(f_pass))) {
   pass_tab <- readRDS(f_pass[1])
   pass_catch_tab <- readRDS(f_pass[2])
-  if (!setequal(pass_tab$site_visit, site_out$site_visit)) stop("passes.rds is not the passes of sites.rds: rerun 0230")
+  if (!setequal(pass_tab$site_visit, site_out$site_visit)) {
+    stop("passes.rds is not the passes of sites.rds: rerun PLACE=FALSE scripts/0230")
+  }
   write_csv(pass_tab, file.path(derived, "fdis_passes.csv"), na = "")
   write_csv(pass_catch_tab, file.path(derived, "fdis_pass_catch.csv"), na = "")
 } else {
-  message("No passes in ", build, " (a build restored from the archive?): rerun scripts/0230 to write ",
-          "fdis_passes.csv and fdis_pass_catch.csv")
+  unlink(file.path(derived, c("fdis_passes.csv", "fdis_pass_catch.csv")))
+  message("No passes in ", build, " (a build restored from the archive?): run PLACE=FALSE scripts/0230, then this, ",
+          "to write fdis_passes.csv and fdis_pass_catch.csv")
 }
 site_pts <- site_out |> filter(!flag_no_utm) |> group_split(utm_zone) |>
   lapply(\(d) sf::st_transform(sf::st_as_sf(d, coords = c("utm_easting", "utm_northing"),

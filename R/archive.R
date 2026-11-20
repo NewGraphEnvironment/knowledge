@@ -19,7 +19,8 @@
 # where a restore puts a file, `from` where the archive reads it: fdis_sites.csv is 0240's, read where 0240 writes it
 # and never from a tagged EVIDENCE_DIR, since it is built from sites.rds and reads no link schema (#136). fish.rds is
 # 0230's measured fish, which 0320 (bull trout's spawner evidence) and the methodology bundle read (#214); a build
-# archived before it lacks the file, and a restore of one rebuilds it with 0230. The row order is the MANIFEST's, which
+# archived before it lacks the file, and a restore of one rebuilds it with PLACE=FALSE 0230, which leaves the restored
+# sites.rds alone (#246). The row order is the MANIFEST's, which
 # names an archived build
 .knw_archive_evidence_files <- data.frame(file = c("visits_link.csv", "visits_species.csv", "walks.csv",
                                                    "fdis_sites.csv", "reconcile.csv", "sites.rds", "fish.rds"),

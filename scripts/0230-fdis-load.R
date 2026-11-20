@@ -59,6 +59,10 @@
 #         data/fdis/build/reconcile.csv
 #         data/fdis_repeat_surveys.csv   each dropped copy, the copy kept, and what differs
 # RUN:    Rscript scripts/0230-fdis-load.R   (from the repo root)
+#         PLACE=FALSE Rscript scripts/0230-fdis-load.R   writes only what is built before placement (catch.rds,
+#                 fish.rds, passes.rds, pass_catch.rds) and stops, with no database: the remedy for a build restored
+#                 from the archive (0336 PULL=TRUE), whose sites.rds and reconcile.csv a full run would rewrite with a
+#                 placement that need not reproduce (#246)
 # ---------------------------------------------------------------------------
 suppressMessages({
   library(dplyr); library(readr); library(tidyr); library(purrr); library(stringr)
@@ -465,6 +469,19 @@ message("Passes: ", nrow(pp$passes), " passes, ", nrow(pp$pass_catch), " pass x 
         "; visit x species whose passes sum above the visit's n_caught (counts short of measured on some pass): ",
         sum(pc_sum$n_pass_sum > pc_sum$n_caught, na.rm = TRUE),
         "; below it: ", sum(pc_sum$n_pass_sum < pc_sum$n_caught, na.rm = TRUE))
+
+# ---- PLACE=FALSE: the outputs built before placement, and stop ---------------
+# catch, fish and the passes are final here and read no database, so they come out byte-identical to the build's;
+# sites.rds, reconcile.csv and data/fdis_repeat_surveys.csv are left as they are (#246)
+if (identical(Sys.getenv("PLACE"), "FALSE")) {
+  saveRDS(catch, file.path(build, "catch.rds"))
+  saveRDS(fish,  file.path(build, "fish.rds"))
+  saveRDS(pp$passes, file.path(build, "passes.rds"))
+  saveRDS(pp$pass_catch, file.path(build, "pass_catch.rds"))
+  message("PLACE=FALSE: wrote catch.rds, fish.rds, passes.rds, pass_catch.rds to ", build,
+          "; sites.rds and reconcile.csv untouched")
+  quit(save = "no", status = 0)
+}
 
 # ---- place site visits on the network --------------------------------------
 if (!requireNamespace("fresh", quietly = TRUE) || packageVersion("fresh") < fresh_min) {

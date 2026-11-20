@@ -56,7 +56,7 @@ Issue and PR numbers in the seeded history and in `planning/archive/2026-07-*` r
   exist, so on a machine whose copies differ it fails there and nowhere else (CI has no `data/`). A checkout without
   them restores them with `PULL=TRUE scripts/0336-archive.R`, the run its records name, `data/fdis/build/fish.rds` among them
   (read by `0320` and, for the Bayesian-practice article's group counts, `vignette_method.R`; held to the run's ledger
-  since #214). A build archived before #214 lacks it, and `0230` rebuilds it byte-identically. The methodology article's references come from `data-raw/vignette_bib.R` with the chinook article's. A draft article is named
+  since #214). A build archived before #214 lacks it, and `PLACE=FALSE 0230` rebuilds it byte-identically with no database. The methodology article's references come from `data-raw/vignette_bib.R` with the chinook article's. A draft article is named
   `vignettes/_<name>.Rmd`: pkgdown skips it, `.Rbuildignore` keeps it out of the tarball, and pkgdown.yaml fails if
   one reaches `docs/articles/`.
 - `vignettes/tuning-stream-splits.Rmd` — "Splitting streams at fish records shifts the steepest slope mapped as habitat" (#149): the share
@@ -308,8 +308,8 @@ from it, and `research/fdis_export.md` is the reference. The FWA "field measurem
 widths are these same sites, so never score the width model against them.
 The visit tables sum over passes; the passes themselves are `0230`'s `passes.rds` and `pass_catch.rds`
 (`knw_fdis_passes()`, #225), published as `fdis_passes` and `fdis_pass_catch` in v3. They are built before placement
-and read no database, so a rerun of `0230` reproduces them, `fish.rds` and `catch.rds` byte for byte, while its
-`sites.rds` need not: on 2026-11-20 a rerun on another database and fresh 0.53.0 placed 245 of 51,587 visits
+and read no database, so `PLACE=FALSE 0230` reproduces them, `fish.rds` and `catch.rds` byte for byte and stops
+before placement; a full run also rewrites `sites.rds`, which need not reproduce: on 2026-11-20 a rerun on another database and fresh 0.53.0 placed 245 of 51,587 visits
 differently from the published build (#246). Restore the published placement with `0336 PULL=TRUE`, never by
 rerunning `0230`.
 Some surveys were loaded under two to four collection ids (same UTM, date, per-pass effort and

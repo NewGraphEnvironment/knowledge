@@ -36,7 +36,8 @@ wf_farm_priority.js                          farm priority/crossing tables out o
 --- FDIS electrofishing export (province-wide, not per group) ---
 0230  sync s3://fresh-bc/fdis/, QA, roll passes to site visits, place on FWA with fresh's snap and the 1:50k code
       (#91; fwapg database (PG* env vars), fresh >= 0.40.0; SNAP_LIMIT / SNAP_LIMIT_CODE override the limits)
-      also keeps the passes: data/fdis/build/{passes,pass_catch}.rds, knw_fdis_passes() (#225)
+      also keeps the passes: data/fdis/build/{passes,pass_catch}.rds, knw_fdis_passes() (#225). PLACE=FALSE writes
+      only what precedes placement (catch, fish, passes) and stops, with no database: the remedy on a restored build
 0240  size classes + CH / char evidence + summary vs thresholds -> data/fdis_*.csv; fdis_sites.csv and the passes
       as fdis_passes.csv / fdis_pass_catch.csv (data/fdis/derived, for 0299)
 
