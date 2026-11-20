@@ -71,6 +71,13 @@ reference:
       - knw_fdis_species
       - knw_spawner_evidence
       - knw_fiss_visits
+      - knw_fiss_parse_step
+      - knw_fiss_read_step
+      - knw_fiss_match_sheet
+      - knw_fiss_select
+      - knw_fiss_columns
+      - knw_fiss_utm_zone
+      - knw_fiss_nfc
       - knw_bcfishobs_match
       - knw_nuseds_fetch
       - knw_nuseds_records
