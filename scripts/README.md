@@ -460,8 +460,10 @@ workbooks carry every method.
   none; the radius is not sensitive (50 m → 2 km adds ~1.5 % of matched sites, mostly weak).
 - **Site gradient in percent (#34):** the workbook's `Average Gradient (%)` cell is percent-formatted and stores
   2.5 % as 0.025, so `gradient_pct` is the raw value × 100, as `fdis_evidence.csv`'s is. A raw value above 1 is set
-  `NA` and counted (`site_gradient_raw_above_1_set_na`), and `site_gradient_vs_fwa_median_ratio` holds the median ratio
-  to `fwa_gradient_pct` at the same sites within 0.25–4 (0.925 over 16 sites, 2026-11-20).
+  `NA` and **fails** the reconcile (`site_gradient_raw_above_1_set_na`): a workbook's units differ and must be read.
+  `site_gradient_vs_fwa_median_ratio` holds the median ratio of the raw values × 100 to `fwa_gradient_pct` at the same
+  sites within 0.25–4 (0.925 over 16 sites, 2026-11-20); it is taken over all sites together, so one workbook typed
+  in percent with every value at or below 1 % would pass it.
 - **Life stage vs length:** `data/fiss_stage_vs_class.csv` compares the Step 2 label with the length
   class per fish and per Step 2 row.
 - Outputs: `data/fiss_evidence.csv`, `data/fiss_fdis_overlap.csv`, `data/fiss_stage_vs_class.csv`,

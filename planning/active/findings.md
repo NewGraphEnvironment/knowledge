@@ -154,3 +154,12 @@ byte-identical to the baseline and a GeoPackage of identical content (restored).
   `inst/`), so nothing refuses at merge. The step-2 CSVs (`fiss_workbooks`) did not move.
 - **Readers updated:** `scripts/0293`'s heading, `research/bt_spawning.md`; `scripts/README.md` describes the
   conversion; #248's body carries converting the per-group column before those layers are published.
+
+## Code-check round 1 (2026-11-20)
+
+One finding, real: the gradient checks failed toward pass. A raw value above 1 was set NA with a passing row, and the
+FWA ratio was taken over the survivors, `NA` (a pass) under 5 sites; reading every workbook in percent would have
+left 4 sites and passed. Now the above-1 count fails the reconcile and the ratio is taken on the raw values x100 before
+any NA rule. A copy of `0250` reading every gradient x100 stops on both rows (exit 1, "Reconciliation FAILED:
+site_gradient_raw_above_1_set_na, site_gradient_vs_fwa_median_ratio"); the real run still passes, `fiss_evidence.csv`
+unchanged.
