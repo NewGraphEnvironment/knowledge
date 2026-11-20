@@ -36,6 +36,10 @@ dir.create(work)
 banner_v2   <- "Fish Data Submission Spreadsheet Template -V 2.0, April 27, 2012"
 banner_v2_2 <- "Fish  Data Submission Spreadsheet Template V. 2.0, April 27, 2012"   # Step 2's spelling
 
+# A workbook names its author: openxlsx writes the login (USER) unless told otherwise, and LibreOffice carries it into
+# the converted .xls. These files are tracked and ship with the package, so the author is fixed (#176 code-check).
+new_workbook <- function() openxlsx::createWorkbook(creator = "knowledge")
+
 # one row of cells from `col` on; NULL leaves the row empty
 put <- function(wb, sheet, row, values, col = 1L) {
   if (is.null(values)) return(invisible())
@@ -68,7 +72,9 @@ save_as <- function(wb, name) {
   if (ext == "xlsx") {
     file.copy(xlsx, file.path(out_dir, name), overwrite = TRUE)
   } else {
-    st <- system2(soffice, c("--headless", "--convert-to", "xls", "--outdir", shQuote(work), shQuote(xlsx)),
+    # a fresh profile: LibreOffice adds no author of its own, and a running instance's lock is not met
+    profile <- paste0("-env:UserInstallation=file://", file.path(work, "lo_profile"))
+    st <- system2(soffice, c(profile, "--headless", "--convert-to", "xls", "--outdir", shQuote(work), shQuote(xlsx)),
                   stdout = TRUE, stderr = TRUE)
     got <- file.path(work, name)
     if (!file.exists(got)) stop("soffice did not write ", name, ":\n", paste(st, collapse = "\n"))
@@ -100,7 +106,7 @@ lab_v2_s4 <- c("REFERENCE NUMBER", "Gazetted Names", "Local Name", "Waterbody ID
 keys <- function(ref, name = "Test Creek") list("REFERENCE NUMBER" = ref, "Gazetted Name" = name)
 keys_s <- function(ref, name = "Test Creek") list("REFERENCE NUMBER" = ref, "Gazetted Names" = name)
 
-wb <- openxlsx::createWorkbook()
+wb <- new_workbook()
 openxlsx::addWorksheet(wb, "INSTRUCTIONS")
 put(wb, "INSTRUCTIONS", 1, "Synthetic test workbook in the V2.0 template's layout; every value is made up.")
 step_sheet(wb, "Step 1 (Ref. and Loc. Info)", banner_v2, "Step 1  Referencing and Locational Information", 31,
@@ -162,7 +168,7 @@ lab_old_s4 <- c("REFERENCE NUMBER", "Gazetted Names", "Local Name", "Reach #", "
                 "Avg. Wetted Width (m)", "Average Gradient (%)", "UTM Zone", "UTM Easting", "UTM Northing",
                 "Comments")
 
-wb <- openxlsx::createWorkbook()
+wb <- new_workbook()
 openxlsx::addWorksheet(wb, "INSTRUCTIONS")
 put(wb, "INSTRUCTIONS", 1, "Synthetic test workbook in the pre-2012 edition's layout; every value is made up.")
 step_sheet(wb, "Step 1 (Ref. and Loc. Info)", "Step 1  Reference and Locational Information", NULL, 26,
@@ -201,7 +207,7 @@ lab_17_s2 <- c("REFERENCE NUMBER", "Gazetted Name", "Local Name", "Reach #", "Si
                "Total Number", "Comments")
 lab_17_s3 <- c("Ref. No.", "Gazetted Names", "Local Name", "Species Code", "Length (mm)", "Comments")
 
-wb <- openxlsx::createWorkbook()
+wb <- new_workbook()
 step_sheet(wb, "Step 1 (Locational Info)", "Step 1  Locational and Reference Information", NULL, 17, lab_17_s1, list(
   c(keys(7, "North Creek"), list("Date (yyyy/mm/day)" = "2005/09/03", "UTM Zone" = 11, "UTM Easting" = 300400,
                                  "UTM Northing" = 5690800))))
@@ -221,7 +227,7 @@ lab_ref <- c("Reference Number", "Gazetted Name", "Local Name", "Watershed Code 
              "Species Code", "Total Number")
 lab_fish <- c("REFERENCE NUMBER", "Species Code", "Length (mm)", "Weight (g)", "Sex", "Maturity", "Age Structure",
               "Age Sample #", "Age", "Genetic Structure", "Genetic Sample #", "Comments")
-wb <- openxlsx::createWorkbook()
+wb <- new_workbook()
 step_sheet(wb, "Reference", "Reference Information Section", NULL, 22, lab_ref, list(
   list("Reference Number" = 1, "Gazetted Name" = "Fish Creek", "Date (yyyy/mm/day)" = "2004/08/10",
        "UTM Zone" = 11, "UTM Easting" = 290100, "UTM Northing" = 5720400, "Sampling Method" = "EF",
@@ -235,7 +241,7 @@ save_as(wb, "individual_fish.xls")
 
 # ---- a step whose rows carry no reference number ----------------------------------------------------------------
 # filled cells under the header but none in REFERENCE NUMBER: the reference-number filter keeps nothing (no_rows)
-wb <- openxlsx::createWorkbook()
+wb <- new_workbook()
 step_sheet(wb, "Step 1 (Ref. and Loc. Info)", banner_v2, "Step 1  Referencing and Locational Information", 31,
            lab_v2_s1, list(
              list("Gazetted Name" = "Test Creek", "UTM Zone" = 10, "UTM Easting" = 612000, "UTM Northing" = 5980000),
@@ -243,7 +249,7 @@ step_sheet(wb, "Step 1 (Ref. and Loc. Info)", banner_v2, "Step 1  Referencing an
 save_as(wb, "no_reference.xlsx")
 
 # ---- a tissue-results workbook ----------------------------------------------------------------------------------
-wb <- openxlsx::createWorkbook()
+wb <- new_workbook()
 openxlsx::addWorksheet(wb, "Tissue")
 put(wb, "Tissue", 1, c("Sample ID", "Species", "Tissue", "Hg (mg/kg)"))
 put(wb, "Tissue", 2, list("T-01", "Rainbow Trout", "muscle", 0.04))
