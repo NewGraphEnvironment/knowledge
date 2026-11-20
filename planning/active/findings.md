@@ -169,7 +169,26 @@ Nothing about the visit tables changes. The question of which passes are the sam
 - `visits.csv` columns: KEY, DATA_SET, UTM_*, METHOD_NUMBER, HAUL_OR_PASS, IN/OUT date and time, FISHING_TIME, FISHING_AREA_LENGTH, FISHING_AREA_WIDTH, FREQUENCY, VOLTAGE, PULSE, AGNCY_ID, NAME.
 - The per-pass consumer is a private package's issue; its settled design: site = the visit's point, visit = site visit, replicate = pass; effort = fishing time; a pass with only "no fish caught" is a no-taxon row with 0, a pass with no catch record a no-taxon row with NA; species codes raw, so blocking rules apply per pass.
 
+## 0230 rerun on m1 (2026-11-20T03:56Z, 40 s)
+
+- `fish.rds` 8cf273515ce2b692c3719130eac75b93 and `catch.rds` a31fd7bbe2febbe31d70fc8f4cd3a161: byte-identical to every
+  evidence ledger's `md5_fish` / `md5_catch`. fish.rds is built before placement, so it reads no database.
+- `sites.rds` 853c682052cc0868ef1ed7bc5b048695, not the published 39f751b174aea4a14eb0dc0d3e3b126d: same 51,587 visits
+  and columns; 245 differ in `downstream_route_measure` and `linear_feature_id` (37 in `blue_line_key`, 7 in
+  `snap_moved`, plus the joined FWA attributes). reconcile.csv: `sites_snap_moved` 778 against 785. The published build's
+  ledger records fresh 0.52.0; m1 has fresh 0.53.0 and its own database. Placement does not reproduce here; the
+  published sites.rds and reconcile.csv (from the archive) were put back into this checkout's build. The rerun's copies:
+  scratchpad `build_rerun_m1/` (not tracked).
+- Per-pass check on the real build: 61,388 passes and 73,567 pass x species rows; status fish 35,642, nfc 25,279,
+  no_record 467. Every kept visit's pass count equals `n_pass`, and the passes' fishing time and area sum to the
+  visit's (0230 stops otherwise; it did not). 885 visit x species caught have no pass row (their catch sits on a KEY
+  with no visits.csv row); 161 visit x species sum above the visit's `n_caught` over their passes (a pass's count short
+  of its measured fish); none below.
+- Tracked outputs under m1's placement: `data/fdis_evidence.csv` and `data/fdis_summary_ch_bt.csv` moved (restored);
+  `data/fdis_repeat_surveys.csv` and `data/fdis_maturity_check.csv` unchanged.
+
 ## Errors Encountered
 
 | Error | Resolution |
 |-------|------------|
+| `$ operator is invalid for atomic vectors` in `knw_archive_plan()` | my loop variable `f` shadowed the tune-file frame `f`; renamed `b` |

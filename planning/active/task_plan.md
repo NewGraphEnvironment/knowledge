@@ -28,6 +28,10 @@ What exploration found:
 
 ## Decided at the gate (Al, 2026-11-19)
 
+- **The span lives in the checks (Al, 2026-11-20, after the plan review's item 17).** `fdis_sites.csv` is pinned by md5
+  in `method.rds`, so a span column would stale it; the checks compute each visit's span, and a published column waits
+  for move 12's method-bundle rebuild (noted in #231's body).
+
 - **Per-pass tables join `knowledge/fdis/v3`** before its first upload, making 13 tables with no version bump. They reach the bucket when #219 uploads v3.
 - **#23 is cut** to the span and the downstream-end check, with match rates. Age-class counts and the workbook second source go to a new issue naming move 6, left out of `planning/backlog.md` for the next sweep. #23 closes with this PR.
 - **Re-archive the published evidence in this PR** with `fish.rds`. This makes a new evidence id in the bucket's private `archive/knowledge/` and new rows in `data/archive_index.csv`, so `PULL=TRUE` restores `fish.rds` for the published run.
@@ -72,9 +76,11 @@ What exploration found:
   Update the fixture and the 6-row and MANIFEST-tail expectations.
 - [x] `R/archive.R`: add `fish.rds` (build) to `.knw_archive_evidence_files`, held to the ledger's `md5_fish` as `sites.rds` is held to `md5_sites`.
 - [x] Update `scripts/0336-archive.R`'s header and the `CLAUDE.md` line saying PULL does not restore `fish.rds`. Name `0230` as the only remedy for a build archived before this change.
-- [ ] **Rerun `0230` then `0240` on this host's database.** Confirm byte-identical `sites.rds`, `catch.rds` and `fish.rds` against the published run's ledger (`md5_sites`, `md5_fish`; `catch.rds` against the current file).
+- [x] **Rerun `0230` then `0240` on this host's database.** (2026-11-20: fish.rds and catch.rds byte-identical to the ledgers; sites.rds not: 245 visits placed differently, recorded in findings; the published sites.rds restored here) Confirm byte-identical `sites.rds`, `catch.rds` and `fish.rds` against the published run's ledger (`md5_sites`, `md5_fish`; `catch.rds` against the current file).
   - If `sites.rds` differs, stop: placement is not reproducing on this database, and nothing is archived or published from the rerun. The finding goes to #214 and the PR.
-- [ ] **Re-archive** the published evidence:
+- [ ] Before any put (review item 6): compress each restored grade table with `.knw_zstd()` and compare with the
+  index's `object_md5`; stop if one differs (a put would re-send it and leave the published batch noncurrent).
+- [ ] **Re-archive** the published evidence (review item 1: `PULL=TRUE GRADES=TRUE` in the worktree, run from its root):
   1. Make a scratch worktree at the branch tip.
   2. Restore evidence `3d907629…` with `PULL=TRUE` there.
   3. Copy in the verified `fish.rds`.
@@ -84,30 +90,41 @@ What exploration found:
 
 ## Phase 3: the site span and where the record sits (#23, cut)
 
-- [ ] File the split issue (age-class counts per visit; the workbook second source after #21's parser), naming move 6. Rewrite #23's body to the cut scope, with a link to it.
-- [ ] Tests first for the span: a span capped at the blue line's top, and a missing or sentinel fished length.
-- [ ] Add the span columns to `0240`'s `fdis_sites.csv`. It already connects to the database for the basin; the same query reads each blue line's top measure.
-  - `upstream_route_measure` is `downstream_route_measure + fished_length_m`, capped at the line's top.
-  - `flag_span_capped`.
-  - NA where the length is missing or a sentinel.
-- [ ] `data-raw/fdis_downstream_end_check.R` (no database) runs on the published evidence's `bcfishobs_fdis_match.csv` and `fdis_sites.csv`:
+- [x] File the split issue (age-class counts per visit; the workbook second source after #21's parser), naming move 6. Rewrite #23's body to the cut scope, with a link to it.
+- [ ] `0240` writes the pass CSVs only where `0230`'s passes are present, and says to rerun `0230` otherwise (review
+  item 4); rerun `0240` once on the published `sites.rds` and confirm every tracked output byte-identical (item 5).
+- [ ] The span, in the checks (gate, 2026-11-20): `knw_fdis_span()`, tested first (capped at the blue line's top,
+  missing or sentinel length), `downstream_route_measure + fished_length_m` capped at the line's top with a flag.
+- [ ] `data-raw/fdis_downstream_end_check.R` runs on the published `fdis_sites.csv` and a `bcfishobs_fdis_match` regenerated with `knw_bcfishobs_match()` from the published sites and catch (review item 2; the bcfishobs snapshot logged), reading the blue lines' top measures:
   - match rates by species and class;
   - for one-to-one matches on the same blue line, where the bcfishobs point sits against the visit's span (below it, at the downstream end within 5 m, inside it, above it), with offsets as a share of fished length;
-  - logged to `scripts/logs/fdis/<date>_fdis_downstream_end_check.txt`.
+  - logged to `scripts/logs/fdis/<date>_fdis_downstream_end_check.txt`;
+  - says what it can show (review item 10): FDIS-keyed bcfishobs points likely carry the visit's own UTM, so their
+    offset measures two snaps, and #137 rests on the fished span instead.
 - [ ] `research/fdis_export.md`: a section on the site span and where a record sits, with the match rates and the check's verdict.
 
 ## Phase 4: one flow per segment (#137)
 
 - [ ] `data-raw/segment_flow_resolution_check.R` runs on this host's database: the published build's network, the flow load read from the table comment and logged, and a logged `pg_stat_activity` check.
-  - **Question 1.** Per FWA segment, the upstream area at its downstream end (`fwa_watersheds_upstream_area` through `fwa_streams_watersheds_lut`) against that minus its local fundamental watershed. That gives an area-scaled MAD at top against bottom: the share of change, province-wide, by edge type, and by MAD class (0.1–1 and 1–10 m³/s).
+  - **Question 1** (method from review item 11). A reach is the segments sharing `blue_line_key` and local code
+    between confluences; its local area is every polygon with that watershed and local code, and upstream area is
+    interpolated linearly by measure along it, so each segment gets an area, and an area-scaled MAD, at its bottom and
+    top. Report the share of change province-wide, by edge type, and by MAD class (0.1–1 and 1–10 m³/s). Lake and
+    double-line river skeletons are reported apart; parent-fallback segments and segments with no lookup row are
+    excluded and counted.
   - **Question 2.** At each published visit, the area-scaled flow change from the record's point to the top of its fished span, inside the segment and where the span crosses into the next one. Set against the segment value and against the two yardsticks: source error, and the two sources' disagreement.
-  - **Question 3.** The share of visits whose class at each published flow threshold flips when flow is read at the record's point or at the span's midpoint instead of the segment. The thresholds are CH rearing 0.75, ST 0.5, BT 0.35 and CO 0.1 m³/s.
+  - **Question 3.** The share of visits whose class at each published minimum-MAD threshold flips when flow is read at
+    the record's point or at the span's midpoint instead of the segment, every key's value read from `thresholds.csv`
+    (WCT included). Near-river flow flips are declined (review item 14).
+  - Visits from the restored published `visits_link` and `fdis_sites` (item 12); the network from `whse_basemapping`.
   - Batched queries; logged to `scripts/logs/flow/<date>_segment_flow_resolution_check.txt`.
 - [ ] `research/discharge_resolution.md` (new), led by a plain-language walk then the numbers:
   - whether segment resolution adds error beyond placement and source error;
   - what point flow would move.
 
   Add it to `research/README.md`. If it matters, file the follow-up issue for point flow (it would regrade every key, so it waits on Al); otherwise #137 closes on the verdict.
+
+Declined at the review: #225's workbook passes (`knw_fiss_visits()`), which are #245's second source.
 
 ## Phase 5: close out
 
