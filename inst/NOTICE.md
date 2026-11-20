@@ -78,7 +78,7 @@ the edition banner line of the Province's Fish Data Submission spreadsheet templ
 tested on the label rows it reads. Every value in them is made up, and nothing else of the template (instructions,
 pick lists, formatting) is copied. The template itself is downloaded from the Province's
 [fish data submission](https://www2.gov.bc.ca/gov/content/environment/plants-animals-ecosystems/fish/fish-and-fish-habitat-data-information/fish-data-submission/submit-fish-data)
-page, which carries no licence of its own; whether its labels need one is open in #76.
+page, which carries no licence of its own; whether its labels need one is open in [#76](https://github.com/NewGraphEnvironment/knowledge/issues/76).
 
 ## Terms not yet settled
 
