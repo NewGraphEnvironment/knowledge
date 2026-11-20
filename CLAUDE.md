@@ -3730,9 +3730,6 @@ hex sticker, etc.). README layout is `readme.md`, with `link` as its worked exam
 Follow R Packages (2e) conventions:
 - `R/` for functions, `tests/testthat/` for tests, `man/` for docs
 - `DESCRIPTION` with proper fields (Title, Description, Authors@R)
-- `DESCRIPTION` URL field: include both the GitHub repo and the pkgdown site
-  so pkgdown links correctly (e.g., `URL: https://github.com/OWNER/PKG,
-  https://owner.github.io/PKG/`)
 - `NAMESPACE` managed by roxygen2 (`#' @export`, `#' @import`, `#' @importFrom`)
 - Never edit `NAMESPACE` or `man/` by hand
 
@@ -3912,7 +3909,6 @@ Then keep the vignette and its bundle true as both move:
 - `@import` or `@importFrom` in the package-level doc (`R/<pkg>-package.R`)
   to populate NAMESPACE — don't rely on `::` everywhere in function bodies
 - pkgdown site for public packages with `_pkgdown.yml` (bootstrap 5)
-- GitHub Action for pkgdown (`usethis::use_github_action("pkgdown")`)
 
 ## lintr
 
@@ -3983,31 +3979,14 @@ exclusions: list(
 
 ## Repository Setup
 
-### Branch protection
-
-Protect main from deletion and force pushes:
-
-```bash
-gh api repos/OWNER/REPO/rulesets --method POST --input - <<'EOF'
-{
-  "name": "Protect main",
-  "target": "branch",
-  "enforcement": "active",
-  "bypass_actors": [
-    { "actor_id": 5, "actor_type": "RepositoryRole", "bypass_mode": "always" }
-  ],
-  "conditions": { "ref_name": { "include": ["refs/heads/main"], "exclude": [] } },
-  "rules": [ { "type": "deletion" }, { "type": "non_fast_forward" } ]
-}
-EOF
-```
-
 ### Scaffold checklist
 
+- Right after `gh repo create`, the repo's `ecosystem.yml` row, with a tagline, in its own soul PR with soul's README re-rendered (`uv run --script scripts/ecosystem/ecosystem_registry.py render --readme README.md`), merged before the next daily registry check at 13:17 UTC, which fails a repo with no row
 - `usethis::create_package(".")`
 - `usethis::use_mit_license("New Graph Environment Ltd.")`; `Authors@R` as in `/citation-cff`
-- `usethis::use_testthat(edition = 3)`
-- `usethis::use_pkgdown()`
+- `usethis::use_testthat(edition = 3)`, with one real test: git keeps no empty `tests/testthat/`, and testthat aborts on one with `No test files found.`
+- `NEWS.md` opens `# <pkg> 0.0.0.9000 (development version)`: R never reads entries under a version-less heading, and `R CMD check` notes `No news entries found` until a release sits below it
+- `usethis::use_pkgdown()`, then the site URL in `_pkgdown.yml`'s `url:` and in DESCRIPTION's `URL` beside the repo (`URL: https://github.com/OWNER/PKG, https://owner.github.io/PKG/`): `pkgdown::check_pkgdown()` aborts without either
 - `usethis::use_directory("dev")` — reproducible setup script
 - `usethis::use_directory("data-raw")` — data generation scripts
 - Hex sticker: copy soul's `templates/make_hexsticker.R` to `data-raw/`
