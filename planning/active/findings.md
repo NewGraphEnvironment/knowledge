@@ -56,3 +56,38 @@ Backlog: `planning/backlog.md`, move 7. Plan it with `/planning-init <this issue
 
 | Error | Resolution |
 |-------|------------|
+
+## Phase 1 measurements (2026-11-20, on m1, local fwapg)
+
+**Layouts.** Over the five groups' parse logs there are five workbook layouts, not the three #7 names:
+
+| layout | workbooks | Step 1 header | Steps 2 / 3 / 4 header | names |
+|---|---|---|---|---|
+| V2.0 template (banners 2012, 2016, 2018, 2019, 2020, 2022) | 150 | 31 | 23 / 18 / 20 | `Species`, `Sampling Method`, `Haul # /Pass #`, `Survey Date`, `Alias (Local Name)`, `Waterbody (ID) Identifier` |
+| pre-2012, row 1 is the step name | 80 | 26 | 6 / 6 / 6 | `Species Code`, `Method` (Step 3) or `Sampling Method` (Step 2), `Haul or Pass`, `Date (yyyy/mm/day)` |
+| pre-2012, Step 1 "(Locational Info)" | 2 (LNTH) | 17 | 6 / 6 / 6 | as above, Step 2 `Method` |
+| per-fish workbook ("Reference", "Fish collection") | 5 | none matches | Step 2 sheet at 4, read as Step 3 | `Species Code`, `Length (mm)` |
+| tissue data, reach summaries, other tables | 10 | none matches | none | |
+
+#7's "row 26 (2016+ editions)" is wrong: the header-26 layout is the pre-2012 edition, and every V2.0 banner from
+2012 to 2022 shares one layout and one label set. The banner of row 1 differs by sheet within one workbook (Step 2's
+reads "Fish  Data Submission Spreadsheet Template V. 2.0, ..." where Steps 1, 3 and 4 read "-V 2.0, ...").
+
+**The template's terms.** The current template is a zip on the province's "Submit fish data" page, with no licence of
+its own; the site's copyright page reserves all rights and asks for written permission to reproduce. The fixtures
+therefore copy only what the parser keys on, the column labels and the edition banner line, and nothing else of the
+template (instructions, pick lists, formatting, macros); every data value is synthetic. Noted on #76.
+
+**#34, the gradient cell's format.** Every filled `Average Gradient (%)` cell read carries the number format `0.0%`:
+two pre-2012 workbooks (LNTH 11293, COTR 16428, converted with soffice) and three V2.0 (COTR 62266, 50588, 50944). A
+percent-formatted cell stores 2.5 % as 0.025, so `0250` multiplies by 100.
+
+**The FDIS build `0250` reads** is the published one: `fish.rds` 8cf27351, `catch.rds` a31fd7bb, `sites.rds` 39f751b1
+(move 6's archive README).
+
+**Baseline.** Today's `0220`, run unchanged on the five groups (m1's local fwapg, idle), reproduces every tracked CSV
+byte for byte; each GeoPackage holds identical rows, attributes, geometry and CRS (its bytes differ by the write
+stamp); each reconcile differs only in `enumerate_db_source`'s expected column and `clip_polygon_source`, which name
+the database that ran. Group totals: COTR 736 sites (394 no fish), LNTH 1,427 (207), UNTH 989 (181), UPCE 7,023 (419),
+PINE 1,610 (209). The baseline outputs are the refactor's reference; the tracked files were restored so no content-free
+change is committed.

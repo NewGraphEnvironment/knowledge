@@ -42,21 +42,21 @@ The plan does them in one order, so the FISS outputs are regenerated once and di
 
 ## Phase 1: Measure before moving code
 
-- [ ] Per edition, measure the header row and banner of each step sheet from the five parse logs. Header rows seen
+- [x] Per edition, measure the header row and banner of each step sheet from the five parse logs. Header rows seen
       today are 4, 6, 17, 18, 20, 23, 26 and 31, more than #7 lists. Write the fixture set in `findings.md`.
-- [ ] Find the provincial template:
+- [x] Find the provincial template:
   - where the current edition can be downloaded;
   - the 2016+ label rows taken from it;
   - for older editions (2012, the header-17 layout, the step-name banner), the label rows read from workbook headers,
     which are template text.
   Record each edition's source.
-- [ ] Read the template's terms from its catalogue page. Then either add an `inst/NOTICE.md` row, or file a note on
+- [x] Read the template's terms from its catalogue page. Then either add an `inst/NOTICE.md` row, or file a note on
       #76 if the terms are unconfirmed.
-- [ ] #34: read the number format of the gradient cell in a few workbooks per edition. Convert a copy with soffice into
+- [x] #34: read the number format of the gradient cell in a few workbooks per edition. Convert a copy with soffice into
       the scratchpad and read the style with tidyxl. Confirm it is a percent format and record the editions.
-- [ ] Reference outputs before any code change: the md5 of every `data/<wsg>/fiss_*` file for the five groups and of
+- [x] Reference outputs before any code change: the md5 of every `data/<wsg>/fiss_*` file for the five groups and of
       `data/fiss_*.csv`, written to the scratchpad.
-- [ ] Check that `data/fdis/build/{sites,fish}.rds` are the published build's (against the run ledger's md5s), since
+- [x] Check that `data/fdis/build/{sites,fish}.rds` are the published build's (against the run ledger's md5s), since
       `0250` reads them. Find a reachable fwapg for `0220`'s clip and `0250`'s placement, and read `pg_stat_activity`.
 
 ## Phase 2: #7, graduate the parser into the package
