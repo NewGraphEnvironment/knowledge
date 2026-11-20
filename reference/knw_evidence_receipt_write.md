@@ -87,5 +87,5 @@ r <- knw_evidence_receipt_write(ev, settings, inputs, knowledge = list(commit = 
 r$result$summary$visits
 #> [1] 2
 r$recipe$recipe_id
-#> [1] "6fed3f47084ad02a5636d29c2fac6a2d1f0a18eab982bc543e51808ab050d4a5"
+#> [1] "ad1f244cb1c477838d4d92a683f839f3a81bb979f54439156319236e46893f53"
 ```

@@ -1,5 +1,36 @@
 # Changelog
 
+## knowledge 0.4.46
+
+- The FDIS load keeps its electrofishing passes
+  ([\#225](https://github.com/NewGraphEnvironment/knowledge/issues/225)):
+  [`knw_fdis_passes()`](https://newgraphenvironment.github.io/knowledge/reference/knw_fdis_passes.md)
+  writes one row per pass of a kept visit and one per pass and species
+  code caught, by the visit table’s count rule applied per pass, with
+  each pass marked as having caught a fish, recorded no fish caught, or
+  no catch record; `0230` writes them after the repeat drop and stops if
+  they disagree with the visit table, `0240` writes them as CSV, and the
+  unpublished `knowledge/fdis/v3` gains `fdis_passes` and
+  `fdis_pass_catch`. The evidence archive holds `fish.rds`, held to the
+  run ledger’s `md5_fish`, and the published run’s evidence was archived
+  again with it, so `0336 PULL=TRUE` restores it
+  ([\#214](https://github.com/NewGraphEnvironment/knowledge/issues/214)).
+  `PLACE=FALSE 0230` and `ONLY=passes 0240` rebuild what a restored
+  build lacks without rewriting its placement, which a rerun on another
+  database and fresh version does not reproduce
+  ([\#246](https://github.com/NewGraphEnvironment/knowledge/issues/246)).
+  [`knw_fdis_span()`](https://newgraphenvironment.github.io/knowledge/reference/knw_fdis_span.md)
+  gives the stretch a visit fished: a bcfishobs record sits at its
+  visit’s own point, so the location error is the fished span, a median
+  100 m
+  ([\#23](https://github.com/NewGraphEnvironment/knowledge/issues/23)).
+  One discharge per FWA segment is fine enough to tune on: a point flow
+  would change the class at each key’s minimum flow for 0.13 to 2.8 % of
+  visits, against 2.4 to 7.9 % for the other flow source
+  ([\#137](https://github.com/NewGraphEnvironment/knowledge/issues/137),
+  `research/discharge_resolution.md`). Nothing published moves
+  ([\#175](https://github.com/NewGraphEnvironment/knowledge/issues/175)).
+
 ## knowledge 0.4.45
 
 - Where link’s access gradients come from, and what the sources say fish
