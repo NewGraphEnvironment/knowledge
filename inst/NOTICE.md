@@ -71,6 +71,15 @@ report-corpus scripts ran (`scripts/0100`). They are incidental, not a distribut
 licence is "Access Only", and the current layers come from the catalogue. The package does not ship them, and
 `knw_pscis_pull()` reads PSCIS from the user's own database.
 
+## Fish Data Submission template labels
+
+The test workbooks in `inst/testdata/fiss/`, written by `data-raw/fiss_fixtures.R`, copy only the column labels and
+the edition banner line of the Province's Fish Data Submission spreadsheet template, so that the `knw_fiss_*` parser is
+tested on the label rows it reads. Every value in them is made up, and nothing else of the template (instructions,
+pick lists, formatting) is copied. The template itself is downloaded from the Province's
+[fish data submission](https://www2.gov.bc.ca/gov/content/environment/plants-animals-ecosystems/fish/fish-and-fish-habitat-data-information/fish-data-submission/submit-fish-data)
+page, which carries no licence of its own; whether its labels need one is open in [#76](https://github.com/NewGraphEnvironment/knowledge/issues/76).
+
 ## Terms not yet settled
 
 The terms for redistributing these files are open in

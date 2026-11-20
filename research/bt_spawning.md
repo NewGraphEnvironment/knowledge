@@ -96,7 +96,8 @@ State the layer's delineation method beside any number taken from it.
 - **Upstream defects found:** FDIS surveys loaded under two to four collection ids (#35; 1,431 of the export's
   53,018 visits, now dropped by 0230, which moved the Aug–Oct spawner rates by at most 0.011 and their rate ratios by at
   most 0.07); FISS
-  workbook site gradient read as a fraction (#34).
+  workbook site gradient read as a fraction (#34; since 2026-11-20 `0250` writes it in percent, so a log of `0293`
+  from before then prints the fraction).
 
 ## Dead ends, kept because they are evidence
 

@@ -133,13 +133,20 @@ sites <- sites |>
   transmute(site_key, report_id, wsg, gazetted_name,
             date = parse_date(survey_date),
             utm_zone = num(utm_zone), utm_easting = num(utm_easting), utm_northing = num(utm_northing),
-            gradient_pct = num(average_gradient_percent), channel_width_m = num(avg_channel_width_m)) |>
-  mutate(year = as.integer(format(date, "%Y")), month = as.integer(format(date, "%m")),
+            gradient_raw = num(average_gradient_percent), channel_width_m = num(avg_channel_width_m)) |>
+  # The template's Average Gradient (%) cell is percent-formatted, so it stores 2.5 % as 0.025 (#34): every one of
+  # the 25 reports carrying a gradient (2026-11-20) holds a fraction, 24 in `0.0%` cells and one typed into General
+  # cells. A raw value above 1 cannot be such a fraction: it is set NA and fails the reconcile, because it means a
+  # workbook's units differ and must be read before the table is used. Rounded to 4 decimals of a percent, so the
+  # product's float noise stays out of the table.
+  mutate(gradient_pct = ifelse(gradient_raw > 1, NA_real_, round(100 * gradient_raw, 4)),
+         year = as.integer(format(date, "%Y")), month = as.integer(format(date, "%m")),
          # the 0220 plausibility window for BC
          placeable = !is.na(utm_zone) & utm_zone %in% 8:11 &
            !is.na(utm_easting) & utm_easting >= 150000 & utm_easting <= 850000 &
            !is.na(utm_northing) & utm_northing >= 5300000 & utm_northing <= 6700000)
 n_undated <- sum(is.na(sites$date))
+n_gradient_above_1 <- sum(sites$gradient_raw > 1, na.rm = TRUE)
 
 # ---- fish and counts, coded -------------------------------------------------
 breaks <- read_csv("data/fdis_size_breaks.csv", col_types = "cccccc") |>
@@ -289,7 +296,7 @@ stopifnot(!anyDuplicated(placed$site_key), nrow(placed) == nrow(pts))
 site_attr <- sites |>
   left_join(placed, by = "site_key") |>
   transmute(site_key, watershed_group_code, fwa_basin, blue_line_key, downstream_route_measure,
-            month, year, gradient_pct, channel_width_m, fwa_gradient_pct = fwa_gradient * 100,
+            month, year, gradient_raw, gradient_pct, channel_width_m, fwa_gradient_pct = fwa_gradient * 100,
             modelled_channel_width_m, channel_width_source,
             flag_far_snap = !is.na(distance_to_stream) & distance_to_stream > snap_flag_m,
             # FDIS checks placement against its 50k watershed code; FISS has none read here
@@ -358,6 +365,14 @@ disagree <- stage_vs_class |>
   summarise(disagree = round(sum(n[!agrees]) / sum(n), 3), n = sum(n), .groups = "drop")
 print(as.data.frame(disagree))
 
+# ---- the workbook gradient against the FWA line's ----------------------------
+# on the raw values x 100 at the evidence sites, before the above-1 rule sets any NA, so a unit slip moves the ratio
+# by 100x however many values the rule removed
+grad_sites <- site_attr |>
+  filter(site_key %in% evidence$site_visit, gradient_raw > 0, fwa_gradient_pct > 0)
+grad_n <- nrow(grad_sites)
+grad_ratio <- if (grad_n >= 5) round(median(100 * grad_sites$gradient_raw / grad_sites$fwa_gradient_pct), 3) else NA_real_
+
 # ---- reconcile: every Step 3 fish lands in exactly one bucket ----------------
 ff_ids <- fish |>
   mutate(bucket = case_when(
@@ -398,6 +413,14 @@ reconcile <- bind_rows(
   chk("species_labels_unmapped", NA, nrow(unmapped), pass = TRUE,
       note = paste(sprintf("%s=%d", unmapped$species, unmapped$n)[seq_len(min(15, nrow(unmapped)))], collapse = "; ")),
   chk("sites_undated", NA, n_undated, pass = TRUE),
+  chk("site_gradient_raw_above_1_set_na", 0L, n_gradient_above_1,
+      note = "a percent-formatted cell stores a fraction; a value above 1 is not one: read that workbook's cells"),
+  # the workbook gradient against the FWA line's at the same sites, both in percent: a unit slip moves the median
+  # ratio by 100x, far outside the band (stated before the first run, #34)
+  chk("site_gradient_vs_fwa_median_ratio", "0.25-4", grad_ratio,
+      pass = is.na(grad_ratio) || (grad_ratio >= 0.25 && grad_ratio <= 4),
+      note = sprintf("%d sites with both gradients above 0%s", grad_n,
+                     if (grad_n < 5) "; too few to judge" else "")),
   chk("evidence_sites_unplaced", NA, sum(is.na(evidence$blue_line_key) & evidence$site_visit %in% pts$site_key), pass = TRUE,
       note = "placeable sites fwa_indexpoint found no stream for within 500 m"),
   chk("evidence_sites_not_placeable", NA, n_distinct(evidence$site_visit[!evidence$site_visit %in% pts$site_key]), pass = TRUE),

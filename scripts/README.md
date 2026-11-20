@@ -397,9 +397,12 @@ fishless. Run on five groups (PINE, COTR, UNTH, LNTH, UPCE; #5).
   joins the manifest by key (`file_name` collides across attachments), one row per manifest URL,
   `status` ok / converted / unreadable / download_failed. Two dead links (HTTP 404 on ACAT's side)
   are the only failures across ~230 files.
-- `0220` — column set is **passed config** (`wanted_cols`), not hardcoded. Header is auto-detected by
-  anchoring on the `REFERENCE NUMBER` label row (rows 26, 31 or 17 across the 2009–2022 editions),
-  because row 1 of the provincial template is a title banner. UTM zone is parsed as its leading
+- `0220` — the driver over the package's tested parser (#7): `knw_fiss_parse_step()` per workbook and step,
+  `knw_fiss_nfc()` for the Step 2 roll-up, on fixtures in `inst/testdata/fiss/` (`data-raw/fiss_fixtures.R`). The
+  column set is **passed config** (`wanted_cols`, from `knw_fiss_columns()`), not hardcoded. Header is auto-detected
+  by anchoring on the `REFERENCE NUMBER` label row, because row 1 of the provincial template is a title banner: Step
+  1 sits at row 31 in the V2.0 template (every banner from 2012 to 2022) and at 26 or 17 in the pre-2012 edition, and
+  Steps 2 to 4 at 23, 18 and 20 (V2.0) or 6 (pre-2012). UTM zone is parsed as its leading
   digits (`"11U"` is common on North Thompson submissions and used to drop the site). NFC is taken
   from the sheet's own `No Fish Caught` value, or a zero-catch code from `data/fdis_species_codes.csv`
   (`NFC`, `ZZZ`) in the editions that record codes (`nfc_source = "submitted"`); a real zero count
@@ -411,8 +414,10 @@ fishless. Run on five groups (PINE, COTR, UNTH, LNTH, UPCE; #5).
   yielded nothing: no_sheet_match for tissue-data and summary workbooks, no_header, no_rows …,
   plus `header_row` and the edition `banner`), then the site tables, then `fiss_xls_reconcile.csv`.
   Template editions name columns differently (`species_code`/`species`, `method`/`sampling_method`,
-  `haul_or_pass`/`haul_number_pass_number`, `date_yyyy_mm_day`/`survey_date`); `variant_map` folds
-  them to one name. Step 3 (Individual Fish Data) is written raw to `fiss_step3_fish_<wsg>.csv`, and
+  `haul_or_pass`/`haul_number_pass_number`, `date_yyyy_mm_day`/`survey_date`); `knw_fiss_columns()$variants`
+  folds them to one name. Step 4's `average_gradient_percent` is written as the cell stores it: the template's cell
+  is percent-formatted, so the per-group tables hold 2.5 % as 0.025. `0250` converts it; the per-group tables and
+  GeoPackages keep the raw fraction under that name (#34). Step 3 (Individual Fish Data) is written raw to `fiss_step3_fish_<wsg>.csv`, and
   a per-fish sheet filed under a Step 2 name is read as Step 3 (`fish_layout` in the parse log).
   The reconciliation is a **gate**: manifest ↔ reports ↔ fetch log ↔ parse log are checked before
   any site table is written and site counts after; any failed check exits non-zero.
@@ -453,6 +458,12 @@ workbooks carry every method.
   and length (a multiset match: repeated FDIS rows are distinct fish). Only the **electrofishing**
   rows at such a site are dropped. 45 of 68 reports with electrofished fish match ≥ 90 %, 13 match
   none; the radius is not sensitive (50 m → 2 km adds ~1.5 % of matched sites, mostly weak).
+- **Site gradient in percent (#34):** the workbook's `Average Gradient (%)` cell is percent-formatted and stores
+  2.5 % as 0.025, so `gradient_pct` is the raw value × 100, as `fdis_evidence.csv`'s is. A raw value above 1 is set
+  `NA` and **fails** the reconcile (`site_gradient_raw_above_1_set_na`): a workbook's units differ and must be read.
+  `site_gradient_vs_fwa_median_ratio` holds the median ratio of the raw values × 100 to `fwa_gradient_pct` at the same
+  sites within 0.25–4 (0.925 over 16 sites, 2026-11-20); it is taken over all sites together, so one workbook typed
+  in percent with every value at or below 1 % would pass it.
 - **Life stage vs length:** `data/fiss_stage_vs_class.csv` compares the Step 2 label with the length
   class per fish and per Step 2 row.
 - Outputs: `data/fiss_evidence.csv`, `data/fiss_fdis_overlap.csv`, `data/fiss_stage_vs_class.csv`,

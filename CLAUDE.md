@@ -371,9 +371,13 @@ rearing on every setup: `research/minimal_network_tuning.md`, `data-raw/setup_co
 
 ### FISS submission workbooks: editions drift, and most EF fish are already in FDIS
 
-Template editions before 2016 name columns differently (`species_code`, `method`,
-`haul_or_pass`, `date_yyyy_mm_day`). Any new column `0220` reads needs checking against every
-edition's header, or it silently comes back NA on the old ones. A site is no-fish only if no
+The pre-2012 edition names columns differently (`species_code`, `method`, `haul_or_pass`,
+`date_yyyy_mm_day`) and puts its header rows elsewhere (Step 1 at row 26 or 17 and the others at 6, against the
+V2.0 template's 31, 23, 18 and 20 for every banner from 2012 to 2022). The parser is the package's `knw_fiss_*`
+(`R/fiss_parse.R`, `R/fiss_nfc.R`, #7), tested on one synthetic workbook per layout in `inst/testdata/fiss/`
+(`data-raw/fiss_fixtures.R`, which copies only the template's labels and banner lines). Any new column needs checking
+against every layout's header, or it silently comes back NA on the old ones. Step 4's `average_gradient_percent` is a
+fraction as the template's percent-formatted cell stores it; `0250` writes it in percent (#34). A site is no-fish only if no
 Step 2 record under its reference number caught anything: one trap with fish makes it a fish
 site. `NFC` and "No Fish Caught" are the no-fish entries (confirmed with Al, 2026-09-28). The
 FDIS export was built from these submissions, so `0250` dedupes against it before counting
