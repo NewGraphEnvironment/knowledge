@@ -54,3 +54,12 @@ of the old ones in the trash: the sync was in the 2.8 MB `-wal`. A build then wo
 (the citation keys do not change on a `replace`) and skipped them as "no text". A graceful quit of Zotero
 (`osascript -e 'tell application "Zotero" to quit'`) left a 0-byte `-wal`, after which the same read saw all ten new
 items and all ten old ones trashed. The plan review predicted it (cred#45).
+
+## Push logs and the bucket manifest (code-check round 3, 2026-11-21)
+
+`0150 ACTION=push` prints the whole merged manifest, whose other stores' entries name the repository and branch that
+last pushed them, a private repository among them. The five push logs now keep only their own store's entry, and the
+branch's history was rewritten (before its first push) so no commit carries the full dump; the final tree was
+byte-identical to before. `flow` was pushed again so its manifest `head_sha` names a commit the branch still holds
+(all five were pushed again after a second rewrite, below). A push log written by `0150` needs the same trim
+until `0150` prints only the entry it wrote.

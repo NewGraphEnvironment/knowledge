@@ -1,0 +1,25 @@
+# push flow again, unchanged, 2026-11-21T11:18:05Z: its first push recorded a head_sha this branch's history no longer holds (the push logs were rewritten to drop the manifest's other entries)
+[dry run] would upload data/rag/flow.duckdb -> s3://fresh-bc/rag/flow.duckdb
+[dry run] merged manifest would hold: fraser, vca_refs, peace, pine, habitat_modelling, temperature, flow, bull_trout_grayling, sturgeon, statistics, westslope_cutthroat, bull_trout, fish_passage
+# the dry run's manifest entry for flow (the manifest's other entries are left out)
+{
+  "flow": {
+    "documents": 43,
+    "chunks": 11757,
+    "embedding_size": 768,
+    "embedding_model": "nomic-embed-text",
+    "ragnar_version": "0.4.0",
+    "store_schema": "0.4.0",
+    "store_name": "store_001",
+    "bytes": 162541568,
+    "md5": "3453bcea0cc871857250c7e915977722",
+    "repo": "NewGraphEnvironment/knowledge",
+    "branch": "179-backlog-move-10-report-corpus-one-librar",
+    "head_sha": "70978531e98b66b5d132a08d18eb2099a2de3e33",
+    "built_by": "cred::crd_store_push()",
+    "date_completed": "2026-11-21T11:18:07Z"
+  }
+}
+Uploading flow.duckdb (155 MB)
+Manifest updated — now holds: fraser, vca_refs, peace, pine, habitat_modelling, temperature, flow, bull_trout_grayling, sturgeon, statistics, westslope_cutthroat, bull_trout, fish_passage
+# exit 0 at 2026-11-21T11:18:27Z
