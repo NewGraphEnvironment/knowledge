@@ -1,0 +1,90 @@
+# rebuild temperature from SW2RXUJC (OVERWRITE=TRUE), #217: ten OCRed scans replaced their textless originals in Zotero
+# expected: the OCRed scans this store holds ingest (2), under cred 0.8.0 and ragnar 0.4.0
+# pull: ACTION=query VERIFY=TRUE
+  <chr>                  <chr>     <int>  <int>  <int> <chr> <dbl> <chr>  <chr> 
+1 roberge_etal2002LifeH… /User…     9042  35976  37638 "App… 0.664 bm25   hybrid
+2 u_s_fishandwildlifese… /User…    10305 220129 221378 "Cri… 0.231 cosin… hybrid
+# start 2026-11-21T09:10:46Z
+10 of 65 members left out:
+  7CGM7AKH  munozsabater2019ERA5Landhourly  (no live PDF)
+  BU8377PN  irvine2025NewGraphEnvironmentwatertempbc  (no live PDF)
+  FQ97NEHI  meyer_griffith1997Firstwintersurvival  (no live PDF)
+  JQ7AXPKG  brakensiek_hankin2007EstimatingOverwinter  (no live PDF)
+  K3ZZNX4B  pacificclimateimpactsconsortiumGriddedHydrologic  (no live PDF)
+  M2AMUQGL  piotrowski_napiorkowski2019Simplemodifications  (no live PDF)
+  T678S7X5  bradford_etal2001Ecologyjuvenile  (no live PDF)
+  TE3UBDI2  pdf  (standalone attachment, no keyed item in this build holds its file)
+  UEG4KUPQ  holtby1988EffectsLogging  (no live PDF)
+  X2PL2ACL  stream-temperature-database  (standalone attachment, no keyed item in this build holds its file)
+54 keys across 1 collections
+Ingesting 54 PDF(s) into data/rag/temperature.duckdb
+Could not get FontBBox from font descriptor because None cannot be parsed as 4 floats
+Could not get FontBBox from font descriptor because None cannot be parsed as 4 floats
+Could not get FontBBox from font descriptor because None cannot be parsed as 4 floats
+Could not get FontBBox from font descriptor because None cannot be parsed as 4 floats
+Could not get FontBBox from font descriptor because None cannot be parsed as 4 floats
+Could not get FontBBox from font descriptor because None cannot be parsed as 4 floats
+Could not get FontBBox from font descriptor because None cannot be parsed as 4 floats
+Could not get FontBBox from font descriptor because None cannot be parsed as 4 floats
+Could not get FontBBox from font descriptor because None cannot be parsed as 4 floats
+Could not get FontBBox from font descriptor because None cannot be parsed as 4 floats
+Could not get FontBBox from font descriptor because None cannot be parsed as 4 floats
+Could not get FontBBox from font descriptor because None cannot be parsed as 4 floats
+Could not get FontBBox from font descriptor because None cannot be parsed as 4 floats
+Could not get FontBBox from font descriptor because None cannot be parsed as 4 floats
+Could not get FontBBox from font descriptor because None cannot be parsed as 4 floats
+Could not get FontBBox from font descriptor because None cannot be parsed as 4 floats
+Could not get FontBBox from font descriptor because None cannot be parsed as 4 floats
+Could not get FontBBox from font descriptor because None cannot be parsed as 4 floats
+Could not get FontBBox from font descriptor because None cannot be parsed as 4 floats
+Could not get FontBBox from font descriptor because None cannot be parsed as 4 floats
+Could not get FontBBox from font descriptor because None cannot be parsed as 4 floats
+Could not get FontBBox from font descriptor because None cannot be parsed as 4 floats
+Could not get FontBBox from font descriptor because None cannot be parsed as 4 floats
+Could not get FontBBox from font descriptor because None cannot be parsed as 4 floats
+Could not get FontBBox from font descriptor because None cannot be parsed as 4 floats
+Could not get FontBBox from font descriptor because None cannot be parsed as 4 floats
+Could not get FontBBox from font descriptor because None cannot be parsed as 4 floats
+Could not get FontBBox from font descriptor because None cannot be parsed as 4 floats
+Could not get FontBBox from font descriptor because None cannot be parsed as 4 floats
+Could not get FontBBox from font descriptor because None cannot be parsed as 4 floats
+Could not get FontBBox from font descriptor because None cannot be parsed as 4 floats
+Could not get FontBBox from font descriptor because None cannot be parsed as 4 floats
+Could not get FontBBox from font descriptor because None cannot be parsed as 4 floats
+Could not get FontBBox from font descriptor because None cannot be parsed as 4 floats
+Could not get FontBBox from font descriptor because None cannot be parsed as 4 floats
+Could not get FontBBox from font descriptor because None cannot be parsed as 4 floats
+Could not get FontBBox from font descriptor because None cannot be parsed as 4 floats
+Could not get FontBBox from font descriptor because None cannot be parsed as 4 floats
+Could not get FontBBox from font descriptor because None cannot be parsed as 4 floats
+Could not get FontBBox from font descriptor because None cannot be parsed as 4 floats
+Could not get FontBBox from font descriptor because None cannot be parsed as 4 floats
+Could not get FontBBox from font descriptor because None cannot be parsed as 4 floats
+Could not get FontBBox from font descriptor because None cannot be parsed as 4 floats
+Could not get FontBBox from font descriptor because None cannot be parsed as 4 floats
+Could not get FontBBox from font descriptor because None cannot be parsed as 4 floats
+Could not get FontBBox from font descriptor because None cannot be parsed as 4 floats
+Could not get FontBBox from font descriptor because None cannot be parsed as 4 floats
+Could not get FontBBox from font descriptor because None cannot be parsed as 4 floats
+Could not get FontBBox from font descriptor because None cannot be parsed as 4 floats
+Could not get FontBBox from font descriptor because None cannot be parsed as 4 floats
+Could not get FontBBox from font descriptor because None cannot be parsed as 4 floats
+Could not get FontBBox from font descriptor because None cannot be parsed as 4 floats
+Could not get FontBBox from font descriptor because None cannot be parsed as 4 floats
+Could not get FontBBox from font descriptor because None cannot be parsed as 4 floats
+Could not get FontBBox from font descriptor because None cannot be parsed as 4 floats
+Could not get FontBBox from font descriptor because None cannot be parsed as 4 floats
+Could not get FontBBox from font descriptor because None cannot be parsed as 4 floats
+Could not get FontBBox from font descriptor because None cannot be parsed as 4 floats
+Could not get FontBBox from font descriptor because None cannot be parsed as 4 floats
+Could not get FontBBox from font descriptor because None cannot be parsed as 4 floats
+Could not get FontBBox from font descriptor because None cannot be parsed as 4 floats
+Could not get FontBBox from font descriptor because None cannot be parsed as 4 floats
+Store built: data/rag/temperature.duckdb | docs: 54 | chunks: 12333 | model: nomic-embed-text
+53 documents before, 54 after: 4 added, 3 dropped
+dropped:
+  ~/Zotero/storage/HYSNCHBC/distribution,_life_history,_abundance,_harvest,_habitat,_and_limiting_factors.pdf
+  ~/Zotero/storage/4UA2S9TZ/hartman_etal1987_forestry_chronicle.pdf
+  ~/Zotero/storage/KUGT5HMG/bjornn_reiser_1991_habitat_requirements_of_salmonids_in_streams.pdf
+Built data/rag/temperature.duckdb. It is not in the bucket until ACTION=push.
+# exit 0 at 2026-11-21T09:21:23Z

@@ -1,0 +1,170 @@
+# rebuild habitat_modelling from U9ZCZ6RN,RXNFPBPH,VHWEK6RE,GELFSUTU,9U54XAND,SW2RXUJC,DQP29KU7,X29BX4U8,W4425VK5,545K8HP4 (OVERWRITE=TRUE), #217: ten OCRed scans replaced their textless originals in Zotero
+# expected: the OCRed scans this store holds ingest (10), under cred 0.8.0 and ragnar 0.4.0
+# pull: ACTION=query VERIFY=TRUE
+  <chr>                  <chr>     <int>  <int>  <int> <chr> <dbl> <chr>  <chr> 
+1 lewis2007LiteratureRe… /User…     9169 179194 180763 "| 3… 0.869 bm25   hybrid
+2 mcpherson2020Habitatu… /User…    45919  24994  26376 "1.0… 0.266 cosin… hybrid
+# start 2026-11-21T09:56:19Z
+80 of 499 members left out:
+  39EVDWLA  whiteTraditionalecological  (no live PDF)
+  3RAKG3QT  moriasi_etal2007Modelevaluation  (no live PDF)
+  3UAGFPJE  scrivener_etal1994JuvenileChinook  (no live PDF)
+  49XWPFN7  cosewic2019COSEWICassessment  (no live PDF)
+  4HMFR6VL  zhang_montgomery1994Digitalelevation  (no live PDF)
+  4MSN9JNT  bradford1995Comparativereview  (no live PDF)
+  4Z5EFYEH  ruggerone_etal2003CompetitionAsian  (no live PDF)
+  57U384K8  curry_noakes1995Groundwaterselection  (no live PDF)
+  7CGM7AKH  munozsabater2019ERA5Landhourly  (no live PDF)
+  7HMBEIT2  dakinkuiper_etal2022Characterizingstream  (no live PDF)
+  7INMABI2  morley_etal2005Juvenilesalmonid  (no live PDF)
+  85VHA7WI  zhou_etal2020Identifyingspawner  (no live PDF)
+  A5AKDNKQ  kaeriyama_etal2004Changefeeding  (no live PDF)
+  A9LP5CFW  duffy_etal2010OntogeneticDiet  (no live PDF)
+  AF4WVTDV  gilbert_etal2016ValleyBottom  (no live PDF)
+  BAVQVAKX  limm_marchetti2009JuvenileChinook  (no live PDF)
+  BGQZQW7S  bcdepartmentofrecreationandconservationfishandgamebranch1963Annualreport  (no live PDF)
+  BI9SZBYD  dfg_webmaster@alaska_govFishSpecies  (no live PDF)
+  BLQNYN2D  morrell1985GitksanWetsuweten  (no live PDF)
+  BR6VXVBA  daum_flannery2011CanadianOriginChinook  (no live PDF)
+  BU8377PN  irvine2025NewGraphEnvironmentwatertempbc  (no live PDF)
+  CU46DM9P  france1997MacroinvertebrateColonization  (no live PDF)
+  DGALA8B5  holzerInteriorColumbia  (no live PDF)
+  DT5P8MAX  nash_sutcliffe1970Riverflow  (no live PDF)
+  FQ97NEHI  meyer_griffith1997Firstwintersurvival  (no live PDF)
+  FZ37XRI8  knox_etal2022Leveesdont  (no live PDF)
+  GASQBBB3  environmentandclimatechangecanada2021NationalWater  (no live PDF)
+  GFZDPM4J  davies_etal2007ModelingStream  (no live PDF)
+  GHI2HEYX  tadokoro_etal1996Changechum  (no live PDF)
+  H5EH3UGM  milne1955SkeenaTyee  (no live PDF)
+  H8IMD55M  williamson_zimmerman2005Region7a  (no live PDF)
+  HD284DAN  beacham_murray1993Fecundityegg  (no live PDF)
+  JEUEPK29  thorley_etal2021ChannelWidthc  (no live PDF)
+  JFMTWE3B  ruggerone_irvine2018NumbersBiomass  (no live PDF)
+  JQ7AXPKG  brakensiek_hankin2007EstimatingOverwinter  (no live PDF)
+  JXHRU58C  thorley_etal2021ChannelWidth  (no live PDF)
+  K3ZZNX4B  pacificclimateimpactsconsortiumGriddedHydrologic  (no live PDF)
+  K6NXJRMR  thorley_irvine2021ChannelWidtha  (no live PDF)
+  L4NTEIJY  32-The-Risk-Wilf-Luedke.pdf  (standalone attachment, no keyed item in this build holds its file)
+  L7KHAN38  roni_etal2002ReviewStream  (no live PDF)
+  LL5M9VTC  swales_etal1986Winterhabitat  (no live PDF)
+  LVXRIJ9U  b_c_conservationdatacentre2021BCSpecies  (no live PDF)
+  M2AMUQGL  piotrowski_napiorkowski2019Simplemodifications  (no live PDF)
+  N25VJVA8  healey_heard1984InterIntraPopulation  (no live PDF)
+  NH5EQ8H4  lglltd_2025SkeenaRiver  (no live PDF)
+  PAMWUBME  winther2012RetrospectiveChinook  (no live PDF)
+  PURIPFQT  swimmingperformance.pdf  (standalone attachment, no keyed item in this build holds its file)
+  PVW7F7VR  price_etal2026rebuildinggiis  (no live PDF)
+  QPNEPRSV  mcneil1964ReddSuperimposition  (no live PDF)
+  R2NQI39U  honea_etalEvaluatinghabitat  (no live PDF)
+  R6GELZWZ  trudel_etal2009DistributionMigration  (no live PDF)
+  RHKW5Y3X  fishpassagetechnicalworkinggroup2014FishPassage  (no live PDF)
+  SVG9KCNU  zotero-item-6635  (no live PDF)
+  T4AZJ7YK  jeffres_etal2008Ephemeralfloodplain  (no live PDF)
+  T678S7X5  bradford_etal2001Ecologyjuvenile  (no live PDF)
+  TE3UBDI2  pdf  (standalone attachment, no keyed item in this build holds its file)
+  U6LEDW6P  TopicModel2PartialBBNHabitatIntrinsicPotential  (no live PDF)
+  UA7RI236  roni_etal2019Monitoringeffectiveness  (no live PDF)
+  UEFSUE7D  cunjak1996Winterhabitat  (no live PDF)
+  UEG4KUPQ  holtby1988EffectsLogging  (no live PDF)
+  ULD94GDP  cosewic2018COSEWICAssessment  (no live PDF)
+  UXI3ARYT  bidlack_etal2014IdentifyingSuitable  (no live PDF)
+  VD2Y884U  hall2016DRAFTIntegrated  (no live PDF)
+  VDHTRJ9Y  MigrationPatternsAdultBullTroutMetoliusRiverLakeBillyChinookOregon  (no live PDF)
+  VW2NHJ7G  07354626401-1.pdf  (standalone attachment, no keyed item in this build holds its file)
+  VXD3JYT5  millerStrategicSalmon  (no live PDF)
+  W3ICV3R9  beechie_etal2015Restoringsalmon  (no live PDF)
+  WBB5469C  SwimDistanceWaterVelocityTool  (no live PDF)
+  WHRCKYFT  ricker1981ChangesAverage  (no live PDF)
+  X2PL2ACL  stream-temperature-database  (standalone attachment, no keyed item in this build holds its file)
+  XM35MVB6  finnegan_etal2005Controlschannel  (no live PDF)
+  XT6K3LQ7  irvine_etal2014IncreasingDominance  (no live PDF)
+  XZX6FAE7  cosewic2012COSEWICassessment  (no live PDF)
+  Y4DV5KU7  bcdepartmentofrecreationandconservationfishandgamebranch1964Annualreport  (no live PDF)
+  Y9TLJX3A  rosenberger_etal2025AlaskanInterceptions  (no live PDF)
+  ZADLRQ2S  phillips2006COSEWICassessment  (no live PDF)
+  ZRE4Z65R  beechie_etal2023Howdoes  (no live PDF)
+  ZUAQ8T7W  nelitz_etal2007HelpingPacific  (no live PDF)
+  ZUGF5L5E  pres_rams_mar_5_2020.pdf  (standalone attachment, no keyed item in this build holds its file)
+  ZYYKYG2K  schweigert_etal2010reviewfactors  (no live PDF)
+414 keys across 10 collections
+Ingesting 414 PDF(s) into data/rag/habitat_modelling.duckdb
+The PDF <_io.BytesIO object at 0x30ad4e070> contains a metadata field indicating that it should not allow text extraction. Ignoring this field and proceeding. Use the check_extractable if you want to raise an error in this case
+The PDF <_io.BytesIO object at 0x324e44220> contains a metadata field indicating that it should not allow text extraction. Ignoring this field and proceeding. Use the check_extractable if you want to raise an error in this case
+The PDF <_io.BytesIO object at 0x311393650> contains a metadata field indicating that it should not allow text extraction. Ignoring this field and proceeding. Use the check_extractable if you want to raise an error in this case
+The PDF <_io.BytesIO object at 0x303b2df30> contains a metadata field indicating that it should not allow text extraction. Ignoring this field and proceeding. Use the check_extractable if you want to raise an error in this case
+Could not get FontBBox from font descriptor because None cannot be parsed as 4 floats
+Could not get FontBBox from font descriptor because None cannot be parsed as 4 floats
+Could not get FontBBox from font descriptor because None cannot be parsed as 4 floats
+Could not get FontBBox from font descriptor because None cannot be parsed as 4 floats
+Could not get FontBBox from font descriptor because None cannot be parsed as 4 floats
+Could not get FontBBox from font descriptor because None cannot be parsed as 4 floats
+Could not get FontBBox from font descriptor because None cannot be parsed as 4 floats
+Could not get FontBBox from font descriptor because None cannot be parsed as 4 floats
+Could not get FontBBox from font descriptor because None cannot be parsed as 4 floats
+Could not get FontBBox from font descriptor because None cannot be parsed as 4 floats
+Could not get FontBBox from font descriptor because None cannot be parsed as 4 floats
+Could not get FontBBox from font descriptor because None cannot be parsed as 4 floats
+Could not get FontBBox from font descriptor because None cannot be parsed as 4 floats
+Could not get FontBBox from font descriptor because None cannot be parsed as 4 floats
+Could not get FontBBox from font descriptor because None cannot be parsed as 4 floats
+Could not get FontBBox from font descriptor because None cannot be parsed as 4 floats
+Could not get FontBBox from font descriptor because None cannot be parsed as 4 floats
+Could not get FontBBox from font descriptor because None cannot be parsed as 4 floats
+Could not get FontBBox from font descriptor because None cannot be parsed as 4 floats
+Could not get FontBBox from font descriptor because None cannot be parsed as 4 floats
+Could not get FontBBox from font descriptor because None cannot be parsed as 4 floats
+Could not get FontBBox from font descriptor because None cannot be parsed as 4 floats
+Could not get FontBBox from font descriptor because None cannot be parsed as 4 floats
+Could not get FontBBox from font descriptor because None cannot be parsed as 4 floats
+Could not get FontBBox from font descriptor because None cannot be parsed as 4 floats
+Could not get FontBBox from font descriptor because None cannot be parsed as 4 floats
+Could not get FontBBox from font descriptor because None cannot be parsed as 4 floats
+Could not get FontBBox from font descriptor because None cannot be parsed as 4 floats
+Could not get FontBBox from font descriptor because None cannot be parsed as 4 floats
+Could not get FontBBox from font descriptor because None cannot be parsed as 4 floats
+Could not get FontBBox from font descriptor because None cannot be parsed as 4 floats
+Could not get FontBBox from font descriptor because None cannot be parsed as 4 floats
+Could not get FontBBox from font descriptor because None cannot be parsed as 4 floats
+Could not get FontBBox from font descriptor because None cannot be parsed as 4 floats
+Could not get FontBBox from font descriptor because None cannot be parsed as 4 floats
+Could not get FontBBox from font descriptor because None cannot be parsed as 4 floats
+Could not get FontBBox from font descriptor because None cannot be parsed as 4 floats
+Could not get FontBBox from font descriptor because None cannot be parsed as 4 floats
+Could not get FontBBox from font descriptor because None cannot be parsed as 4 floats
+Could not get FontBBox from font descriptor because None cannot be parsed as 4 floats
+Could not get FontBBox from font descriptor because None cannot be parsed as 4 floats
+Could not get FontBBox from font descriptor because None cannot be parsed as 4 floats
+Could not get FontBBox from font descriptor because None cannot be parsed as 4 floats
+Could not get FontBBox from font descriptor because None cannot be parsed as 4 floats
+Could not get FontBBox from font descriptor because None cannot be parsed as 4 floats
+Could not get FontBBox from font descriptor because None cannot be parsed as 4 floats
+Could not get FontBBox from font descriptor because None cannot be parsed as 4 floats
+Could not get FontBBox from font descriptor because None cannot be parsed as 4 floats
+Could not get FontBBox from font descriptor because None cannot be parsed as 4 floats
+Could not get FontBBox from font descriptor because None cannot be parsed as 4 floats
+Could not get FontBBox from font descriptor because None cannot be parsed as 4 floats
+Could not get FontBBox from font descriptor because None cannot be parsed as 4 floats
+Could not get FontBBox from font descriptor because None cannot be parsed as 4 floats
+Could not get FontBBox from font descriptor because None cannot be parsed as 4 floats
+Could not get FontBBox from font descriptor because None cannot be parsed as 4 floats
+Could not get FontBBox from font descriptor because None cannot be parsed as 4 floats
+Could not get FontBBox from font descriptor because None cannot be parsed as 4 floats
+Could not get FontBBox from font descriptor because None cannot be parsed as 4 floats
+Could not get FontBBox from font descriptor because None cannot be parsed as 4 floats
+Could not get FontBBox from font descriptor because None cannot be parsed as 4 floats
+Could not get FontBBox from font descriptor because None cannot be parsed as 4 floats
+Could not get FontBBox from font descriptor because None cannot be parsed as 4 floats
+The PDF <_io.BytesIO object at 0x30bd414e0> contains a metadata field indicating that it should not allow text extraction. Ignoring this field and proceeding. Use the check_extractable if you want to raise an error in this case
+Cannot set non-stroke color: 2 components specified, but only 1 (grayscale), 3 (RGB), and 4 (CMYK) are supported
+Cannot set non-stroke color: 2 components specified, but only 1 (grayscale), 3 (RGB), and 4 (CMYK) are supported
+Cannot set non-stroke color: 2 components specified, but only 1 (grayscale), 3 (RGB), and 4 (CMYK) are supported
+Cannot set non-stroke color: 2 components specified, but only 1 (grayscale), 3 (RGB), and 4 (CMYK) are supported
+The PDF <_io.BytesIO object at 0x147052020> contains a metadata field indicating that it should not allow text extraction. Ignoring this field and proceeding. Use the check_extractable if you want to raise an error in this case
+The PDF <_io.BytesIO object at 0x14a290c20> contains a metadata field indicating that it should not allow text extraction. Ignoring this field and proceeding. Use the check_extractable if you want to raise an error in this case
+The PDF <_io.BytesIO object at 0x3081e17b0> contains a metadata field indicating that it should not allow text extraction. Ignoring this field and proceeding. Use the check_extractable if you want to raise an error in this case
+Read with pdftools, because markitdown could not:
+  andrusak_thorley2013KootenayLake (ecocat_37026_KootenayLakeExploitation.pdf): Embedded NUL in string.
+Store built: data/rag/habitat_modelling.duckdb | docs: 414 | chunks: 69916 | model: nomic-embed-text
+404 documents before, 414 after: 10 added, 0 dropped
+Built data/rag/habitat_modelling.duckdb. It is not in the bucket until ACTION=push.
+# exit 0 at 2026-11-21T10:48:12Z

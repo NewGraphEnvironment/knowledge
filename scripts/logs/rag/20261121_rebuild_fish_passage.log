@@ -1,0 +1,21 @@
+# rebuild fish_passage from HJZKI75D (OVERWRITE=TRUE), #217: ten OCRed scans replaced their textless originals in Zotero
+# expected: the OCRed scans this store holds ingest (1), under cred 0.8.0 and ragnar 0.4.0
+# pull: ACTION=query VERIFY=TRUE
+  <chr>                    <chr>     <int> <int> <int> <chr> <dbl> <chr>  <chr> 
+1 mount_etal2011GISmodell… /User…     2835 12963 14228 "Fis… 0.297 cosin… hybrid
+2 mount_etal2011GISmodell… /User…     2840 16703 18234 "fro… 1.04  bm25   hybrid
+# start 2026-11-21T09:04:35Z
+25 keys across 1 collections
+Ingesting 25 PDF(s) into data/rag/fish_passage.duckdb
+Installed 48 packages in 642ms
+Installed 48 packages in 719ms
+Installed 48 packages in 654ms
+Installed 48 packages in 524ms
+Installed 48 packages in 803ms
+Installed 48 packages in 646ms
+Read with pdftools, because markitdown could not:
+  washingtondepartmentoffishwildlife2009FishPassage (wdfw00061.pdf): Embedded NUL in string.
+Store built: data/rag/fish_passage.duckdb | docs: 25 | chunks: 6717 | model: nomic-embed-text
+24 documents before, 25 after: 1 added, 0 dropped
+Built data/rag/fish_passage.duckdb. It is not in the bucket until ACTION=push.
+# exit 0 at 2026-11-21T09:10:14Z

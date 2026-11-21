@@ -1,0 +1,25 @@
+# rebuild flow from FWTJDD8Z (OVERWRITE=TRUE), #217: ten OCRed scans replaced their textless originals in Zotero
+# expected: the OCRed scans this store holds ingest (4), under cred 0.8.0 and ragnar 0.4.0
+# pull: ACTION=query VERIFY=TRUE
+  <chr>                    <chr>     <int> <int> <int> <chr> <dbl> <chr>  <chr> 
+1 canada_departmentoffish… /User…     1838 54972 56603 "Cri… 0.275 cosin… hybrid
+2 roberge_etal2002LifeHis… /User…     6344 35976 37638 "App… 0.478 bm25   hybrid
+# start 2026-11-21T09:46:45Z
+43 keys across 1 collections
+Ingesting 43 PDF(s) into data/rag/flow.duckdb
+The PDF <_io.BytesIO object at 0x31188e980> contains a metadata field indicating that it should not allow text extraction. Ignoring this field and proceeding. Use the check_extractable if you want to raise an error in this case
+Store built: data/rag/flow.duckdb | docs: 41 | chunks: 11520 | model: nomic-embed-text
+43 documents before, 41 after: 4 added, 6 dropped
+dropped:
+  ~/Zotero/storage/AHN734FV/GOVPUB-I49-PURL-LPS101450.pdf
+  ~/Zotero/storage/T3KBBEF3/ford_et_al_1995_literature_reviews_of_the_life_history,_habitat_requirements_and.pdf
+  ~/Zotero/storage/XDKIU3UA/stuart_chislett_1979_grayling_sukunka.pdf
+  ~/Zotero/storage/S89CA359/neuman_newcombe_1977_minimum_acceptable_stream_flows_in_british_columbia_-_a_review.pdf
+  ~/Zotero/storage/JD85T6BT/Habitat_Suitability_Index_Models_Coho_Salmon.pdf
+  ~/Zotero/storage/KUGT5HMG/bjornn_reiser_1991_habitat_requirements_of_salmonids_in_streams.pdf
+Built data/rag/flow.duckdb. It is not in the bucket until ACTION=push.
+Warning message:
+Skipped 2 PDF(s):
+  mcmahon1983Habitatsuitability (Habitat_Suitability_Index_Models_Coho_Salmon.pdf): no text (markdown reader: no text; pdftools: no text)
+  hubert_etal1985Habitatsuitability (GOVPUB-I49-PURL-LPS101450.pdf): no text (markdown reader: no text; pdftools: no text) 
+# exit 0 at 2026-11-21T09:54:26Z

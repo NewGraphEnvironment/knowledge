@@ -1,0 +1,25 @@
+# rebuild bull_trout_grayling from VHWEK6RE,GELFSUTU (OVERWRITE=TRUE), #217: ten OCRed scans replaced their textless originals in Zotero
+# expected: the OCRed scans this store holds ingest (1), under cred 0.8.0 and ragnar 0.4.0
+# pull: ACTION=query VERIFY=TRUE
+  <chr>                  <chr>     <int>  <int>  <int> <chr> <dbl> <chr>  <chr> 
+1 hagen_sary2023BullTro… /User…     4665 129529 130994 "Wil… 0.768 bm25   hybrid
+2 mcpherson2020Habitatu… /User…     7855  24994  26376 "1.0… 0.266 cosin… hybrid
+# start 2026-11-21T09:22:21Z
+2 of 203 members left out:
+  H8IMD55M  williamson_zimmerman2005Region7a  (no live PDF)
+  VDHTRJ9Y  MigrationPatternsAdultBullTroutMetoliusRiverLakeBillyChinookOregon  (no live PDF)
+197 keys across 2 collections
+Ingesting 197 PDF(s) into data/rag/bull_trout_grayling.duckdb
+Cannot set non-stroke color: 2 components specified, but only 1 (grayscale), 3 (RGB), and 4 (CMYK) are supported
+Cannot set non-stroke color: 2 components specified, but only 1 (grayscale), 3 (RGB), and 4 (CMYK) are supported
+Cannot set non-stroke color: 2 components specified, but only 1 (grayscale), 3 (RGB), and 4 (CMYK) are supported
+Cannot set non-stroke color: 2 components specified, but only 1 (grayscale), 3 (RGB), and 4 (CMYK) are supported
+The PDF <_io.BytesIO object at 0x33896ca40> contains a metadata field indicating that it should not allow text extraction. Ignoring this field and proceeding. Use the check_extractable if you want to raise an error in this case
+The PDF <_io.BytesIO object at 0x30b5dc180> contains a metadata field indicating that it should not allow text extraction. Ignoring this field and proceeding. Use the check_extractable if you want to raise an error in this case
+The PDF <_io.BytesIO object at 0x16f221c10> contains a metadata field indicating that it should not allow text extraction. Ignoring this field and proceeding. Use the check_extractable if you want to raise an error in this case
+Read with pdftools, because markitdown could not:
+  andrusak_thorley2013KootenayLake (ecocat_37026_KootenayLakeExploitation.pdf): Embedded NUL in string.
+Store built: data/rag/bull_trout_grayling.duckdb | docs: 197 | chunks: 29763 | model: nomic-embed-text
+196 documents before, 197 after: 1 added, 0 dropped
+Built data/rag/bull_trout_grayling.duckdb. It is not in the bucket until ACTION=push.
+# exit 0 at 2026-11-21T09:46:19Z

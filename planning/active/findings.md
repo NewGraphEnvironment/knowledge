@@ -45,3 +45,12 @@ Backlog: `planning/backlog.md`, move 10. Plan it with `/planning-init <this issu
 |-------|------------|
 | `ocrmypdf`: tesseract "image file not found: /tmp/ocrmypdf.io.*/000001_rasterize.png", every file failed | The sandbox keeps tesseract from reading ocrmypdf's temp files under `/tmp`; run with `TMPDIR` in the session scratchpad |
 | Importing `0270` from a read-only script exits: 0153 reads a Web API key at load | `data-raw/zotero_library_triage.py` sets a placeholder `ZOTERO_API_KEY` before the load; it makes no Web API call |
+
+## cred's immutable read after a `replace` (2026-11-21)
+
+After `0275`'s live run and Zotero's sync, the ten new attachment files sat in `~/Zotero/storage/<new key>/` with the
+OCR files' md5s, but an `immutable=1` read of `zotero.sqlite` (cred's) saw none of the new attachment items and none
+of the old ones in the trash: the sync was in the 2.8 MB `-wal`. A build then would have taken the old scans again
+(the citation keys do not change on a `replace`) and skipped them as "no text". A graceful quit of Zotero
+(`osascript -e 'tell application "Zotero" to quit'`) left a 0-byte `-wal`, after which the same read saw all ten new
+items and all ten old ones trashed. The plan review predicted it (cred#45).
