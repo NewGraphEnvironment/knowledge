@@ -13,3 +13,5 @@
   ; filed #251 (split from #13) and cred#53 (blocks #14); #13, #14, #16 and #179 bodies edited;
   backlog batch 16 now carries #13 only
 - Phase 1: OCR running (the first try failed under the sandbox's `/tmp`; `TMPDIR` in the scratchpad fixed it)
+- OCR done 08:39–09:00 UTC (21 min, 1,453 pages): word counts 4,817 (Hartman) to 97,071 (Ford); each title page read;
+  ten `replace` rows appended; `0275 --only <ten> --dry-run` clean

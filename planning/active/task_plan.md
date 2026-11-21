@@ -36,9 +36,9 @@ library holds copies only, and a copy gets a new key so nothing joins on a share
 ## Phase 1: OCR the ten scans and rebuild the stores that hold them (batch 22, #217)
 
 - [x] Upgrade cred to 0.8.0 and ragnar to 0.4.0 (`pak::pak()`), and check `0150`'s version gates still pass
-- [ ] Download each of the ten attachments (keys in #217's table), `ocrmypdf --deskew` each into `data/rag/pdf/ocr217/`
+- [x] Download each of the ten attachments (keys in #217's table), `ocrmypdf --deskew` each into `data/rag/pdf/ocr217/`
       (ignored), check each title page reads correctly, and record its word count
-- [ ] Append ten `replace` rows to `data/zotero_attachment_verdicts.csv`, in the shape of #151's and #194's rows
+- [x] Append ten `replace` rows to `data/zotero_attachment_verdicts.csv`, in the shape of #151's and #194's rows
       (item, citation key, attachment, file, `why` with the word count and the md5-mismatch note)
 - [ ] Run `0275 --only <the ten item keys> --dry-run`, then live, then a no-op dry run; record the new attachment keys;
       commit the verdict rows before any push (review)
