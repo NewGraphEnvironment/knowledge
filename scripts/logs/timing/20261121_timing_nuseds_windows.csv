@@ -1,4 +1,4 @@
-"wsg_code","species_code","scope","run_type","pop_id","waterbody","groups","records","years_start","years_end","first_year","last_year","start_median","start_q10","start_q90","end_median","end_q10","end_q90","arrival_median","years_arrival"
+"wsg_code","species_code","scope","run_type","pop_id","waterbody","groups","records","n_start","n_end","first_year","last_year","start_median","start_q10","start_q90","end_median","end_q10","end_q90","arrival_median","n_arrival"
 "ADMS","CH","apart","1","46246","ADAMS RIVER","ADMS,SHUL",74,44,44,1953,2000,"09-20","09-05","09-29","10-30","10-20","11-08","09-10",33
 "ADMS","CH","apart","1","46256","ADAMS RIVER - UPPER","ADMS,SHUL",51,2,2,1993,2000,"09-13","09-11","09-15","10-10","10-03","10-18","09-02",2
 "ADMS","CO","group","1; FALL",,,"ADMS",185,41,48,1975,2012,"11-01","10-15","11-12","11-27","11-15","12-17","10-15",44
