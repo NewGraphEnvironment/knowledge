@@ -70,13 +70,13 @@ library holds copies only, and a copy gets a new key so nothing joins on a share
       checking each against the item itself
 - [x] `research/zotero_libraries.md`: what each library holds against library 9, the match counts by kind, the
       verdict counts, and what retirement waits on; add a row to `research/README.md`
-- [ ] File the new issue (personal-library triage, the 11 multi-PDF items, carrying out the `merge` verdicts,
+- [x] File the new issue (personal-library triage, the 11 multi-PDF items, carrying out the `merge` verdicts,
       retirement), naming move 10 as where it was split from; move the "Personal-library items" list and the
       `fisheries/fish_passage` note out of #13 into it
-- [ ] File a cred issue for document identity on parent item key, library and version, with a resolve check for
+- [x] File a cred issue for document identity on parent item key, library and version, with a resolve check for
       merged-away keys; write "blocked by cred#N" into #14's body, and tick its `CLAUDE.md` sentence fix there
-- [ ] Write the separate-store decision into #16's body
-- [ ] `planning/backlog.md`: batch 16 keeps #13 only; #14, #16 and the new issue are named nowhere in the file (batch
+- [x] Write the separate-store decision into #16's body
+- [x] `planning/backlog.md`: batch 16 keeps #13 only; #14, #16 and the new issue are named nowhere in the file (batch
       22's mentions of #14's rebuild and the personal-library pointer included, review), so the next sweep places them;
       the move 10 row says so; record it in #179's body; the PR closes #13 and #217
 

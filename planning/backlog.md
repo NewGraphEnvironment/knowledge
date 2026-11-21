@@ -47,7 +47,7 @@ split piece, or one filed since the last pass): run `/backlog-sweep` to place it
 | - [x] 7 | #176 | 11: FISS parser, gradient and PINE (3 issues; batches 12 and 27 left unplaced at the gate, recorded in #176's body) | done: https://github.com/NewGraphEnvironment/knowledge/pull/249 | B | — | opus |
 | - [ ] 8 | #177 | 13, 23: promotion cargo, tuning-code fixes (4 issues) | **waiting** on Al's word for the next full retune | E | 12 | opus |
 | - [x] 9 | #178 | 14: fish-passage literature, the access track's first piece (1 issue) | done: https://github.com/NewGraphEnvironment/knowledge/pull/237 | C | — | fable then opus |
-| - [ ] 10 | #179 | 16, 22: library, keys and our own prose; OCR of the scanned PDFs (4 issues) | open | C | 9 | opus |
+| - [ ] 10 | #179 | 16, 22: library, keys and our own prose; OCR of the scanned PDFs (2 issues; two of batch 16's members and the rest of #13 left unplaced at the gate, recorded in #179's body) | open | C | 9 | opus |
 | - [ ] 11 | #180 | 17: report-priority pipeline for any group (3 issues) | **waiting** on Al's word to resume the report-priority work, parked 2026-09-04 | C | 10 | opus |
 | - [ ] 12 | #231 | 19: article wording and one method-bundle rebuild (3 issues) | open | E | — | opus |
 | - [ ] 13 | #232 | 20: one research page per key (3 issues) | open | E | 10, 12 | fable then opus |
@@ -91,13 +91,13 @@ link's own pass: link#468, a backlog pass for link that carries the link issues 
 | 13 | #177 | promotion cargo: #63, #148, #72 | 3 | #63's tie-break; #85 and #162 ride the same retune or not | each changes what only a promotion may |
 | 14 | #178 | fish-passage literature: #234 (from #132) | 1 | its own store; gradient rows with their leap and speed basis (both decided 2026-11-18) | the access track's first piece; the records review needs its literature |
 | 15 | #178 | gradient on the ground: #70, #71 | 2 | split 2026-11-18: the gradient track, first piece batch 24 | — |
-| 16 | #179 | library, keys and our own prose: #13, #14, #16 | 3 | the single-library policy; one store or two | #14 depends on #13; #16's store question is the same keying decision |
+| 16 | #179 | library, keys and our own prose: #13 (first piece; two members left unplaced at the gate) | 1 | the single-library policy; one store or two (both decided 2026-11-21) | the policy the store keying waits on |
 | 17 | #180 | report-priority pipeline for any group: #4, #15, #3 | 3 | resume or not | #4 and #15 rewrite `0161` and `0162`; #3 records the farm decision they act on |
 | 18 | #175 | the FDIS load's outputs: #225, #214 | 2 | whether the per-pass tables join `fdis/v3` before its first upload (#219) | one `0230` rerun and one archive with #23 |
 | 19 | #231 | article wording and one method-bundle rebuild: #201, #202, #115 | 3 | rebuild the bundle on its own now, on the database's host, or with move 8's promotion | one rebuild of `method.rds` and one blind readability pass |
 | 20 | #232 | one research page per key: #211, carrying #90 and #64 | 3 | page names; where the check register lives | one generator writes every page (batch 7, split from move 4) |
 | 21 | #233 | window flow follow-ups: #226, #227 | 2 | a separate window walk or the published one; which evidence directory; how much of #227 is wet's | both read the window flows and write `research/chinook_window_flow.md` |
-| 22 | #179 | OCR of the scanned PDFs: #217 | 1 | none | rides #14's rebuild of every store |
+| 22 | #179 | OCR of the scanned PDFs: #217 | 1 | none | rebuilds the five stores that hold the scans |
 | 23 | #177 | tuning-code fixes: #203 | 1 | nest `honest` or rename it | the curve change regrades every key, which only a promotion publishes |
 | 24 | #236 | PSCIS stream slope against link's gradient: #235 (from #70) | 1 | what `STREAM_SLOPE` measures | the gradient track's first piece, beside #121's FDIS check |
 | 25 | #244 | NuSEDS windows for every group: #240 (from #243) | 1 | the mainstem rule; whether a NuSEDS window alone may become a row | the timing track's first piece; #241 and #242 start from its windows |
@@ -138,7 +138,7 @@ own issue.
 #168 (read the key from `ZOTERO_API_KEY_FILE`), #151 (OCR Tredger 1984, merge the duplicate strategy, correct two
 items) and #126 (items with several PDFs). Touches `scripts/0153`, `scripts/0270`, a shared key helper,
 `scripts/README.md`, `CLAUDE.md`, `data/sturgeon_additions.csv`. Gate: a verdict per group-library item for #126; the
-personal-library items wait on #13. The writes need a person present (auto mode refused #124's merge).
+personal-library items wait on the personal library's triage. The writes need a person present (auto mode refused #124's merge).
 
 ### 5. New sources into the stores
 
@@ -240,11 +240,11 @@ were each several PRs; the gradient track holds their order.
 
 - [ ] Carried by move 10, #179
 
-#13 (triage the dormant Zotero libraries), #14 (key the stores on parent item, library and version) and #16 (index our
-own prose).
+#13 (triage the dormant Zotero libraries), its first piece: the single-library policy and a verdict on each satellite
+group-library item. The other two members were left unplaced at move 10's gate (2026-11-21, recorded in #179's body),
+as was the rest of #13's triage, split to its own issue.
 
-**Touches:** `data/zotero_key_map.csv`, `scripts/0150-store.R`, `scripts/0152-rag-add-harvest.R`,
-`scripts/0153-reports-to-zotero.py`, `scripts/0154-corpus-tag.R`, `scripts/0156-rag-dedup.R`, `CLAUDE.md`
+**Touches:** `data-raw/zotero_library_triage.py`, `data/zotero_library_triage.csv`, `CLAUDE.md`, `research/zotero_libraries.md`
 
 ### 17. Report-priority pipeline for any group
 
@@ -319,9 +319,9 @@ a window rule waits on Al's word.
 - [ ] Carried by move 10, #179
 
 #217: OCR ten group-library scans with no text layer (Bjornn & Reiser 1991 and Ford et al. 1995 among them), a
-`replace` verdict for each through `0275`, then the stores that hold them. #14 in batch 16 rebuilds every store when it
-changes their keys, so the OCR rides that rebuild; cred's free-space issue on updated stores is still open, so they are
-rebuilt rather than updated.
+`replace` verdict for each through `0275`, then the five cred-built stores that hold them (`habitat_modelling`,
+`temperature`, `flow`, `fish_passage`, `bull_trout_grayling`); cred's free-space issue on updated stores is still open,
+so they are rebuilt rather than updated. `peace`, a key-named store of local copies, keeps its old scan.
 
 **Touches:** `data/zotero_attachment_verdicts.csv`, `scripts/0275-zotero-attachments-tidy.py`, `scripts/0150-store.R`
 
