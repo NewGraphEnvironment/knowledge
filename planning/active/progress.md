@@ -15,3 +15,11 @@
 - Zotero quit on m1, `-wal` 0 bytes at 2026-11-21T19:22Z.
 - Commits: 6678dab9
 - Next: Phase 2, the rebuild (launched 2026-11-21T19:23Z on m1, `~/knw223/wt`)
+
+## Phases 2 and 3, 2026-11-21
+
+- Rebuilt on m1 from the branch worktree, 19:23Z to 19:31Z: 32 documents, 1 added (Hedger), 0 dropped, nothing skipped.
+- After-query returns Hedger; Zotero reopened on m1; pushed at 19:55Z and read back from the bucket; issue body ticked
+  with the cred deferral stated; the m1 worktree and its local branch removed.
+- Commits: fa08310e, this commit
+- Next: archive, PR

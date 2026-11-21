@@ -1,0 +1,24 @@
+# After the #223 rebuild: query the rebuilt local store (unverified), cred 0.8.0 and ragnar 0.4.0
+# Q "capture probability declines across electrofishing passes, removal estimates biased low"  expect: hedger_etal2013Improvingabundance among the results
+# start 2026-11-21T19:54:27Z
+Opening data/rag/statistics.duckdb unverified (verify = FALSE).
+duckdb keeps downloaded extensions and secrets in a temporary directory:
+ℹ /tmp/RtmpUovGmB/duckdb
+This is removed when the R session ends.
+• Extensions are re-downloaded each session.
+• Secrets are lost.
+ℹ Run duckdb(shared_home = TRUE) (or create ~/.duckdb) to keep them (suitable for most users).
+ℹ Run duckdb(shared_home = FALSE) to accept the temporary directory (and silence this message).
+ℹ See ?duckdb_storage for details and alternatives.
+# A tibble: 8 × 9
+  citation_key            origin chunk_id start   end text   score metric method
+  <chr>                   <chr>     <int> <int> <int> <chr>  <dbl> <chr>  <chr> 
+1 peterson_etal2004Evalu… /User…     1432   546  2370 "Abs…  0.203 cosin… hybrid
+2 peterson_etal2004Evalu… /User…     1481 39870 41604 "Thr…  0.217 cosin… hybrid
+3 hedger_etal2013Improvi… /User…     1577     1  1590 "1\n…  0.214 cosin… hybrid
+4 hedger_etal2013Improvi… /User…     1580  2436  4043 "42\… 13.3   bm25   hybrid
+5 hedger_etal2013Improvi… /User…     1583  4828  9638 "70\… 14.8   bm25   hybrid
+6 hedger_etal2013Improvi… /User…     1589  9639 11202 "133…  0.216 cosin… hybrid
+7 hedger_etal2013Improvi… /User…     1605 22400 24830 "294… 13.3   bm25   hybrid
+8 hedger_etal2013Improvi… /User…     1623 36824 38400 "475… 13.8   bm25   hybrid
+# exit 0 at 2026-11-21T19:54:45Z

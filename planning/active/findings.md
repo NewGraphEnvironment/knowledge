@@ -44,3 +44,14 @@ ragnar 0.4.0, the CRAN release, chunks the same markdown into 69 chunks, as test
   15 left out (the same 15), 32 documents and 11,182 chunks, "31 documents before, 32 after: 1 added, 0 dropped", no
   Skipped warning, no `-wal` warning. The 69 chunks it gained are the 69 the issue measured for Hedger under 0.4.0.
   Bates 2024 was read with pdftools again, and ESL's two oversized chunks were split again, as in #216.
+
+## Phase 3, 2026-11-21
+
+- After the rebuild, the removal-estimator query returns hedger_etal2013Improvingabundance in 6 of its top 8 results
+  (`20261121_query_statistics.log`); before it, all 8 were Peterson et al. 2004.
+- Push at 2026-11-21T19:55Z from the branch worktree. The bucket's manifest entry and object were then read back:
+  32 documents, md5 `4e2d930649fb1c1d7257781370522fca`, 154,677,248 bytes (153,890,816 before, so a fresh 0.4.0 build
+  did not grow the file), `ragnar_version` and `store_schema` 0.4.0, branch `223-statistics-store-rebuild-under-ragnar-0`.
+- The push's full output prints the whole merged manifest, whose other entries name other repositories; the committed
+  log keeps this store's entry only.
+- m1's main checkout still holds the 31-document copy in `data/rag/`; its next verified connect replaces it.

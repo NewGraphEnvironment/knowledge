@@ -63,24 +63,24 @@ ragnar 0.4.0, with the build and push logs committed.
       end times, as #217's `20261121_rebuild_*.log` do → `scripts/logs/rag/20261121_rebuild_statistics.log`
 - [x] Check the log against the expected file: 32 documents, "31 before, 32 after: 1 added, 0 dropped",
       no "Skipped" warning and no `zotero.sqlite-wal` warning; any difference is explained in findings before the push
-- [ ] Same removal-estimator query on the rebuilt store, logged: Hedger is returned
-- [ ] Reopen Zotero on m1
+- [x] Same removal-estimator query on the rebuilt store, logged: Hedger is returned
+- [x] Reopen Zotero on m1
 
 ## Phase 3: Push and record
 
-- [ ] Dry run `ACTION=push STORE=statistics` (no `CONFIRM`): the manifest entry shows `ragnar_version` 0.4.0 and
+- [x] Dry run `ACTION=push STORE=statistics` (no `CONFIRM`): the manifest entry shows `ragnar_version` 0.4.0 and
       `store_schema` 0.4.0
-- [ ] `CONFIRM=TRUE` push; read its result before any verified connect (CLAUDE.md, the #172 case)
-- [ ] `scripts/logs/rag/20261121_push_statistics.log` in #217's form: the other stores' manifest entries left out,
+- [x] `CONFIRM=TRUE` push; read its result before any verified connect (CLAUDE.md, the #172 case)
+- [x] `scripts/logs/rag/20261121_push_statistics.log` in #217's form: the other stores' manifest entries left out,
       this store's entry kept (`documents: 32`, `branch` this branch, `ragnar_version`, `store_schema`)
-- [ ] Commit the logs on the branch; tick the issue's remaining boxes in its body, saying the comment's "update cred
+- [x] Commit the logs on the branch; tick the issue's remaining boxes in its body, saying the comment's "update cred
       everywhere before pushing" was deferred to #217's owed item (m4 still has cred 0.7.0), not met
-- [ ] Remove the m1 worktree and its local branch
+- [x] Remove the m1 worktree and its local branch
 
 ## Validation
 
-- [ ] The build log says 32 documents, Hedger added, 0 dropped, nothing skipped
-- [ ] The after-query returns Hedger; the push log records `documents: 32`, this branch, `ragnar_version: 0.4.0`
+- [x] The build log says 32 documents, Hedger added, 0 dropped, nothing skipped
+- [x] The after-query returns Hedger; the push log records `documents: 32`, this branch, `ragnar_version: 0.4.0`
 - [ ] `/code-check`: the branch adds logs and planning files only, nothing that runs; a review of the logs for host
       names, home paths and private repository names stands in for it (the public-repo rule, the #217 rewrite)
 - [ ] PWF checkboxes match landed work; `/planning-archive`, then `/gh-pr-push`
