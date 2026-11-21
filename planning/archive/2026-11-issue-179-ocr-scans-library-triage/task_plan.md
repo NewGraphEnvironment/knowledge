@@ -93,7 +93,7 @@ library holds copies only, and a copy gets a new key so nothing joins on a share
 - [x] Tests pass (`devtools::test()`)
 - [x] `/code-check branch` clean
 - [x] PWF checkboxes match landed work
-- [ ] `/planning-archive` on completion
+- [x] `/planning-archive` on completion
 
 Verification: each OCR's title page and word count are read by eye; `0275`'s second dry run reports every row done;
 each rebuild's log shows the ten ingested (none in its "no text" skip list) and its dropped list read; a query on two
