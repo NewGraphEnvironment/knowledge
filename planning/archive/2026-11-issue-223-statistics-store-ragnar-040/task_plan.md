@@ -81,7 +81,7 @@ ragnar 0.4.0, with the build and push logs committed.
 
 - [x] The build log says 32 documents, Hedger added, 0 dropped, nothing skipped
 - [x] The after-query returns Hedger; the push log records `documents: 32`, this branch, `ragnar_version: 0.4.0`
-- [ ] `/code-check`: the branch adds logs and planning files only, nothing that runs; a review of the logs for host
+- [x] `/code-check`: the branch adds logs and planning files only, nothing that runs; a review of the logs for host
       names, home paths and private repository names stands in for it (the public-repo rule, the #217 rewrite)
-- [ ] PWF checkboxes match landed work; `/planning-archive`, then `/gh-pr-push`
+- [x] PWF checkboxes match landed work; `/planning-archive`, then `/gh-pr-push`
 
