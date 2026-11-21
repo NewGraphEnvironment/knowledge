@@ -25,3 +25,7 @@
   gfe_id 2477 (filter moved after the guard); a filtered run with no table rows crashed before writing `OUT` (OUT now
   written after the checks and before the comparison, which stops cleanly on no rows; no keys refuses). Verified:
   `WSG=ADMS SPECIES=CH` and `SPECIES=CO` exit 0 and write; the full run's windows CSV is byte-identical to d015364c's
+- Round 2 (2 fragile findings, none inside round 1's fixes, which it verified on every zero-length path): the script's
+  RUN line still tee'd into the day's tracked log (now the 0340 shape: `$TMPDIR`, pipefail, copy in after a full run
+  that succeeded); `years_*` counted records, not population-years (16 dated records of two populations share one), so
+  the columns are `n_start`, `n_end`, `n_arrival` and the header says what a record is

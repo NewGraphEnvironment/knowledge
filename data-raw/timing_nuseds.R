@@ -20,12 +20,14 @@
 #     exploration).
 #   - THE WINDOW. For each population and year: spawning starts at START_SPAWN_DT_FROM and ends at END_SPAWN_DT_TO,
 #     or END_SPAWN_DT_FROM where DFO gives no END_SPAWN_DT_TO. Dates are DD-MON-YY; only the month and day are read.
-#     A group's window runs from the median start to the median end over its population-years with dates, with the
-#     10th and 90th percentiles. Days are counted on a season year that starts on 1 April (1 September for
-#     steelhead, which spawn in spring), so a coho or chum spawning end in January counts after December, not before
-#     August. Each population's own window and run type are printed beside the group's, and a window per run type
-#     where a group holds more than one, so a reader sees where one stream sets the window and where runs differ.
-#     Stream arrival is printed for the migration rows.
+#     A group's window runs from the median start to the median end over its dated records (n_start, n_end), with the
+#     10th and 90th percentiles. A record is one population, stream (gfe_id) and year, so n counts population-years
+#     except where a population was counted on two streams in one year (16 dated records of two populations in the
+#     2026-06-01 release). Days are counted on a season year that starts on 1 April (1 September for steelhead, which
+#     spawn in spring), so a coho or chum spawning end in January counts after December, not before August. Each
+#     population's own window and run type are printed beside the group's, and a window per run type where a group
+#     holds more than one, so a reader sees where one stream sets the window and where runs differ. Stream arrival is
+#     printed for the migration rows.
 #   - THE COMPARISON. Every row of the timing table is set beside its group's window: a spawning row's start and end,
 #     and a migration row's end against the day before NuSEDS's median start (the table's convention that migration
 #     ends where spawning starts), each as a difference in days (NuSEDS minus the row). Other stages have no NuSEDS
@@ -39,11 +41,14 @@
 #         whse_basemapping (PG*)
 # OUTPUT: the windows and the comparison, printed; with OUT= the windows as a CSV, one row per group x species x
 #         scope (group, run_type, population, apart)
-# RUN:    d=$(date -u +%Y%m%d); OUT=scripts/logs/timing/${d}_timing_nuseds_windows.csv Rscript data-raw/timing_nuseds.R \
-#           2>&1 | tee scripts/logs/timing/${d}_timing_nuseds.txt   (repo root)
-#         WSG=BULK,MORR SPECIES=CH ...      (comma lists, else every group and species with dated records; not
-#                                            GROUPS, which bash keeps for itself and never exports)
-#         VERSION=v1 ...                    (the published set, else v1)
+# RUN:    d=$(date -u +%Y%m%d); t=${TMPDIR:-/tmp}/${d}_timing_nuseds
+#         (set -o pipefail; OUT=${t}_windows.csv Rscript data-raw/timing_nuseds.R 2>&1 | tee ${t}.txt) &&
+#           cp ${t}.txt ${t}_windows.csv scripts/logs/timing/   (repo root)
+#         Written outside the repo and copied in after a full run that succeeded, as 0340's log is (#230): a tee into
+#         a tracked log truncates it at launch, and a filtered or refused run would replace the day's full record.
+#         WSG=BULK,MORR SPECIES=CH before Rscript   (comma lists, else every group and species with dated records;
+#                                                    a run to read, not to copy in; not GROUPS, which bash keeps)
+#         VERSION=v1 before Rscript         (the published set, else v1)
 # ---------------------------------------------------------------------------
 pkgload::load_all(quiet = TRUE)
 options(warn = 1, width = 200)
@@ -154,13 +159,14 @@ yr <- function(d, f) {
   if (length(y)) f(y) else NA_integer_
 }
 summ <- function(d) data.frame(
-  records = nrow(d), years_start = sum(!is.na(d$start_day)), years_end = sum(!is.na(d$end_day)),
+  records = nrow(d), n_start = sum(!is.na(d$start_day)), n_end = sum(!is.na(d$end_day)),
   first_year = yr(d, min), last_year = yr(d, max),
   start_median = day_str(qd(d$start_day, 0.5)), start_q10 = day_str(qd(d$start_day, 0.1)),
   start_q90 = day_str(qd(d$start_day, 0.9)), end_median = day_str(qd(d$end_day, 0.5)),
   end_q10 = day_str(qd(d$end_day, 0.1)), end_q90 = day_str(qd(d$end_day, 0.9)),
-  arrival_median = day_str(qd(d$arrival_day, 0.5)), years_arrival = sum(!is.na(d$arrival_day)),
-  start_day = round(qd(d$start_day, 0.5)), end_day = round(qd(d$end_day, 0.5)), arrival_day = round(qd(d$arrival_day, 0.5)))
+  arrival_median = day_str(qd(d$arrival_day, 0.5)), n_arrival = sum(!is.na(d$arrival_day)),
+  start_day = round(qd(d$start_day, 0.5)), end_day = round(qd(d$end_day, 0.5)),
+  arrival_day = round(qd(d$arrival_day, 0.5)))
 x$run <- ifelse(is.na(x$run_type), "none", x$run_type)
 pop_rows <- function(d, scope, w, sp) {
   if (!nrow(d)) return(NULL)
@@ -212,14 +218,14 @@ for (k in seq_len(nrow(keys))) {
 }
 win <- do.call(rbind, win)
 rownames(win) <- NULL
-show <- c("scope", "run_type", "pop_id", "waterbody", "groups", "records", "years_start", "years_end", "first_year",
+show <- c("scope", "run_type", "pop_id", "waterbody", "groups", "records", "n_start", "n_end", "first_year",
           "last_year", "start_median", "start_q10", "start_q90", "end_median", "end_q10", "end_q90", "arrival_median",
-          "years_arrival")
+          "n_arrival")
 for (k in seq_len(nrow(keys))) {
   w <- keys$wsg[k]
   sp <- keys$species_code[k]
   d <- win[win$wsg_code == w & win$species_code == sp, , drop = FALSE]
-  d <- d[order(match(d$scope, c("group", "run_type", "population", "apart")), -d$years_start), , drop = FALSE]
+  d <- d[order(match(d$scope, c("group", "run_type", "population", "apart")), -d$n_start), , drop = FALSE]
   cat("\n====", w, sp, ":", sum(d$scope == "population"), "populations pooled,", sum(d$scope == "apart"),
       "apart (on a stream crossing several groups)\n")
   print(d[, show], row.names = FALSE)
@@ -229,7 +235,7 @@ for (k in seq_len(nrow(keys))) {
 check <- function(w, sp, start, end, ys = NULL, ye = NULL) {
   r <- win[win$wsg_code == w & win$species_code == sp & win$scope == "group", , drop = FALSE]
   if (!nrow(r)) return(invisible(cat("check skipped:", w, sp, "not in this run\n")))
-  got <- c(r$start_median, r$end_median, r$years_start, r$years_end)
+  got <- c(r$start_median, r$end_median, r$n_start, r$n_end)
   ok <- identical(got[1:2], c(start, end)) && (is.null(ys) || identical(as.integer(got[3:4]), c(ys, ye)))
   if (!ok) stop(w, " ", sp, " window is ", paste(got, collapse = " "), ", not ", start, " ", end, " ", ys, " ", ye,
                 call. = FALSE)
@@ -282,7 +288,7 @@ for (i in which(!is.na(cmp$largest))) {
            drop = FALSE]
   if (!nrow(a)) next
   cat("\n", cmp$wsg_code[i], cmp$species_code[i], cmp$life_stage[i], "row: apart populations in", cmp$wsg_code[i], "\n")
-  print(a[order(-a$years_start), c("pop_id", "waterbody", "groups", "years_start", "first_year", "last_year",
+  print(a[order(-a$n_start), c("pop_id", "waterbody", "groups", "n_start", "first_year", "last_year",
                                    "start_median", "end_median", "arrival_median")], row.names = FALSE)
 }
 cat("\nrows not compared:\n")
