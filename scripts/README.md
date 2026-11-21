@@ -141,7 +141,8 @@ wf_farm_priority.js                          farm priority/crossing tables out o
       data/nuseds/<release>/ (ignored), knw_nuseds_records() reads it through crate (dfo/nuseds_all_areas) and adds
       evidence_kind -> nuseds_records.csv there, a row of data/nuseds_release.csv (tracked; a recorded release that
       arrives with other bytes stops it). PUBLISH=TRUE uploads knowledge/nuseds/<VERSION, v1>/ with its receipt and
-      data/nuseds_README.md; a clean tree only. Logs: scripts/logs/nuseds/
+      data/nuseds_README.md; a clean tree only. Logs: scripts/logs/nuseds/, tee'd to $TMPDIR and copied in after a
+      run that succeeded, since a tee into a tracked log truncates it and the clean-tree check refuses (#230)
 
 --- Frozen on the published v2 tables (0299 PULL=TRUE VERSION=v2): the one-species analyses #57 superseded ---
 0291  BT use curve (#28)   0292  BT candidate weight   0293  BT spawner evidence (#33)

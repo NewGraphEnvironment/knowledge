@@ -29,9 +29,9 @@ Skeena and North Thompson in their lowest groups, so those points cannot place a
   `scripts/logs/nuseds/` after the run. The clean-tree check stays whole.
 
 ## Phase 1: 0340 runs as documented (#230)
-- [ ] `scripts/0340-nuseds-build.R` header RUN line: tee to `"${TMPDIR:-/tmp}/<yyyymmdd>_nuseds_build.txt"`, then `cp` it
+- [x] `scripts/0340-nuseds-build.R` header RUN line: tee to `"${TMPDIR:-/tmp}/<yyyymmdd>_nuseds_build.txt"`, then `cp` it
       into `scripts/logs/nuseds/`. Say why in one line (tee truncates a tracked log, so the publish refuses)
-- [ ] `scripts/README.md`'s 0340 entry says the same
+- [x] `scripts/README.md`'s 0340 entry says the same
 
 ## Phase 2: windows for every group and species from the published parquet (#240)
 - [ ] Read `knowledge/nuseds/v1` (`VERSION=`) over HTTPS: download the manifest and the parquet to a tempfile with curl,

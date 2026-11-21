@@ -7,3 +7,5 @@
 - Created branch `244-backlog-move-16-nuseds-spawning-windows` off origin/main; claimed #244 in-flight
 - Scaffolded PWF baseline from issue #244 with approved phases
 - Next: start Phase 1
+- Phase 1 (#230): 0340's RUN line tees to `$TMPDIR` inside a `pipefail` subshell and copies the log in only after a
+  run that succeeded; checked with a stub Rscript (status 1: nothing copied; status 0: copied; pipefail does not leak)
