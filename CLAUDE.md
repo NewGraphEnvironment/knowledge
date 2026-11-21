@@ -162,6 +162,11 @@ Issue and PR numbers in the seeded history and in `planning/archive/2026-07-*` r
   (tracked) records each release built, and `data/nuseds_README.md` is the README of `knowledge/nuseds/v1`, which
   `0340 PUBLISH=TRUE` uploads. NuSEDS is OGL-Canada (`inst/NOTICE.md`). One row is one estimate (`act_id`): a
   population, stream (`gfe_id`) and year is unique, and a population, species and year is not.
+  `data-raw/timing_nuseds.R` (#240) reads the published set over HTTPS and writes every group's and species'
+  spawning windows to `scripts/logs/timing/`, beside the timing table's rows. A population whose watershed code
+  crosses several groups (a mainstem) joins no group's window and is listed "apart" under each group, unless
+  `data/nuseds_reach_groups.csv` (tracked, keyed by `gfe_id`) names the group its reach lies in. Add a reach there
+  when a review places it.
 - `data/flow_window/` — ignored: the window flow per FWA segment for every complete timing window
   (`data-raw/segment_window_flow.R`, #42), both of wet's sources from one published build. `data/tune/flow_window/`
   (tracked) holds #105's Phase 1 tables (`data-raw/chinook_window_flow.R`), which `0325`, `0330` and

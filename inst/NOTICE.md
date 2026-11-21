@@ -28,7 +28,9 @@ The NuSEDS escapement records that `scripts/0340-nuseds-build.R` publishes to
 [`knowledge/nuseds/v1/`](https://fresh-bc.s3.us-west-2.amazonaws.com/knowledge/nuseds/v1/README.md) are Fisheries and
 Oceans Canada's [NuSEDS](https://open.canada.ca/data/en/dataset/c48669a3-045b-400d-b730-48aafe8c5ee6) All Areas file,
 read through crate with one column added; `data/nuseds_release.csv` records each release built, and
-`data/nuseds_README.md` is the published set's README. Contains information licensed under the
+`data/nuseds_README.md` is the published set's README. `data-raw/timing_nuseds.R` writes spawning windows computed from
+those records to `scripts/logs/timing/` (`*_timing_nuseds.txt`, `*_timing_nuseds_windows.csv`), and
+`data/nuseds_reach_groups.csv` names NuSEDS reaches by DFO's `gfe_id` and reach name. Contains information licensed under the
 [Open Government Licence - Canada](https://open.canada.ca/en/open-government-licence-canada).
 
 ## BC Geographical Names

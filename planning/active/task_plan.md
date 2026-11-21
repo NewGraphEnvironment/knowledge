@@ -20,7 +20,7 @@ Skeena and North Thompson in their lowest groups, so those points cannot place a
 
 - **Mainstem rule: reported apart, plus a named table.** A population on a stream that crosses several groups stays out
   of the pooled group window and is listed under every group it crosses, beside that group's window. A tracked table,
-  `data/nuseds_reach_groups.csv` (waterbody, pop_id, wsg_code, reason), assigns a named reach to one group where we
+  `data/nuseds_reach_groups.csv` (gfe_id, waterbody, wsg_code, reason; keyed by DFO's reach, since the Fraser's one code runs through every Fraser group: Plan review), assigns a named reach to one group where we
   know where it spawns. It starts with UFRA's "FRASER RIVER - ABOVE TETE JAUNE", so the published UFRA window is
   unchanged. #241 and #242 add reaches (Morice, Bulkley upper) as they review them.
 - **No NuSEDS-only rows.** This PR writes windows and the comparison to tracked logs. `data/life_history_timing.csv`
@@ -34,27 +34,27 @@ Skeena and North Thompson in their lowest groups, so those points cannot place a
 - [x] `scripts/README.md`'s 0340 entry says the same
 
 ## Phase 2: windows for every group and species from the published parquet (#240)
-- [ ] Read `knowledge/nuseds/v1` (`VERSION=`) over HTTPS: download the manifest and the parquet to a tempfile with curl,
+- [x] Read `knowledge/nuseds/v1` (`VERSION=`) over HTTPS: download the manifest and the parquet to a tempfile with curl,
       refuse a sha256 that differs from the manifest's, and print the release, sha256 and manifest commit
-- [ ] `GROUPS=` and `SPECIES=` (comma lists; default every group and species with dated records). Map NuSEDS species
+- [x] `GROUPS=` and `SPECIES=` (comma lists; default every group and species with dated records). Map NuSEDS species
       to the table's codes (CH CO SK PK CM ST; Atlantic dropped)
-- [ ] Group by watershed code as now, through one query on `whse_basemapping.fwa_stream_networks_sp`. Single-group
-      codes pool into their group; codes in `data/nuseds_reach_groups.csv` go to the group it names; any other
+- [x] Group by watershed code as now, through one query on `whse_basemapping.fwa_stream_networks_sp`. Single-group
+      codes pool into their group; reaches (gfe_id) in `data/nuseds_reach_groups.csv` go to the group it names (and are not listed apart elsewhere); any other
       multi-group population is "apart" and listed under every group its code crosses
-- [ ] Each population's row carries its `run_type`. Where a group holds more than one run type for a species, print
+- [x] Each population's row carries its `run_type`. Where a group holds more than one run type for a species, print
       a window per run type beside the pooled window
-- [ ] Write `scripts/logs/timing/<yyyymmdd>_timing_nuseds_windows.csv`: one row per group × species × scope
+- [x] Write `scripts/logs/timing/<yyyymmdd>_timing_nuseds_windows.csv`: one row per group × species × scope
       (`group` pooled, `population`, `apart`), with the start/end/arrival medians and q10/q90, year counts, first and last year
-- [ ] Regression stops: UFRA chinook 08-11 to 09-05 (123/126 population-years) and COTR 08-10 to 09-06 (35/36), the
-      windows the published rows rest on; BULK chinook tributaries 08-15 to 09-10 (28 population-years, #240's run)
-- [ ] New `data/nuseds_reach_groups.csv` (UFRA's reach); add it to NuSEDS's row in `inst/NOTICE.md` and to the
+- [x] Regression stops: UFRA chinook 08-11 to 09-05 (123/126 population-years) and COTR 08-10 to 09-06 (35/36), the
+      windows the published rows rest on; BULK chinook tributaries 08-15 to 09-10 (28/27 population-years, #240's run; both counts pinned after the Plan review)
+- [x] New `data/nuseds_reach_groups.csv` (UFRA's reach); add it to NuSEDS's row in `inst/NOTICE.md` and to the
       `data/` root list in `CLAUDE.md`
 
 ## Phase 3: compare every timing row with NuSEDS (#240)
-- [ ] For every row of `data/life_history_timing.csv` (`knw_timing_read()`): compare a spawning row's start and end
+- [x] For every row of `data/life_history_timing.csv` (`knw_timing_read()`): compare a spawning row's start and end
       with its group's pooled window, in days. Compare a migration row's end with the day before the NuSEDS median
       start, and print the median arrival. Every other stage prints "no NuSEDS measure"
-- [ ] List the group's apart populations beside each compared row, so BULK and MORR chinook show their mainstems.
+- [x] List the group's apart populations beside each compared row, so BULK and MORR chinook show their mainstems.
       Print every difference sorted by size; no threshold
 
 ## Phase 4: run, record, document
@@ -74,6 +74,7 @@ Skeena and North Thompson in their lowest groups, so those points cannot place a
 - [ ] `/planning-archive` on completion
 
 Verification: the script's regression stops reproduce the UFRA and COTR windows (and BULK's tributary window) from
-the parquet; the sha256 check proves it read the published set; Phase 1 is proved by running `0340` (no PUBLISH) with
-the new RUN line on a day whose log is tracked, and checking that `git status` stays clean until the `cp`.
+the parquet; the sha256 check proves it read the published set; Phase 1 is proved with a stub Rscript under the new RUN line
+(a failing run copies nothing; a good one copies the log), since a non-PUBLISH 0340 never reaches the clean-tree check
+and rewrites `data/nuseds_release.csv` anyway (Plan review).
 

@@ -9,3 +9,11 @@
 - Next: start Phase 1
 - Phase 1 (#230): 0340's RUN line tees to `$TMPDIR` inside a `pipefail` subshell and copies the log in only after a
   run that succeeded; checked with a stub Rscript (status 1: nothing copied; status 0: copied; pipefail does not leak)
+- Plan review (background Plan agent) landed after Phase 1: it read an older tree, so its PUBLISH-placement, pipefail
+  and README findings were already handled; taken in: reach table keyed by `gfe_id` (the Fraser's one code runs
+  through every Fraser group), BULK's both counts pinned (28/27), a "migration row has no end" outcome, a named reach
+  not listed apart elsewhere, Phase 1's verification restated. Parquet date strings parse as DD-MON-YY with NA for blanks
+  (the run's `doy()` refused nothing)
+- Phases 2-3: `data-raw/timing_nuseds.R` rewritten; run from a copy on m1 (00:50-00:51 UTC, 33 s): 480 group x species
+  keys in 126 groups, 6,112 window rows; UFRA, COTR and BULK chinook checks reproduce. Season year from 04-01 (09-01
+  for ST), since ~3,000 coho and chum spawning ends fall in January-March
