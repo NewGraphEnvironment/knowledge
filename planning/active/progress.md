@@ -17,3 +17,6 @@
 - Phases 2-3: `data-raw/timing_nuseds.R` rewritten; run from a copy on m1 (00:50-00:51 UTC, 33 s): 480 group x species
   keys in 126 groups, 6,112 window rows; UFRA, COTR and BULK chinook checks reproduce. Season year from 04-01 (09-01
   for ST), since ~3,000 coho and chum spawning ends fall in January-March
+- Phase 4: committed run `scripts/logs/timing/20261121_timing_nuseds.{txt,_windows.csv}` (UTC date; from a copy of the
+  committed script at 749f8cfd); scripts/README.md timing note and the timing logs README updated. The backlog ticks
+  moved to "Owed at the end": `/gh-pr-merge` writes them with the PR URL

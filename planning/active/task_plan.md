@@ -58,13 +58,13 @@ Skeena and North Thompson in their lowest groups, so those points cannot place a
       Print every difference sorted by size; no threshold
 
 ## Phase 4: run, record, document
-- [ ] Run on m1 (`PG*` → fwapg) for every group and species; commit the console log
+- [x] Run on m1 (`PG*` → fwapg) for every group and species; commit the console log
       `scripts/logs/timing/<yyyymmdd>_timing_nuseds.txt` and the windows CSV
-- [ ] Update the header's INPUT/OUTPUT/RUN lines, the `scripts/README.md` timing note (every group, the reach table,
+- [x] Update the header's INPUT/OUTPUT/RUN lines, the `scripts/README.md` timing note (every group, the reach table,
       the logs) and `scripts/logs/timing/README.md` (the new filenames)
-- [ ] Tick #240 and #230 in `planning/backlog.md` batches 25–26, and in #243's member list at the merge
 
 ## Owed at the end (reported, done after merge)
+- [ ] Tick move 16 and batches 25–26 in `planning/backlog.md` with the PR's URL (`/gh-pr-merge`'s tick commit, as for #176), and #240 in #243's member list
 - [ ] #241 and #242 bodies name the windows CSV and the reach table they start from and add to
 
 ## Validation

@@ -488,9 +488,12 @@ Seeds `data/life_history_timing.csv` from the fish-passage reporting template's
   citations carried. `knw_timing_read()` refuses overlapping or split windows, so a hand edit
   cannot reintroduce them.
 - The table is meant to be edited and challenged. Once edited by hand, do not re-run `0260` over it.
-- Since #96, UFRA and COTR chinook rows come from DFO's NuSEDS spawn dates (`data-raw/timing_nuseds.R`, which
-  prints each group's window and every population's, by FWA watershed code, from `0340`'s records) and the
-  literature, each claim a `timing` row in `data/literature_evidence.csv` that `0280` checks.
+- Since #96, UFRA and COTR chinook rows come from DFO's NuSEDS spawn dates and the literature, each claim a `timing`
+  row in `data/literature_evidence.csv` that `0280` checks. `data-raw/timing_nuseds.R` (#240) reads the published
+  `knowledge/nuseds/v1` set and writes every group's and species' window, and every population's, by FWA watershed
+  code (`GROUPS=`, `SPECIES=`; `OUT=` for the windows CSV), and sets each row of the table beside its group's window.
+  A population on a code that crosses several groups is listed apart under each, unless `data/nuseds_reach_groups.csv`
+  names its reach's group; it stops unless it reproduces the UFRA, COTR and BULK chinook windows. It writes no row.
 - `data-raw/segment_window_flow.R` reads every complete window onto every FWA segment of its group (#42; ignored
   `data/flow_window/`); rerun it after a timing change.
 - Logs: `scripts/logs/timing/`.
