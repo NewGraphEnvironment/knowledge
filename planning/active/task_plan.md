@@ -50,18 +50,18 @@ ragnar 0.4.0, with the build and push logs committed.
 - [x] Write `scripts/logs/rag/20261121_rebuild_statistics_expected.txt` the way #216's expected file is written:
       32 keys with a live PDF (the 31 in the bucket plus Hedger), the 15 left out with no live PDF, none dropped,
       checked against the four collections' current membership (anything filed since 2026-11-16 is named there)
-- [ ] Wait for m1's Zotero to finish syncing, quit it, and confirm a 0-byte `zotero.sqlite-wal` (cred reads
+- [x] Wait for m1's Zotero to finish syncing, quit it, and confirm a 0-byte `zotero.sqlite-wal` (cred reads
       immutable, cred#45)
 
 ## Phase 2: Rebuild (m1)
 
-- [ ] Push this branch; on m1 fetch it, `git worktree add ~/knw223/wt <branch>`, copy the pulled store into its
+- [x] Push this branch; on m1 fetch it, `git worktree add ~/knw223/wt <branch>`, copy the pulled store into its
       `data/rag/`, and confirm `git -C ~/knw223/wt/data/rag rev-parse --abbrev-ref HEAD` names the branch
 
-- [ ] `ACTION=build OVERWRITE=TRUE STORE=statistics COLLECTIONS="LP4R4VYR,73PNRGJF,Z7JP8UN2,K2P7XGFG"` (the build
+- [x] `ACTION=build OVERWRITE=TRUE STORE=statistics COLLECTIONS="LP4R4VYR,73PNRGJF,Z7JP8UN2,K2P7XGFG"` (the build
       list in `scripts/README.md`), run in the worktree, header lines naming #223, the expected file, the before-state log and cred/ragnar versions, start and
       end times, as #217's `20261121_rebuild_*.log` do → `scripts/logs/rag/20261121_rebuild_statistics.log`
-- [ ] Check the log against the expected file: 32 documents, "31 before, 32 after: 1 added, 0 dropped",
+- [x] Check the log against the expected file: 32 documents, "31 before, 32 after: 1 added, 0 dropped",
       no "Skipped" warning and no `zotero.sqlite-wal` warning; any difference is explained in findings before the push
 - [ ] Same removal-estimator query on the rebuilt store, logged: Hedger is returned
 - [ ] Reopen Zotero on m1

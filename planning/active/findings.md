@@ -37,3 +37,10 @@ ragnar 0.4.0, the CRAN release, chunks the same markdown into 69 chunks, as test
   comparison by origin is valid there.
 - cred records the manifest's `repo`, `branch` and `head_sha` with `.crd_git_provenance(dirname(store_path))`
   (`.crd_store_describe()`), which is why the build and push move to a worktree of this branch.
+
+## Phase 2, 2026-11-21
+
+- The rebuild on m1 (2026-11-21T19:23Z to 19:31Z, cred 0.8.0, ragnar 0.4.0) matched the expected file: 32 keys,
+  15 left out (the same 15), 32 documents and 11,182 chunks, "31 documents before, 32 after: 1 added, 0 dropped", no
+  Skipped warning, no `-wal` warning. The 69 chunks it gained are the 69 the issue measured for Hedger under 0.4.0.
+  Bates 2024 was read with pdftools again, and ESL's two oversized chunks were split again, as in #216.
