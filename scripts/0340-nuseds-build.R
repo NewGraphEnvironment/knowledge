@@ -21,9 +21,13 @@
 # OUTPUT: data/nuseds/<release>/ (ignored): the zip, nuseds_records.csv, publish/ (Parquet, manifest.json,
 #         receipt.json); data/nuseds_release.csv (tracked); with PUBLISH=TRUE s3://fresh-bc/knowledge/nuseds/<version>/
 #         (the Parquet, receipt, manifest and README.md)
-# RUN:    Rscript scripts/0340-nuseds-build.R 2>&1 | tee scripts/logs/nuseds/<yyyymmdd>_nuseds_build.txt   (repo root)
-#         RELEASE=20260601 ...            (a named release, else the newest the record lists)
-#         PUBLISH=TRUE Rscript scripts/0340-nuseds-build.R   (uploads; needs write access to fresh-bc)
+# RUN:    L="${TMPDIR:-/tmp}/<yyyymmdd>_nuseds_build.txt"
+#         (set -o pipefail; Rscript scripts/0340-nuseds-build.R 2>&1 | tee "$L") && cp "$L" scripts/logs/nuseds/
+#         (repo root). The log is written outside the repo and copied in after a run that succeeded: tee truncates its
+#         file at launch, so a tracked log in scripts/logs/ would be a change the clean-tree check below refuses
+#         (#230), and a refused run's log never replaces the day's tracked one.
+#         RELEASE=20260601 before Rscript   (a named release, else the newest the record lists)
+#         PUBLISH=TRUE before Rscript       (uploads; needs write access to fresh-bc)
 # ---------------------------------------------------------------------------
 pkgload::load_all(quiet = TRUE)
 options(warn = 1)
