@@ -23,8 +23,9 @@
 #     A group's window runs from the median start to the median end over its dated records (n_start, n_end), with the
 #     10th and 90th percentiles. A record is one population, stream (gfe_id) and year, so n counts population-years
 #     except where a population was counted on two streams in one year (16 dated records with a watershed code, of
-#     two populations, in the 2026-06-01 release). Days are counted on a season year that starts on 1 April (1 September for steelhead, which
-#     spawn in spring), so a coho or chum spawning end in January counts after December, not before August. Each
+#     two populations, in the 2026-06-01 release). Days are counted on a season year that starts on 1 April
+#     (1 September for steelhead, which spawn in spring), so a coho or chum spawning end in January counts after
+#     December, not before August. Each
 #     population's own window and run type are printed beside the group's, and a window per run type where a group
 #     holds more than one, so a reader sees where one stream sets the window and where runs differ. Stream arrival is
 #     printed for the migration rows.
