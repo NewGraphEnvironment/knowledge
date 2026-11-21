@@ -1,0 +1,25 @@
+# push habitat_modelling after the #217 rebuilds, 2026-11-21T11:29:44Z (pushed again after the branch's history was rewritten before its first push, so the manifest's head_sha names a commit the branch holds)
+[dry run] would upload data/rag/habitat_modelling.duckdb -> s3://fresh-bc/rag/habitat_modelling.duckdb
+[dry run] merged manifest would hold: fraser, vca_refs, peace, pine, habitat_modelling, temperature, flow, bull_trout_grayling, sturgeon, statistics, westslope_cutthroat, bull_trout, fish_passage
+# the dry run's manifest entry for habitat_modelling (the manifest's other entries are left out)
+{
+  "habitat_modelling": {
+    "documents": 414,
+    "chunks": 69916,
+    "embedding_size": 768,
+    "embedding_model": "nomic-embed-text",
+    "ragnar_version": "0.4.0",
+    "store_schema": "0.4.0",
+    "store_name": "store_001",
+    "bytes": 947400704,
+    "md5": "4b2bded05fef024088e9e9730925f60c",
+    "repo": "NewGraphEnvironment/knowledge",
+    "branch": "179-backlog-move-10-report-corpus-one-librar",
+    "head_sha": "c75c804ac8456b6b267bf0e078c4ed598ab5bcc7",
+    "built_by": "cred::crd_store_push()",
+    "date_completed": "2026-11-21T11:29:48Z"
+  }
+}
+Uploading habitat_modelling.duckdb (904 MB)
+Manifest updated — now holds: fraser, vca_refs, peace, pine, habitat_modelling, temperature, flow, bull_trout_grayling, sturgeon, statistics, westslope_cutthroat, bull_trout, fish_passage
+# exit 0 at 2026-11-21T11:31:26Z

@@ -134,6 +134,11 @@ Issue and PR numbers in the seeded history and in `planning/archive/2026-07-*` r
   whole `statistics` tree: those two collections, `survey_design` and `model_selection`), and
   `zotero_attachment_verdicts.csv` (what `0275` did to each group item with several PDFs or wrong fields, one decided
   row per item, kept as the record; #126, #151), and
+  `zotero_library_triage.csv` (each item of the five satellite group libraries, whether the central library holds it
+  and by what evidence, whether it holds the item's file (`central_file`), and the verdict on each it does not, `present`,
+  `merge` or `discard`, with who decided each row (`decided_by`: the script rewrites every column of its own rows each run and refuses one
+  whose verdict or reason was edited; a `hand` row keeps its verdict and reason, and a hand `present` its key); Zotero ids only, since a
+  satellite library's name or titles can name a client; `data-raw/zotero_library_triage.py`, #13), and
   `thresholds.csv` and `thresholds_groups.csv` (the tuned thresholds per species × stage × component in link's
   parameter names, with the near-river pair's scope where a rule has one (`near_river_scope`, from the comparison's
   tuned structure), and the groups each rule was scored on; `0325`, #57, #73). `data/tune/` holds the tuning run's
@@ -217,8 +222,9 @@ frees inside the file (NewGraphEnvironment/cred#48): #194's updates left 32 to 7
 OVERWRITE=TRUE`, the same build list) before its push (`scripts/README.md`, the `ACTION=update` bullet, which says what a rebuild drops that an update
 keeps).
 
-`crd_store_build()` reads the local `~/Zotero/zotero.sqlite` and names documents by Better BibTeX
-citation key. That is a different identity from the harvest's `<EXTENT>__<reportId>.pdf`, which
+`crd_store_build()` reads the local `~/Zotero/zotero.sqlite`, takes the Better BibTeX citation keys it is given, and
+names each document by its attachment's path (`storage/<attachment key>/<file>`), which `crd_search()` resolves back to
+a citation key. Keying on the parent item, its library and its version is #14. That is a different identity from the harvest's `<EXTENT>__<reportId>.pdf`, which
 `0152`–`0156` parse out of `origin` for watershed-group attribution. A key-named store needs
 `data/zotero_key_map.csv` to join the farm. `peace.duckdb` is key-named and never deduped; the
 manifest entry says so.
@@ -268,6 +274,16 @@ Recon reports number reaches 1, 2, 3; those are not crossing ids.
 ### Don't harvest NGE's own reports from EcoCat
 
 They are the stale submitted versions. They reach Zotero from the report repos.
+
+### One Zotero library is the source
+
+The `NewGraphEnvironment` group library (group 4733734) is the single source of every reference, PDF and citation key.
+A share library holds copies only, and a copy gets a key of its own, so nothing joins on a share-library key. The five
+other group libraries in our Zotero are dormant: `data/zotero_library_triage.csv` records which of their items the
+central library holds and what is decided for the rest, and they are retired once every `merge` is carried out and
+every file of a `present` item that the central library lacks (`central_file` other than `same`) is attached to its
+central copy or judged the same document. The
+personal library is triaged separately. `research/zotero_libraries.md` has the counts.
 
 ### Zotero access is local, except for filing
 
