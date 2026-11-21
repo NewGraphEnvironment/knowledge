@@ -11530,6 +11530,8 @@ check: UFRA CH 08-11 to 09-05 as published
 check: COTR CH 08-10 to 09-06 as published
 check: BULK CH 08-15 to 09-10 as published
 
+wrote 6112 windows to scripts/logs/timing/20261121_timing_nuseds_windows.csv 
+
 ==== the timing table beside NuSEDS (days: NuSEDS minus the row; pooled group windows)
  wsg_code species_code life_stage start   end                                                                                                        source  start_nuseds end_nuseds d_start d_end
      MORR           CH  migration 05-01 09-30                                                                            bustard_schell2002ConservingMorice arrival 08-11      08-20      NA   -41
@@ -11652,5 +11654,3 @@ rows not compared:
               no NuSEDS measure   10
               no NuSEDS species   11
  no NuSEDS window for the group    6
-
-wrote 6112 windows to scripts/logs/timing/20261121_timing_nuseds_windows.csv 
