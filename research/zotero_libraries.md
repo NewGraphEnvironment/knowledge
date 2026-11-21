@@ -8,9 +8,10 @@ unmatched items read against each item by hand
 ## The answer
 
 Of the 168 live items in the five satellite group libraries, 113 are already in the central `NewGraphEnvironment`
-library (group 4733734): 111 found by evidence and 2 under another title. Of the other 55, 51 are to be merged into
-the central library and 4 let go. None of the five libraries can be retired until the 51 merges are carried out; the
-personal library (about 280 items with no match by title or DOI) is a separate triage, not done here.
+library (group 4733734): 110 found by evidence and 3 by hand. Of the other 55, 51 are to be merged into the central
+library and 4 let go. And 13 of the 113 hold a file the central library has no copy of, its copy of the work holding
+no file at all. None of the five libraries can be retired until the 51 merges are carried out and those 13 files are
+attached to their central copies; the personal library (about 280 items with no match by title or DOI) is a separate triage, not done here.
 
 | group | items | present | merge | discard |
 |---|---|---|---|---|
@@ -31,17 +32,27 @@ The script takes the strongest evidence first, and a match on it settles the ite
 
 | evidence | items matched |
 |---|---|
-| a live PDF with the same bytes (`storageHash`) as a central PDF | 44 |
+| a live PDF with the same bytes (`storageHash`) as a central PDF | 43 |
 | the same DOI | 27 |
 | the same title, letters and digits only | 40 |
 | the same title before its first colon, or its first 60 characters | 0 |
-| none | 57 |
+| none | 58 |
 
-#13's first count matched titles alone and found 65 group-library items missing; with the PDF bytes and DOIs it is 57,
-and two of those are the same works under a corrected or extended title (a typo in the central copy's title; a project
-number added to it), recorded `present` by hand with the central key. A title match could join two different works
+#13's first count matched titles alone and found 65 group-library items missing; with the PDF bytes and DOIs it is 58.
+Three of those are recorded `present` by hand with the central key: two works under a corrected or extended title (a
+typo in the central copy's title; a project number added to it), and a copy of the Bjornn and Reiser 1991 scan, which
+matched by its bytes until #217 replaced the central scan with an OCRed copy. A row the script matched and no longer
+does comes back undecided, so a matched verdict never outlives its evidence. A title match could join two different works
 sharing a generic title; the 40 title matches were not each read, so a merge that later finds its "present" copy is
 another work reopens that row.
+
+## Whether the central library holds the file, not only the work
+
+`present` says the central library has a record of the work. It does not say it has the satellite's file, and
+retiring a library deletes its files. `central_file` records that, over every stored file of an item: of the 77
+`present` items holding a file, 51 have a central file with the same bytes, 13 a central copy holding another file
+(another version or scan), and 13 a central copy holding none. Those 13 (one of them a Word file) are carried over
+before retirement.
 
 ## What was decided for the 55
 
@@ -57,7 +68,8 @@ anything is retired.
 
 ## What retirement waits on
 
-1. The 51 merges, through the Web API, each into a collection of the central library, with a note of where it came from.
+1. The 51 merges, through the Web API, each into a collection of the central library, with a note of where it came from;
+   and the 13 files a `present` item's central copy lacks, attached to that copy.
 2. The personal library's triage (about 280 items unmatched by title and DOI, and the 11 personal items with several
    PDFs that #13 listed).
 3. Al deletes each satellite group once its merges are done: a group deletion is the owner's.

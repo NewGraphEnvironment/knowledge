@@ -16,11 +16,19 @@ first count matched titles only, which reads case, punctuation and subtitle drif
   doi           the same DOI (case and any https://doi.org/ prefix ignored)
   title         the same title, lower case with everything but letters and digits removed
   title_prefix  the same title before its first colon, or its first 60 such characters
-A row it matches is `present`. A row it does not match keeps whatever verdict and reason
-the file already holds for it (group_id + item_key), so a decision made by hand survives a
-re-run: `present` (under another title; library9_key names the copy), `merge` (copy it
-into the central library) or `discard` (let it go with the library). A row no longer in
-the libraries drops out.
+A row it matches is `present`. A row it does not match keeps the verdict, reason and
+library9_key the file holds for it (group_id + item_key) only where that row was unmatched
+too, so a decision made by hand survives a re-run and an automatic `present` whose evidence
+has gone (a central PDF replaced, a title edited) comes back undecided: `present` (under
+another title; library9_key names the copy, which must be a live central item), `merge`
+(copy it into the central library) or `discard` (let it go with the library). A row no
+longer in the libraries drops out.
+
+`present` says the central library holds a record of the work, not that it holds the
+satellite's file. central_file says that, over every stored file of the item (any type):
+`same` (a central file has the same bytes), `other` (library9_key's item holds a file, with
+other bytes), `none` (no central copy of the file: retiring the library would delete it, so
+it is carried over first) or blank (the item holds no file).
 
 The tracked file carries Zotero ids only. A satellite library's name, and the titles of
 its items, can name a client or a project, which nothing tracked here may (CLAUDE.md, "One
@@ -30,7 +38,7 @@ INPUT   ~/Zotero/zotero.sqlite, read through 0270's guarded copy (db()), so a co
         in zotero.sqlite-wal is seen (#127)
         data/zotero_library_triage.csv, for the verdicts already decided, if it exists
 OUTPUT  data/zotero_library_triage.csv: group_id, item_key, item_type, pdfs, match_kind,
-        library9_key, verdict, reason; one row per live top-level item (notes and
+        library9_key, central_file, verdict, reason; one row per live top-level item (notes and
         annotations aside), sorted by group_id and item_key
         a count per library, match kind and verdict on stdout
         --check writes nothing and exits 1 when the file differs from what a run would write
@@ -42,14 +50,16 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 ROOT = os.path.normpath(os.path.join(HERE, ".."))
 # 0270 loads 0153, which reads a Web API key when it loads and exits without one. This script
 # makes no Web API call, so a placeholder stands in where no key is set (any call would be refused).
-os.environ.setdefault("ZOTERO_API_KEY", "none: data-raw/zotero_library_triage.py reads only the local database")
+# An exported empty key reads to 0153 as no key, so test the value, not whether it is set.
+if not os.environ.get("ZOTERO_API_KEY", "").strip():
+    os.environ["ZOTERO_API_KEY"] = "none: data-raw/zotero_library_triage.py reads only the local database"
 _spec = importlib.util.spec_from_file_location("z0270", os.path.join(ROOT, "scripts", "0270-habitat-collection-build.py"))
 z = importlib.util.module_from_spec(_spec)
 _spec.loader.exec_module(z)          # 0270 has a __main__ guard; this only defines helpers
 
 CENTRAL = 4733734
 OUT = os.path.join(ROOT, "data", "zotero_library_triage.csv")
-COLS = ["group_id", "item_key", "item_type", "pdfs", "match_kind", "library9_key", "verdict", "reason"]
+COLS = ["group_id", "item_key", "item_type", "pdfs", "match_kind", "library9_key", "central_file", "verdict", "reason"]
 VERDICTS = {"present", "merge", "discard"}
 
 
@@ -67,9 +77,10 @@ def doi(s):
 
 
 def items(con, lib):
-    """Live top-level items of one library: key, type, title, DOI and the md5 of each live PDF.
+    """Live top-level items of one library: key, type, title, DOI, the md5 of each live PDF, and
+    the md5 of each live stored file of any type.
 
-    A standalone attachment is its own row, and its own file is its PDF."""
+    A standalone attachment is its own row, and its own file is its PDF (or its file)."""
     rows = con.execute("""
         SELECT i.itemID, i.key, t.typeName,
           (SELECT v.value FROM itemData d JOIN itemDataValues v ON v.valueID = d.valueID
@@ -84,23 +95,29 @@ def items(con, lib):
           AND t.typeName NOT IN ('note', 'annotation')
           AND (t.typeName <> 'attachment' OR self.parentItemID IS NULL)
         ORDER BY i.key""", (lib,)).fetchall()
-    pdf = {}
-    for item_id, h in con.execute("""
-        SELECT COALESCE(ia.parentItemID, ia.itemID), ia.storageHash
+    pdf, files = {}, {}
+    for item_id, h, ctype in con.execute("""
+        SELECT COALESCE(ia.parentItemID, ia.itemID), ia.storageHash, ia.contentType
         FROM itemAttachments ia
         JOIN items a ON a.itemID = ia.itemID
         LEFT JOIN deletedItems da ON da.itemID = ia.itemID
-        WHERE a.libraryID = ? AND da.itemID IS NULL
-          AND ia.contentType = 'application/pdf' AND ia.storageHash IS NOT NULL""", (lib,)):
-        pdf.setdefault(item_id, set()).add(h)
-    return [dict(key=k, type=t, title=ti, doi=doi(d), pdf=sorted(pdf.get(i, ())))
+        WHERE a.libraryID = ? AND da.itemID IS NULL AND ia.storageHash IS NOT NULL""", (lib,)):
+        files.setdefault(item_id, set()).add(h)
+        if ctype == "application/pdf":
+            pdf.setdefault(item_id, set()).add(h)
+    return [dict(key=k, type=t, title=ti, doi=doi(d), pdf=sorted(pdf.get(i, ())), files=sorted(files.get(i, ())))
             for i, k, t, ti, d in rows]
 
 
 def index(central):
     """Lookups into the central library: each kind of evidence -> the sorted keys holding it."""
-    idx = {"pdf_md5": {}, "doi": {}, "title": {}, "title_prefix": {}}
+    idx = {"pdf_md5": {}, "doi": {}, "title": {}, "title_prefix": {},
+           "keys": set(), "files": set(), "with_file": set()}
     for it in central:
+        idx["keys"].add(it["key"])
+        idx["files"].update(it["files"])
+        if it["files"]:
+            idx["with_file"].add(it["key"])
         for h in it["pdf"]:
             idx["pdf_md5"].setdefault(h, set()).add(it["key"])
         if it["doi"]:
@@ -120,6 +137,15 @@ def match(it, idx):
         if value and value in idx[kind]:
             return kind, sorted(idx[kind][value])[0]
     return "none", ""
+
+
+def central_file(it, k9, idx):
+    """Whether the central library holds this item's file: same, other, none, or blank (no file)."""
+    if not it["files"]:
+        return ""
+    if any(h in idx["files"] for h in it["files"]):
+        return "same"
+    return "other" if k9 in idx["with_file"] else "none"
 
 
 def render(rows):
@@ -159,14 +185,23 @@ def main():
             if kind != "none":
                 verdict, reason = "present", f"matched by {kind}"
             else:
-                verdict, reason = old.get("verdict", ""), old.get("reason", "")
-                if old.get("library9_key"):
+                # Only a decision made by hand carries over: an earlier automatic `present` whose
+                # evidence has gone comes back undecided.
+                hand = old.get("match_kind") == "none"
+                verdict, reason = (old.get("verdict", ""), old.get("reason", "")) if hand else ("", "")
+                if hand and old.get("library9_key"):
                     k9 = old["library9_key"]
+                    if k9 not in idx["keys"]:
+                        sys.exit(f"{gid} {it['key']}: library9_key {k9} is not a live item of the central "
+                                 "library; decide the row again")
                 titles.append((gid, it["key"], it["type"], len(it["pdf"]), it["title"] or ""))
             if verdict and verdict not in VERDICTS:
                 sys.exit(f"{gid} {it['key']}: verdict '{verdict}' is not one of {sorted(VERDICTS)}")
+            if verdict == "present" and not k9:
+                sys.exit(f"{gid} {it['key']}: a `present` verdict names no library9_key")
             rows.append(dict(group_id=gid, item_key=it["key"], item_type=it["type"], pdfs=len(it["pdf"]),
-                             match_kind=kind, library9_key=k9, verdict=verdict, reason=reason))
+                             match_kind=kind, library9_key=k9, central_file=central_file(it, k9, idx),
+                             verdict=verdict, reason=reason))
     rows.sort(key=lambda r: (int(r["group_id"]), r["item_key"]))
 
     out = render(rows)
@@ -176,6 +211,8 @@ def main():
         counts[k] = counts.get(k, 0) + 1
     for (gid, kind, verdict), n in sorted(counts.items()):
         print(f"{gid}\t{kind}\t{verdict}\t{n}")
+    print(f"{sum(r['verdict'] == 'present' and r['central_file'] == 'none' for r in rows)} `present` items "
+          "hold a file the central library lacks (to carry over before retirement)")
     print(f"{len(rows)} items in {len(libs) - 1} libraries; "
           f"{sum(r['match_kind'] == 'none' for r in rows)} unmatched, "
           f"{sum(not r['verdict'] for r in rows)} undecided")

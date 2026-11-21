@@ -1,169 +1,169 @@
-group_id,item_key,item_type,pdfs,match_kind,library9_key,verdict,reason
-2517476,25MGXX9T,journalArticle,1,none,,merge,"eDNA, occupancy or detection-error methods: the literature statistics/detection collects (#216)"
-2517476,265JFCKD,journalArticle,1,none,,merge,"eDNA, occupancy or detection-error methods: the literature statistics/detection collects (#216)"
-2517476,2F4NB3UZ,journalArticle,1,title,C6T4RPBK,present,matched by title
-2517476,2LPPCIU9,journalArticle,1,none,,merge,salmon thermal tolerance review: the temperature literature
-2517476,3JSGDKCP,journalArticle,1,none,,merge,"eDNA, occupancy or detection-error methods: the literature statistics/detection collects (#216)"
-2517476,4H6UYBTR,journalArticle,1,none,,merge,"eDNA, occupancy or detection-error methods: the literature statistics/detection collects (#216)"
-2517476,4HXEUIMQ,journalArticle,1,doi,5TBDTFIZ,present,matched by doi
-2517476,4WGBD8YV,journalArticle,1,none,,merge,"eDNA, occupancy or detection-error methods: the literature statistics/detection collects (#216)"
-2517476,565KLFL9,journalArticle,1,none,,merge,"eDNA, occupancy or detection-error methods: the literature statistics/detection collects (#216)"
-2517476,5JF2CEY3,attachment,0,none,,discard,"a standalone image file, not a work"
-2517476,6CL2BA7Q,journalArticle,1,doi,DTIN22SC,present,matched by doi
-2517476,7JPPXD5R,journalArticle,1,none,,discard,protected-area management outside BC freshwater fisheries
-2517476,8ZUPSQSJ,journalArticle,1,none,,merge,"eDNA, occupancy or detection-error methods: the literature statistics/detection collects (#216)"
-2517476,9SLXCIJS,journalArticle,1,none,,merge,"eDNA, occupancy or detection-error methods: the literature statistics/detection collects (#216)"
-2517476,9UC8N3GB,journalArticle,1,none,,merge,"eDNA, occupancy or detection-error methods: the literature statistics/detection collects (#216)"
-2517476,9Z3W47XT,report,1,pdf_md5,QCHYDXGV,present,matched by pdf_md5
-2517476,AAD9TRTN,journalArticle,1,none,,merge,"eDNA, occupancy or detection-error methods: the literature statistics/detection collects (#216)"
-2517476,ARFFG6JC,attachment,0,title,NXLIIZL8,present,matched by title
-2517476,BVRYYCHN,journalArticle,1,doi,5X6VF6GJ,present,matched by doi
-2517476,CC5CLHYF,journalArticle,1,none,,merge,"eDNA, occupancy or detection-error methods: the literature statistics/detection collects (#216)"
-2517476,D226IPND,journalArticle,1,none,,merge,"eDNA, occupancy or detection-error methods: the literature statistics/detection collects (#216)"
-2517476,DSGI3SIP,journalArticle,1,none,,merge,"eDNA, occupancy or detection-error methods: the literature statistics/detection collects (#216)"
-2517476,F9AFFPEF,journalArticle,2,none,,merge,"eDNA, occupancy or detection-error methods: the literature statistics/detection collects (#216)"
-2517476,G53RBDRH,journalArticle,1,none,,merge,"eDNA, occupancy or detection-error methods: the literature statistics/detection collects (#216)"
-2517476,GKMY89IQ,journalArticle,1,doi,PS64VIQI,present,matched by doi
-2517476,H5D92CD7,journalArticle,1,title,YLVBU4ZF,present,matched by title
-2517476,I7YRLTI9,journalArticle,1,none,,merge,"eDNA, occupancy or detection-error methods: the literature statistics/detection collects (#216)"
-2517476,KGYB96PZ,journalArticle,1,none,,merge,"eDNA, occupancy or detection-error methods: the literature statistics/detection collects (#216)"
-2517476,MTJT69IZ,thesis,1,none,,merge,"eDNA, occupancy or detection-error methods: the literature statistics/detection collects (#216)"
-2517476,NL933XPK,attachment,0,title,SA6EFLV6,present,matched by title
-2517476,NWIAXLDN,attachment,0,title,K36IZGA4,present,matched by title
-2517476,P4KXX8G3,journalArticle,1,none,,merge,evidence and decision-making paper; kept with the library's other method reading
-2517476,P4VQ6SGZ,journalArticle,1,none,,discard,reservoir walleye stocking outside BC freshwater fisheries
-2517476,PHALGG3D,journalArticle,1,none,,merge,"eDNA, occupancy or detection-error methods: the literature statistics/detection collects (#216)"
-2517476,PQZGZXUK,journalArticle,1,none,,merge,"eDNA, occupancy or detection-error methods: the literature statistics/detection collects (#216)"
-2517476,PY99S5HQ,journalArticle,1,none,,merge,"eDNA, occupancy or detection-error methods: the literature statistics/detection collects (#216)"
-2517476,Q5VZNJ5Q,document,1,pdf_md5,PB8T4E4I,present,matched by pdf_md5
-2517476,QBEL2TX3,journalArticle,1,none,,merge,"eDNA, occupancy or detection-error methods: the literature statistics/detection collects (#216)"
-2517476,S2TKQ953,journalArticle,1,none,,merge,evidence and decision-making commentary; kept with the library's other method reading
-2517476,SIWJMCRV,attachment,0,title,H7BRP69J,present,matched by title
-2517476,T2H3LAFY,journalArticle,1,none,,merge,"eDNA, occupancy or detection-error methods: the literature statistics/detection collects (#216)"
-2517476,TRRARTJ4,journalArticle,1,none,,merge,"eDNA, occupancy or detection-error methods: the literature statistics/detection collects (#216)"
-2517476,V54XUDRH,journalArticle,1,doi,TQ7H44WG,present,matched by doi
-2517476,W29RL3H5,journalArticle,1,doi,8NWZU2SD,present,matched by doi
-2517476,Y977NHW8,journalArticle,1,none,,merge,"eDNA, occupancy or detection-error methods: the literature statistics/detection collects (#216)"
-2517476,ZN7MFWPL,journalArticle,1,none,,merge,"eDNA, occupancy or detection-error methods: the literature statistics/detection collects (#216)"
-2769586,2XRV3SBW,journalArticle,0,none,,discard,"the same work as 2796581 PIW5QNI3, which is merged with its PDF; this copy has none"
-2769586,49GV35NP,journalArticle,0,title,XIGKHSTT,present,matched by title
-2769586,4YFU6KYV,journalArticle,0,doi,VIR8K4QM,present,matched by doi
-2769586,5FZTZI4D,journalArticle,0,title,EPBDEU5K,present,matched by title
-2769586,F8PBWP2E,journalArticle,0,doi,CUVWXS9Q,present,matched by doi
-2769586,FJLHGL25,journalArticle,0,title,F9F4TH2I,present,matched by title
-2769586,JQUDLZ2R,journalArticle,0,doi,K7B7B8RF,present,matched by doi
-2769586,KR2VKLW2,journalArticle,0,doi,6T3K9ZBY,present,matched by doi
-2769586,LFB9P7A2,journalArticle,0,title,B3TYJ9I9,present,matched by title
-2769586,MFTM963P,journalArticle,0,doi,3MDQERTJ,present,matched by doi
-2769586,MVED9CHB,journalArticle,0,title,BID734MC,present,matched by title
-2769586,NA2EMEI9,journalArticle,0,title,YN95Z6EU,present,matched by title
-2769586,S9ZRMCN9,journalArticle,0,doi,FAIC7HTL,present,matched by doi
-2769586,T8S34MZ5,book,0,title,NTCDJ37E,present,matched by title
-2769586,TISL437E,report,0,title,QCHYDXGV,present,matched by title
-2769586,UTDBPUX4,journalArticle,0,doi,UXI3ARYT,present,matched by doi
-2769586,V7E8PH7J,journalArticle,0,doi,YJP7YLLD,present,matched by doi
-2769586,XG3IA2HN,journalArticle,0,doi,3XFEFP3L,present,matched by doi
-2769586,Y6FCI5BF,journalArticle,0,doi,HJV5JMGM,present,matched by doi
-2769586,Z6KGNWXY,journalArticle,0,title,S3IPNXIN,present,matched by title
-2796581,54NS8XRP,journalArticle,1,title,F9F4TH2I,present,matched by title
-2796581,63MTAF8N,book,1,pdf_md5,A9MAQ3ZL,present,matched by pdf_md5
-2796581,82WV49D6,journalArticle,1,pdf_md5,CUVWXS9Q,present,matched by pdf_md5
-2796581,9GNZYYVS,journalArticle,1,pdf_md5,B3TYJ9I9,present,matched by pdf_md5
-2796581,A4SLUPQH,journalArticle,1,pdf_md5,7BIC5WW2,present,matched by pdf_md5
-2796581,ALI8QMAS,journalArticle,1,pdf_md5,BID734MC,present,matched by pdf_md5
-2796581,BCCIBXQQ,journalArticle,1,pdf_md5,VIR8K4QM,present,matched by pdf_md5
-2796581,BTUI7LU6,journalArticle,1,pdf_md5,HJV5JMGM,present,matched by pdf_md5
-2796581,C885QIV2,journalArticle,1,pdf_md5,3XFEFP3L,present,matched by pdf_md5
-2796581,IQ5YDC8D,journalArticle,1,pdf_md5,6T3K9ZBY,present,matched by pdf_md5
-2796581,JBW4EK3H,journalArticle,1,title,YN95Z6EU,present,matched by title
-2796581,JCEI3V83,journalArticle,1,title,S3IPNXIN,present,matched by title
-2796581,JMMEYIQG,book,1,pdf_md5,NTCDJ37E,present,matched by pdf_md5
-2796581,MX2FFKM8,journalArticle,1,doi,3MDQERTJ,present,matched by doi
-2796581,N39QPZIP,report,1,pdf_md5,QCHYDXGV,present,matched by pdf_md5
-2796581,PIW5QNI3,journalArticle,1,none,,merge,"sockeye spawning behaviour paper, with its PDF"
-2796581,QVS9MZ3G,attachment,1,none,Z53XIYCM,present,the same Raleigh and Miller 1986 HSI models report; the central title carries a typo
-2796581,RBCB2C35,journalArticle,1,pdf_md5,FAIC7HTL,present,matched by pdf_md5
-2796581,T2RXUCQ4,journalArticle,0,doi,UXI3ARYT,present,matched by doi
-2796581,UJLHGGJA,journalArticle,1,pdf_md5,Q5393JVX,present,matched by pdf_md5
-2796581,UKZVACL9,attachment,1,pdf_md5,YDHYE9V9,present,matched by pdf_md5
-2796581,Y856VDR7,journalArticle,1,pdf_md5,K7B7B8RF,present,matched by pdf_md5
-2796581,ZIMHQL5J,journalArticle,1,pdf_md5,YJP7YLLD,present,matched by pdf_md5
-2796581,ZQETHMQS,journalArticle,1,pdf_md5,EPBDEU5K,present,matched by pdf_md5
-2796596,33RIUKLY,journalArticle,0,title,TK4PDDE2,present,matched by title
-2796596,3LJ9AS7R,journalArticle,1,pdf_md5,HZNHL3IJ,present,matched by pdf_md5
-2796596,3PUAWZVK,journalArticle,1,doi,5AUDDRAR,present,matched by doi
-2796596,3Y8XPUZT,attachment,0,title,F4KBB4Z3,present,matched by title
-2796596,4DEGATYZ,bookSection,1,pdf_md5,ALSDQPI2,present,matched by pdf_md5
-2796596,5VKTT8X5,journalArticle,1,pdf_md5,33HSHT3E,present,matched by pdf_md5
-2796596,6GKM6JAG,report,1,pdf_md5,UVBBU9X7,present,matched by pdf_md5
-2796596,6L8UX2L6,report,1,pdf_md5,9CKC9KTU,present,matched by pdf_md5
-2796596,6NXW4DAQ,journalArticle,1,doi,YR9NQH5J,present,matched by doi
-2796596,6RCA5H4G,journalArticle,1,none,,merge,fish passage and connectivity literature: Fisheries/Fish Passage
-2796596,7429YN69,attachment,1,pdf_md5,8F47V5LQ,present,matched by pdf_md5
-2796596,76PUR5VR,attachment,0,title,HTG3QTS5,present,matched by title
-2796596,7IFKYN2Z,journalArticle,1,none,,merge,fish passage and connectivity literature: Fisheries/Fish Passage
-2796596,7Y3PZXVZ,journalArticle,1,pdf_md5,98GJP8SS,present,matched by pdf_md5
-2796596,8IHZEA8B,attachment,1,pdf_md5,J69JV9VW,present,matched by pdf_md5
-2796596,8VGNI6KG,journalArticle,1,none,,merge,fish passage and connectivity literature: Fisheries/Fish Passage
-2796596,948USDIX,journalArticle,1,none,,merge,fish passage and connectivity literature: Fisheries/Fish Passage
-2796596,95A3MVPU,attachment,0,title,C7G29ICC,present,matched by title
-2796596,9D8YUVWD,journalArticle,2,pdf_md5,EMX8DUDZ,present,matched by pdf_md5
-2796596,9GNNGI8U,journalArticle,1,doi,KTE89EDH,present,matched by doi
-2796596,ADU8MC5Q,document,0,title,9BRJUBXK,present,matched by title
-2796596,AM7C5ELM,journalArticle,1,none,,merge,fish passage and connectivity literature: Fisheries/Fish Passage
-2796596,C7K9D34W,document,1,pdf_md5,HWTDXTQA,present,matched by pdf_md5
-2796596,DEBTVNFS,document,0,title,RHKW5Y3X,present,matched by title
-2796596,E2ATD4L3,journalArticle,1,none,,merge,fish passage and connectivity literature: Fisheries/Fish Passage
-2796596,GDFGK2TM,attachment,1,pdf_md5,LHDYM8NU,present,matched by pdf_md5
-2796596,H7X8YYGX,journalArticle,1,pdf_md5,AXSUBBYH,present,matched by pdf_md5
-2796596,HLSZ9W88,document,0,title,VDT8YQJT,present,matched by title
-2796596,I3IPV4M5,document,0,title,W3UNAINZ,present,matched by title
-2796596,J835XEQA,attachment,0,title,AC6SL5RC,present,matched by title
-2796596,JR4N7733,book,1,title,CBDKDPST,present,matched by title
-2796596,KKUYS2CF,journalArticle,1,none,,merge,fish passage and connectivity literature: Fisheries/Fish Passage
-2796596,KTJJ9UTD,book,1,pdf_md5,3QVAYLMY,present,matched by pdf_md5
-2796596,LDN2VVDC,journalArticle,1,title,4DD7RSW2,present,matched by title
-2796596,LLNEE3EQ,document,0,title,62KS7YAA,present,matched by title
-2796596,MBI3ZN5P,journalArticle,1,pdf_md5,5RK97MSL,present,matched by pdf_md5
-2796596,MNN9TFYF,attachment,1,pdf_md5,YEAMT7SM,present,matched by pdf_md5
-2796596,N2HDE6BB,journalArticle,1,none,,merge,fish passage and connectivity literature: Fisheries/Fish Passage
-2796596,NCUTBFAP,journalArticle,1,none,,merge,fish passage and connectivity literature: Fisheries/Fish Passage
-2796596,NS9A74MU,book,1,title,3Z72BJKM,present,matched by title
-2796596,NTQ4QRS4,journalArticle,1,pdf_md5,83BZGZ7R,present,matched by pdf_md5
-2796596,PAZXB8D7,journalArticle,1,doi,MN57YIWC,present,matched by doi
-2796596,PEJZPYII,journalArticle,1,pdf_md5,TTV53WE3,present,matched by pdf_md5
-2796596,PG72T99T,book,1,none,,merge,fish passage and connectivity literature: Fisheries/Fish Passage
-2796596,PNI8D9JY,webpage,0,title,WZ8K96D7,present,matched by title
-2796596,QA4TGP6A,book,1,none,,merge,"fish passage literature; its title is truncated, so take the title from the PDF when merging"
-2796596,RBUDWTRC,journalArticle,1,none,,merge,chinook salmon population genetics paper
-2796596,S5LSQKBR,document,1,title,92ZPSREY,present,matched by title
-2796596,SJB3V2NS,attachment,1,pdf_md5,JDBISW5S,present,matched by pdf_md5
-2796596,TZ5R4HBP,journalArticle,1,none,,merge,fish passage and connectivity literature: Fisheries/Fish Passage
-2796596,UD6BJ6PK,journalArticle,1,pdf_md5,A7N3MH9P,present,matched by pdf_md5
-2796596,UU94Q65Q,journalArticle,1,none,,merge,fish passage and connectivity literature: Fisheries/Fish Passage
-2796596,VRXBQN2L,journalArticle,0,doi,975KKEYV,present,matched by doi
-2796596,WFFCZPND,journalArticle,1,none,,merge,fish passage and connectivity literature: Fisheries/Fish Passage
-2796596,WPJ6LBJN,journalArticle,1,doi,GW7NM72E,present,matched by doi
-2796596,XEBS9D42,attachment,1,pdf_md5,62JHFDWU,present,matched by pdf_md5
-2796596,XILGZYL7,document,0,title,5EWXSR9X,present,matched by title
-2796596,YGFKGJ7P,journalArticle,1,none,,merge,fish passage and connectivity literature: Fisheries/Fish Passage
-2796596,YWJIJCUN,journalArticle,0,title,SQZTWR97,present,matched by title
-4573988,66I9JSGU,report,1,pdf_md5,9R5INMSK,present,matched by pdf_md5
-4573988,7RAY87X9,webpage,1,pdf_md5,4QE5S56Q,present,matched by pdf_md5
-4573988,93D7ETZ4,journalArticle,0,doi,JD5UEY36,present,matched by doi
-4573988,CE49LK5J,report,1,pdf_md5,YXCLFWWL,present,matched by pdf_md5
-4573988,DPXC2LCC,document,1,none,TA5U6Y6V,present,the same project report; the central title adds its project number
-4573988,F2NQVPAY,journalArticle,0,doi,2DACGEU7,present,matched by doi
-4573988,FAQXMIUJ,document,1,pdf_md5,YHSC8JQZ,present,matched by pdf_md5
-4573988,FQ8VV8RL,document,0,title,RQ25KTYY,present,matched by title
-4573988,KYJLYNT8,document,1,title,XIDJ6DP4,present,matched by title
-4573988,LBL6763C,report,1,none,,merge,"fish sampling permit report, with its PDF"
-4573988,PILP78XS,report,0,none,,merge,"a consultant report filed in EcoCat; no PDF, so the merge carries its record and link"
-4573988,PNIFHAEZ,report,1,none,,merge,"community water-quality monitoring report, with its PDF"
-4573988,UEYGDVCT,document,0,title,HDLCTVY5,present,matched by title
-4573988,UMWZN7E2,document,0,title,SFE8ZLFY,present,matched by title
-4573988,WUS9MYW8,report,1,pdf_md5,NYRFGRFZ,present,matched by pdf_md5
-4573988,X4GQTCUD,document,1,none,,merge,"fish passage data analysis report, with its PDF"
-4573988,Z8I734GQ,book,0,none,,merge,"provincial water-quality trends report; no PDF, so the merge carries its record"
-4573988,ZQMFRZC6,journalArticle,0,doi,X7ZF9PWW,present,matched by doi
-4573988,ZWN8DTNT,document,0,title,YBVSLNX5,present,matched by title
+group_id,item_key,item_type,pdfs,match_kind,library9_key,central_file,verdict,reason
+2517476,25MGXX9T,journalArticle,1,none,,none,merge,"eDNA, occupancy or detection-error methods: the literature statistics/detection collects (#216)"
+2517476,265JFCKD,journalArticle,1,none,,none,merge,"eDNA, occupancy or detection-error methods: the literature statistics/detection collects (#216)"
+2517476,2F4NB3UZ,journalArticle,1,title,C6T4RPBK,other,present,matched by title
+2517476,2LPPCIU9,journalArticle,1,none,,none,merge,salmon thermal tolerance review: the temperature literature
+2517476,3JSGDKCP,journalArticle,1,none,,none,merge,"eDNA, occupancy or detection-error methods: the literature statistics/detection collects (#216)"
+2517476,4H6UYBTR,journalArticle,1,none,,none,merge,"eDNA, occupancy or detection-error methods: the literature statistics/detection collects (#216)"
+2517476,4HXEUIMQ,journalArticle,1,doi,5TBDTFIZ,other,present,matched by doi
+2517476,4WGBD8YV,journalArticle,1,none,,none,merge,"eDNA, occupancy or detection-error methods: the literature statistics/detection collects (#216)"
+2517476,565KLFL9,journalArticle,1,none,,none,merge,"eDNA, occupancy or detection-error methods: the literature statistics/detection collects (#216)"
+2517476,5JF2CEY3,attachment,0,none,,same,discard,"a standalone image file, not a work"
+2517476,6CL2BA7Q,journalArticle,1,doi,DTIN22SC,other,present,matched by doi
+2517476,7JPPXD5R,journalArticle,1,none,,none,discard,protected-area management outside BC freshwater fisheries
+2517476,8ZUPSQSJ,journalArticle,1,none,,none,merge,"eDNA, occupancy or detection-error methods: the literature statistics/detection collects (#216)"
+2517476,9SLXCIJS,journalArticle,1,none,,none,merge,"eDNA, occupancy or detection-error methods: the literature statistics/detection collects (#216)"
+2517476,9UC8N3GB,journalArticle,1,none,,none,merge,"eDNA, occupancy or detection-error methods: the literature statistics/detection collects (#216)"
+2517476,9Z3W47XT,report,1,pdf_md5,QCHYDXGV,same,present,matched by pdf_md5
+2517476,AAD9TRTN,journalArticle,1,none,,none,merge,"eDNA, occupancy or detection-error methods: the literature statistics/detection collects (#216)"
+2517476,ARFFG6JC,attachment,0,title,NXLIIZL8,same,present,matched by title
+2517476,BVRYYCHN,journalArticle,1,doi,5X6VF6GJ,none,present,matched by doi
+2517476,CC5CLHYF,journalArticle,1,none,,none,merge,"eDNA, occupancy or detection-error methods: the literature statistics/detection collects (#216)"
+2517476,D226IPND,journalArticle,1,none,,none,merge,"eDNA, occupancy or detection-error methods: the literature statistics/detection collects (#216)"
+2517476,DSGI3SIP,journalArticle,1,none,,none,merge,"eDNA, occupancy or detection-error methods: the literature statistics/detection collects (#216)"
+2517476,F9AFFPEF,journalArticle,2,none,,none,merge,"eDNA, occupancy or detection-error methods: the literature statistics/detection collects (#216)"
+2517476,G53RBDRH,journalArticle,1,none,,none,merge,"eDNA, occupancy or detection-error methods: the literature statistics/detection collects (#216)"
+2517476,GKMY89IQ,journalArticle,1,doi,PS64VIQI,none,present,matched by doi
+2517476,H5D92CD7,journalArticle,1,title,YLVBU4ZF,none,present,matched by title
+2517476,I7YRLTI9,journalArticle,1,none,,none,merge,"eDNA, occupancy or detection-error methods: the literature statistics/detection collects (#216)"
+2517476,KGYB96PZ,journalArticle,1,none,,none,merge,"eDNA, occupancy or detection-error methods: the literature statistics/detection collects (#216)"
+2517476,MTJT69IZ,thesis,1,none,,none,merge,"eDNA, occupancy or detection-error methods: the literature statistics/detection collects (#216)"
+2517476,NL933XPK,attachment,0,title,SA6EFLV6,same,present,matched by title
+2517476,NWIAXLDN,attachment,0,title,K36IZGA4,same,present,matched by title
+2517476,P4KXX8G3,journalArticle,1,none,,none,merge,evidence and decision-making paper; kept with the library's other method reading
+2517476,P4VQ6SGZ,journalArticle,1,none,,none,discard,reservoir walleye stocking outside BC freshwater fisheries
+2517476,PHALGG3D,journalArticle,1,none,,none,merge,"eDNA, occupancy or detection-error methods: the literature statistics/detection collects (#216)"
+2517476,PQZGZXUK,journalArticle,1,none,,none,merge,"eDNA, occupancy or detection-error methods: the literature statistics/detection collects (#216)"
+2517476,PY99S5HQ,journalArticle,1,none,,none,merge,"eDNA, occupancy or detection-error methods: the literature statistics/detection collects (#216)"
+2517476,Q5VZNJ5Q,document,1,pdf_md5,PB8T4E4I,same,present,matched by pdf_md5
+2517476,QBEL2TX3,journalArticle,1,none,,none,merge,"eDNA, occupancy or detection-error methods: the literature statistics/detection collects (#216)"
+2517476,S2TKQ953,journalArticle,1,none,,none,merge,evidence and decision-making commentary; kept with the library's other method reading
+2517476,SIWJMCRV,attachment,0,title,H7BRP69J,same,present,matched by title
+2517476,T2H3LAFY,journalArticle,1,none,,none,merge,"eDNA, occupancy or detection-error methods: the literature statistics/detection collects (#216)"
+2517476,TRRARTJ4,journalArticle,1,none,,none,merge,"eDNA, occupancy or detection-error methods: the literature statistics/detection collects (#216)"
+2517476,V54XUDRH,journalArticle,1,doi,TQ7H44WG,other,present,matched by doi
+2517476,W29RL3H5,journalArticle,1,doi,8NWZU2SD,other,present,matched by doi
+2517476,Y977NHW8,journalArticle,1,none,,none,merge,"eDNA, occupancy or detection-error methods: the literature statistics/detection collects (#216)"
+2517476,ZN7MFWPL,journalArticle,1,none,,none,merge,"eDNA, occupancy or detection-error methods: the literature statistics/detection collects (#216)"
+2769586,2XRV3SBW,journalArticle,0,none,,,discard,"the same work as 2796581 PIW5QNI3, which is merged with its PDF; this copy has none"
+2769586,49GV35NP,journalArticle,0,title,XIGKHSTT,,present,matched by title
+2769586,4YFU6KYV,journalArticle,0,doi,VIR8K4QM,,present,matched by doi
+2769586,5FZTZI4D,journalArticle,0,title,EPBDEU5K,,present,matched by title
+2769586,F8PBWP2E,journalArticle,0,doi,CUVWXS9Q,,present,matched by doi
+2769586,FJLHGL25,journalArticle,0,title,F9F4TH2I,,present,matched by title
+2769586,JQUDLZ2R,journalArticle,0,doi,K7B7B8RF,,present,matched by doi
+2769586,KR2VKLW2,journalArticle,0,doi,6T3K9ZBY,,present,matched by doi
+2769586,LFB9P7A2,journalArticle,0,title,B3TYJ9I9,,present,matched by title
+2769586,MFTM963P,journalArticle,0,doi,3MDQERTJ,,present,matched by doi
+2769586,MVED9CHB,journalArticle,0,title,BID734MC,,present,matched by title
+2769586,NA2EMEI9,journalArticle,0,title,YN95Z6EU,,present,matched by title
+2769586,S9ZRMCN9,journalArticle,0,doi,FAIC7HTL,,present,matched by doi
+2769586,T8S34MZ5,book,0,title,NTCDJ37E,,present,matched by title
+2769586,TISL437E,report,0,title,QCHYDXGV,,present,matched by title
+2769586,UTDBPUX4,journalArticle,0,doi,UXI3ARYT,,present,matched by doi
+2769586,V7E8PH7J,journalArticle,0,doi,YJP7YLLD,,present,matched by doi
+2769586,XG3IA2HN,journalArticle,0,doi,3XFEFP3L,,present,matched by doi
+2769586,Y6FCI5BF,journalArticle,0,doi,HJV5JMGM,,present,matched by doi
+2769586,Z6KGNWXY,journalArticle,0,title,S3IPNXIN,,present,matched by title
+2796581,54NS8XRP,journalArticle,1,title,F9F4TH2I,other,present,matched by title
+2796581,63MTAF8N,book,1,pdf_md5,A9MAQ3ZL,same,present,matched by pdf_md5
+2796581,82WV49D6,journalArticle,1,pdf_md5,CUVWXS9Q,same,present,matched by pdf_md5
+2796581,9GNZYYVS,journalArticle,1,pdf_md5,B3TYJ9I9,same,present,matched by pdf_md5
+2796581,A4SLUPQH,journalArticle,1,pdf_md5,7BIC5WW2,same,present,matched by pdf_md5
+2796581,ALI8QMAS,journalArticle,1,pdf_md5,BID734MC,same,present,matched by pdf_md5
+2796581,BCCIBXQQ,journalArticle,1,pdf_md5,VIR8K4QM,same,present,matched by pdf_md5
+2796581,BTUI7LU6,journalArticle,1,pdf_md5,HJV5JMGM,same,present,matched by pdf_md5
+2796581,C885QIV2,journalArticle,1,pdf_md5,3XFEFP3L,same,present,matched by pdf_md5
+2796581,IQ5YDC8D,journalArticle,1,pdf_md5,6T3K9ZBY,same,present,matched by pdf_md5
+2796581,JBW4EK3H,journalArticle,1,title,YN95Z6EU,other,present,matched by title
+2796581,JCEI3V83,journalArticle,1,title,S3IPNXIN,other,present,matched by title
+2796581,JMMEYIQG,book,1,pdf_md5,NTCDJ37E,same,present,matched by pdf_md5
+2796581,MX2FFKM8,journalArticle,1,doi,3MDQERTJ,none,present,matched by doi
+2796581,N39QPZIP,report,1,pdf_md5,QCHYDXGV,same,present,matched by pdf_md5
+2796581,PIW5QNI3,journalArticle,1,none,,none,merge,"sockeye spawning behaviour paper, with its PDF"
+2796581,QVS9MZ3G,attachment,1,none,Z53XIYCM,other,present,the same Raleigh and Miller 1986 HSI models report; the central title carries a typo
+2796581,RBCB2C35,journalArticle,1,pdf_md5,FAIC7HTL,same,present,matched by pdf_md5
+2796581,T2RXUCQ4,journalArticle,0,doi,UXI3ARYT,,present,matched by doi
+2796581,UJLHGGJA,journalArticle,1,pdf_md5,Q5393JVX,same,present,matched by pdf_md5
+2796581,UKZVACL9,attachment,1,none,YDHYE9V9,other,present,"the same scan as the central item's, whose textless original #217 replaced with an OCRed copy"
+2796581,Y856VDR7,journalArticle,1,pdf_md5,K7B7B8RF,same,present,matched by pdf_md5
+2796581,ZIMHQL5J,journalArticle,1,pdf_md5,YJP7YLLD,same,present,matched by pdf_md5
+2796581,ZQETHMQS,journalArticle,1,pdf_md5,EPBDEU5K,same,present,matched by pdf_md5
+2796596,33RIUKLY,journalArticle,0,title,TK4PDDE2,,present,matched by title
+2796596,3LJ9AS7R,journalArticle,1,pdf_md5,HZNHL3IJ,same,present,matched by pdf_md5
+2796596,3PUAWZVK,journalArticle,1,doi,5AUDDRAR,none,present,matched by doi
+2796596,3Y8XPUZT,attachment,0,title,F4KBB4Z3,same,present,matched by title
+2796596,4DEGATYZ,bookSection,1,pdf_md5,ALSDQPI2,same,present,matched by pdf_md5
+2796596,5VKTT8X5,journalArticle,1,pdf_md5,33HSHT3E,same,present,matched by pdf_md5
+2796596,6GKM6JAG,report,1,pdf_md5,UVBBU9X7,same,present,matched by pdf_md5
+2796596,6L8UX2L6,report,1,pdf_md5,9CKC9KTU,same,present,matched by pdf_md5
+2796596,6NXW4DAQ,journalArticle,1,doi,YR9NQH5J,none,present,matched by doi
+2796596,6RCA5H4G,journalArticle,1,none,,none,merge,fish passage and connectivity literature: Fisheries/Fish Passage
+2796596,7429YN69,attachment,1,pdf_md5,8F47V5LQ,same,present,matched by pdf_md5
+2796596,76PUR5VR,attachment,0,title,HTG3QTS5,same,present,matched by title
+2796596,7IFKYN2Z,journalArticle,1,none,,none,merge,fish passage and connectivity literature: Fisheries/Fish Passage
+2796596,7Y3PZXVZ,journalArticle,1,pdf_md5,98GJP8SS,same,present,matched by pdf_md5
+2796596,8IHZEA8B,attachment,1,pdf_md5,J69JV9VW,same,present,matched by pdf_md5
+2796596,8VGNI6KG,journalArticle,1,none,,none,merge,fish passage and connectivity literature: Fisheries/Fish Passage
+2796596,948USDIX,journalArticle,1,none,,none,merge,fish passage and connectivity literature: Fisheries/Fish Passage
+2796596,95A3MVPU,attachment,0,title,C7G29ICC,same,present,matched by title
+2796596,9D8YUVWD,journalArticle,2,pdf_md5,EMX8DUDZ,same,present,matched by pdf_md5
+2796596,9GNNGI8U,journalArticle,1,doi,KTE89EDH,none,present,matched by doi
+2796596,ADU8MC5Q,document,0,title,9BRJUBXK,,present,matched by title
+2796596,AM7C5ELM,journalArticle,1,none,,none,merge,fish passage and connectivity literature: Fisheries/Fish Passage
+2796596,C7K9D34W,document,1,pdf_md5,HWTDXTQA,same,present,matched by pdf_md5
+2796596,DEBTVNFS,document,0,title,RHKW5Y3X,,present,matched by title
+2796596,E2ATD4L3,journalArticle,1,none,,none,merge,fish passage and connectivity literature: Fisheries/Fish Passage
+2796596,GDFGK2TM,attachment,1,pdf_md5,LHDYM8NU,same,present,matched by pdf_md5
+2796596,H7X8YYGX,journalArticle,1,pdf_md5,AXSUBBYH,same,present,matched by pdf_md5
+2796596,HLSZ9W88,document,0,title,VDT8YQJT,,present,matched by title
+2796596,I3IPV4M5,document,0,title,W3UNAINZ,,present,matched by title
+2796596,J835XEQA,attachment,0,title,AC6SL5RC,same,present,matched by title
+2796596,JR4N7733,book,1,title,CBDKDPST,none,present,matched by title
+2796596,KKUYS2CF,journalArticle,1,none,,none,merge,fish passage and connectivity literature: Fisheries/Fish Passage
+2796596,KTJJ9UTD,book,1,pdf_md5,3QVAYLMY,same,present,matched by pdf_md5
+2796596,LDN2VVDC,journalArticle,1,title,4DD7RSW2,other,present,matched by title
+2796596,LLNEE3EQ,document,0,title,62KS7YAA,,present,matched by title
+2796596,MBI3ZN5P,journalArticle,1,pdf_md5,5RK97MSL,same,present,matched by pdf_md5
+2796596,MNN9TFYF,attachment,1,pdf_md5,YEAMT7SM,same,present,matched by pdf_md5
+2796596,N2HDE6BB,journalArticle,1,none,,none,merge,fish passage and connectivity literature: Fisheries/Fish Passage
+2796596,NCUTBFAP,journalArticle,1,none,,none,merge,fish passage and connectivity literature: Fisheries/Fish Passage
+2796596,NS9A74MU,book,1,title,3Z72BJKM,none,present,matched by title
+2796596,NTQ4QRS4,journalArticle,1,pdf_md5,83BZGZ7R,same,present,matched by pdf_md5
+2796596,PAZXB8D7,journalArticle,1,doi,MN57YIWC,none,present,matched by doi
+2796596,PEJZPYII,journalArticle,1,pdf_md5,TTV53WE3,same,present,matched by pdf_md5
+2796596,PG72T99T,book,1,none,,none,merge,fish passage and connectivity literature: Fisheries/Fish Passage
+2796596,PNI8D9JY,webpage,0,title,WZ8K96D7,,present,matched by title
+2796596,QA4TGP6A,book,1,none,,none,merge,"fish passage literature; its title is truncated, so take the title from the PDF when merging"
+2796596,RBUDWTRC,journalArticle,1,none,,none,merge,chinook salmon population genetics paper
+2796596,S5LSQKBR,document,1,title,92ZPSREY,other,present,matched by title
+2796596,SJB3V2NS,attachment,1,pdf_md5,JDBISW5S,same,present,matched by pdf_md5
+2796596,TZ5R4HBP,journalArticle,1,none,,none,merge,fish passage and connectivity literature: Fisheries/Fish Passage
+2796596,UD6BJ6PK,journalArticle,1,pdf_md5,A7N3MH9P,same,present,matched by pdf_md5
+2796596,UU94Q65Q,journalArticle,1,none,,none,merge,fish passage and connectivity literature: Fisheries/Fish Passage
+2796596,VRXBQN2L,journalArticle,0,doi,975KKEYV,,present,matched by doi
+2796596,WFFCZPND,journalArticle,1,none,,none,merge,fish passage and connectivity literature: Fisheries/Fish Passage
+2796596,WPJ6LBJN,journalArticle,1,doi,GW7NM72E,none,present,matched by doi
+2796596,XEBS9D42,attachment,1,pdf_md5,62JHFDWU,same,present,matched by pdf_md5
+2796596,XILGZYL7,document,0,title,5EWXSR9X,other,present,matched by title
+2796596,YGFKGJ7P,journalArticle,1,none,,none,merge,fish passage and connectivity literature: Fisheries/Fish Passage
+2796596,YWJIJCUN,journalArticle,0,title,SQZTWR97,,present,matched by title
+4573988,66I9JSGU,report,1,pdf_md5,9R5INMSK,same,present,matched by pdf_md5
+4573988,7RAY87X9,webpage,1,pdf_md5,4QE5S56Q,same,present,matched by pdf_md5
+4573988,93D7ETZ4,journalArticle,0,doi,JD5UEY36,,present,matched by doi
+4573988,CE49LK5J,report,1,pdf_md5,YXCLFWWL,same,present,matched by pdf_md5
+4573988,DPXC2LCC,document,1,none,TA5U6Y6V,none,present,the same project report; the central title adds its project number
+4573988,F2NQVPAY,journalArticle,0,doi,2DACGEU7,,present,matched by doi
+4573988,FAQXMIUJ,document,1,pdf_md5,YHSC8JQZ,same,present,matched by pdf_md5
+4573988,FQ8VV8RL,document,0,title,RQ25KTYY,,present,matched by title
+4573988,KYJLYNT8,document,1,title,XIDJ6DP4,none,present,matched by title
+4573988,LBL6763C,report,1,none,,none,merge,"fish sampling permit report, with its PDF"
+4573988,PILP78XS,report,0,none,,,merge,"a consultant report filed in EcoCat; no PDF, so the merge carries its record and link"
+4573988,PNIFHAEZ,report,1,none,,none,merge,"community water-quality monitoring report, with its PDF"
+4573988,UEYGDVCT,document,0,title,HDLCTVY5,,present,matched by title
+4573988,UMWZN7E2,document,0,title,SFE8ZLFY,,present,matched by title
+4573988,WUS9MYW8,report,1,pdf_md5,NYRFGRFZ,same,present,matched by pdf_md5
+4573988,X4GQTCUD,document,1,none,,none,merge,"fish passage data analysis report, with its PDF"
+4573988,Z8I734GQ,book,0,none,,,merge,"provincial water-quality trends report; no PDF, so the merge carries its record"
+4573988,ZQMFRZC6,journalArticle,0,doi,X7ZF9PWW,,present,matched by doi
+4573988,ZWN8DTNT,document,0,title,YBVSLNX5,,present,matched by title

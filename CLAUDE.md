@@ -135,7 +135,8 @@ Issue and PR numbers in the seeded history and in `planning/archive/2026-07-*` r
   `zotero_attachment_verdicts.csv` (what `0275` did to each group item with several PDFs or wrong fields, one decided
   row per item, kept as the record; #126, #151), and
   `zotero_library_triage.csv` (each item of the five satellite group libraries, whether the central library holds it
-  and by what evidence, and the verdict on each it does not, `present`, `merge` or `discard`; Zotero ids only, since a
+  and by what evidence, whether it holds the item's file (`central_file`), and the verdict on each it does not, `present`,
+  `merge` or `discard`; Zotero ids only, since a
   satellite library's name or titles can name a client; `data-raw/zotero_library_triage.py`, #13), and
   `thresholds.csv` and `thresholds_groups.csv` (the tuned thresholds per species × stage × component in link's
   parameter names, with the near-river pair's scope where a rule has one (`near_river_scope`, from the comparison's
@@ -278,7 +279,8 @@ They are the stale submitted versions. They reach Zotero from the report repos.
 The `NewGraphEnvironment` group library (group 4733734) is the single source of every reference, PDF and citation key.
 A share library holds copies only, and a copy gets a key of its own, so nothing joins on a share-library key. The five
 other group libraries in our Zotero are dormant: `data/zotero_library_triage.csv` records which of their items the
-central library holds and what is decided for the rest, and they are retired once every `merge` is carried out. The
+central library holds and what is decided for the rest, and they are retired once every `merge` is carried out and
+every file a `present` item's central copy lacks (`central_file` `none`) is attached to it. The
 personal library is triaged separately. `research/zotero_libraries.md` has the counts.
 
 ### Zotero access is local, except for filing
