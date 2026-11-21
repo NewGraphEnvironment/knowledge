@@ -41,7 +41,8 @@
 #         scope (group, run_type, population, apart)
 # RUN:    d=$(date -u +%Y%m%d); OUT=scripts/logs/timing/${d}_timing_nuseds_windows.csv Rscript data-raw/timing_nuseds.R \
 #           2>&1 | tee scripts/logs/timing/${d}_timing_nuseds.txt   (repo root)
-#         GROUPS=BULK,MORR SPECIES=CH ...   (comma lists, else every group and species with dated records)
+#         WSG=BULK,MORR SPECIES=CH ...      (comma lists, else every group and species with dated records; not
+#                                            GROUPS, which bash keeps for itself and never exports)
 #         VERSION=v1 ...                    (the published set, else v1)
 # ---------------------------------------------------------------------------
 pkgload::load_all(quiet = TRUE)
@@ -51,7 +52,7 @@ env_list <- function(v) {
   v <- toupper(trimws(strsplit(Sys.getenv(v), ",")[[1]]))
   v[nzchar(v)]
 }
-want_groups <- env_list("GROUPS")
+want_groups <- env_list("WSG")
 want_species <- env_list("SPECIES")
 version <- Sys.getenv("VERSION", "v1")
 out <- Sys.getenv("OUT")
@@ -83,7 +84,7 @@ cat("NuSEDS", man$id, "release", man$provenance$nuseds_release, "published from 
     man$provenance$published_from_commit, "\n", mf$path, "sha256", sha, "(the manifest's),", nrow(x), "rows\n")
 
 x$species_code <- unname(species_codes[x$species])
-x <- x[!is.na(x$species_code) & (!length(want_species) | x$species_code %in% want_species), , drop = FALSE]
+x <- x[!is.na(x$species_code), , drop = FALSE]
 x$end_dt <- ifelse(is.na(x$end_spawn_dt_to), x$end_spawn_dt_from, x$end_spawn_dt_to)
 dated <- !is.na(x$start_spawn_dt_from) | !is.na(x$end_dt)
 cat(sum(dated), "dated records of", length(unique(x$pop_id[dated])), "populations;",
@@ -142,6 +143,7 @@ for (i in seq_len(nrow(reach))) {
   }
   x$wsg[hit] <- reach$wsg_code[i]
 }
+if (length(want_species)) x <- x[x$species_code %in% want_species, , drop = FALSE]
 cat("named reaches (data/nuseds_reach_groups.csv):", paste(reach$waterbody, "->", reach$wsg_code, collapse = "; "),
     "\n")
 
@@ -179,6 +181,7 @@ apart_keys <- if (nrow(apart_x)) {
 keys <- unique(rbind(pooled_keys, apart_keys))
 if (length(want_groups)) keys <- keys[keys$wsg %in% want_groups, , drop = FALSE]
 keys <- keys[order(keys$wsg, match(keys$species_code, species_codes)), , drop = FALSE]
+if (!nrow(keys)) stop("no dated records for the groups and species asked", call. = FALSE)
 cat(nrow(keys), "group x species keys in", length(unique(keys$wsg)), "groups\n")
 
 win <- list()
@@ -236,10 +239,19 @@ check("UFRA", "CH", "08-11", "09-05", 123L, 126L)
 check("COTR", "CH", "08-10", "09-06", 35L, 36L)
 check("BULK", "CH", "08-15", "09-10", 28L, 27L)
 
+if (nzchar(out)) {
+  utils::write.csv(win[, c("wsg_code", "species_code", show)], out, row.names = FALSE, na = "")
+  cat("\nwrote", nrow(win), "windows to", out, "\n")
+}
+
 # ---- the timing table beside NuSEDS ----
 tt <- as.data.frame(knw_timing_read("data/life_history_timing.csv"))
 if (length(want_groups)) tt <- tt[tt$wsg_code %in% want_groups, , drop = FALSE]
 if (length(want_species)) tt <- tt[tt$species_code %in% want_species, , drop = FALSE]
+if (!nrow(tt)) {
+  cat("\nthe timing table has no row for the groups and species asked: nothing to compare\n")
+  quit(save = "no", status = 0)
+}
 cmp <- do.call(rbind, lapply(seq_len(nrow(tt)), function(i) {
   r <- tt[i, ]
   g1 <- win[win$wsg_code == r$wsg_code & win$species_code == r$species_code & win$scope == "group", , drop = FALSE]
@@ -276,7 +288,3 @@ for (i in which(!is.na(cmp$largest))) {
 cat("\nrows not compared:\n")
 print(as.data.frame(table(compared = cmp$compared[is.na(cmp$largest)])), row.names = FALSE)
 
-if (nzchar(out)) {
-  utils::write.csv(win[, c("wsg_code", "species_code", show)], out, row.names = FALSE, na = "")
-  cat("\nwrote", nrow(win), "windows to", out, "\n")
-}

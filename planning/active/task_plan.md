@@ -36,7 +36,7 @@ Skeena and North Thompson in their lowest groups, so those points cannot place a
 ## Phase 2: windows for every group and species from the published parquet (#240)
 - [x] Read `knowledge/nuseds/v1` (`VERSION=`) over HTTPS: download the manifest and the parquet to a tempfile with curl,
       refuse a sha256 that differs from the manifest's, and print the release, sha256 and manifest commit
-- [x] `GROUPS=` and `SPECIES=` (comma lists; default every group and species with dated records). Map NuSEDS species
+- [x] `WSG=` and `SPECIES=` (not `GROUPS`, which bash keeps; code-check round 1) (comma lists; default every group and species with dated records). Map NuSEDS species
       to the table's codes (CH CO SK PK CM ST; Atlantic dropped)
 - [x] Group by watershed code as now, through one query on `whse_basemapping.fwa_stream_networks_sp`. Single-group
       codes pool into their group; reaches (gfe_id) in `data/nuseds_reach_groups.csv` go to the group it names (and are not listed apart elsewhere); any other

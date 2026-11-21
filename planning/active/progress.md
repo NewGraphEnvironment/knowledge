@@ -20,3 +20,8 @@
 - Phase 4: committed run `scripts/logs/timing/20261121_timing_nuseds.{txt,_windows.csv}` (UTC date; from a copy of the
   committed script at 749f8cfd); scripts/README.md timing note and the timing logs README updated. The backlog ticks
   moved to "Owed at the end": `/gh-pr-merge` writes them with the PR URL
+- `/code-check branch` round 1 (3 findings, all real, each reproduced): `GROUPS=` never reaches R under bash (renamed
+  `WSG`, as `segment_window_flow.R` did in #174); `SPECIES=` filtered before the reach guard, so `SPECIES=CO` stopped on
+  gfe_id 2477 (filter moved after the guard); a filtered run with no table rows crashed before writing `OUT` (OUT now
+  written after the checks and before the comparison, which stops cleanly on no rows; no keys refuses). Verified:
+  `WSG=ADMS SPECIES=CH` and `SPECIES=CO` exit 0 and write; the full run's windows CSV is byte-identical to d015364c's
