@@ -43,3 +43,5 @@ Backlog: `planning/backlog.md`, move 10. Plan it with `/planning-init <this issu
 
 | Error | Resolution |
 |-------|------------|
+| `ocrmypdf`: tesseract "image file not found: /tmp/ocrmypdf.io.*/000001_rasterize.png", every file failed | The sandbox keeps tesseract from reading ocrmypdf's temp files under `/tmp`; run with `TMPDIR` in the session scratchpad |
+| Importing `0270` from a read-only script exits: 0153 reads a Web API key at load | `data-raw/zotero_library_triage.py` sets a placeholder `ZOTERO_API_KEY` before the load; it makes no Web API call |

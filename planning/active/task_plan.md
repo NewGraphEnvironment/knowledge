@@ -35,31 +35,40 @@ library holds copies only, and a copy gets a new key so nothing joins on a share
 
 ## Phase 1: OCR the ten scans and rebuild the stores that hold them (batch 22, #217)
 
-- [ ] Upgrade cred to 0.8.0 and ragnar to 0.4.0 (`pak::pak()`), and check `0150`'s version gates still pass
+- [x] Upgrade cred to 0.8.0 and ragnar to 0.4.0 (`pak::pak()`), and check `0150`'s version gates still pass
 - [ ] Download each of the ten attachments (keys in #217's table), `ocrmypdf --deskew` each into `data/rag/pdf/ocr217/`
       (ignored), check each title page reads correctly, and record its word count
 - [ ] Append ten `replace` rows to `data/zotero_attachment_verdicts.csv`, in the shape of #151's and #194's rows
       (item, citation key, attachment, file, `why` with the word count and the md5-mismatch note)
-- [ ] Run `0275 --dry-run`, then live, then a no-op dry run; record the new attachment keys
-- [ ] Sync Zotero, confirm the new attachments in a guarded copy of `zotero.sqlite`, then pull and rebuild
+- [ ] Run `0275 --only <the ten item keys> --dry-run`, then live, then a no-op dry run; record the new attachment keys;
+      commit the verdict rows before any push (review)
+- [ ] Sync Zotero, then quit it (or wait for a 0-byte `-wal`: cred reads the live file immutable, cred#45, and a
+      `replace` keeps the citation key, so a build could take the old scan again; review), check each new
+      `~/Zotero/storage/<new key>/<file>` exists with its OCR file's md5, then pull and rebuild
       (`ACTION=build OVERWRITE=TRUE`, each store's whole build list from `scripts/README.md`) `habitat_modelling`,
       `temperature`, `flow`, `fish_passage` and `bull_trout_grayling`; log each to `scripts/logs/rag/`, read each
-      dropped list, and check the ten now ingest (a query hit for Bjornn & Reiser and Ford et al.)
-- [ ] Push each store (`ACTION=push`, dry run first), and read each push's result before any verified connect
+      dropped list, and check per store: the new attachment keys in its origins (10, 2, 4, 1, 1), none of the old ones, no
+      `-wal` warning in its log, and a query hit for Bjornn & Reiser and Ford et al.
+- [ ] `peace` is left out (review): it also holds Stuart & Chislett (`data/rag/_pdfs/peace/XDKIU3UA.pdf`), but it is a
+      key-named store of local copies that `0150` cannot update, and rebuilding it renames all 117 documents, which is
+      #14's key change; say so in #217's body
+- [ ] Push each store (`ACTION=push`, dry run first), and read each push's result before any verified connect; each
+      manifest entry shows `store_schema: "0.4.0"`, and a verified connect after the push passes
 - [ ] Correct #217's body: five stores, not three; tick its plan
 
 ## Phase 2: The single-library policy and the group-library triage (batch 16, #13's first piece)
 
-- [ ] Write the single-library policy into `CLAUDE.md` (Zotero working notes), and correct the store sentence: a
-      cred-built document is named by its attachment path, which `crd_search()` resolves to a citation key (#14)
-- [ ] `data-raw/zotero_library_triage.py`: from a guarded copy of `zotero.sqlite` (the `snapshot()` rule), match each
-      live top-level item of libraries 2, 5, 6, 7 and 8 against library 9 by PDF md5 (`storageHash`), DOI, then
+- [x] Write the single-library policy into `CLAUDE.md` (Zotero working notes), and correct the store sentence: a
+      cred-built document is named by its attachment path, which `crd_search()` resolves to a citation key (#14); the
+      same sentence in `scripts/0150-store.R`'s header and `scripts/README.md` (review)
+- [x] `data-raw/zotero_library_triage.py`: from a guarded copy of `zotero.sqlite` (the `snapshot()` rule), match each
+      live top-level item of the five satellite groups (by group id) against library 9 by PDF md5 (`storageHash`), DOI, then
       normalised title, and write `data/zotero_library_triage.csv` (group id, item key, match kind, library-9 key,
       verdict, reason). No titles or library names in the tracked file (a satellite library's name and titles can
       carry client identifiers); the script prints titles to the terminal for review
-- [ ] Give each unmatched candidate a verdict (`present` under another title / `merge` / `discard`) with a reason,
+- [x] Give each unmatched candidate a verdict (`present` under another title / `merge` / `discard`) with a reason,
       checking each against the item itself
-- [ ] `research/zotero_libraries.md`: what each library holds against library 9, the match counts by kind, the
+- [x] `research/zotero_libraries.md`: what each library holds against library 9, the match counts by kind, the
       verdict counts, and what retirement waits on; add a row to `research/README.md`
 - [ ] File the new issue (personal-library triage, the 11 multi-PDF items, carrying out the `merge` verdicts,
       retirement), naming move 10 as where it was split from; move the "Personal-library items" list and the
@@ -67,13 +76,15 @@ library holds copies only, and a copy gets a new key so nothing joins on a share
 - [ ] File a cred issue for document identity on parent item key, library and version, with a resolve check for
       merged-away keys; write "blocked by cred#N" into #14's body, and tick its `CLAUDE.md` sentence fix there
 - [ ] Write the separate-store decision into #16's body
-- [ ] `planning/backlog.md`: batch 16 keeps #13 only; #14, #16 and the new issue are left out for the next sweep;
-      the move 10 row says so; record it in #179's body
+- [ ] `planning/backlog.md`: batch 16 keeps #13 only; #14, #16 and the new issue are named nowhere in the file (batch
+      22's mentions of #14's rebuild and the personal-library pointer included, review), so the next sweep places them;
+      the move 10 row says so; record it in #179's body; the PR closes #13 and #217
 
 ## Owed at the end (reported, done after merge)
 
 - [ ] cred 0.8.0 installed on every machine that updates stores (the database's host included)
 - [ ] Al reviews the `discard` verdicts before the new issue carries out any merge or retirement
+- [ ] A read of one rebuilt store on another machine once its cred is 0.8.0
 
 ## Validation
 

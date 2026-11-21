@@ -33,7 +33,8 @@
 #   - cred takes ONE collection or a vector of citation keys. The old build
 #     unioned several collections, so `build` here resolves each named
 #     collection to its citation keys and passes the union.
-#   - A cred-built store is named by Better BibTeX citation key, not by
+#   - A cred-built store is built from Better BibTeX citation keys and names each
+#     document by its attachment path (storage/<attachment key>/<file>; #14), not by
 #     `<EXTENT>__<reportId>.pdf`. It has no watershed-group attribution and
 #     needs data/zotero_key_map.csv to join the farm (0154, 0161). Items with
 #     no citation key or no PDF attachment are absent; build names each one
