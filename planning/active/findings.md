@@ -33,7 +33,7 @@ ragnar 0.4.0, the CRAN release, chunks the same markdown into 69 chunks, as test
   manifest entry has no `ragnar_version` or `store_schema`.
 - Membership (a copy of m1's `zotero.sqlite` with its `-wal`): 47 distinct members, 32 keys with one live PDF each,
   the same 15 left out as #216's. Expected: 1 added (Hedger), 0 dropped.
-- The pulled store's origins are `/Users/airvine/Zotero/storage/...`, m1's own paths, so the build's before/after
+- The pulled store's origins are `~/Zotero/storage/...` under the build host's home, m1's own paths, so the build's before/after
   comparison by origin is valid there.
 - cred records the manifest's `repo`, `branch` and `head_sha` with `.crd_git_provenance(dirname(store_path))`
   (`.crd_store_describe()`), which is why the build and push move to a worktree of this branch.

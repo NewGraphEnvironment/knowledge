@@ -13,7 +13,7 @@ Owner forks: 0
 - Ordering, "update cred everywhere before pushing": the push is not held for it, as decided at the gate; the issue
   and PR say it was deferred to #217's owed item, not met. Folded into Phase 3 and the Context.
 - Assumption, origins are absolute paths and could differ by host: checked, not a problem. The pulled store's origins
-  are `/Users/airvine/Zotero/storage/...`, m1's own paths, and the build also runs on m1.
+  are `~/Zotero/storage/...` under the build host's home, m1's own paths, and the build also runs on m1.
 - Assumption, the bucket entry lacks `ragnar_version`/`store_schema`: confirmed and recorded in the expected file.
 - Assumption, "no size growth" is not in the comment: disproved; the comment says a fresh build writes the new schema
   "with correct search indexes and no size growth".
