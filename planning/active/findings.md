@@ -63,3 +63,8 @@ branch's history was rewritten (before its first push) so no commit carries the 
 byte-identical to before. `flow` was pushed again so its manifest `head_sha` names a commit the branch still holds
 (all five were pushed again after a second rewrite, below). A push log written by `0150` needs the same trim
 until `0150` prints only the entry it wrote.
+
+A second rewrite (code-check round 4) took a machine's host name out of the early planning commits. Every commit after
+the base changed, so all five stores were pushed again at `c75c804a`, the first commit after that rewrite; the push logs
+now record those pushes, and every manifest `head_sha` names a commit the branch holds. Nothing had been pushed to
+GitHub before either rewrite.

@@ -1,4 +1,4 @@
-# push temperature after the #217 rebuild, 2026-11-21T10:50:11Z
+# push temperature after the #217 rebuilds, 2026-11-21T11:28:34Z (pushed again after the branch's history was rewritten before its first push, so the manifest's head_sha names a commit the branch holds)
 [dry run] would upload data/rag/temperature.duckdb -> s3://fresh-bc/rag/temperature.duckdb
 [dry run] merged manifest would hold: fraser, vca_refs, peace, pine, habitat_modelling, temperature, flow, bull_trout_grayling, sturgeon, statistics, westslope_cutthroat, bull_trout, fish_passage
 # the dry run's manifest entry for temperature (the manifest's other entries are left out)
@@ -15,11 +15,11 @@
     "md5": "980e4a856c71394f217a74310037286c",
     "repo": "NewGraphEnvironment/knowledge",
     "branch": "179-backlog-move-10-report-corpus-one-librar",
-    "head_sha": "c2d07c263b61cb96f69ec9036af6f8c39202e8b4",
+    "head_sha": "c75c804ac8456b6b267bf0e078c4ed598ab5bcc7",
     "built_by": "cred::crd_store_push()",
-    "date_completed": "2026-11-21T10:50:14Z"
+    "date_completed": "2026-11-21T11:28:37Z"
   }
 }
 Uploading temperature.duckdb (163 MB)
 Manifest updated — now holds: fraser, vca_refs, peace, pine, habitat_modelling, temperature, flow, bull_trout_grayling, sturgeon, statistics, westslope_cutthroat, bull_trout, fish_passage
-# exit 0 at 2026-11-21T10:50:32Z
+# exit 0 at 2026-11-21T11:28:57Z
