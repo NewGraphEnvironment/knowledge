@@ -39,3 +39,8 @@
   lines, 19 quantified claims): no behavioural defect; three wording defects, two inside round 2's fix: the CSV's grain
   (one row per window, not per group x species x scope), "16 dated records" holds for records with a watershed code,
   and the log printed OUT's full temp path (now its basename, so no local path reaches the public log)
+- Round 5, confirming round 4 by re-enumerating sets C (17), D (9) and E (19) and grepping both tracked logs for local
+  paths (none): one wording defect inside round 4's grain fix (a group row exists only where the group has pooled
+  records). Fixed, and measured on the tracked CSV: 480 keys, 357 group rows = 357 keys with pooled populations, no
+  duplicate group rows, windows unique on group x species x scope x run type x population. The loop ends on that
+  enumeration: every member of A-E checked, the one remaining defect fixed and measured

@@ -41,8 +41,8 @@
 #         nuseds_records.parquet), data/nuseds_reach_groups.csv, data/life_history_timing.csv, a database holding
 #         whse_basemapping (PG*)
 # OUTPUT: the windows and the comparison, printed; with OUT= the windows as a CSV, one row per window: per group and
-#         species its pooled window (scope group), one per run type where it holds several (run_type), and one per
-#         population pooled (population) or listed apart (apart)
+#         species with pooled records its window (scope group), one per run type where it holds several (run_type),
+#         and one per population pooled (population) or listed apart (apart)
 # RUN:    d=$(date -u +%Y%m%d); t=${TMPDIR:-/tmp}/${d}_timing_nuseds
 #         (set -o pipefail; OUT=${t}_windows.csv Rscript data-raw/timing_nuseds.R 2>&1 | tee ${t}.txt) &&
 #           cp ${t}.txt ${t}_windows.csv scripts/logs/timing/   (repo root)
