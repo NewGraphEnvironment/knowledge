@@ -53,7 +53,7 @@ split piece, or one filed since the last pass): run `/backlog-sweep` to place it
 | - [ ] 13 | #232 | 20: one research page per key (3 issues) | open | E | 10, 12 | fable then opus |
 | - [ ] 14 | #233 | 21: window flow follow-ups (2 issues) | open | G | — | fable then opus |
 | - [ ] 15 | #236 | 24: PSCIS stream slope against link's gradient, the gradient track's first piece (1 issue) | open | F | — | opus |
-| - [ ] 16 | #244 | 25, 26: NuSEDS windows for every group, the timing track's first piece; a publish that runs as documented (2 issues) | open | H | — | opus |
+| - [x] 16 | #244 | 25, 26: NuSEDS windows for every group, the timing track's first piece; a publish that runs as documented (2 issues) | done: https://github.com/NewGraphEnvironment/knowledge/pull/250 | H | — | opus |
 Tracks are separate efforts, not moves: baselines (#139, `track:baselines`: #140 next), speed (`track:speed`: #85,
 #101; its umbrella is in the skills repository), provenance (`track:provenance`: #162, then #246, the placement ties a rerun of `0230` meets on another database; #165 done in PR #206, #197 in PR #207; umbrella likewise) and
 minimal-run (#120, `track:minimal-run`: closed 2026-11-18, its waiting setups owed in #132 and #70) and publish (#220,
@@ -349,7 +349,7 @@ measures.
 
 ### 25. NuSEDS windows for every group
 
-- [ ] Carried by move 16, #244
+- [x] Carried by move 16, #244 (merged in https://github.com/NewGraphEnvironment/knowledge/pull/250)
 
 #240, the timing track's first piece (#243): `data-raw/timing_nuseds.R` takes groups and species as arguments (default
 every group and species with dated records), reads the published `knowledge/nuseds/v1` parquet rather than the local
@@ -362,7 +362,7 @@ no literature exists yet. Two open wet issues read the timing rows and rerun whe
 
 ### 26. A publish that runs as documented
 
-- [ ] Carried by move 16, #244
+- [x] Carried by move 16, #244 (merged in https://github.com/NewGraphEnvironment/knowledge/pull/250)
 
 #230: `scripts/0340-nuseds-build.R`'s documented RUN line tees into a tracked log, which `tee` truncates at launch, so
 `PUBLISH=TRUE`'s clean-tree check refuses (#174's publish of `knowledge/nuseds/v1` moved the log by hand). Gate: the log
