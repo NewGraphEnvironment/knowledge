@@ -1,5 +1,33 @@
 # Changelog
 
+## knowledge 0.4.48
+
+- NuSEDS spawning windows for every watershed group and species with
+  dated records
+  ([\#240](https://github.com/NewGraphEnvironment/knowledge/issues/240)):
+  `data-raw/timing_nuseds.R` reads the published `knowledge/nuseds/v1`
+  set (its sha256 held to the manifest), takes `WSG=` and `SPECIES=`,
+  and writes 6,112 windows over 480 group and species pairs in 126
+  groups, each population’s beside its group’s, then sets every row of
+  `data/life_history_timing.csv` beside its group’s window. A population
+  on a watershed code that crosses several groups, a mainstem such as
+  the Morice or the Bulkley, joins no group’s window and is listed apart
+  under each, unless the new `data/nuseds_reach_groups.csv` names the
+  group its reach lies in; it holds UFRA’s Fraser above Tete Jaune, so
+  the published UFRA window is unchanged. The script writes no table
+  row: BULK chinook spawning starts 14 days later than its row, and MORR
+  chinook migration runs 41 days into spawning, for
+  [\#241](https://github.com/NewGraphEnvironment/knowledge/issues/241)
+  and
+  [\#242](https://github.com/NewGraphEnvironment/knowledge/issues/242)
+  to review (`research/nuseds_timing.md`). `0340`’s documented run
+  writes its log outside the repo and copies it in after a run that
+  succeeded, so `PUBLISH=TRUE` no longer refuses on its own log
+  ([\#230](https://github.com/NewGraphEnvironment/knowledge/issues/230)).
+  Backlog move 16
+  ([\#244](https://github.com/NewGraphEnvironment/knowledge/issues/244))
+  carried both. Nothing published moves.
+
 ## knowledge 0.4.47
 
 - The Fish Data Submission workbook parser is tested package code
