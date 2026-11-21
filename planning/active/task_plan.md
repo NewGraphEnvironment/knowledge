@@ -91,8 +91,8 @@ library holds copies only, and a copy gets a new key so nothing joins on a share
 ## Validation
 
 - [x] Tests pass (`devtools::test()`)
-- [ ] `/code-check branch` clean
-- [ ] PWF checkboxes match landed work
+- [x] `/code-check branch` clean
+- [x] PWF checkboxes match landed work
 - [ ] `/planning-archive` on completion
 
 Verification: each OCR's title page and word count are read by eye; `0275`'s second dry run reports every row done;

@@ -22,3 +22,8 @@
   replaced, Zotero reopened to sync and quit again, `flow` rebuilt to 43 with all six new keys
 - All five pushed (10:50–10:56 UTC), each verified connect kept the local file (md5 matches manifest); queries return
   Bjornn & Reiser 1991 and Ford et al. 1995; tests 2,557 pass, 0 fail; Zotero reopened; #217's body corrected
+- `/code-check branch`: five rounds, ended on an enumeration (`review-enumeration.md`, `review-verdict.md`). Rounds 2-4
+  each found a defect inside the previous fix (the triage CSV's read-back guessing who decided a row, until `decided_by`
+  made it explicit; `central_file` judged on any file, then on one central copy). Round 3 found the push logs dumping
+  the bucket manifest, which named a private repository; round 4 found a host name left in early planning commits.
+  The branch's history was rewritten twice before its first push, and all five stores re-pushed at `c75c804a`.
