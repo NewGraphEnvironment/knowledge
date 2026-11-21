@@ -40,21 +40,23 @@ library holds copies only, and a copy gets a new key so nothing joins on a share
       (ignored), check each title page reads correctly, and record its word count
 - [x] Append ten `replace` rows to `data/zotero_attachment_verdicts.csv`, in the shape of #151's and #194's rows
       (item, citation key, attachment, file, `why` with the word count and the md5-mismatch note)
-- [ ] Run `0275 --only <the ten item keys> --dry-run`, then live, then a no-op dry run; record the new attachment keys;
+- [x] Run `0275 --only <the ten item keys> --dry-run`, then live, then a no-op dry run; record the new attachment keys;
       commit the verdict rows before any push (review)
-- [ ] Sync Zotero, then quit it (or wait for a 0-byte `-wal`: cred reads the live file immutable, cred#45, and a
+- [x] Sync Zotero, then quit it (or wait for a 0-byte `-wal`: cred reads the live file immutable, cred#45, and a
       `replace` keeps the citation key, so a build could take the old scan again; review), check each new
       `~/Zotero/storage/<new key>/<file>` exists with its OCR file's md5, then pull and rebuild
       (`ACTION=build OVERWRITE=TRUE`, each store's whole build list from `scripts/README.md`) `habitat_modelling`,
       `temperature`, `flow`, `fish_passage` and `bull_trout_grayling`; log each to `scripts/logs/rag/`, read each
       dropped list, and check per store: the new attachment keys in its origins (10, 2, 4, 1, 1), none of the old ones, no
       `-wal` warning in its log, and a query hit for Bjornn & Reiser and Ford et al.
-- [ ] `peace` is left out (review): it also holds Stuart & Chislett (`data/rag/_pdfs/peace/XDKIU3UA.pdf`), but it is a
+- [x] `peace` is left out (review): it also holds Stuart & Chislett (`data/rag/_pdfs/peace/XDKIU3UA.pdf`), but it is a
       key-named store of local copies that `0150` cannot update, and rebuilding it renames all 117 documents, which is
       #14's key change; say so in #217's body
-- [ ] Push each store (`ACTION=push`, dry run first), and read each push's result before any verified connect; each
+- [x] Push each store (`ACTION=push`, dry run first), and read each push's result before any verified connect; each
       manifest entry shows `store_schema: "0.4.0"`, and a verified connect after the push passes
-- [ ] Correct #217's body: five stores, not three; tick its plan
+- [x] Correct #217's body: five stores, not three; tick its plan
+- [x] Two more textless scans the first `flow` rebuild skipped (McMahon 1983, Hubert et al. 1985): OCRed, replaced
+      through `0275`, `flow` rebuilt again (found mid-run; same issue, same mechanism)
 
 ## Phase 2: The single-library policy and the group-library triage (batch 16, #13's first piece)
 
@@ -88,7 +90,7 @@ library holds copies only, and a copy gets a new key so nothing joins on a share
 
 ## Validation
 
-- [ ] Tests pass (`devtools::test()`)
+- [x] Tests pass (`devtools::test()`)
 - [ ] `/code-check branch` clean
 - [ ] PWF checkboxes match landed work
 - [ ] `/planning-archive` on completion

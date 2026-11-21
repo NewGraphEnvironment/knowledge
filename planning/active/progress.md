@@ -15,3 +15,10 @@
 - Phase 1: OCR running (the first try failed under the sandbox's `/tmp`; `TMPDIR` in the scratchpad fixed it)
 - OCR done 08:39–09:00 UTC (21 min, 1,453 pages): word counts 4,817 (Hartman) to 97,071 (Ford); each title page read;
   ten `replace` rows appended; `0275 --only <ten> --dry-run` clean
+- `0275` live for the ten (09:02 UTC); new attachments synced with the OCR md5s, but cred's immutable read saw none of
+  it until Zotero was quit (0-byte `-wal`); rebuilds 09:04–10:48 UTC: habitat_modelling 404 → 414, temperature 53 → 54,
+  fish_passage 24 → 25, bull_trout_grayling 196 → 197, each with its new keys and none of the old
+- `flow`'s first rebuild dropped two more textless HSI scans; OCRed (Hubert's needed `--invalidate-digital-signatures`),
+  replaced, Zotero reopened to sync and quit again, `flow` rebuilt to 43 with all six new keys
+- All five pushed (10:50–10:56 UTC), each verified connect kept the local file (md5 matches manifest); queries return
+  Bjornn & Reiser 1991 and Ford et al. 1995; tests 2,557 pass, 0 fail; Zotero reopened; #217's body corrected
