@@ -9,9 +9,9 @@ unmatched items read against each item by hand
 
 Of the 168 live items in the five satellite group libraries, 113 are already in the central `NewGraphEnvironment`
 library (group 4733734): 110 found by evidence and 3 by hand. Of the other 55, 51 are to be merged into the central
-library and 4 let go. And 13 of the 113 hold a file the central library has no copy of, its copy of the work holding
-no file at all. None of the five libraries can be retired until the 51 merges are carried out and those 13 files are
-attached to their central copies; the personal library (about 280 items with no match by title or DOI) is a separate triage, not done here.
+library and 4 let go. And 27 of the 113 hold a file the central library has no copy of. None of the five libraries
+can be retired until the 51 merges are carried out and each of those 27 is attached to its central copy or judged the
+same document as the file that copy holds; the personal library (about 280 items with no match by title or DOI) is a separate triage, not done here.
 
 | group | items | present | merge | discard |
 |---|---|---|---|---|
@@ -42,7 +42,8 @@ The script takes the strongest evidence first, and a match on it settles the ite
 Three of those are recorded `present` by hand with the central key: two works under a corrected or extended title (a
 typo in the central copy's title; a project number added to it), and a copy of the Bjornn and Reiser 1991 scan, which
 matched by its bytes until #217 replaced the central scan with an OCRed copy. A row the script matched and no longer
-does comes back undecided, so a matched verdict never outlives its evidence. A title match could join two different works
+does comes back undecided, so a matched verdict never outlives its evidence; a verdict decided by hand is kept on a
+re-run whether or not the row matches, so a wrong match can be overridden. A title match could join two different works
 sharing a generic title; the 40 title matches were not each read, so a merge that later finds its "present" copy is
 another work reopens that row.
 
@@ -50,8 +51,9 @@ another work reopens that row.
 
 `present` says the central library has a record of the work. It does not say it has the satellite's file, and
 retiring a library deletes its files. `central_file` records that, over every stored file of an item: of the 77
-`present` items holding a file, 51 have a central file with the same bytes, 13 a central copy holding another file
-(another version or scan), and 13 a central copy holding none. Those 13 (one of them a Word file) are carried over
+`present` items holding a file, 50 have every file in the central library with the same bytes, 1 has some of its files
+there and not others, 13 have a central copy holding another file (another version or scan; one is a Word file), and 13
+a central copy holding none. The 27 that are not `same` are carried over, or the other file judged the same document,
 before retirement.
 
 ## What was decided for the 55
@@ -69,7 +71,8 @@ anything is retired.
 ## What retirement waits on
 
 1. The 51 merges, through the Web API, each into a collection of the central library, with a note of where it came from;
-   and the 13 files a `present` item's central copy lacks, attached to that copy.
+   and the 27 `present` items whose files the central library lacks (`central_file` `part`, `other` or `none`): each
+   file attached to its central copy, or the copy's own file judged the same document.
 2. The personal library's triage (about 280 items unmatched by title and DOI, and the 11 personal items with several
    PDFs that #13 listed).
 3. Al deletes each satellite group once its merges are done: a group deletion is the owner's.

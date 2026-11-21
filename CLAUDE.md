@@ -280,7 +280,8 @@ The `NewGraphEnvironment` group library (group 4733734) is the single source of 
 A share library holds copies only, and a copy gets a key of its own, so nothing joins on a share-library key. The five
 other group libraries in our Zotero are dormant: `data/zotero_library_triage.csv` records which of their items the
 central library holds and what is decided for the rest, and they are retired once every `merge` is carried out and
-every file a `present` item's central copy lacks (`central_file` `none`) is attached to it. The
+every file of a `present` item that the central library lacks (`central_file` other than `same`) is attached to its
+central copy or judged the same document. The
 personal library is triaged separately. `research/zotero_libraries.md` has the counts.
 
 ### Zotero access is local, except for filing

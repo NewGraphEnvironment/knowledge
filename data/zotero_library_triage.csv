@@ -107,7 +107,7 @@ group_id,item_key,item_type,pdfs,match_kind,library9_key,central_file,verdict,re
 2796596,8VGNI6KG,journalArticle,1,none,,none,merge,fish passage and connectivity literature: Fisheries/Fish Passage
 2796596,948USDIX,journalArticle,1,none,,none,merge,fish passage and connectivity literature: Fisheries/Fish Passage
 2796596,95A3MVPU,attachment,0,title,C7G29ICC,same,present,matched by title
-2796596,9D8YUVWD,journalArticle,2,pdf_md5,EMX8DUDZ,same,present,matched by pdf_md5
+2796596,9D8YUVWD,journalArticle,2,pdf_md5,EMX8DUDZ,part,present,matched by pdf_md5
 2796596,9GNNGI8U,journalArticle,1,doi,KTE89EDH,none,present,matched by doi
 2796596,ADU8MC5Q,document,0,title,9BRJUBXK,,present,matched by title
 2796596,AM7C5ELM,journalArticle,1,none,,none,merge,fish passage and connectivity literature: Fisheries/Fish Passage

@@ -16,19 +16,22 @@ first count matched titles only, which reads case, punctuation and subtitle drif
   doi           the same DOI (case and any https://doi.org/ prefix ignored)
   title         the same title, lower case with everything but letters and digits removed
   title_prefix  the same title before its first colon, or its first 60 such characters
-A row it matches is `present`. A row it does not match keeps the verdict, reason and
-library9_key the file holds for it (group_id + item_key) only where that row was unmatched
-too, so a decision made by hand survives a re-run and an automatic `present` whose evidence
-has gone (a central PDF replaced, a title edited) comes back undecided: `present` (under
+A row it matches is `present`, with reason "matched by <kind>". Every other verdict in the
+file is a decision made by hand (any row whose verdict is not that automatic pair), and a
+re-run keeps it, with its reason and library9_key, whether or not the row matches now: so a
+wrong title match can be overridden. An automatic `present` whose evidence has gone (a
+central PDF replaced, a title edited) comes back undecided. Hand verdicts: `present` (under
 another title; library9_key names the copy, which must be a live central item), `merge`
 (copy it into the central library) or `discard` (let it go with the library). A row no
 longer in the libraries drops out.
 
 `present` says the central library holds a record of the work, not that it holds the
 satellite's file. central_file says that, over every stored file of the item (any type):
-`same` (a central file has the same bytes), `other` (library9_key's item holds a file, with
-other bytes), `none` (no central copy of the file: retiring the library would delete it, so
-it is carried over first) or blank (the item holds no file).
+`same` (every one has a central file with the same bytes), `part` (some do, some do not),
+`other` (none does, and library9_key's item holds a file with other bytes), `none` (none
+does, and the central copy holds no file) or blank (the item holds no file). Anything but
+`same` and blank is a file retiring the library would delete: carried over, or decided the
+same document, first.
 
 The tracked file carries Zotero ids only. A satellite library's name, and the titles of
 its items, can name a client or a project, which nothing tracked here may (CLAUDE.md, "One
@@ -143,8 +146,11 @@ def central_file(it, k9, idx):
     """Whether the central library holds this item's file: same, other, none, or blank (no file)."""
     if not it["files"]:
         return ""
-    if any(h in idx["files"] for h in it["files"]):
+    held = [h in idx["files"] for h in it["files"]]
+    if all(held):
         return "same"
+    if any(held):
+        return "part"
     return "other" if k9 in idx["with_file"] else "none"
 
 
@@ -182,18 +188,22 @@ def main():
         for it in items(con, lib):
             kind, k9 = match(it, idx)
             old = prior.get((str(gid), it["key"]), {})
-            if kind != "none":
-                verdict, reason = "present", f"matched by {kind}"
-            else:
-                # Only a decision made by hand carries over: an earlier automatic `present` whose
-                # evidence has gone comes back undecided.
-                hand = old.get("match_kind") == "none"
-                verdict, reason = (old.get("verdict", ""), old.get("reason", "")) if hand else ("", "")
-                if hand and old.get("library9_key"):
+            # A decision made by hand is any earlier verdict but the automatic pair; it carries over,
+            # matched or not. An earlier automatic `present` whose evidence has gone comes back undecided.
+            hand = bool(old.get("verdict")) and not (
+                old.get("verdict") == "present" and old.get("reason", "").startswith("matched by "))
+            if hand:
+                verdict, reason = old["verdict"], old.get("reason", "")
+                if old.get("library9_key"):
                     k9 = old["library9_key"]
                     if k9 not in idx["keys"]:
                         sys.exit(f"{gid} {it['key']}: library9_key {k9} is not a live item of the central "
                                  "library; decide the row again")
+            elif kind != "none":
+                verdict, reason = "present", f"matched by {kind}"
+            else:
+                verdict, reason = "", ""
+            if kind == "none":
                 titles.append((gid, it["key"], it["type"], len(it["pdf"]), it["title"] or ""))
             if verdict and verdict not in VERDICTS:
                 sys.exit(f"{gid} {it['key']}: verdict '{verdict}' is not one of {sorted(VERDICTS)}")
@@ -211,8 +221,8 @@ def main():
         counts[k] = counts.get(k, 0) + 1
     for (gid, kind, verdict), n in sorted(counts.items()):
         print(f"{gid}\t{kind}\t{verdict}\t{n}")
-    print(f"{sum(r['verdict'] == 'present' and r['central_file'] == 'none' for r in rows)} `present` items "
-          "hold a file the central library lacks (to carry over before retirement)")
+    print(f"{sum(r['verdict'] == 'present' and r['central_file'] not in ('same', '') for r in rows)} `present` "
+          "items hold a file the central library has no copy of (central_file part, other or none)")
     print(f"{len(rows)} items in {len(libs) - 1} libraries; "
           f"{sum(r['match_kind'] == 'none' for r in rows)} unmatched, "
           f"{sum(not r['verdict'] for r in rows)} undecided")
