@@ -1,0 +1,10 @@
+# rebuild flow from FWTJDD8Z (OVERWRITE=TRUE), #217: the first rebuild (20261121_rebuild_flow.log) skipped two more textless HSI scans (mcmahon1983, hubert_etal1985), since OCRed and replaced
+# expected: 43 documents, the bucket copy's count; 'before' below is the first rebuild's 41
+# start 2026-11-21T10:49:12Z
+43 keys across 1 collections
+Ingesting 43 PDF(s) into data/rag/flow.duckdb
+The PDF <_io.BytesIO object at 0x3273189a0> contains a metadata field indicating that it should not allow text extraction. Ignoring this field and proceeding. Use the check_extractable if you want to raise an error in this case
+Store built: data/rag/flow.duckdb | docs: 43 | chunks: 11757 | model: nomic-embed-text
+41 documents before, 43 after: 2 added, 0 dropped
+Built data/rag/flow.duckdb. It is not in the bucket until ACTION=push.
+# exit 0 at 2026-11-21T10:55:34Z

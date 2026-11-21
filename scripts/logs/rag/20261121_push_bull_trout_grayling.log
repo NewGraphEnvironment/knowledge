@@ -1,0 +1,25 @@
+# push bull_trout_grayling after the #217 rebuild, 2026-11-21T10:50:32Z
+[dry run] would upload data/rag/bull_trout_grayling.duckdb -> s3://fresh-bc/rag/bull_trout_grayling.duckdb
+[dry run] merged manifest would hold: fraser, vca_refs, peace, pine, habitat_modelling, temperature, flow, bull_trout_grayling, sturgeon, statistics, westslope_cutthroat, bull_trout, fish_passage
+# the dry run's manifest entry for bull_trout_grayling (the manifest's other entries are left out)
+{
+  "bull_trout_grayling": {
+    "documents": 197,
+    "chunks": 29763,
+    "embedding_size": 768,
+    "embedding_model": "nomic-embed-text",
+    "ragnar_version": "0.4.0",
+    "store_schema": "0.4.0",
+    "store_name": "store_001",
+    "bytes": 405024768,
+    "md5": "af7be21ae6ad3f7c53f3e6cdb1e3b6f5",
+    "repo": "NewGraphEnvironment/knowledge",
+    "branch": "179-backlog-move-10-report-corpus-one-librar",
+    "head_sha": "c2d07c263b61cb96f69ec9036af6f8c39202e8b4",
+    "built_by": "cred::crd_store_push()",
+    "date_completed": "2026-11-21T10:50:36Z"
+  }
+}
+Uploading bull_trout_grayling.duckdb (386 MB)
+Manifest updated — now holds: fraser, vca_refs, peace, pine, habitat_modelling, temperature, flow, bull_trout_grayling, sturgeon, statistics, westslope_cutthroat, bull_trout, fish_passage
+# exit 0 at 2026-11-21T10:51:18Z

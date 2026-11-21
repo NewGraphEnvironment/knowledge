@@ -1,0 +1,25 @@
+# push fish_passage after the #217 rebuild, 2026-11-21T10:49:55Z
+[dry run] would upload data/rag/fish_passage.duckdb -> s3://fresh-bc/rag/fish_passage.duckdb
+[dry run] merged manifest would hold: fraser, vca_refs, peace, pine, habitat_modelling, temperature, flow, bull_trout_grayling, sturgeon, statistics, westslope_cutthroat, bull_trout, fish_passage
+# the dry run's manifest entry for fish_passage (the manifest's other entries are left out)
+{
+  "fish_passage": {
+    "documents": 25,
+    "chunks": 6717,
+    "embedding_size": 768,
+    "embedding_model": "nomic-embed-text",
+    "ragnar_version": "0.4.0",
+    "store_schema": "0.4.0",
+    "store_name": "store_001",
+    "bytes": 94908416,
+    "md5": "6d48b54ea2fb0a9e7b4670af2e494a4b",
+    "repo": "NewGraphEnvironment/knowledge",
+    "branch": "179-backlog-move-10-report-corpus-one-librar",
+    "head_sha": "c2d07c263b61cb96f69ec9036af6f8c39202e8b4",
+    "built_by": "cred::crd_store_push()",
+    "date_completed": "2026-11-21T10:49:58Z"
+  }
+}
+Uploading fish_passage.duckdb (91 MB)
+Manifest updated — now holds: fraser, vca_refs, peace, pine, habitat_modelling, temperature, flow, bull_trout_grayling, sturgeon, statistics, westslope_cutthroat, bull_trout, fish_passage
+# exit 0 at 2026-11-21T10:50:11Z
