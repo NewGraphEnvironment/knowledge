@@ -71,7 +71,7 @@ Skeena and North Thompson in their lowest groups, so those points cannot place a
 - [x] Tests pass (`devtools::test()`; `test-data-dir.R` covers the new `data/` file)
 - [x] `/code-check` clean (once over the branch)
 - [x] PWF checkboxes match landed work
-- [ ] `/planning-archive` on completion
+- [x] `/planning-archive` on completion
 
 Verification: the script's regression stops reproduce the UFRA and COTR windows (and BULK's tributary window) from
 the parquet; the sha256 check proves it read the published set; Phase 1 is proved with a stub Rscript under the new RUN line
