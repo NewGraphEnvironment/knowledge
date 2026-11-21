@@ -22,8 +22,8 @@
 #     or END_SPAWN_DT_FROM where DFO gives no END_SPAWN_DT_TO. Dates are DD-MON-YY; only the month and day are read.
 #     A group's window runs from the median start to the median end over its dated records (n_start, n_end), with the
 #     10th and 90th percentiles. A record is one population, stream (gfe_id) and year, so n counts population-years
-#     except where a population was counted on two streams in one year (16 dated records of two populations in the
-#     2026-06-01 release). Days are counted on a season year that starts on 1 April (1 September for steelhead, which
+#     except where a population was counted on two streams in one year (16 dated records with a watershed code, of
+#     two populations, in the 2026-06-01 release). Days are counted on a season year that starts on 1 April (1 September for steelhead, which
 #     spawn in spring), so a coho or chum spawning end in January counts after December, not before August. Each
 #     population's own window and run type are printed beside the group's, and a window per run type where a group
 #     holds more than one, so a reader sees where one stream sets the window and where runs differ. Stream arrival is
@@ -39,8 +39,9 @@
 # INPUT:  https://fresh-bc.s3.us-west-2.amazonaws.com/knowledge/nuseds/<VERSION>/ (manifest.json,
 #         nuseds_records.parquet), data/nuseds_reach_groups.csv, data/life_history_timing.csv, a database holding
 #         whse_basemapping (PG*)
-# OUTPUT: the windows and the comparison, printed; with OUT= the windows as a CSV, one row per group x species x
-#         scope (group, run_type, population, apart)
+# OUTPUT: the windows and the comparison, printed; with OUT= the windows as a CSV, one row per window: per group and
+#         species its pooled window (scope group), one per run type where it holds several (run_type), and one per
+#         population pooled (population) or listed apart (apart)
 # RUN:    d=$(date -u +%Y%m%d); t=${TMPDIR:-/tmp}/${d}_timing_nuseds
 #         (set -o pipefail; OUT=${t}_windows.csv Rscript data-raw/timing_nuseds.R 2>&1 | tee ${t}.txt) &&
 #           cp ${t}.txt ${t}_windows.csv scripts/logs/timing/   (repo root)
@@ -258,7 +259,7 @@ check("BULK", "CH", "08-15", "09-10", 28L, 27L)
 
 if (nzchar(out)) {
   utils::write.csv(win[, c("wsg_code", "species_code", show)], out, row.names = FALSE, na = "")
-  cat("\nwrote", nrow(win), "windows to", out, "\n")
+  cat("\nwrote", nrow(win), "windows to", basename(out), "\n")
 }
 
 # ---- the timing table beside NuSEDS ----

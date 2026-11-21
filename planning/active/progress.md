@@ -35,3 +35,7 @@
   stops rather than skips a missing regression check. Probed: `WSG=BULK OUT=…` and `WSG=BULK,MORX` refuse (pipefail,
   no copy); the full run's windows CSV and log are identical to 13436fc7's but the OUT path. The loop now ends only on
   an enumeration
+- Round 4, an enumeration (12 env inputs, 15 stop/quit/return points, 16 printed outputs + 20 CSV columns, 9 command
+  lines, 19 quantified claims): no behavioural defect; three wording defects, two inside round 2's fix: the CSV's grain
+  (one row per window, not per group x species x scope), "16 dated records" holds for records with a watershed code,
+  and the log printed OUT's full temp path (now its basename, so no local path reaches the public log)
