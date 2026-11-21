@@ -68,9 +68,9 @@ Skeena and North Thompson in their lowest groups, so those points cannot place a
 - [ ] #241 and #242 bodies name the windows CSV and the reach table they start from and add to
 
 ## Validation
-- [ ] Tests pass (`devtools::test()`; `test-data-dir.R` covers the new `data/` file)
-- [ ] `/code-check` clean (once over the branch)
-- [ ] PWF checkboxes match landed work
+- [x] Tests pass (`devtools::test()`; `test-data-dir.R` covers the new `data/` file)
+- [x] `/code-check` clean (once over the branch)
+- [x] PWF checkboxes match landed work
 - [ ] `/planning-archive` on completion
 
 Verification: the script's regression stops reproduce the UFRA and COTR windows (and BULK's tributary window) from

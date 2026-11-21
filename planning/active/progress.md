@@ -44,3 +44,5 @@
   records). Fixed, and measured on the tracked CSV: 480 keys, 357 group rows = 357 keys with pooled populations, no
   duplicate group rows, windows unique on group x species x scope x run type x population. The loop ends on that
   enumeration: every member of A-E checked, the one remaining defect fixed and measured
+- Validation: `devtools::test()` at d015364c: FAIL 0, SKIP 3, PASS 2,557 (the later commits touch only data-raw/, docs
+  and logs, which no test reads); `/code-check branch` 5 rounds, ended on an enumeration (`review-verdict.md`)
