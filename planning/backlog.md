@@ -47,7 +47,7 @@ split piece, or one filed since the last pass): run `/backlog-sweep` to place it
 | - [x] 7 | #176 | 11: FISS parser, gradient and PINE (3 issues; batches 12 and 27 left unplaced at the gate, recorded in #176's body) | done: https://github.com/NewGraphEnvironment/knowledge/pull/249 | B | — | opus |
 | - [ ] 8 | #177 | 13, 23: promotion cargo, tuning-code fixes (4 issues) | **waiting** on Al's word for the next full retune | E | 12 | opus |
 | - [x] 9 | #178 | 14: fish-passage literature, the access track's first piece (1 issue) | done: https://github.com/NewGraphEnvironment/knowledge/pull/237 | C | — | fable then opus |
-| - [ ] 10 | #179 | 16, 22: library, keys and our own prose; OCR of the scanned PDFs (2 issues; two of batch 16's members and the rest of #13 left unplaced at the gate, recorded in #179's body) | open | C | 9 | opus |
+| - [x] 10 | #179 | 16, 22: library, keys and our own prose; OCR of the scanned PDFs (2 issues; two of batch 16's members and the rest of #13 left unplaced at the gate, recorded in #179's body) | done: https://github.com/NewGraphEnvironment/knowledge/pull/252 | C | 9 | opus |
 | - [ ] 11 | #180 | 17: report-priority pipeline for any group (3 issues) | **waiting** on Al's word to resume the report-priority work, parked 2026-09-04 | C | 10 | opus |
 | - [ ] 12 | #231 | 19: article wording and one method-bundle rebuild (3 issues) | open | E | — | opus |
 | - [ ] 13 | #232 | 20: one research page per key (3 issues) | open | E | 10, 12 | fable then opus |
@@ -238,7 +238,7 @@ were each several PRs; the gradient track holds their order.
 
 ### 16. Library, keys and our own prose
 
-- [ ] Carried by move 10, #179
+- [x] Carried by move 10, #179 (merged in https://github.com/NewGraphEnvironment/knowledge/pull/252)
 
 #13 (triage the dormant Zotero libraries), its first piece: the single-library policy and a verdict on each satellite
 group-library item. The other two members were left unplaced at move 10's gate (2026-11-21, recorded in #179's body),
@@ -316,7 +316,7 @@ a window rule waits on Al's word.
 
 ### 22. OCR of the scanned PDFs
 
-- [ ] Carried by move 10, #179
+- [x] Carried by move 10, #179 (merged in https://github.com/NewGraphEnvironment/knowledge/pull/252)
 
 #217: OCR ten group-library scans with no text layer (Bjornn & Reiser 1991 and Ford et al. 1995 among them), a
 `replace` verdict for each through `0275`, then the five cred-built stores that hold them (`habitat_modelling`,
