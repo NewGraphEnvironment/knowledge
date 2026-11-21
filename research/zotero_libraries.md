@@ -42,8 +42,9 @@ The script takes the strongest evidence first, and a match on it settles the ite
 Three of those are recorded `present` by hand with the central key: two works under a corrected or extended title (a
 typo in the central copy's title; a project number added to it), and a copy of the Bjornn and Reiser 1991 scan, which
 matched by its bytes until #217 replaced the central scan with an OCRed copy. A row the script matched and no longer
-does comes back undecided, so a matched verdict never outlives its evidence; a verdict decided by hand is kept on a
-re-run whether or not the row matches, so a wrong match can be overridden. A title match could join two different works
+does comes back undecided, so a matched verdict never outlives its evidence. Each row says who decided it
+(`decided_by`): a row marked `hand` is kept on a re-run whether or not it matches, so a wrong match can be overridden.
+A title prefix shorter than 20 characters is no match (none of the 168 rows rested on a prefix). A title match could join two different works
 sharing a generic title; the 40 title matches were not each read, so a merge that later finds its "present" copy is
 another work reopens that row.
 

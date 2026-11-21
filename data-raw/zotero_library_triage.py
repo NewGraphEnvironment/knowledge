@@ -15,20 +15,24 @@ first count matched titles only, which reads case, punctuation and subtitle drif
                 central PDF, the item's own or a standalone one
   doi           the same DOI (case and any https://doi.org/ prefix ignored)
   title         the same title, lower case with everything but letters and digits removed
-  title_prefix  the same title before its first colon, or its first 60 such characters
-A row it matches is `present`, with reason "matched by <kind>". Every other verdict in the
-file is a decision made by hand (any row whose verdict is not that automatic pair), and a
-re-run keeps it, with its reason and library9_key, whether or not the row matches now: so a
-wrong title match can be overridden. An automatic `present` whose evidence has gone (a
-central PDF replaced, a title edited) comes back undecided. Hand verdicts: `present` (under
-another title; library9_key names the copy, which must be a live central item), `merge`
-(copy it into the central library) or `discard` (let it go with the library). A row no
-longer in the libraries drops out.
+  title_prefix  the same title before its first colon, or its first 60 such characters,
+                where that prefix is at least 20 characters (a shorter one joins unrelated
+                works: `1`, `http`)
+decided_by says who decided each row, so a re-run never has to guess it. A `script` row is
+rewritten in full every run: `present`, "matched by <kind>" where it matches, undecided
+where it does not (so a verdict never outlives its evidence); the script refuses a `script`
+row whose verdict or reason someone edited. To decide a row, set decided_by to `hand` and
+write the verdict and reason: a `hand` row keeps them on every run, matched or not, so a
+wrong match can be overridden. Hand verdicts: `present` (under another title; library9_key
+must name the copy, a live central item), `merge` (copy it into the central library) or
+`discard` (let it go with the library); on a hand `merge` or `discard` row library9_key is
+the script's current match, for reference. A row no longer in the libraries drops out.
 
 `present` says the central library holds a record of the work, not that it holds the
 satellite's file. central_file says that, over every stored file of the item (any type):
 `same` (every one has a central file with the same bytes), `part` (some do, some do not),
-`other` (none does, and library9_key's item holds a file with other bytes), `none` (none
+`other` (none does, and a central item the row matched or names holds a file with other
+bytes), `none` (none
 does, and the central copy holds no file) or blank (the item holds no file). Anything but
 `same` and blank is a file retiring the library would delete: carried over, or decided the
 same document, first.
@@ -41,7 +45,7 @@ INPUT   ~/Zotero/zotero.sqlite, read through 0270's guarded copy (db()), so a co
         in zotero.sqlite-wal is seen (#127)
         data/zotero_library_triage.csv, for the verdicts already decided, if it exists
 OUTPUT  data/zotero_library_triage.csv: group_id, item_key, item_type, pdfs, match_kind,
-        library9_key, central_file, verdict, reason; one row per live top-level item (notes and
+        library9_key, central_file, decided_by, verdict, reason; one row per live top-level item (notes and
         annotations aside), sorted by group_id and item_key
         a count per library, match kind and verdict on stdout
         --check writes nothing and exits 1 when the file differs from what a run would write
@@ -62,7 +66,10 @@ _spec.loader.exec_module(z)          # 0270 has a __main__ guard; this only defi
 
 CENTRAL = 4733734
 OUT = os.path.join(ROOT, "data", "zotero_library_triage.csv")
-COLS = ["group_id", "item_key", "item_type", "pdfs", "match_kind", "library9_key", "central_file", "verdict", "reason"]
+COLS = ["group_id", "item_key", "item_type", "pdfs", "match_kind", "library9_key", "central_file", "decided_by",
+        "verdict", "reason"]
+AUTO = re.compile(r"matched by (pdf_md5|doi|title|title_prefix)")
+PREFIX_MIN = 20
 VERDICTS = {"present", "merge", "discard"}
 
 
@@ -71,7 +78,8 @@ def norm(s):
 
 
 def prefix(s):
-    return norm((s or "").split(":")[0])[:60]
+    p = norm((s or "").split(":")[0])[:60]
+    return p if len(p) >= PREFIX_MIN else ""
 
 
 def doi(s):
@@ -200,33 +208,37 @@ def main():
         for it in items(con, lib):
             kind, k9, cands = match(it, idx)
             old = prior.get((str(gid), it["key"]), {})
-            # A decision made by hand is any earlier verdict but the automatic pair; it carries over,
-            # matched or not. An earlier automatic `present` whose evidence has gone comes back undecided.
-            hand = bool(old.get("verdict")) and not (
-                old.get("verdict") == "present" and old.get("reason", "").startswith("matched by "))
-            if hand:
-                verdict, reason = old["verdict"], old.get("reason", "")
-                # Only a hand `present` names its copy by hand; on any other hand row the key is the
-                # script's current match, worked out again each run.
-                if verdict == "present" and old.get("library9_key"):
-                    k9 = old["library9_key"]
+            who = old.get("decided_by", "script") or "script"
+            if who not in ("script", "hand"):
+                sys.exit(f"{gid} {it['key']}: decided_by '{who}' is not script or hand")
+            if who == "hand":
+                verdict, reason = old.get("verdict", ""), old.get("reason", "")
+                if not verdict:
+                    sys.exit(f"{gid} {it['key']}: a hand row has no verdict; write one, or set decided_by to "
+                             "script to let the script decide it")
+                if verdict == "present":
+                    k9 = old.get("library9_key", "")
+                    if not k9:
+                        sys.exit(f"{gid} {it['key']}: a hand `present` names no library9_key")
                     if k9 not in idx["keys"]:
                         sys.exit(f"{gid} {it['key']}: library9_key {k9} is not a live item of the central "
                                  "library; decide the row again")
                     cands = sorted(set(cands) | {k9})
-            elif kind != "none":
-                verdict, reason = "present", f"matched by {kind}"
             else:
-                verdict, reason = "", ""
+                # A script row as the script writes it: the automatic pair, or undecided. Anything
+                # else is an edit made without marking the row as decided by hand.
+                ov, orr = old.get("verdict", ""), old.get("reason", "")
+                if old and not ((ov, orr) == ("", "") or (ov == "present" and AUTO.fullmatch(orr))):
+                    sys.exit(f"{gid} {it['key']}: a script row's verdict or reason was edited "
+                             f"('{ov}', '{orr}'); set decided_by to hand to keep it")
+                verdict, reason = ("present", f"matched by {kind}") if kind != "none" else ("", "")
             if kind == "none":
                 titles.append((gid, it["key"], it["type"], len(it["pdf"]), it["title"] or ""))
             if verdict and verdict not in VERDICTS:
                 sys.exit(f"{gid} {it['key']}: verdict '{verdict}' is not one of {sorted(VERDICTS)}")
-            if verdict == "present" and not k9:
-                sys.exit(f"{gid} {it['key']}: a `present` verdict names no library9_key")
             rows.append(dict(group_id=gid, item_key=it["key"], item_type=it["type"], pdfs=len(it["pdf"]),
                              match_kind=kind, library9_key=k9, central_file=central_file(it, cands, idx),
-                             verdict=verdict, reason=reason))
+                             decided_by=who, verdict=verdict, reason=reason))
     rows.sort(key=lambda r: (int(r["group_id"]), r["item_key"]))
 
     out = render(rows)
