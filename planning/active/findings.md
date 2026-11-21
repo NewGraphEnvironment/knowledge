@@ -23,3 +23,17 @@ ragnar 0.4.0, the CRAN release, chunks the same markdown into 69 chunks, as test
 
 | Error | Resolution |
 |-------|------------|
+| `aws` not found over ssh to m1 (`0150 ACTION=query VERIFY=TRUE`) | m1's non-login shell lacks `/opt/homebrew/bin`; export it on `PATH` first. The AWS keys come from `~/.Renviron`, so read the bucket through `Rscript`, not the shell's `aws` |
+
+## Phase 1, 2026-11-21
+
+- m1: cred 0.8.0, ragnar 0.4.0, `cred.store_source` `s3://fresh-bc/rag/`, Ollama `nomic-embed-text`, checkout clean on
+  `main` at `e126a7f6`, `storage/CBBACKUJ/hedger_etal2013_accepted.pdf` present.
+- The bucket's `statistics`: 31 documents, 11,113 chunks, 153,890,816 bytes, pushed 2026-11-17 under cred 0.7.0; its
+  manifest entry has no `ragnar_version` or `store_schema`.
+- Membership (a copy of m1's `zotero.sqlite` with its `-wal`): 47 distinct members, 32 keys with one live PDF each,
+  the same 15 left out as #216's. Expected: 1 added (Hedger), 0 dropped.
+- The pulled store's origins are `/Users/airvine/Zotero/storage/...`, m1's own paths, so the build's before/after
+  comparison by origin is valid there.
+- cred records the manifest's `repo`, `branch` and `head_sha` with `.crd_git_provenance(dirname(store_path))`
+  (`.crd_store_describe()`), which is why the build and push move to a worktree of this branch.

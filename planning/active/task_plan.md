@@ -35,17 +35,19 @@ ragnar 0.4.0, with the build and push logs committed.
   the logs are copied back with `scp`.
 - Tailscale SSH exits 0 whatever ran: every remote step is gated on printed text, the long build runs under
   `nohup` with a `DONE_*` marker holding its exit code, waited on by a remote-side `until` loop in the background.
-- Run 0150 from m1's `~/Projects/repo/knowledge` (it reads `.Rprofile` for `cred.store_source` and writes the
-  ignored `data/rag/`), with every log written to `~/knw223/` on m1, not into that checkout. Check before the run
-  that the checkout is still clean on `main`.
+- The pull (Phase 1) runs from m1's `~/Projects/repo/knowledge`. The build and the push run from a worktree of this
+  branch on m1 (`~/knw223/wt`), with a real `data/rag/` holding a copy of the pulled store: cred records the
+  manifest's `branch` and `head_sha` from `git -C dirname(store)`, so a run from m1's `main` checkout, or through a
+  symlinked `data/rag`, would record `main` (review). Logs are written to `~/knw223/` and copied back; the worktree
+  and its local branch are removed at the end. m1's non-login ssh shell needs `/opt/homebrew/bin` on `PATH` for `aws`.
 
 ## Phase 1: Before the build (m1)
 
-- [ ] Confirm on m1: cred 0.8.0 and ragnar 0.4.0, Ollama answering, the checkout clean on `main`, Hedger's PDF present
-- [ ] Pull the bucket copy: `ACTION=query VERIFY=TRUE STORE=statistics` with a removal-estimator query (Zippin,
+- [x] Confirm on m1: cred 0.8.0 and ragnar 0.4.0, Ollama answering, the checkout clean on `main`, Hedger's PDF present
+- [x] Pull the bucket copy: `ACTION=query VERIFY=TRUE STORE=statistics` with a removal-estimator query (Zippin,
       Carle & Strub, Seber), logged as the before state; read the manifest entry's documents, chunks,
       `ragnar_version`/`store_schema`
-- [ ] Write `scripts/logs/rag/20261121_rebuild_statistics_expected.txt` the way #216's expected file is written:
+- [x] Write `scripts/logs/rag/20261121_rebuild_statistics_expected.txt` the way #216's expected file is written:
       32 keys with a live PDF (the 31 in the bucket plus Hedger), the 15 left out with no live PDF, none dropped,
       checked against the four collections' current membership (anything filed since 2026-11-16 is named there)
 - [ ] Wait for m1's Zotero to finish syncing, quit it, and confirm a 0-byte `zotero.sqlite-wal` (cred reads
@@ -53,11 +55,14 @@ ragnar 0.4.0, with the build and push logs committed.
 
 ## Phase 2: Rebuild (m1)
 
+- [ ] Push this branch; on m1 fetch it, `git worktree add ~/knw223/wt <branch>`, copy the pulled store into its
+      `data/rag/`, and confirm `git -C ~/knw223/wt/data/rag rev-parse --abbrev-ref HEAD` names the branch
+
 - [ ] `ACTION=build OVERWRITE=TRUE STORE=statistics COLLECTIONS="LP4R4VYR,73PNRGJF,Z7JP8UN2,K2P7XGFG"` (the build
-      list in `scripts/README.md`), header lines naming #223, the expectation and cred/ragnar versions, start and
+      list in `scripts/README.md`), run in the worktree, header lines naming #223, the expected file, the before-state log and cred/ragnar versions, start and
       end times, as #217's `20261121_rebuild_*.log` do → `scripts/logs/rag/20261121_rebuild_statistics.log`
 - [ ] Check the log against the expected file: 32 documents, "31 before, 32 after: 1 added, 0 dropped",
-      no "Skipped" warning; any difference is explained in findings before the push
+      no "Skipped" warning and no `zotero.sqlite-wal` warning; any difference is explained in findings before the push
 - [ ] Same removal-estimator query on the rebuilt store, logged: Hedger is returned
 - [ ] Reopen Zotero on m1
 
@@ -66,15 +71,16 @@ ragnar 0.4.0, with the build and push logs committed.
 - [ ] Dry run `ACTION=push STORE=statistics` (no `CONFIRM`): the manifest entry shows `ragnar_version` 0.4.0 and
       `store_schema` 0.4.0
 - [ ] `CONFIRM=TRUE` push; read its result before any verified connect (CLAUDE.md, the #172 case)
-- [ ] `scripts/logs/rag/20261121_push_statistics.log` keeps only this store's manifest entry (the merged list of
-      store names and other entries are left out, as #217's push logs were trimmed), so the recorded ragnar version
-      is in the committed log
-- [ ] Commit the logs on the branch; tick the issue's remaining boxes in its body
+- [ ] `scripts/logs/rag/20261121_push_statistics.log` in #217's form: the other stores' manifest entries left out,
+      this store's entry kept (`documents: 32`, `branch` this branch, `ragnar_version`, `store_schema`)
+- [ ] Commit the logs on the branch; tick the issue's remaining boxes in its body, saying the comment's "update cred
+      everywhere before pushing" was deferred to #217's owed item (m4 still has cred 0.7.0), not met
+- [ ] Remove the m1 worktree and its local branch
 
 ## Validation
 
 - [ ] The build log says 32 documents, Hedger added, 0 dropped, nothing skipped
-- [ ] The after-query returns Hedger; the push log records `ragnar_version: 0.4.0`
+- [ ] The after-query returns Hedger; the push log records `documents: 32`, this branch, `ragnar_version: 0.4.0`
 - [ ] `/code-check`: the branch adds logs and planning files only, nothing that runs; a review of the logs for host
       names, home paths and private repository names stands in for it (the public-repo rule, the #217 rewrite)
 - [ ] PWF checkboxes match landed work; `/planning-archive`, then `/gh-pr-push`
