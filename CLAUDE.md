@@ -253,7 +253,9 @@ checkpointed. After a Web API write (`0275`, `0270`), quit Zotero once it has sy
 `replace` keeps the citation key, so a build that misses the sync takes the old attachment again and gives no sign
 beyond `0150`'s `-wal` warning (#217, 2026-11-21). `0150 ACTION=push` prints the bucket's whole merged
 manifest, whose other entries name the repositories that pushed them: a committed push log keeps only its
-own store's entry. Citation keys are not unique across libraries (the same key names different
+own store's entry. The entry's `branch` and `head_sha` are read with `git -C` on the store file's directory, so push
+from a checkout or worktree of the issue's branch holding a real `data/rag/` (a symlinked one resolves to the checkout
+it points into; #223). Citation keys are not unique across libraries (the same key names different
 papers in the personal and group libraries), so resolve a key inside the group
 (`groups.groupID = 4733734`), never across the whole database.
 

@@ -1,0 +1,23 @@
+# Expected before ACTION=build OVERWRITE=TRUE STORE=statistics COLLECTIONS=LP4R4VYR,73PNRGJF,Z7JP8UN2,K2P7XGFG (#223), written 2026-11-21, cred 0.8.0 and ragnar 0.4.0
+# before (bucket copy, verified connect 2026-11-21T19:20Z): 31 documents, 11113 chunks, pushed 2026-11-17 under cred 0.7.0 (its manifest entry has no ragnar_version or store_schema)
+# members (from a copy of zotero.sqlite with its -wal, the group library): 47 distinct, 2 of them in two collections
+#   (mackenzie_royle2005Designingoccupancy, guillera-arroita_etal2010Designoccupancy), the same as #216's build
+# expected keys with a live PDF: 32, each with one PDF: #216's 31 plus hedger_etal2013Improvingabundance (CBBACKUJ)
+# expected left out (15), each 'no live PDF', the same 15 as #216's:
+  K2P7XGFG BBA2Q7W2 breiman_etal1984ClassificationRegression
+  LP4R4VYR BGVWWBV6 BayesianBeliefNets
+  LP4R4VYR XBCBNKW6 kendall1975RankCorrelation
+  LP4R4VYR TNK2RP5H mann1945NonparametricTests
+  LP4R4VYR UTZ4K2QG sen1968EstimatesRegression
+  LP4R4VYR VKB34D98 theil1950RankInvariantMethod
+  Z7JP8UN2 KMCPFP3K albertaremotecamerasteeringcommitteercsc_etal2024RemoteCamera
+  Z7JP8UN2 G8X6IU8M atlas_etal2023Wildsalmon
+  Z7JP8UN2 PS64VIQI castaneda_etal2020DetectingNative
+  Z7JP8UN2 5X6VF6GJ ficetola_etal2015Replicationlevels
+  Z7JP8UN2 R283VZX9 kays_etal2020empiricalevaluation
+  Z7JP8UN2 4DNKES53 lhoste_etal2025newunderwater
+  Z7JP8UN2 TME3DX5P moeller_etal2018Threenovel
+  Z7JP8UN2 M2FQPT9W schmelzle_kinziger2016Usingoccupancy
+  Z7JP8UN2 XJ3JX57M wearn_glover-kapfer2017Cameratrappingconservation
+# expected: 31 documents before, 32 after: 1 added (hedger_etal2013Improvingabundance), 0 dropped
+# expected: no 'Skipped' warning; bates_etal2024CrossValidationWhat read with pdftools again (markitdown: embedded NUL), as in #216

@@ -1,0 +1,25 @@
+# Before the #223 rebuild: pull statistics from the bucket (ACTION=query VERIFY=TRUE), cred 0.8.0 and ragnar 0.4.0
+# Q "capture probability declines across electrofishing passes, removal estimates biased low"  expect: no hedger_etal2013Improvingabundance (skipped by ragnar 0.3.1 in #216)
+# start 2026-11-21T19:20:05Z
+Local statistics.duckdb does not match the manifest — re-downloading.
+Downloaded statistics (31 docs, 11113 chunks, embedded with nomic-embed-text).
+duckdb keeps downloaded extensions and secrets in a temporary directory:
+ℹ /tmp/Rtmpx26yfU/duckdb
+This is removed when the R session ends.
+• Extensions are re-downloaded each session.
+• Secrets are lost.
+ℹ Run duckdb(shared_home = TRUE) (or create ~/.duckdb) to keep them (suitable for most users).
+ℹ Run duckdb(shared_home = FALSE) to accept the temporary directory (and silence this message).
+ℹ See ?duckdb_storage for details and alternatives.
+# A tibble: 8 × 9
+  citation_key            origin chunk_id start   end text   score metric method
+  <chr>                   <chr>     <int> <int> <int> <chr>  <dbl> <chr>  <chr> 
+1 peterson_etal2004Evalu… /User…     1449     1  2370 "Tra… 12.0   bm25   hybrid
+2 peterson_etal2004Evalu… /User…     1452  2371  4775 "met… 12.8   bm25   hybrid
+3 peterson_etal2004Evalu… /User…     1486 29493 31195 "Mea… 12.0   bm25   hybrid
+4 peterson_etal2004Evalu… /User…     1491 33585 36066 "Int… 12.2   bm25   hybrid
+5 peterson_etal2004Evalu… /User…     1499 39870 41604 "Thr…  0.217 cosin… hybrid
+6 peterson_etal2004Evalu… /User…     1502 42496 44781 "The…  0.223 cosin… hybrid
+7 peterson_etal2004Evalu… /User…     1505 44782 47219 "und… 12.1   bm25   hybrid
+8 peterson_etal2004Evalu… /User…     1508 47220 48854 "ter… 11.6   bm25   hybrid
+# exit 0 at 2026-11-21T19:20:43Z
