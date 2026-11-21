@@ -54,7 +54,7 @@ group_id,item_key,item_type,pdfs,match_kind,library9_key,central_file,verdict,re
 2769586,JQUDLZ2R,journalArticle,0,doi,K7B7B8RF,,present,matched by doi
 2769586,KR2VKLW2,journalArticle,0,doi,6T3K9ZBY,,present,matched by doi
 2769586,LFB9P7A2,journalArticle,0,title,B3TYJ9I9,,present,matched by title
-2769586,MFTM963P,journalArticle,0,doi,3MDQERTJ,,present,matched by doi
+2769586,MFTM963P,journalArticle,0,doi,XT8HKKYW,,present,matched by doi
 2769586,MVED9CHB,journalArticle,0,title,BID734MC,,present,matched by title
 2769586,NA2EMEI9,journalArticle,0,title,YN95Z6EU,,present,matched by title
 2769586,S9ZRMCN9,journalArticle,0,doi,FAIC7HTL,,present,matched by doi
@@ -78,7 +78,7 @@ group_id,item_key,item_type,pdfs,match_kind,library9_key,central_file,verdict,re
 2796581,JBW4EK3H,journalArticle,1,title,YN95Z6EU,other,present,matched by title
 2796581,JCEI3V83,journalArticle,1,title,S3IPNXIN,other,present,matched by title
 2796581,JMMEYIQG,book,1,pdf_md5,NTCDJ37E,same,present,matched by pdf_md5
-2796581,MX2FFKM8,journalArticle,1,doi,3MDQERTJ,none,present,matched by doi
+2796581,MX2FFKM8,journalArticle,1,doi,XT8HKKYW,other,present,matched by doi
 2796581,N39QPZIP,report,1,pdf_md5,QCHYDXGV,same,present,matched by pdf_md5
 2796581,PIW5QNI3,journalArticle,1,none,,none,merge,"sockeye spawning behaviour paper, with its PDF"
 2796581,QVS9MZ3G,attachment,1,none,Z53XIYCM,other,present,the same Raleigh and Miller 1986 HSI models report; the central title carries a typo
@@ -123,7 +123,7 @@ group_id,item_key,item_type,pdfs,match_kind,library9_key,central_file,verdict,re
 2796596,KKUYS2CF,journalArticle,1,none,,none,merge,fish passage and connectivity literature: Fisheries/Fish Passage
 2796596,KTJJ9UTD,book,1,pdf_md5,3QVAYLMY,same,present,matched by pdf_md5
 2796596,LDN2VVDC,journalArticle,1,title,4DD7RSW2,other,present,matched by title
-2796596,LLNEE3EQ,document,0,title,62KS7YAA,,present,matched by title
+2796596,LLNEE3EQ,document,0,title,9X2YUIGR,,present,matched by title
 2796596,MBI3ZN5P,journalArticle,1,pdf_md5,5RK97MSL,same,present,matched by pdf_md5
 2796596,MNN9TFYF,attachment,1,pdf_md5,YEAMT7SM,same,present,matched by pdf_md5
 2796596,N2HDE6BB,journalArticle,1,none,,none,merge,fish passage and connectivity literature: Fisheries/Fish Passage

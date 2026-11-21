@@ -133,17 +133,23 @@ def index(central):
 
 
 def match(it, idx):
-    """The strongest evidence that the central library holds this item, and the copy it names."""
+    """The strongest evidence that the central library holds this item, the copy it names and
+    every central item holding that evidence (duplicates in the central library share it).
+
+    The copy named is one holding a file where any does, then the first key in order, so the
+    choice does not rest on key order alone."""
     tries = [("pdf_md5", h) for h in it["pdf"]] + [("doi", it["doi"]), ("title", norm(it["title"])),
                                                    ("title_prefix", prefix(it["title"]))]
     for kind, value in tries:
         if value and value in idx[kind]:
-            return kind, sorted(idx[kind][value])[0]
-    return "none", ""
+            cands = sorted(idx[kind][value], key=lambda k: (k not in idx["with_file"], k))
+            return kind, cands[0], cands
+    return "none", "", []
 
 
-def central_file(it, k9, idx):
-    """Whether the central library holds this item's file: same, other, none, or blank (no file)."""
+def central_file(it, cands, idx):
+    """Whether the central library holds this item's file: same, part, other, none, or blank (no
+    file). `other` and `none` are judged over every central item the row names or matched."""
     if not it["files"]:
         return ""
     held = [h in idx["files"] for h in it["files"]]
@@ -151,7 +157,7 @@ def central_file(it, k9, idx):
         return "same"
     if any(held):
         return "part"
-    return "other" if k9 in idx["with_file"] else "none"
+    return "other" if any(k in idx["with_file"] for k in cands) else "none"
 
 
 def render(rows):
@@ -179,6 +185,12 @@ def main():
     lib_of = dict(libs)
     if CENTRAL not in lib_of:
         sys.exit(f"group {CENTRAL} is not in this Zotero database")
+    # A satellite group this database lacks (not synced here, or left) would drop every row and hand
+    # verdict of it from the file; refuse instead.
+    gone = sorted({g for g, _ in prior} - {str(g) for g in lib_of})
+    if gone:
+        sys.exit(f"group(s) {', '.join(gone)} hold rows in {os.path.relpath(OUT, ROOT)} but are not in this "
+                 "Zotero database: sync them here, or remove their rows by hand if they are retired")
     idx = index(items(con, lib_of[CENTRAL]))
 
     rows, titles = [], []
@@ -186,7 +198,7 @@ def main():
         if gid == CENTRAL:
             continue
         for it in items(con, lib):
-            kind, k9 = match(it, idx)
+            kind, k9, cands = match(it, idx)
             old = prior.get((str(gid), it["key"]), {})
             # A decision made by hand is any earlier verdict but the automatic pair; it carries over,
             # matched or not. An earlier automatic `present` whose evidence has gone comes back undecided.
@@ -194,11 +206,14 @@ def main():
                 old.get("verdict") == "present" and old.get("reason", "").startswith("matched by "))
             if hand:
                 verdict, reason = old["verdict"], old.get("reason", "")
-                if old.get("library9_key"):
+                # Only a hand `present` names its copy by hand; on any other hand row the key is the
+                # script's current match, worked out again each run.
+                if verdict == "present" and old.get("library9_key"):
                     k9 = old["library9_key"]
                     if k9 not in idx["keys"]:
                         sys.exit(f"{gid} {it['key']}: library9_key {k9} is not a live item of the central "
                                  "library; decide the row again")
+                    cands = sorted(set(cands) | {k9})
             elif kind != "none":
                 verdict, reason = "present", f"matched by {kind}"
             else:
@@ -210,7 +225,7 @@ def main():
             if verdict == "present" and not k9:
                 sys.exit(f"{gid} {it['key']}: a `present` verdict names no library9_key")
             rows.append(dict(group_id=gid, item_key=it["key"], item_type=it["type"], pdfs=len(it["pdf"]),
-                             match_kind=kind, library9_key=k9, central_file=central_file(it, k9, idx),
+                             match_kind=kind, library9_key=k9, central_file=central_file(it, cands, idx),
                              verdict=verdict, reason=reason))
     rows.sort(key=lambda r: (int(r["group_id"]), r["item_key"]))
 

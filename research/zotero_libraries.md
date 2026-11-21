@@ -52,8 +52,9 @@ another work reopens that row.
 `present` says the central library has a record of the work. It does not say it has the satellite's file, and
 retiring a library deletes its files. `central_file` records that, over every stored file of an item: of the 77
 `present` items holding a file, 50 have every file in the central library with the same bytes, 1 has some of its files
-there and not others, 13 have a central copy holding another file (another version or scan; one is a Word file), and 13
-a central copy holding none. The 27 that are not `same` are carried over, or the other file judged the same document,
+there and not others, 14 have a central copy holding another file (another version or scan; one is a Word file), and 12
+a central copy holding none (judged over every central item that shares the evidence, since the central library holds
+some works twice). The 27 that are not `same` are carried over, or the other file judged the same document,
 before retirement.
 
 ## What was decided for the 55
