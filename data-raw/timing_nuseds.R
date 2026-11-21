@@ -44,10 +44,11 @@
 # RUN:    d=$(date -u +%Y%m%d); t=${TMPDIR:-/tmp}/${d}_timing_nuseds
 #         (set -o pipefail; OUT=${t}_windows.csv Rscript data-raw/timing_nuseds.R 2>&1 | tee ${t}.txt) &&
 #           cp ${t}.txt ${t}_windows.csv scripts/logs/timing/   (repo root)
-#         Written outside the repo and copied in after a full run that succeeded, as 0340's log is (#230): a tee into
-#         a tracked log truncates it at launch, and a filtered or refused run would replace the day's full record.
-#         WSG=BULK,MORR SPECIES=CH before Rscript   (comma lists, else every group and species with dated records;
-#                                                    a run to read, not to copy in; not GROUPS, which bash keeps)
+#         Written outside the repo and copied in after a run that succeeded, as 0340's log is (#230): a tee into a
+#         tracked log truncates it at launch. Only a full run takes OUT, so only it reaches the copy.
+#         WSG=BULK,MORR SPECIES=CH Rscript data-raw/timing_nuseds.R   (a run to read: comma lists, else every group
+#                                           and species with dated records; it refuses OUT, and a group with no dated
+#                                           record; not GROUPS, which bash keeps for itself)
 #         VERSION=v1 before Rscript         (the published set, else v1)
 # ---------------------------------------------------------------------------
 pkgload::load_all(quiet = TRUE)
@@ -64,6 +65,10 @@ out <- Sys.getenv("OUT")
 species_codes <- c(Chinook = "CH", Coho = "CO", Sockeye = "SK", Pink = "PK", Chum = "CM", Steelhead = "ST")
 if (length(bad <- setdiff(want_species, species_codes))) {
   stop("SPECIES outside ", paste(species_codes, collapse = ", "), ": ", paste(bad, collapse = ", "), call. = FALSE)
+}
+filtered <- length(want_groups) > 0L || length(want_species) > 0L
+if (filtered && nzchar(out)) {
+  stop("OUT is the full run's table: a run with WSG or SPECIES prints only, so it never replaces it", call. = FALSE)
 }
 season_start <- c(CH = "04-01", CO = "04-01", SK = "04-01", PK = "04-01", CM = "04-01", ST = "09-01")
 
@@ -185,7 +190,12 @@ apart_keys <- if (nrow(apart_x)) {
   })))
 } else pooled_keys[0, ]
 keys <- unique(rbind(pooled_keys, apart_keys))
-if (length(want_groups)) keys <- keys[keys$wsg %in% want_groups, , drop = FALSE]
+if (length(want_groups)) {
+  if (length(miss <- setdiff(want_groups, keys$wsg))) {
+    stop("no dated records in WSG ", paste(miss, collapse = ", "), " for the species asked", call. = FALSE)
+  }
+  keys <- keys[keys$wsg %in% want_groups, , drop = FALSE]
+}
 keys <- keys[order(keys$wsg, match(keys$species_code, species_codes)), , drop = FALSE]
 if (!nrow(keys)) stop("no dated records for the groups and species asked", call. = FALSE)
 cat(nrow(keys), "group x species keys in", length(unique(keys$wsg)), "groups\n")
@@ -234,7 +244,8 @@ for (k in seq_len(nrow(keys))) {
 # ---- the windows the published rows rest on ----
 check <- function(w, sp, start, end, ys = NULL, ye = NULL) {
   r <- win[win$wsg_code == w & win$species_code == sp & win$scope == "group", , drop = FALSE]
-  if (!nrow(r)) return(invisible(cat("check skipped:", w, sp, "not in this run\n")))
+  if (!nrow(r) && filtered) return(invisible(cat("check skipped:", w, sp, "not in this run\n")))
+  if (!nrow(r)) stop("a full run has no ", w, " ", sp, " group window", call. = FALSE)
   got <- c(r$start_median, r$end_median, r$n_start, r$n_end)
   ok <- identical(got[1:2], c(start, end)) && (is.null(ys) || identical(as.integer(got[3:4]), c(ys, ye)))
   if (!ok) stop(w, " ", sp, " window is ", paste(got, collapse = " "), ", not ", start, " ", end, " ", ys, " ", ye,

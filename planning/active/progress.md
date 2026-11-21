@@ -29,3 +29,9 @@
   RUN line still tee'd into the day's tracked log (now the 0340 shape: `$TMPDIR`, pipefail, copy in after a full run
   that succeeded); `years_*` counted records, not population-years (16 dated records of two populations share one), so
   the columns are `n_start`, `n_end`, `n_arrival` and the header says what a record is
+- Round 3 (2 fragile; one inside round 2's fix): a filtered run exits 0, so the RUN line's `&& cp` could copy a subset
+  over the full record. Now a run with WSG or SPECIES refuses OUT, so the documented line (which sets OUT) refuses
+  under a filter and never copies; WSG refuses a group with no dated records (a typo ran the rest silently); a full run
+  stops rather than skips a missing regression check. Probed: `WSG=BULK OUT=…` and `WSG=BULK,MORX` refuse (pipefail,
+  no copy); the full run's windows CSV and log are identical to 13436fc7's but the OUT path. The loop now ends only on
+  an enumeration
