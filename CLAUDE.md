@@ -136,8 +136,8 @@ Issue and PR numbers in the seeded history and in `planning/archive/2026-07-*` r
   row per item, kept as the record; #126, #151), and
   `zotero_library_triage.csv` (each item of the five satellite group libraries, whether the central library holds it
   and by what evidence, whether it holds the item's file (`central_file`), and the verdict on each it does not, `present`,
-  `merge` or `discard`, with who decided each row (`decided_by`: the script rewrites its own rows every run, keeps a
-  `hand` row as written, and refuses a script row someone edited); Zotero ids only, since a
+  `merge` or `discard`, with who decided each row (`decided_by`: the script rewrites every column of its own rows each run and refuses one
+  whose verdict or reason was edited; a `hand` row keeps its verdict and reason, and a hand `present` its key); Zotero ids only, since a
   satellite library's name or titles can name a client; `data-raw/zotero_library_triage.py`, #13), and
   `thresholds.csv` and `thresholds_groups.csv` (the tuned thresholds per species × stage × component in link's
   parameter names, with the near-river pair's scope where a rule has one (`near_river_scope`, from the comparison's

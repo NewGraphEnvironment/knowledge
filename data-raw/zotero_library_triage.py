@@ -186,7 +186,12 @@ def main():
     if os.path.exists(OUT):
         with open(OUT, newline="") as f:
             for r in csv.DictReader(f):
-                prior[(r["group_id"], r["item_key"])] = r
+                k = (r["group_id"], r["item_key"])
+                # Two rows for one item (a merge conflict kept both sides) would let the last one win
+                # and drop the other's decision; refuse.
+                if k in prior:
+                    sys.exit(f"{' '.join(k)} has two rows in {os.path.relpath(OUT, ROOT)}; keep one")
+                prior[k] = r
 
     con = z.db()
     libs = con.execute("SELECT groupID, libraryID FROM groups ORDER BY groupID").fetchall()
