@@ -43,15 +43,16 @@
 
 ## Phase 4, 2026-11-22
 
-- Completed: `data-raw/chinook_window_evidence.R` and its run on the database's host (round trip 1.0 ms, no other
-  active session): `data/fdis/derived_window/` (ignored) with `flow_0801_0930` on all 45,529 visits and 258,496
+- Completed: `data-raw/chinook_window_evidence.R` and its run on the database's host (round trip 0.9 ms in the
+  committed log, no other active session): `data/fdis/derived_window/` (ignored) with `flow_0801_0930` on all 45,529 visits and 258,496
   window-walk rows on `pick@0815-0915` beside the 775,488 published; record
   `data/tune/flow_window/ch_rear_window_evidence_run.csv`; log
   `scripts/logs/flow_window/20261122_chinook_window_evidence.txt`.
 - Measured: 4,532,843 picked segments in the load, none short of a window month or on two sources. Phase 1's median
   window share of MAD reproduced (0.590271; largest gap in a group's median 4.9e-15). The window walk: 500 starts in
-  7.3 s uncached on 8 workers, all 36,928 in 1.0 min cold (the committed log is the fourth pass, which read them from
-  `knw.walk_cache_window`). Found 233,984 of 258,496 rows, against 240,312 for the annual walk. The exact walk puts
+  7.0 s uncached on 8 workers in the committed log, which is the fourth pass and read the full walk from
+  `knw.walk_cache_window`. The cold walk of all 36,928 starts took 1.0 min on the second pass (after 7.3 s for its
+  500), whose log the later passes overwrote: that figure is from this session, not from a committed file. Found 233,984 of 258,496 rows, against 240,312 for the annual walk. The exact walk puts
   a river within 1 km of 980 scored visits where Phase 1's ladder reading had 969: 11 more, none with chinook.
 - Three passes stopped, each on a check: 4 visits hold a tied parent's flow from before #161 (none scored); readr
   does not round-trip 17 digits; md5 vectors named by path (`planning/active/findings.md`).
@@ -81,3 +82,17 @@
   carries the result; `CLAUDE.md`, `scripts/README.md`, `research/README.md`.
 - By the verdict, no follow-up is filed for link, the evidence build or group windows.
 - Next: the full tests, lint against main, `/code-check branch`, the archive and the PR.
+
+## Review round 1, 2026-11-22
+
+- Full test suite on the database's host before the round: 463 tests, 2,654 expectations passed, 0 failed, 0 errors,
+  2 skipped (the live build-record schema test and the ignored grade tables).
+- Round 1, code (`review-round1.md`): 4 findings, all fragile, none moving a committed number; all fixed. `r$curve`
+  partial-matched `curve_error` in the tune script's error path (`[[ ]]` now); the window walk's month check counted
+  rows, so a NULL flow or weight would read a window short (it counts flows and refuses a NULL month or weight); no
+  test reached that check (a month no segment carries now does, and with the check deleted that test fails); the
+  window cache was not keyed on the month weights (the key now carries the months and weights).
+- Round 1b, claims (`review-round1b.md`): every cell of the result tables matched the committed CSVs; 4 overclaims in
+  the prose around them, all fixed (the article's sentence on stream size, "most" for 138 of 300, a "points to" cell
+  that left out "both", three timings from passes whose logs were overwritten).
+- The window walk's file changed, so the evidence and the scoring are run again on it.

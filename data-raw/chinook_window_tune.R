@@ -171,13 +171,13 @@ for (rd in names(readings)) {
   cached <- file.exists(file.path(out_dir, rd, paste0(key, "_score.rds")))
   t0 <- Sys.time()
   r <- tune(rd, vl, smoke = FALSE)
-  if (is.null(r$score) || is.null(r$curve)) {
+  if (is.null(r[["score"]]) || is.null(r[["curve"]])) {
     stop(rd, ": not fitted (", r$status, "; ", r$curve_error, ")", call. = FALSE)
   }
   runs[[rd]] <- r
   cat(sprintf("%s: scored in %.1f min%s. %d rules; recommended %s (held-out %.3f); best %s (%.3f); %d in the region\n",
               rd, mins(t0), if (cached) " (a score cache was on file: read back if its settings match)" else "",
-              nrow(r$score$rules), r$pick$rule, r$score$rules$dev_heldout[r$score$rules$recommended],
+              nrow(r$score$rules), r[["pick"]]$rule, r$score$rules$dev_heldout[r$score$rules$recommended],
               r$score$rules$rule[which.min(r$score$rules$dev_heldout)], min(r$score$rules$dev_heldout),
               sum(r$score$rules$in_region)))
 }
@@ -191,7 +191,7 @@ if (!identical(ctl$rule, tab_pub$rule) || max(abs(round(ctl$dev_heldout, 6) - ta
   stop("the control reading does not give the published table back", call. = FALSE)
 }
 ctl_summ <- c(honest = sum(runs$control$score$honest$dev_rec),
-              seeds = sum(runs$control$score$seeds$recommended == runs$control$pick$rule),
+              seeds = sum(runs$control$score$seeds$recommended == runs$control[["pick"]]$rule),
               boot = ctl$boot_rec_share[ctl$recommended])
 pub_summ <- c(honest = summ$honest_dev_rec, seeds = summ$seeds_same_rec, boot = summ$boot_rec_share)
 if (any(abs(ctl_summ - pub_summ) > 1e-3)) {
@@ -218,7 +218,9 @@ cat(sprintf("every reading scored the same %d visits (%d with CH) of %d groups, 
             ctl$n_visits[1], ctl$n_detect[1], ctl$n_wsg[1]))
 
 # ---- each reading's tables ----
-nz <- function(x) if (is.null(x)) NA else x   # a run whose curve did not fit still has its scores
+# a run whose curve did not fit still has its scores. A record is read with [[ ]] wherever a longer name could
+# answer for a missing one: `$curve` on a record with no curve returns its `curve_error`
+nz <- function(x) if (is.null(x)) NA else x
 reading_row <- function(rd, r) {
   rules <- r$score$rules
   rec <- rules[rules$recommended, , drop = FALSE]
@@ -240,8 +242,8 @@ reading_row <- function(rd, r) {
     recommended_se = rec$se_diff, region_n = sum(rules$in_region),
     default_in_region = dflt$in_region, dev_default = dflt$dev_heldout,
     dev_null = best$dev_heldout - best$ddev_null,
-    dev_curve = nz(r$curve$heldout), null_heldout_curve = nz(r$null_heldout_curve),
-    curve_visits = if (is.null(r$curve)) NA_integer_ else nrow(r$curve$data), grade_withheld = nz(r$grade_withheld)
+    dev_curve = nz(r[["curve"]]$heldout), null_heldout_curve = nz(r$null_heldout_curve),
+    curve_visits = if (is.null(r[["curve"]])) NA_integer_ else nrow(r[["curve"]]$data), grade_withheld = nz(r$grade_withheld)
   )
   if (!is.null(r$score$honest)) {
     h <- share(by_rule(r$score$honest$rule))
@@ -342,7 +344,7 @@ runs_no <- list()
 for (rd in names(readings)) {
   t0 <- Sys.time()
   runs_no[[rd]] <- tune(rd, vl_no, tag = "_nolfra", smoke = FALSE, extra = FALSE)
-  if (is.null(runs_no[[rd]]$score)) stop(rd, " without LFRA: not fitted (", runs_no[[rd]]$status, ")", call. = FALSE)
+  if (is.null(runs_no[[rd]][["score"]])) stop(rd, " without LFRA: not fitted (", runs_no[[rd]]$status, ")", call. = FALSE)
   rn <- rec_of(runs_no[[rd]])
   cat(sprintf(paste("%s without LFRA: scored in %.1f min; %d visits (%d with CH) of %d groups;",
                     "recommended %s (held-out %.3f)\n"),

@@ -247,14 +247,14 @@ otherwise; held-out deviance throughout, lower is better.
 | best rule's score | 1,222.2 | +0.7 | +6.3 | +5.1 | MAD, narrowly, for all three |
 | rules in the one-SE region, of 6,149 | 102 | 56 | 130 | 122 | a narrower choice for stream; a wider one for river and both |
 | nested selection (the choosing, scored on the fold it did not see) | 1,322.7 | −40.1 | −8.8 | −36.8 | the window, for all three |
-| nested folds that pick the recommended rule, of 5 | 2 | 3 | 3 | 4 | the window |
-| nested folds that pick its size, of 5 | 2 | 5 | 3 | 5 | the window at the stream |
-| other seeds that recommend the same rule, of 4 | 4 | 4 | 0 | 4 | against river |
-| bootstrap share on the recommended rule | 0.095 | 0.190 | 0.140 | 0.235 | the window |
-| bootstrap share on its size | 0.335 | 0.535 | 0.295 | 0.645 | the window at the stream |
-| bootstrap share on its gradient | 0.440 | 0.490 | 0.320 | 0.410 | neither |
-| bootstrap share on its exception | 0.445 | 0.510 | 0.310 | 0.325 | MAD at the river |
-| the curve's score, on the same 4,855 visits | 1,167.6 | −21.7 | +12.1 | +8.5 | the window at the stream; MAD at the river |
+| nested folds that pick the recommended rule, of 5 | 2 | 3 | 3 | 4 | the window, for all three |
+| nested folds that pick its size, of 5 | 2 | 5 | 3 | 5 | the window, for all three, most for stream and both |
+| other seeds that recommend the same rule, of 4 | 4 | 4 | 0 | 4 | neither for stream and both; MAD for river |
+| bootstrap share on the recommended rule | 0.095 | 0.190 | 0.140 | 0.235 | the window, for all three |
+| bootstrap share on its size | 0.335 | 0.535 | 0.295 | 0.645 | the window for stream and both; MAD for river |
+| bootstrap share on its gradient | 0.440 | 0.490 | 0.320 | 0.410 | the window for stream; MAD for river and both |
+| bootstrap share on its exception | 0.445 | 0.510 | 0.310 | 0.325 | the window for stream; MAD for river and both |
+| the curve's score, on the same 4,855 visits | 1,167.6 | −21.7 | +12.1 | +8.5 | the window for stream; MAD for river and both |
 | the curve's score, without LFRA (4,209 visits) | 1,063.5 | +12.8 | +27.2 | +38.1 | MAD, for all three |
 
 Only the first two rows carry an SE. The differences in nested selection and in the curve have none here, so they
@@ -339,7 +339,8 @@ says little about a small stream.
   between two steps.
 - **The verdict compares recommended rules**, as set beforehand. Where a region is wide the recommended rule is far
   from the best one, which is what happened at the river.
-- **Most of Phase 1's change is one group's**, and so is the stream reading's gain in the curve.
+- **Nearly half of Phase 1's change is one group's** (the lower Fraser holds 138 of the 300 visits that moved), and
+  the stream reading's gain in the curve is that group's.
 - **16 chinook visits moved in Phase 1.** A difference that small was always going to be hard to score.
 - **Four visits carry a MAD from before a tie was settled.** The published evidence was built before a segment with
   two equally near parents took the lower id's flow (#161); 4 of the 45,529 visits hold the other parent's. All sit

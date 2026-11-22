@@ -455,9 +455,9 @@ shows it on our own records; these figures come from that article's data, writte
   together, but reads as a slope on the ground only to within a few points: counting each species' sites within one
   step of its own limit (`r n0(band_n)` in all), `r pc(band_flip)` sit on the other side of it as the crews measured
   it (`r issue("121")`).
-- Flows are 30-year averages, so no single dry year is in them. A stream's size is its average flow over the whole
-  year. Sizing chinook rearing streams by their average flow in August and September instead was tried, and
-  predicted where chinook were caught no better (`r issue("226")`).
+- Flows are 30-year averages, so no single dry year is in them. They are also averages over the whole year: sizing
+  chinook rearing streams by their average flow in August and September instead was tried, and predicted where
+  chinook were caught no better (`r issue("226")`).
 
 ## Which numbers shape the result, and which have been tested? {#settings}
 

@@ -10,10 +10,10 @@
 --   - the signature takes the window as two arrays: `months`, and each month's `weights` in the window's mean
 --     (the share of the window's days that fall in it; knowledge:::.knw_window_weights() takes them from
 --     wet::wet_flow_window(), so the walk weighs months as wet does);
---   - the arrays are checked;
---   - a segment's flow is the weighted sum of those months on the source, taken only where every month is
---     present on one source, so a segment missing a month is passed over, never read short. `large_mad`
---     carries that window flow.
+--   - the arrays are checked: one length, at least one month, no NULL in either;
+--   - a segment's flow is the weighted sum of those months on the source, taken only where every month
+--     carries a flow on one source (the count is of flows, not rows), so a segment missing a month, or with
+--     no flow in one, is passed over, never read short. `large_mad` carries that window flow.
 -- With months = {0} and weights = {1} this is ch_dist_profile.sql's walk, which the same test file checks on
 -- the database. The published walk is not this file: its md5 (knw_walk_md5()) is on every grade record.
 -- window flow: begin
@@ -48,8 +48,10 @@ BEGIN
     RAISE EXCEPTION 'src must be pick, pcic_routed or wet_balance, not %', src;
   END IF;
   -- window flow: begin
-  IF cardinality(months) IS NULL OR cardinality(months) = 0 OR cardinality(months) <> cardinality(weights) THEN
-    RAISE EXCEPTION 'months and weights must be arrays of one length, at least one month';
+  IF months IS NULL OR weights IS NULL OR cardinality(months) = 0
+     OR cardinality(months) <> cardinality(weights)
+     OR array_position(months, NULL) IS NOT NULL OR array_position(weights, NULL) IS NOT NULL THEN
+    RAISE EXCEPTION 'months and weights must be arrays of one length, at least one month, with no NULL';
   END IF;
   -- window flow: end
   LOOP
@@ -68,7 +70,7 @@ BEGIN
                 JOIN unnest(months, weights) AS w(mo, wt) ON w.mo = m.month
                WHERE m.linear_feature_id = s.linear_feature_id AND m.scenario = 'historical'
                  AND ((src = 'pick' AND m.pick) OR m.source = src)
-              HAVING count(*) = cardinality(months) AND count(DISTINCT m.source) = 1) q ON true
+              HAVING count(m.q_m3s) = cardinality(months) AND count(DISTINCT m.source) = 1) q ON true
             -- window flow: end
            WHERE s.blue_line_key = cur_blk AND s.downstream_route_measure < cur_m
              AND q.q_m3s >= t.qq AND s.edge_type NOT IN (1100, 1150, 1300, 1350, 2300, 1400, 1450)

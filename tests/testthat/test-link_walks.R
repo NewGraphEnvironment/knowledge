@@ -213,8 +213,29 @@ test_that("the window walk given the annual flow as its window is the annual wal
     }
   }
   expect_true(TRUE)
-  expect_error(DBI::dbGetQuery(conn, "SELECT * FROM pg_temp.ch_dist_profile_window(360886335, 1520, '{3}', 'pick',
-                                      '{8,9}', '{1}')"), "one length")
+})
+
+test_that("the window walk reads no window short: a month with no flow is a missing month, and a NULL is refused", {
+  conn <- skip_if_no_pg("discharge")
+  DBI::dbExecute(conn, paste(readLines(.knw_walk_file(TRUE)), collapse = "\n"))
+  walk <- function(months, weights) {
+    DBI::dbGetQuery(conn, sprintf("SELECT * FROM pg_temp.ch_dist_profile_window(360886335, 1520, '{1,3}', 'pick',
+                                   %s, %s) ORDER BY qmin", months, weights))
+  }
+  # August alone at half weight finds a river on this start's own line
+  aug <- walk("'{8}'", "'{0.5}'")
+  expect_identical(aug$status, c("found", "found"))
+  # with a month no segment carries (13), every segment is short a month: none may be taken on August's half alone,
+  # and the walk runs to the sea
+  short <- walk("'{8,13}'", "'{0.5,0.5}'")
+  expect_false(any(short$status == "found"))
+  # a NULL array, a NULL weight or month, and arrays of two lengths are refused, never walked
+  expect_error(walk("'{8,9}'", "'{1}'"), "one length")
+  expect_error(walk("'{8,9}'", "NULL::float8[]"), "one length")
+  expect_error(walk("NULL::integer[]", "'{0.5,0.5}'"), "one length")
+  expect_error(walk("'{8,9}'", "'{0.53125,NULL}'"), "no NULL")
+  expect_error(walk("'{8,NULL}'", "'{0.5,0.5}'"), "no NULL")
+  expect_error(walk("'{}'", "'{}'"), "one length")
 })
 
 test_that("a window walk finds rivers by their window flow, and says so in the source", {
@@ -265,7 +286,13 @@ test_that("a window's cache rows are its own: no other window, and not the annua
   expect_identical(cold, plain)
   kept <- DBI::dbGetQuery(conn, sprintf("SELECT DISTINCT src, walk_md5 FROM %s", tbl))
   expect_identical(kept$src, "pick@0815-0915")
-  expect_identical(kept$walk_md5, knw_walk_md5(window = TRUE))
+  # keyed on the window walk's file and on the months and weights it was walked with
+  expect_identical(kept$walk_md5, paste0(knw_walk_md5(window = TRUE), "|8,9|{0.53125,0.46875}"))
+  expect_identical(.knw_walk_key(NULL), knw_walk_md5())
+  # rows walked on other weights for the same dates are never read
+  DBI::dbExecute(conn, sprintf("UPDATE %s SET walk_md5 = '%s'", tbl,
+                               paste0(knw_walk_md5(window = TRUE), "|8,9|{0.5,0.5}")))
+  expect_message(walk(spawn), "0 of 2 start-and-source pairs read, 2 to walk")
   # another window, and the annual walk, each start cold in the same table
   expect_message(walk(rear), "0 of 2 start-and-source pairs read, 2 to walk")
   expect_message(annual <- walk(), "0 of 2 start-and-source pairs read, 2 to walk")

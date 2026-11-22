@@ -98,12 +98,14 @@ With \code{window}, a river's size is its flow in that window of the year, not i
 annual flow (#226): the walk is \code{inst/sql/ch_dist_profile_window.sql}, the same
 path, statuses and bank rule, reading for each segment the mean of wet's monthly
 flow over the window's days (each month weighted by the days the window takes
-from it, as \code{wet::wet_flow_window()} weighs them). A segment missing one of the
-window's months on the source is passed over. Each row's \code{src} then carries the
-window, \verb{<source>@<mmdd>-<mmdd>} (\verb{pick@0815-0915}), and \code{large_mad} is the
-river's window flow. A window walk is another walk: its cache rows are keyed on
-that \code{src} and on the window walk's own md5 (\code{knw_walk_md5(window = TRUE)}), so
-no row of one window, or of the annual walk, is read as another's.
+from it, as \code{wet::wet_flow_window()} weighs them). A segment with no flow in
+one of the window's months on the source is passed over. Each row's \code{src} then
+carries the window, \verb{<source>@<mmdd>-<mmdd>} (\verb{pick@0815-0915}), and \code{large_mad}
+is the river's window flow. A window walk is another walk: its cache rows are
+keyed on that \code{src} and on the window walk's own md5
+(\code{knw_walk_md5(window = TRUE)}) with the months and weights it was walked on,
+so no row of one window, of other weights, or of the annual walk, is read as
+another's.
 }
 \examples{
 \dontrun{

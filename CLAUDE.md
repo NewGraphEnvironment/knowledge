@@ -656,8 +656,9 @@ is the check against fresh's walk on one group (BULK, 2026-10-22: 0 of 2,460 sta
 A window walk (`knw_link_walks(window = )`, #226) is another file, `inst/sql/ch_dist_profile_window.sql`: the annual
 walk's text outside three marked regions, which `test-link_walks.R` holds it to, sizing a river by the day-weighted
 mean of the window's months (`knw_link_flow_window()` reads the same flow at a segment, by `wet::wet_flow_window()`).
-Its rows' `src` is `<source>@<mmdd>-<mmdd>`, and its cache rows are keyed on that and on its own md5, in
-`knw.walk_cache_window`. `knw_walk_md5()` stays the annual walk's, the one every grade names: never edit the annual
+Its rows' `src` is `<source>@<mmdd>-<mmdd>`, and its cache rows are keyed on that and on its own md5 with the months
+and weights it was walked on, in `knw.walk_cache_window`. It takes a segment only where every month of the window
+carries a flow on one source, and refuses a NULL month or weight. `knw_walk_md5()` stays the annual walk's, the one every grade names: never edit the annual
 walk for a variant, because its md5 moving regrades every key. A reading on another size column or walk is scored
 with `knw_tune_run(cols =, src =)`, and each reading needs a `cache_dir` of its own: the score cache records neither,
 so two readings in one directory read each other's scores. To set two readings' rules beside each other, score a

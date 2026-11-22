@@ -17,8 +17,9 @@
 #     parent's flow, from before #161, and is counted.
 #   - THE WINDOW WALK (knw_link_walks(window = )): inst/sql/ch_dist_profile_window.sql, the annual walk but for
 #     the flow it reads. Its rows carry src `pick@0815-0915`, beside the published rows on `pick`. It passes over
-#     a segment that lacks one of the window's months on its source, so before any walk the script counts such
-#     segments over the whole load and stops unless there are none.
+#     a segment with no flow in one of the window's months on its source, so before any walk the script counts
+#     such segments over the whole load (flows, not rows: a month whose flow is NULL is a missing month) and stops
+#     unless there are none.
 #   - TARGET FLAGS ARE LEFT EMPTY on the window rows. The tuning never reads them (knw_rule_in()'s no_lake_target
 #     and no_reg_target are off), and knw_walk_index() reads an empty flag as FALSE.
 #   - AGAINST PHASE 1: the median window share of MAD at the scored visits, and each group's, must be Phase 1's
@@ -104,8 +105,8 @@ short <- DBI::dbGetQuery(conn, sprintf("
          count(*) FILTER (WHERE n_annual <> 1) AS annual_not_once,
          count(*) FILTER (WHERE n_win <> %d) AS window_short
   FROM (SELECT linear_feature_id, count(DISTINCT source) AS n_src,
-               count(*) FILTER (WHERE month = 0) AS n_annual,
-               count(*) FILTER (WHERE month IN (%s)) AS n_win
+               count(q_m3s) FILTER (WHERE month = 0) AS n_annual,
+               count(q_m3s) FILTER (WHERE month IN (%s)) AS n_win
         FROM discharge.fwa_v1_segment_monthly
         WHERE scenario = 'historical' AND pick GROUP BY 1) x", length(months), paste(months, collapse = ", ")))
 cat(sprintf(paste("picked segments in the load: %.0f; on two sources %.0f; annual flow not once %.0f;",

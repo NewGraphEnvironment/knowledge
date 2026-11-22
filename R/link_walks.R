@@ -49,12 +49,14 @@
 #' annual flow (#226): the walk is `inst/sql/ch_dist_profile_window.sql`, the same
 #' path, statuses and bank rule, reading for each segment the mean of wet's monthly
 #' flow over the window's days (each month weighted by the days the window takes
-#' from it, as `wet::wet_flow_window()` weighs them). A segment missing one of the
-#' window's months on the source is passed over. Each row's `src` then carries the
-#' window, `<source>@<mmdd>-<mmdd>` (`pick@0815-0915`), and `large_mad` is the
-#' river's window flow. A window walk is another walk: its cache rows are keyed on
-#' that `src` and on the window walk's own md5 (`knw_walk_md5(window = TRUE)`), so
-#' no row of one window, or of the annual walk, is read as another's.
+#' from it, as `wet::wet_flow_window()` weighs them). A segment with no flow in
+#' one of the window's months on the source is passed over. Each row's `src` then
+#' carries the window, `<source>@<mmdd>-<mmdd>` (`pick@0815-0915`), and `large_mad`
+#' is the river's window flow. A window walk is another walk: its cache rows are
+#' keyed on that `src` and on the window walk's own md5
+#' (`knw_walk_md5(window = TRUE)`) with the months and weights it was walked on,
+#' so no row of one window, of other weights, or of the annual walk, is read as
+#' another's.
 #'
 #' @param connector a function of no arguments returning a `DBI` connection to a
 #'   database holding `discharge` and `whse_basemapping`.
@@ -122,7 +124,7 @@ knw_link_walks <- function(connector, starts, q_grid = c(1, 3, 5, 10, 20, 30, 50
   if (cache_on) {
     conn <- connector()
     on.exit(DBI::dbDisconnect(conn), add = TRUE)
-    meta <- .knw_walk_cache_prepare(conn, cache, walk_md5 = knw_walk_md5(window = !is.null(win)))
+    meta <- .knw_walk_cache_prepare(conn, cache, walk_md5 = .knw_walk_key(win))
     # each batch's rows are inserted by the query that walks them, so a worker's walk is kept as it is made
     sql <- .knw_walk_sql(walk_cols, win = win, cache = cache, meta = meta)
     DBI::dbWriteTable(conn, "tmp_knw_walk_starts",
@@ -247,6 +249,16 @@ knw_link_walks <- function(connector, starts, q_grid = c(1, 3, 5, 10, 20, 30, 50
 .knw_walk_cols <- function() {
   setdiff(names(.knw_walk_cache_cols), c("blue_line_key", "downstream_route_measure", "src", "load_md5", "walk_md5",
                                          "walked_at"))
+}
+
+# What a kept walk is keyed on beside its start, source, size and flow load (the cache's `walk_md5` column): the
+# annual walk's md5, or for a window walk its file's md5 with the months and weights the query carries. The weights
+# come from wet, which the window's dates in `src` do not pin: were wet to count a window's days another way, rows
+# walked on the old weights would otherwise be read as the new ones'.
+.knw_walk_key <- function(win = NULL) {
+  if (is.null(win)) return(knw_walk_md5())
+  paste(knw_walk_md5(window = TRUE), paste(as.integer(win$months), collapse = ","), .knw_pg_array(win$weights),
+        sep = "|")
 }
 
 # the file a walk is installed from: the annual walk, or the window walk (#226)
