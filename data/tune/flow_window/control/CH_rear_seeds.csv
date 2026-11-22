@@ -1,0 +1,5 @@
+"reading","seed","best","pick","recommended","default_in_region","main_rec_in_region","region_n"
+"control",55,"mad>=0.75|g<=0.09|Q3@D1000","mad>=0.75|g<=0.09|Q3@D1000","mad>=0.75|g<=0.09|Q3@D1000",FALSE,TRUE,79
+"control",56,"mad>=0.75|g<=0.09|Q3@D1000","mad>=0.75|g<=0.09|Q3@D1000","mad>=0.75|g<=0.09|Q3@D1000",FALSE,TRUE,158
+"control",57,"mad>=0.75|g<=0.09|Q3@D1000","mad>=0.75|g<=0.09|Q3@D1000","mad>=0.75|g<=0.09|Q3@D1000",FALSE,TRUE,145
+"control",58,"mad>=0.75|g<=0.09|Q3@D1000","mad>=0.75|g<=0.09|Q3@D1000","mad>=0.75|g<=0.09|Q3@D1000",FALSE,TRUE,145

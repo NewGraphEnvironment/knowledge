@@ -1,0 +1,9 @@
+"species_code","stage","reading","check","value","limit","pass","table","role","rule","dev_heldout","ddev_null","n_clamp","dev_visit_max","converged","coef_max","coef_max_term","coef_max_fold"
+"CH","rear","stream","null_ratio",0.995065658126317,1.25,TRUE,"checks",,,,,,,,,,
+"CH","rear","stream","clamp",0,0,TRUE,"checks",,,,,,,,,,
+"CH","rear","stream","behind_null",0,1509.25802682099,TRUE,"checks",,,,,,,,,,
+"CH","rear","stream","coef",3.03512874966786,5,TRUE,"checks",,,,,,,,,,
+"CH","rear","stream",,,,,"rules","no_rule","none",1509.25802682099,0,0,13.0418036672176,TRUE,2.16011206291284,"data_setFDS",3
+"CH","rear","stream",,,,,"rules","default","width>=1.5|g<=0.0549|none",1460.44561912588,-48.8124076951085,0,12.2213124948197,TRUE,2.01771388553675,"data_setFDS",3
+"CH","rear","stream",,,,,"rules","link_tuned","mad>=0.28|g<=0.0549|none",1411.36199662532,-97.8960301956643,0,13.2292546143946,TRUE,1.65476239031011,"rule",4
+"CH","rear","stream",,,,,"rules","previous","mad>=0.75|g<=0.09|Q3@D1000",1222.91836819845,-286.33965862254,0,12.8631780900812,TRUE,3.03512874966786,"rule",4

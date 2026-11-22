@@ -135,7 +135,7 @@ Mine, stated so they can be overruled (mechanism, not scope):
 
 ## Phase 5: Score the four readings (no database)
 
-- [ ] `data-raw/chinook_window_tune.R`, on `0322`'s pattern: `knw_tune_run()` for `CH` rearing at its defaults
+- [x] `data-raw/chinook_window_tune.R`, on `0322`'s pattern: `knw_tune_run()` for `CH` rearing at its defaults
       (seed 54, 5 folds, 200 bootstrap resamples, seeds 55 to 58, `d_floor` 200, `segment_gradient`), link's
       thresholds at the published ledger's commit from `LINK_REPO`, the readings as `cols[["mad"]]` and `src`.
       `STAGE=smoke` runs the smoke gates for all four and stops on any failure (#84); `STAGE=score` scores.
@@ -143,22 +143,22 @@ Mine, stated so they can be overruled (mechanism, not scope):
       reading, and each run without LFRA, gets a cache directory of its own and its label in `evidence_id`; the
       control is scored from an empty directory, never `data/tune/`. *(G5):* `thresholds_extra` is passed, as
       `0320` passes it, and the ledger is the one the summary names.
-- [ ] The control must reproduce the published run: every rule's held-out deviance in
+- [x] The control must reproduce the published run: every rule's held-out deviance in
       `data/tune/CH_rear_tune.csv` (`max(abs(round(new, 6) - published)) <= 1e-6`, as `0322` compares), the
       pick, the recommended rule, the region and the summary's seed and nested-selection values. The script
       stops otherwise.
-- [ ] The paired comparison. *Plan review (B2), replacing one grid of every reading's rules, whose SE is
+- [x] The paired comparison. *Plan review (B2), replacing one grid of every reading's rules, whose SE is
       against that grid's best:* one two-row grid per window reading (the control's recommended rule and that
       reading's; a `rule_in` that reads each row's own size column and walk source), `extra = FALSE`, once per
       seed 54 to 58. The row that is not the best carries the paired difference and its SE over the 45 groups.
       Each pair's held-out deviance on seed 54 must equal that reading's own run.
-- [ ] LFRA left out: each reading rescored without the lower Fraser's visits (main seed), and the same paired
+- [x] LFRA left out: each reading rescored without the lower Fraser's visits (main seed), and the same paired
       comparison.
-- [ ] Outputs, `data/tune/flow_window/` only: `ch_rear_tune_run.csv`; per reading
+- [x] Outputs, `data/tune/flow_window/` only: `ch_rear_tune_run.csv`; per reading
       `<reading>/CH_rear_{summary,seeds,honest,groups,smoke,region}.csv`; `ch_rear_readings.csv` (the paired
       comparison by seed, with and without LFRA). Nothing that publishes lists `data/tune/` below its top level:
       the plan review cites every listing, each non-recursive (`planning/active/review-plan.md`).
-- [ ] Run the smoke stage, read it, then score; log `scripts/logs/flow_window/<date>_chinook_window_tune.txt`.
+- [x] Run the smoke stage, read it, then score; log `scripts/logs/flow_window/<date>_chinook_window_tune.txt`.
 
 ## Phase 6: Read it and write it up
 

@@ -58,3 +58,17 @@
 - 1 visit has a MAD and no window flow above zero; 66 have no MAD above zero.
 - Filed #255 (`knw_link_flow()` takes minutes on a few segments).
 - Next: Phase 5, the smoke gates, then the four readings.
+
+## Phase 5, 2026-11-22
+
+- Completed: `data-raw/chinook_window_tune.R`; smoke gates passed on all four readings (10 s,
+  `scripts/logs/flow_window/20261122_chinook_window_tune-smoke.txt`); the four readings scored with every check and
+  again without LFRA in 17 min on 12 workers (3.3 min a reading, 0.8 to 0.9 without the extras;
+  `scripts/logs/flow_window/20261122_chinook_window_tune.txt`); outputs under `data/tune/flow_window/`.
+- The verdict rule's commit (`267fcd06`) precedes the scoring's HEAD (`662eb1e7`), which the log names.
+- Measured: the control gave back all 6,149 rules of run `20261103_0838` (held-out deviance to 1e-6, the pick, the
+  recommended rule, the region, nested selection 1322.677, 4 of 4 seeds, bootstrap share 0.095). All four readings
+  scored the same 4,858 visits of 45 groups in the same folds.
+- Verdict: no window reading beats MAD. Recommended rule less the control's: stream +0.7 (SE 22.7), river +49.5
+  (SE 43.8), both +40.1 (SE 41.2); seeds lower 2, 0 and 0 of 4; without LFRA -0.2, +53.9, +45.2.
+- Next: Phase 6, the write-up.
