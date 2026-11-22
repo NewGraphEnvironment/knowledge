@@ -69,7 +69,7 @@ only; the verdict rule set before scoring.
 
 ## Left for a sweep
 
-- `research/chinook_window_flow.md` is flagged by soul's research check for its length (about 3,500 words) and for a
+- `research/chinook_window_flow.md` is flagged by the shared research-file check for its length (about 3,500 words) and for a
   section headed with an issue number (`## Phase 2: ... (#226)`). The heading was left: `data-raw/chinook_window_tune.R`
   holds the block from that heading to the end of "The verdict rule" to its text at the commit that first held the
   rule (`267fcd06`), which is the record that the rule preceded the scores. Folding the section means moving that

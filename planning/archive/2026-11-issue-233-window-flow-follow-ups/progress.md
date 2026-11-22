@@ -135,6 +135,6 @@
 - Final tree: full suite 466 tests, 2,678 expectations passed, 0 failed, 0 errors, 2 skipped (existing conditional
   skips), on the database's host; `pkgdown::check_pkgdown()` clean; `devtools::document()` writes nothing.
 - `/code-check branch`: three rounds and a claims pass, ended on an enumeration (`review-verdict.md`).
-- soul's research check flags `research/chinook_window_flow.md` for length and for the Phase 2 heading's issue
+- The shared research-file check flags `research/chinook_window_flow.md` for length and for the Phase 2 heading's issue
   number; left, with the reason in the archive README.
 - Archived; PR next.
