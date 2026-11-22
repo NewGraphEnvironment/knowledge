@@ -87,7 +87,8 @@ if (is.null(rule_then) || !identical(rule_then, rule_block(readLines(rule_file))
        call. = FALSE)
 }
 head_sha <- git("rev-parse", "HEAD")
-cat("verdict rule:", rule_file, "first committed at", rule_commit, "and unchanged since\nHEAD:        ", head_sha, "\nstage:       ", stage_run,
+cat("verdict rule:", rule_file, "first committed at", rule_commit, "and unchanged since\nHEAD:        ", head_sha,
+    "\nstage:       ", stage_run,
     "\nstarted:     ", stamp(), "\n\n")
 
 # ---- the published run, and the copy of its evidence with a window ----
@@ -260,7 +261,8 @@ reading_row <- function(rd, r) {
     default_in_region = dflt$in_region, dev_default = dflt$dev_heldout,
     dev_null = best$dev_heldout - best$ddev_null,
     dev_curve = nz(r[["curve"]]$heldout), null_heldout_curve = nz(r$null_heldout_curve),
-    curve_visits = if (is.null(r[["curve"]])) NA_integer_ else nrow(r[["curve"]]$data), grade_withheld = nz(r$grade_withheld)
+    curve_visits = if (is.null(r[["curve"]])) NA_integer_ else nrow(r[["curve"]]$data),
+    grade_withheld = nz(r$grade_withheld)
   )
   if (!is.null(r$score$honest)) {
     h <- share(by_rule(r$score$honest$rule))
@@ -361,7 +363,9 @@ runs_no <- list()
 for (rd in names(readings)) {
   t0 <- Sys.time()
   runs_no[[rd]] <- tune(rd, vl_no, tag = "_nolfra", smoke = FALSE, extra = FALSE)
-  if (is.null(runs_no[[rd]][["score"]])) stop(rd, " without LFRA: not fitted (", runs_no[[rd]]$status, ")", call. = FALSE)
+  if (is.null(runs_no[[rd]][["score"]])) {
+    stop(rd, " without LFRA: not fitted (", runs_no[[rd]]$status, ")", call. = FALSE)
+  }
   rn <- rec_of(runs_no[[rd]])
   cat(sprintf(paste("%s without LFRA: scored in %.1f min; %d visits (%d with CH) of %d groups;",
                     "recommended %s (held-out %.3f)\n"),

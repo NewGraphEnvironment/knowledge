@@ -1,7 +1,7 @@
-verdict rule: research/chinook_window_flow.md at 56980624cb16316373ae4a577139abf688b46481 
-HEAD:         879fea8ae451a710a3cab31c6b706d219f53edee 
+verdict rule: research/chinook_window_flow.md first committed at 267fcd0624ad197ed2e8a735f813225c9a0b9714 and unchanged since
+HEAD:         e75d672d54af7838f32c4d91e05f5aea7d0ff3bb 
 stage:        score 
-started:      2026-11-22T06:19:10Z 
+started:      2026-11-22T06:20:43Z 
 
 published run: 20261103_0838 recommended mad>=0.75|g<=0.09|Q3@D1000 
 evidence:      data/fdis/derived_window 8331cd85b1e16670370d3591e437ca66;6a2e28f1afb46a02c357ac044f8d09e3;7f90c14104b4b4e5dbc7acd9d511bf64 
@@ -148,4 +148,4 @@ both without LFRA: scored in 0.1 min; 4212 visits (228 with CH) of 44 groups; re
 verdict: NO WINDOW READING BEATS MAD by the rule set before the run 
 
 wrote data/tune/flow_window 
-finished: 2026-11-22T06:19:56Z 
+finished: 2026-11-22T06:21:28Z 
