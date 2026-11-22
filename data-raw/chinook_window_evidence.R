@@ -268,13 +268,15 @@ cat(sprintf(paste("  a river within reach: ladder %d, exact %d; ladder only %d, 
 dir.create(out_dir, showWarnings = FALSE, recursive = TRUE)
 f_out <- stats::setNames(file.path(out_dir, paste0(tables, ".csv")), tables)
 unlink(c(f_out, file.path(out_dir, "window_run.csv")))
-# the visits, every field as its own text, with the window flow beside them: %.17g reads back as the double it was
+# the visits, every field as its own text, with the window flow beside them at 15 significant digits, as readr
+# wrote every other number of the table (0310's write_csv). readr neither writes a double's every digit nor reads
+# 17 digits back to the same bits, so the window flow is held to what it reads back as, within 1e-12 of itself
 raw <- readr::read_csv(f_src[["visits_link"]], col_types = readr::cols(.default = "c"), na = character(),
                        show_col_types = FALSE, progress = FALSE)
 if (nrow(raw) != nrow(vl) || !identical(raw$site_visit, vl$site_visit)) {
   stop("the visits read as text are not the visits", call. = FALSE)
 }
-raw[[col_rear]] <- ifelse(is.na(win_flow), "", sprintf("%.17g", win_flow))
+raw[[col_rear]] <- ifelse(is.na(win_flow), "", sprintf("%.15g", win_flow))
 readr::write_csv(raw, f_out[["visits_link"]], na = "", progress = FALSE)
 if (!file.copy(f_src[["visits_species"]], f_out[["visits_species"]])) {
   stop("could not copy visits_species.csv", call. = FALSE)
@@ -285,20 +287,24 @@ readr::write_csv(w, f_out[["walks"]], na = "", append = TRUE, progress = FALSE)
 
 # ---- read the copy back: the published values are unchanged, and the window is there ----
 # column by column, through the reader the tuning uses: a reader's own attributes (its column spec) differ between
-# two files, the values must not. `exact` holds each column to the same type and bits; the window walk's rows were
-# integers and doubles in memory and are read back as doubles, so they are held to the same numbers
+# two files, the values must not. `exact` holds each column to the same type and bits, which the published values
+# must keep, their text being unchanged. What this run computed was written at 15 digits and is held to the same
+# numbers within 1e-12 of their size
+near <- function(a, b) {
+  if (!is.numeric(a) || !is.numeric(b)) return(identical(as.character(a), as.character(b)))
+  identical(is.na(a), is.na(b)) && all(abs(a - b) <= 1e-12 * pmax(1, abs(b)), na.rm = TRUE)
+}
 same_cols <- function(a, b, exact = TRUE) {
   identical(names(a), names(b)) && nrow(a) == nrow(b) &&
-    all(vapply(names(a), function(n) {
-      if (exact) return(identical(a[[n]], b[[n]]))
-      isTRUE(all.equal(a[[n]], b[[n]], tolerance = 0, check.attributes = FALSE))
-    }, logical(1)))
+    all(vapply(names(a), function(n) if (exact) identical(a[[n]], b[[n]]) else near(a[[n]], b[[n]]), logical(1)))
 }
 vl2 <- read_visits(f_out[["visits_link"]])
 if (!identical(names(vl2), c(names(vl), col_rear)) || !same_cols(vl2[names(vl)], vl)) {
   stop("the copy's visits do not read back as the published visits", call. = FALSE)
 }
-if (!identical(vl2[[col_rear]], win_flow)) stop("the window flow does not read back as it was computed", call. = FALSE)
+if (!near(vl2[[col_rear]], win_flow) || !identical(vl2[[col_rear]] > 0, win_flow > 0)) {
+  stop("the window flow does not read back as it was computed", call. = FALSE)
+}
 walks2 <- readr::read_csv(f_out[["walks"]], show_col_types = FALSE, progress = FALSE)
 n_pub <- nrow(walks)
 cols_walk <- setdiff(names(w), c("target_lake", "target_regulated"))

@@ -51,3 +51,16 @@ equality at every visit with a flow of its own and at every scored visit, and co
 | Error | Resolution |
 |-------|------------|
 | `Error: 4 visits' MAD, read again, is not the evidence's mad_pick` | parent ties from before #161; equality is required where the flow is the visit's own and at scored visits, the rest counted |
+
+## readr does not round-trip a double (2026-11-22)
+
+The evidence tables are written by `readr::write_csv()`, which writes 15 significant digits
+(`0.0512872131147541`), and read by `readr::read_csv()`, whose parse of a 17-digit number is not the nearest double:
+13,936 of 45,529 window flows written with `%.17g` read back 1 to 8 units in the last place away. So a number in the
+evidence is a 15-digit value as readr reads it, which is why Phase 1 held MAD to `1e-9` and not to equality. The
+window column is written at 15 digits like every other number of the table, and held to what it reads back as within
+`1e-12` of its size; the published columns' text is unchanged, so they read back identical.
+
+| Error | Resolution |
+|-------|------------|
+| `Error: the window flow does not read back as it was computed` | `%.17g` through readr is not exact; write 15 digits as readr does, hold the read-back to 1e-12 |
