@@ -1,20 +1,20 @@
-HEAD:    3edfa6f8a033953bef8fdabd628d13b4567d9634 
-started: 2026-11-22T06:46:38Z 
+HEAD:    a68762a835e043d656b982719303b53ff0158dcc 
+started: 2026-11-22T07:08:23Z 
 
 published run: 20261103_0838 rule mad>=0.75|g<=0.09|Q3@D1000 
 evidence:      c746c5829c605fb7711feba0ec9d4d93;6a2e28f1afb46a02c357ac044f8d09e3;2e0f0f419022da0f5ac51a3869486a80 
-database round trip 0.9 ms (median of 20 SELECT 1; limit 20 ms) 
+database round trip 1.0 ms (median of 20 SELECT 1; limit 20 ms) 
 flow load:     wet_db_load(): discharge/fwa/v1/segment_monthly, scenario historical last loaded from https://fresh-bc.s3.us-west-2.amazonaws.com/discharge/fwa/v1/manifest.json (built 2026-10-24T12:23:01Z, wet b4bbc50) 
 other active sessions on the database: 0 
-walks:         annual c3f7bdbecff1d55107f28afa59d7f532 window 9c4dcfc9e4d5357e1eee674eecec242a 
+walks:         annual c3f7bdbecff1d55107f28afa59d7f532 window 35cd4ee55a3e5020507b3e310760e127 
 wet:           0.4.39 
 
-picked segments in the load: 4532843; on two sources 0; annual flow not once 0; a window month (8, 9) short or twice 0; a flow that is not a number 0 (22 s)
+picked segments in the load: 4532843; on two sources 0; annual flow not once 0; a window month (8, 9) short or twice 0; a flow that is not a finite number 0 (19 s)
 
-window flow 08-01 to 09-30 (flow_0801_0930): 45529 visits on 28552 segments, 45529 with a flow, 0 without (as mad_pick); MAD read again equal at 45525 visits, and at 22 of the 26 whose flow is a parent's (the rest hold a tied parent's, from before #161: 172777_1_1, 95183_49_1, 95796_73_1, 97120_75_1); 1 with a MAD and no window flow above zero; 66 with no MAD above zero (5 s)
+window flow 08-01 to 09-30 (flow_0801_0930): 45529 visits on 28552 segments, 45529 with a flow, 0 without (as mad_pick); MAD read again equal at 45525 visits, and at 22 of the 26 whose flow is a parent's (the rest hold a tied parent's, from before #161: 172777_1_1, 95183_49_1, 95796_73_1, 97120_75_1); 1 with a MAD and no window flow above zero; 66 with no MAD above zero (4 s)
 scored visits 4858 / 234 / 45 (visits / with CH / groups); median window share of MAD 0.590271 (Phase 1 0.590271); largest gap in a group's median 4.88e-15 over 45 groups
 
-window walk 08-15 to 09-15: 500 starts x 7 sizes in 7.5 s on 8 workers, uncached; 36928 starts to walk
+window walk 08-15 to 09-15: 500 starts x 7 sizes in 7.0 s on 8 workers, uncached; 36928 starts to walk
 NOTICE:  schema "knw" already exists, skipping
 
 NOTICE:  relation "walk_cache_window" already exists, skipping
@@ -30,4 +30,4 @@ Phase 1's river reading against the exact walk, at 3.1150 m3/s within 1000 m, ov
 
 wrote data/fdis/derived_window: 45529 visits (230 columns, one new), 1033984 walk rows (775488 published, 258496 on pick@0815-0915); read back equal
 wrote data/tune/flow_window/ch_rear_window_evidence_run.csv 
-finished: 2026-11-22T06:48:34Z 
+finished: 2026-11-22T07:10:15Z 
