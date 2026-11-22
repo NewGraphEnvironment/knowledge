@@ -5,7 +5,9 @@
 #
 # WHY / DESIGN NOTES:
 #   - THE RULE COMES FIRST. The script refuses unless the research file, the script and R/ are committed and clean,
-#     and logs the commit it read, so the verdict rule is on record before any score is made.
+#     and logs the commit that first held the verdict rule, so the rule is on record before any score is made. The
+#     results are later written into the same file, so a rerun also refuses unless the readings and the rule read
+#     as they did at that commit.
 #   - FOUR READINGS, ONE TUNING EACH, AS THE PUBLISHED RULE WAS TUNED: knw_tune_run() for chinook rearing at its
 #     defaults (five folds on seed 54, the one-SE region, 200 bootstrap resamples, nested selection, seeds 55 to
 #     58, d_floor 200, link's segment gradient), link's thresholds at the published ledger's commit. A reading is
@@ -66,11 +68,26 @@ dirty <- git("status", "--porcelain", "--", rule_file, "data-raw/chinook_window_
 if (length(dirty)) {
   stop("commit first, so the run record's HEAD reproduces the run: ", paste(dirty, collapse = "; "), call. = FALSE)
 }
-rule_commit <- git("log", "-1", "--format=%H", "--", rule_file)
-if (!length(rule_commit)) stop(rule_file, " is not committed", call. = FALSE)
-if (!any(grepl("^### The verdict rule", readLines(rule_file)))) stop(rule_file, " sets no verdict rule", call. = FALSE)
+# The rule as it was first committed, and unchanged since. The file is revised after a run (its results are written
+# into it), so its newest commit is no proof of order: the commit recorded is the first that holds the verdict rule,
+# and the readings and the rule (from the Phase 2 heading to the end of "The verdict rule") must read today as they
+# did there.
+rule_block <- function(lines) {
+  a <- grep("^## Phase 2:", lines)[1]
+  v <- grep("^### The verdict rule", lines)[1]
+  if (is.na(a) || is.na(v) || v < a) return(NULL)
+  nxt <- which(seq_along(lines) > v & grepl("^#{2,3} ", lines))[1]
+  lines[a:(if (is.na(nxt)) length(lines) else nxt - 1L)]
+}
+rule_commit <- git("log", "--reverse", "--format=%H", shQuote("-S### The verdict rule"), "--", rule_file)[1]
+if (is.na(rule_commit)) stop(rule_file, " sets no committed verdict rule", call. = FALSE)
+rule_then <- rule_block(git("show", paste0(rule_commit, ":", rule_file)))
+if (is.null(rule_then) || !identical(rule_then, rule_block(readLines(rule_file)))) {
+  stop("the readings and the verdict rule in ", rule_file, " are not as first committed at ", rule_commit,
+       call. = FALSE)
+}
 head_sha <- git("rev-parse", "HEAD")
-cat("verdict rule:", rule_file, "at", rule_commit, "\nHEAD:        ", head_sha, "\nstage:       ", stage_run,
+cat("verdict rule:", rule_file, "first committed at", rule_commit, "and unchanged since\nHEAD:        ", head_sha, "\nstage:       ", stage_run,
     "\nstarted:     ", stamp(), "\n\n")
 
 # ---- the published run, and the copy of its evidence with a window ----
