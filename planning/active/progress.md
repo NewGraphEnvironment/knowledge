@@ -32,7 +32,7 @@
 - Completed: `inst/sql/ch_dist_profile_window.sql` (generated from the annual walk: its text outside three marked
   regions); `knw_link_walks(window = )` with the query built by `.knw_walk_sql()`, the bare source to SQL and the
   window in the row's `src`; `knw_walk_md5(window = )`; six tests added to `test-link_walks.R` (all 13 in the file
-  pass on the database's host, 121 expectations).
+  pass on the database's host, 126 expectations).
 - Measured: the window walk given month 0 at weight 1 returns the annual walk's rows on 3 starts x 3 sources x 4
   sizes; with the annual-flow read put back into the window file the window test fails (2 expectations), and the
   file was restored to md5 `6f584e5f...`. The annual walk's md5 is unchanged (`c3f7bdbe...`, the grade records').
