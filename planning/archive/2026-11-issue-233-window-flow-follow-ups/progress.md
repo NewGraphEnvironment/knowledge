@@ -129,3 +129,12 @@
   tested, and 18 mutations of the walk file were run: 16 red, 2 green (one an equivalent condition, one the sum's
   order, which no two-month test can show).
 - Reviewer agents spawned on this task: five (the plan review, rounds 1, 1b, 2 and 3).
+
+## Close, 2026-11-22
+
+- Final tree: full suite 466 tests, 2,678 expectations passed, 0 failed, 0 errors, 2 skipped (existing conditional
+  skips), on the database's host; `pkgdown::check_pkgdown()` clean; `devtools::document()` writes nothing.
+- `/code-check branch`: three rounds and a claims pass, ended on an enumeration (`review-verdict.md`).
+- soul's research check flags `research/chinook_window_flow.md` for length and for the Phase 2 heading's issue
+  number; left, with the reason in the archive README.
+- Archived; PR next.

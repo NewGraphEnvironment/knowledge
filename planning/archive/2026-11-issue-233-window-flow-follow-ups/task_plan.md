@@ -180,11 +180,11 @@ Mine, stated so they can be overruled (mechanism, not scope):
 
 ## Validation
 
-- [ ] Tests pass (`devtools::test()`; the database tests run here, with `NOT_CRAN=true`)
-- [ ] `lintr::lint_package()` adds no lint; `devtools::document()`; `pkgdown::check_pkgdown()`
-- [ ] `/code-check branch` clean
-- [ ] PWF checkboxes match landed work
-- [ ] `/planning-archive` on completion
+- [x] Tests pass (`devtools::test()`; the database tests run here, with `NOT_CRAN=true`)
+- [x] `lintr::lint_package()` adds no lint; `devtools::document()`; `pkgdown::check_pkgdown()`
+- [x] `/code-check branch` clean
+- [x] PWF checkboxes match landed work
+- [x] `/planning-archive` on completion
 
 How each change is proved:
 
