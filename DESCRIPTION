@@ -69,6 +69,7 @@ Suggests:
     terra,
     testthat (>= 3.2.0),
     tmap,
+    wet (>= 0.4.39),
     withr,
     xml2,
     yaml
@@ -77,6 +78,7 @@ Remotes:
     NewGraphEnvironment/crate,
     NewGraphEnvironment/flooded,
     NewGraphEnvironment/fresh,
-    NewGraphEnvironment/gq
+    NewGraphEnvironment/gq,
+    NewGraphEnvironment/wet
 Config/DOI: 10.5281/zenodo.23990335
 Config/testthat/edition: 3

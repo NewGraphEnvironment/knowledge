@@ -89,3 +89,112 @@ knw_link_flow <- function(conn, linear_feature_id) {
       LIMIT 1
     ) par ON true", tmp, fwa, q)
 }
+
+#' wet's flow in a seasonal window on FWA segments, on the segment MAD came from
+#'
+#' [knw_link_flow()] reads the annual flow (MAD). This reads the mean flow over a
+#' window of the year, such as 1 August to 30 September, so a stream can be sized
+#' by what it carries when a life stage is in it (#226). The flow is wet's monthly
+#' flow (`discharge.fwa_v1_segment_monthly`, scenario `historical`) on the source
+#' wet picks for the segment, averaged over the window's days with each day
+#' taking its month's mean (`wet::wet_flow_window()`, the monthly basis).
+#'
+#' A window is read on the segment the annual flow came from: the segment's own,
+#' or the parent [knw_link_flow()] falls back to. So a window flow is present
+#' exactly where `mad_pick` is, on the same source, and `mad_pick` comes back
+#' beside it for a caller to hold to its own. A segment read must carry months 0
+#' to 12 once each on one picked source, or the call stops: a window read from
+#' some of its months, or across two sources, is not that window's flow.
+#'
+#' @inheritParams knw_link_flow
+#' @param windows `data.frame` with `start` and `end`, each `"MM-DD"`, one row per
+#'   window. A window whose end is before its start crosses 1 January.
+#' @return A `tibble`, one row per segment, ordered by `linear_feature_id`:
+#'   `linear_feature_id`, `mad_pick`, and one column per window named by its
+#'   dates, `flow_<mmdd>_<mmdd>` (m³/s).
+#' @export
+#' @examples
+#' \dontrun{
+#' conn <- DBI::dbConnect(RPostgres::Postgres())
+#' knw_link_flow_window(conn, c(701747495, 701747496), data.frame(start = "08-01", end = "09-30"))
+#' }
+knw_link_flow_window <- function(conn, linear_feature_id, windows) {
+  .knw_link_flow_window(conn, linear_feature_id, windows)
+}
+
+# knw_link_flow_window() with the FWA and flow tables as arguments, so a test can put fixtures in their place
+.knw_link_flow_window <- function(conn, linear_feature_id, windows, fwa = "whse_basemapping.fwa_stream_networks_sp",
+                                  q = "discharge.fwa_v1_segment_monthly") {
+  chk::chk_numeric(linear_feature_id)
+  chk::chk_not_any_na(linear_feature_id)
+  rlang::check_installed("wet", reason = "to average monthly flow over a window")
+  win <- .knw_windows(windows)
+  tmp <- "tmp_knw_link_flow_window"
+  DBI::dbWriteTable(conn, tmp, data.frame(linear_feature_id = unique(linear_feature_id)),
+                    temporary = TRUE, overwrite = TRUE)
+  on.exit(try(DBI::dbExecute(conn, paste("DROP TABLE IF EXISTS", tmp)), silent = TRUE), add = TRUE)
+  seg <- DBI::dbGetQuery(conn, .knw_link_flow_sql(tmp, fwa = fwa, q = q))
+  if (anyDuplicated(seg$linear_feature_id)) stop("a segment matched twice", call. = FALSE)
+  # a bigint arrives as integer64 on a default connection, and base ifelse() copies its bits into a double
+  id <- as.numeric(seg$linear_feature_id)
+  own <- !is.na(seg$own_mad)
+  src <- ifelse(own, id, as.numeric(seg$parent_lfid))
+  out <- tibble::tibble(linear_feature_id = id,
+                        mad_pick = as.numeric(ifelse(own, seg$own_mad, seg$parent_mad)))
+  for (col in win$col) out[[col]] <- NA_real_
+  read <- unique(src[!is.na(src)])
+  if (length(read)) {
+    mon <- DBI::dbGetQuery(conn, sprintf("SELECT linear_feature_id, source, month, q_m3s FROM %s
+                                          WHERE scenario = 'historical' AND pick
+                                            AND linear_feature_id = ANY($1::bigint[])", q),
+                           params = list(.knw_pg_array(read)))
+    mon <- data.frame(linear_feature_id = as.numeric(mon$linear_feature_id), source = mon$source,
+                      month = as.integer(mon$month), q_m3s = as.numeric(mon$q_m3s))
+    by_seg <- split(mon, factor(mon$linear_feature_id, levels = read))
+    whole <- vapply(by_seg, function(x) identical(sort(x$month), 0:12) && length(unique(x$source)) == 1L, logical(1))
+    if (!all(whole)) {
+      stop(sum(!whole), " of the ", length(read), " segments read do not carry months 0 to 12 once each on one ",
+           "picked source", call. = FALSE)
+    }
+    # the annual flow among the months is the flow query's, or the two read different rows
+    mad0 <- mon$q_m3s[mon$month == 0L][match(src, mon$linear_feature_id[mon$month == 0L])]
+    if (!isTRUE(all.equal(mad0, out$mad_pick, tolerance = 1e-12))) {
+      stop("the annual flow read with the months is not the flow query's", call. = FALSE)
+    }
+    wf <- wet::wet_flow_window(mon, data.frame(window = win$col, start = win$start, end = win$end))
+    for (col in win$col) {
+      w <- wf[wf$window == col, , drop = FALSE]
+      out[[col]] <- w$q_m3s[match(src, w$linear_feature_id)]
+    }
+  }
+  out[order(out$linear_feature_id), , drop = FALSE]
+}
+
+# Windows as the window readers take them: `start` and `end` checked as "MM-DD", each window's label by its dates
+# (`0815-0915`, which a window walk's source carries) and its column name (`flow_0815_0915`).
+.knw_windows <- function(windows) {
+  chk::chk_data(windows)
+  chk::check_names(windows, c("start", "end"))
+  start <- as.character(windows$start)
+  end <- as.character(windows$end)
+  md <- "^(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01])$"
+  if (!length(start) || anyNA(c(start, end)) || !all(grepl(md, c(start, end)))) {
+    stop("windows must hold at least one row, each start and end written \"MM-DD\"", call. = FALSE)
+  }
+  label <- paste0(sub("-", "", start, fixed = TRUE), "-", sub("-", "", end, fixed = TRUE))
+  if (anyDuplicated(label)) stop("two windows have the same dates", call. = FALSE)
+  data.frame(start = start, end = end, label = label, col = paste0("flow_", sub("-", "_", label, fixed = TRUE)))
+}
+
+# The weight each month carries in a window's mean flow on the monthly basis: the share of the window's days that
+# fall in it. Taken from wet::wet_flow_window() on twelve unit series, one per month, so the window walk's SQL
+# (inst/sql/ch_dist_profile_window.sql) weighs months by wet's own count of days, never a second one.
+.knw_window_weights <- function(start, end) {
+  rlang::check_installed("wet", reason = "to weigh the months of a window")
+  unit <- data.frame(series = rep(1:12, each = 12L), month = rep(1:12, times = 12L))
+  unit$q_m3s <- as.numeric(unit$series == unit$month)
+  w <- wet::wet_flow_window(unit, data.frame(window = "w", start = start, end = end), by = "series")
+  wt <- w$q_m3s[match(1:12, w$series)]
+  if (anyNA(wt) || abs(sum(wt) - 1) > 1e-9) stop("the window's month weights do not sum to 1", call. = FALSE)
+  list(months = which(wt > 0), weights = wt[wt > 0])
+}

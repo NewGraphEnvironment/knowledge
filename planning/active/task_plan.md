@@ -72,18 +72,18 @@ Mine, stated so they can be overruled (mechanism, not scope):
 
 ## Phase 2: Window flow at a segment (package)
 
-- [ ] Tests first, `tests/testthat/test-link_flow.R`, on its fixture tables: the window flow equals
+- [x] Tests first, `tests/testthat/test-link_flow.R`, on its fixture tables: the window flow equals
       `wet::wet_flow_window()` on the same months; a segment with no flow of its own reads its parent's months
       on the parent's pick source; no pick gives `NA`; a segment without months 1 to 12 on one pick source
       refuses.
-- [ ] `knw_link_flow_window(conn, linear_feature_id, windows)` in `R/link_flow.R`: the segment MAD came from
+- [x] `knw_link_flow_window(conn, linear_feature_id, windows)` in `R/link_flow.R`: the segment MAD came from
       (own or `parent_lfid`, from `.knw_link_flow_sql()`), its 12 months on the pick source, then
       `wet::wet_flow_window()`. Returns `linear_feature_id`, the MAD read again (for the caller's equality
       check) and one column per window, `flow_<mmdd>_<mmdd>`.
-- [ ] `.knw_window_weights(window)`: the 12 month weights of a window, taken from `wet::wet_flow_window()` on
+- [x] `.knw_window_weights(window)`: the 12 month weights of a window, taken from `wet::wet_flow_window()` on
       unit series, so R and the SQL walk share wet's arithmetic. Test: weights sum to 1; 08-15 to 09-15 is
       17/32 and 15/32.
-- [ ] roxygen, `_pkgdown.yml` reference entry, `devtools::document()`, `pkgdown::check_pkgdown()`.
+- [x] roxygen, `_pkgdown.yml` reference entry, `devtools::document()`, `pkgdown::check_pkgdown()`.
 
 ## Phase 3: The window walk (package)
 

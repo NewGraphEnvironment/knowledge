@@ -94,6 +94,7 @@ reference:
       - knw_parent_read
       - knw_link_segments
       - knw_link_flow
+      - knw_link_flow_window
       - knw_link_width
       - knw_link_regulated
       - knw_link_barrier_dnstr
