@@ -206,19 +206,19 @@ cell_near <- function(r) {
 chg <- data.frame(
   ` ` = c("Smallest stream", "Steepest slope", "Near a river", "Rearing habitat",
           "Sites with chinook, on the habitat", "Sites with chinook, elsewhere"),
-  `<code>link</code> now` = c(cell_size(dflt), grad(dflt$grad_max), cell_near(dflt),
-                              paste(n0(all_row$default_km), "km"), pc(r_dflt_in), pc(r_dflt_out, 1)),
+  "`link` now" = c(cell_size(dflt), grad(dflt$grad_max), cell_near(dflt), paste(n0(all_row$default_km), "km"),
+                   pc(r_dflt_in), pc(r_dflt_out, 1)),
   `Recommended` = c(cell_size(rec), grad(rec$grad_max), cell_near(rec), paste(n0(all_row$tuned_km), "km"),
                     pc(r_rec_in), pc(r_rec_out, 1)),
   check.names = FALSE)
-knitr::kable(chg, format = "html", escape = FALSE, align = "lrr",
-             caption = paste("Chinook rearing under <code>link</code>’s current habitat definition",
+knitr::kable(chg, format = "html", align = "lrr",
+             caption = paste("Chinook rearing under `link`’s current habitat definition",
                              "and the recommended one.")) |>
   kableExtra::kable_styling(full_width = FALSE) |>
-  kableExtra::footnote(general_title = "", escape = FALSE, general = paste0(
-    "Habitat is summed over the ", nrow(per_group), " watershed groups <code>link</code> classified for chinook when ",
-    "the comparison ran, on <code>link</code>’s minimal network, each habitat definition run ",
-    "through all of <code>link</code>’s steps. Both totals include lines through wetlands, which the two habitat definitions test differently ",
+  kableExtra::footnote(general_title = "", general = paste0(
+    "Habitat is summed over the ", nrow(per_group), " watershed groups `link` classified for chinook when ",
+    "the comparison ran, on `link`’s minimal network, each habitat definition run ",
+    "through all of `link`’s steps. Both totals include lines through wetlands, which the two habitat definitions test differently ",
     "(below). ",
     "Sites are the ", n0(sum(fv$n[fv$rule == "default"])), " electrofishing sites of a usual fished area on ",
     "reachable stream, river and wetland lines in those groups, a wider set than the one the habitat definition was chosen on. They overlap the sites it was chosen on, so the rates show it ",
@@ -332,18 +332,18 @@ close calls, and the choice moves toward `link`’s. Of the close calls it takes
 bold_if <- function(v, ref) ifelse(v != ref, paste0("<b>", v, "</b>"), v)
 st <- data.frame(
   ` ` = c("Smallest stream", "Steepest slope", "Near a river"),
-  `<code>link</code> now` = c(cell_size(dflt), grad(dflt$grad_max), cell_near(dflt)),
+  "`link` now" = c(cell_size(dflt), grad(dflt$grad_max), cell_near(dflt)),
   check.names = FALSE)
-st[["Chosen at 1 SE"]] <- bold_if(c(cell_size(rec), grad(rec$grad_max), cell_near(rec)), st[["<code>link</code> now"]])
+st[["Chosen at 1 SE"]] <- bold_if(c(cell_size(rec), grad(rec$grad_max), cell_near(rec)), st[["`link` now"]])
 st[[paste("Chosen at", se_strict, "SE")]] <-
-  bold_if(c(cell_size(ch196), grad(ch196$grad_max), cell_near(ch196)), st[["<code>link</code> now"]])
+  bold_if(c(cell_size(ch196), grad(ch196$grad_max), cell_near(ch196)), st[["`link` now"]])
 knitr::kable(st, format = "html", escape = FALSE, align = "llll",
-             caption = "The chinook rearing habitat definition chosen from the close calls at each bar, beside <code>link</code>’s current one.") |>
+             caption = "The chinook rearing habitat definition chosen from the close calls at each bar, beside `link`’s current one.") |>
   kableExtra::kable_styling(full_width = FALSE, font_size = 13) |>
-  kableExtra::footnote(general_title = "", escape = FALSE, general = paste0(
-    "Bold: differs from <code>link</code>’s. Close calls: ", nrow(region),
+  kableExtra::footnote(general_title = "", general = paste0(
+    "Bold: differs from `link`’s. Close calls: ", nrow(region),
     " habitat definitions at one standard error, ",
-    n0(ch196$n_region), " at ", se_strict, "; <code>link</code>’s is a close call at neither. This package's thresholds table (data/thresholds.csv, column ",
+    n0(ch196$n_region), " at ", se_strict, "; `link`’s is a close call at neither. This package's thresholds table (data/thresholds.csv, column ",
     "rule_196) gives the choice at ", se_strict, " for every species tuned."))
 ```
 
@@ -356,17 +356,17 @@ oc <- data.frame(
             "Chosen on four sets, scored on the fifth",
             paste(meta$spec$n_boot, "redraws of the groups")),
   Result = c(paste0("the recommended habitat definition is a close call on ", sum(seeds$main_rec_in_region), " of ", nrow(seeds),
-                    "; <code>link</code>’s on ", sum(seeds$default_in_region)),
-             paste0("the chosen habitat definition beats <code>link</code>’s on ", sum(honest$dev_rec < honest$dev_default), " of ", nrow(honest),
+                    "; `link`’s on ", sum(seeds$default_in_region)),
+             paste0("the chosen habitat definition beats `link`’s on ", sum(honest$dev_rec < honest$dev_default), " of ", nrow(honest),
                     " and ", if (beats_all) "beats it" else "loses to it", " overall"),
              paste0("a flow floor is chosen in ",
                     if (isTRUE(all.equal(boot_mad, 1))) "every draw" else paste(pc(boot_mad, 1), "of draws"),
                     "; the recommended slope limit in ", pc(boot_grad))),
-  `Points to` = c(if (sum(seeds$main_rec_in_region) > sum(seeds$default_in_region)) "the recommended habitat definition" else "<code>link</code>’s habitat definition",
-                  if (beats_all) "choosing from the records" else "<code>link</code>’s habitat definition",
+  `Points to` = c(if (sum(seeds$main_rec_in_region) > sum(seeds$default_in_region)) "the recommended habitat definition" else "`link`’s habitat definition",
+                  if (beats_all) "choosing from the records" else "`link`’s habitat definition",
                   "a steady shape; an unsettled slope limit"),
   check.names = FALSE)
-knitr::kable(oc, format = "html", escape = FALSE, align = "lll") |>
+knitr::kable(oc, format = "html", align = "lll") |>
   kableExtra::kable_styling(full_width = FALSE, font_size = 13)
 ```
 

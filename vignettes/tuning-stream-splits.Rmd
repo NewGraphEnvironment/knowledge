@@ -525,9 +525,9 @@ the only differences. Two of the four read a slope from somewhere else onto the 
 each segment's **minimal parent**, the minimal-network segment it lies within, and the whole Atlas line it lies on.
 
 ```{r setups}
-how <- c(published = paste("<code>link</code>’s full network, each segment reading its own slope",
-                           "(how <code>link</code> applies a habitat definition)"),
-         minimal = paste("<code>link</code>’s minimal network, without the cuts at fish records, crossings and",
+how <- c(published = paste("`link`’s full network, each segment reading its own slope",
+                           "(how `link` applies a habitat definition)"),
+         minimal = paste("`link`’s minimal network, without the cuts at fish records, crossings and",
                          "hand-mapped habitat"),
          parent = "The full network's segments, each reading its minimal parent's slope",
          atlas = "The full network's segments, each reading the slope of the whole Atlas line it lies on")
@@ -537,7 +537,7 @@ tb <- data.frame(`Segments and slope` = unname(how[su$setup]),
                  `A close call on the full network's records?` = yn(vapply(su$setup, in_reg, TRUE, region_of = "published")),
                  `On the minimal network's?` = yn(vapply(su$setup, in_reg, TRUE, region_of = "minimal")),
                  check.names = FALSE)
-knitr::kable(tb, format = "html", escape = FALSE, align = "lrcc", row.names = FALSE,
+knitr::kable(tb, format = "html", align = "lrcc", row.names = FALSE,
              caption = "The chinook rearing habitat definition chosen on each network and slope.") |>
   kableExtra::kable_styling(full_width = FALSE, font_size = 13) |>
   kableExtra::footnote(general_title = "", general = paste0(

@@ -26,11 +26,12 @@ Issue and PR numbers in the seeded history and in `planning/archive/2026-07-*` r
   habitat definition" at first mention and "habitat definition" after, never "rule" (#156). A package or lower-case
   tool name (`link`, `wet`, `bcfishpass`) is in code font at every mention and linked at its first only (#258; the
   methodology article's "Software and citation" links four again, and the text it prints from its bundle is #201's).
-  Three traps, found by rendering before and after and comparing the text and then the attributes: after a code span,
-  or after `</code>` in a table's string, pandoc can turn a straight apostrophe into an opening quote, so write the
-  possessive with the apostrophe itself (`` `link`’s ``); an HTML kable's caption, footnote, header and cells take
-  `<code>link</code>` and `escape = FALSE`; and knitr gives a figure's alt text the caption's source, backticks and
-  all, so each article's setup chunk strips them with a `fig.cap` hook, which must hand knitr a call, since a caption
+  Three things to know, found by rendering before and after and comparing the text and then the attributes: after a
+  code span pandoc can turn a straight apostrophe into an opening quote, in prose and in a table's string alike, so
+  write the possessive with the apostrophe itself (`` `link`’s ``); an HTML kable's caption, footnote, header and cells
+  take a backtick as prose does, with the default `escape` (pandoc reads markdown inside HTML blocks), so they need no
+  `<code>` tag and no `escape = FALSE`; and knitr gives a figure's alt text the caption's source, backticks and all,
+  so each article's setup chunk strips them with a `fig.cap` hook, which must hand knitr a call, since a caption
   built by `paste0()` is not yet evaluated when the hook runs. The chinook article reads
   `inst/vignette-data/`, which `data-raw/vignette_chinook.R` writes from the tune and compare tables and the
   database (`SCHEMA` names the run's schema, as `0320` and `0330` take it). A promotion (`0335`) reruns it, and only a
