@@ -13,11 +13,13 @@
 --   - the arrays are checked: one length, at least one month, no NULL in either, no month twice, weights
 --     positive and summing to 1;
 --   - a segment's flow is the weighted sum of those months on the source, summed in month order so its last
---     bit does not depend on the order rows arrive in, and taken only where each month of the window carries
---     one flow, on one source: as many flows as months, as many distinct months as months, one source. A
---     segment missing a month, with no flow in one, with a month twice, or picked on two sources is passed
---     over, never read short. `large_mad` carries that window flow.
---     tests/testthat/test-link_walks.R runs this file's text on fixture tables holding each such segment.
+--     bit does not depend on the order rows arrive in, and taken only where the segment's rows match the
+--     window's months one to one: as many rows as months, every row with a flow, every month distinct, one
+--     source. The four counts are one property and each is needed: three review rounds each found a shape
+--     the counts then written let through. A segment missing a month, with no flow in one, with a month
+--     twice, or picked on two sources, alone or together, is passed over, never read short. `large_mad`
+--     carries that window flow. tests/testthat/test-link_walks.R runs this file's text on fixture tables
+--     holding every shape a two-month window's rows can take, 0 to 2 rows a month.
 -- With months = {0} and weights = {1} this is ch_dist_profile.sql's walk, which the same test file checks on
 -- the database. The published walk is not this file: its md5 (knw_walk_md5()) is on every grade record.
 -- window flow: begin
@@ -80,8 +82,8 @@ BEGIN
                 JOIN unnest(months, weights) AS w(mo, wt) ON w.mo = m.month
                WHERE m.linear_feature_id = s.linear_feature_id AND m.scenario = 'historical'
                  AND ((src = 'pick' AND m.pick) OR m.source = src)
-              HAVING count(m.q_m3s) = cardinality(months) AND count(DISTINCT m.month) = cardinality(months)
-                 AND count(DISTINCT m.source) = 1) q ON true
+              HAVING count(*) = cardinality(months) AND count(m.q_m3s) = cardinality(months)
+                 AND count(DISTINCT m.month) = cardinality(months) AND count(DISTINCT m.source) = 1) q ON true
             -- window flow: end
            WHERE s.blue_line_key = cur_blk AND s.downstream_route_measure < cur_m
              AND q.q_m3s >= t.qq AND s.edge_type NOT IN (1100, 1150, 1300, 1350, 2300, 1400, 1450)

@@ -99,28 +99,32 @@ cat("wet:          ", as.character(utils::packageVersion("wet")), "\n\n")
 wts <- .knw_window_weights(spawn$start, spawn$end)
 months <- sort(unique(c(wts$months, .knw_window_weights(rear$start, rear$end)$months)))
 t0 <- Sys.time()
-# the walk's own three conditions on a segment (as many flows as months, each month once, one source), and a flow
-# that is not a number, which the walk would take as larger than any size
+# the walk's own condition on a segment, that its rows match the window's months one to one (as many rows as
+# months, every row with a flow, every month distinct, one source), and a flow that is not a finite number, which
+# the walk would take as larger than any size
 short <- DBI::dbGetQuery(conn, sprintf("
   SELECT count(*) AS segments,
          count(*) FILTER (WHERE n_src <> 1) AS two_sources,
-         count(*) FILTER (WHERE n_annual <> 1) AS annual_not_once,
-         count(*) FILTER (WHERE n_win <> %1$d OR n_win_months <> %1$d) AS window_short,
+         count(*) FILTER (WHERE n_annual <> 1 OR n_annual_rows <> 1) AS annual_not_once,
+         count(*) FILTER (WHERE n_win_rows <> %1$d OR n_win <> %1$d OR n_win_months <> %1$d) AS window_short,
          count(*) FILTER (WHERE n_nan > 0) AS not_a_number
   FROM (SELECT linear_feature_id, count(DISTINCT source) AS n_src,
+               count(*) FILTER (WHERE month = 0) AS n_annual_rows,
                count(q_m3s) FILTER (WHERE month = 0) AS n_annual,
+               count(*) FILTER (WHERE month IN (%2$s)) AS n_win_rows,
                count(q_m3s) FILTER (WHERE month IN (%2$s)) AS n_win,
-               count(DISTINCT month) FILTER (WHERE month IN (%2$s) AND q_m3s IS NOT NULL) AS n_win_months,
-               count(*) FILTER (WHERE month IN (0, %2$s) AND q_m3s = 'NaN') AS n_nan
+               count(DISTINCT month) FILTER (WHERE month IN (%2$s)) AS n_win_months,
+               count(*) FILTER (WHERE month IN (0, %2$s)
+                                  AND q_m3s IN ('NaN', 'Infinity', '-Infinity')) AS n_nan
         FROM discharge.fwa_v1_segment_monthly
         WHERE scenario = 'historical' AND pick GROUP BY 1) x", length(months), paste(months, collapse = ", ")))
 cat(sprintf(paste("picked segments in the load: %.0f; on two sources %.0f; annual flow not once %.0f;",
-                  "a window month (%s) short or twice %.0f; a flow that is not a number %.0f (%.0f s)\n"),
+                  "a window month (%s) short or twice %.0f; a flow that is not a finite number %.0f (%.0f s)\n"),
             short$segments, short$two_sources, short$annual_not_once, paste(months, collapse = ", "),
             short$window_short, short$not_a_number, secs(t0)))
 if (short$two_sources + short$annual_not_once + short$window_short + short$not_a_number > 0) {
   stop("a picked segment lacks a window month, carries one twice, is picked on two sources or has a flow that is ",
-       "not a number: the window walk would pass over it or misread it", call. = FALSE)
+       "not a finite number: the window walk would pass over it or misread it", call. = FALSE)
 }
 
 # ---- the visits, as 0320 reads them ----
@@ -159,6 +163,7 @@ if (!identical(is.na(win_flow), is.na(vl$mad_pick))) {
        call. = FALSE)
 }
 has <- !is.na(win_flow)
+if (!all(is.finite(win_flow[has]))) stop("a visit's window flow is not a finite number", call. = FALSE)
 # a stream with a MAD and no flow in the window is a dry stream, not an error: a rule's size test fails it, and
 # the curve, which reads log size, leaves it out. Counted, so a reading's curve is read knowing how many it lost
 n_dry <- sum(win_flow[has] <= 0 & vl$mad_pick[has] > 0)
@@ -187,7 +192,10 @@ if (any(d$site_visit %in% tied)) {
 ratio <- d[[col_rear]] / d$mad_pick
 med <- stats::median(ratio[is.finite(ratio)])
 by_group <- tapply(ratio, d$watershed_group_code, function(x) stats::median(x[is.finite(x)]))
-gap_group <- max(abs(by_group[p1_group$watershed_group_code] - p1_group$rear_q50), na.rm = TRUE)
+# a group whose median is missing on either side would otherwise drop out of the largest gap and pass unseen
+gaps <- abs(by_group[p1_group$watershed_group_code] - p1_group$rear_q50)
+if (anyNA(gaps)) stop(sum(is.na(gaps)), " groups have no median window share here or in Phase 1", call. = FALSE)
+gap_group <- max(gaps)
 cat(sprintf(paste("scored visits %s (visits / with CH / groups); median window share of MAD %.6f (Phase 1 %.6f);",
                   "largest gap in a group's median %.2e over %d groups\n"),
             paste(n_mod, collapse = " / "), med, p1$med_rear_visit, gap_group, nrow(p1_group)))
@@ -234,8 +242,8 @@ pub_status <- table(pub_pick$status)
 cat("the annual walk on pick, for the same starts:",
     paste(names(pub_status), pub_status, sep = " ", collapse = ", "), "\n")
 found <- w$status == "found"
-if (anyNA(w$large_mad[found]) || any(w$large_mad[found] < w$qmin[found])) {
-  stop("a river found carries a window flow under its size", call. = FALSE)
+if (!all(is.finite(w$large_mad[found])) || any(w$large_mad[found] < w$qmin[found])) {
+  stop("a river found carries a window flow under its size, or one that is not a finite number", call. = FALSE)
 }
 w$target_lake <- NA
 w$target_regulated <- NA

@@ -114,3 +114,18 @@
   swapped, on a line of five malformed segments and one whole one; the walk refuses a repeated month and weights
   that are not positive shares summing to 1; the evidence pre-count holds the same three row conditions and counts
   flows that are not numbers.
+
+## Review round 3, 2026-11-22
+
+- Round 3 (`review-round3.md`), asked for the mechanism: 1 bug and 2 fragile findings, all fixed. The bug sat inside
+  round 2's fix: the walk's four-part month condition was three counts ranging over different rows, so a segment
+  breaking two conditions at once passed (measured by the reviewer: of 225 row shapes the committed walk took 16,
+  14 of them malformed). No committed number was affected: the evidence pre-count stops on those shapes and found
+  none in 4,532,843 picked segments. The condition is now a one-to-one match (as many rows as months, every row with
+  a flow, every month distinct, one source). The pre-count now also stops on an infinite flow, and the Phase 1 check
+  no longer drops a group with a missing median.
+- The loop ends on an enumeration (`review-enumeration.md`): the test "of every shape a two-month window's rows can
+  take" holds the walk to all 225 row shapes (it takes exactly the 2 whole ones), the argument checks are each
+  tested, and 18 mutations of the walk file were run: 16 red, 2 green (one an equivalent condition, one the sum's
+  order, which no two-month test can show).
+- Reviewer agents spawned on this task: five (the plan review, rounds 1, 1b, 2 and 3).
