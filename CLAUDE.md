@@ -74,7 +74,7 @@ Issue and PR numbers in the seeded history and in `planning/archive/2026-07-*` r
   that `data-raw/cut_points_stage.R` copies on the database's host into the ignored `data/stage/` (both builds, the
   setup runs, the evidence), and `cut_points_places.rds` (`data-raw/vignette_cut_points_places.R`). The stage stays on
   that host; the bundle needs nothing else, and the staged md5s are tested only where the stage exists. The methodology
-  article's "Does where link cuts a stream change the rules?" (`#cuts`) answers it in brief and links it, reading
+  article's "Does where `link` cuts a stream change the habitat definitions?" (`#cuts`) answers it in brief and links it, reading
   `cut_points.rds` for its two numbers; a promotion does not rebuild that bundle, so the section's guard stops the build
   when the methodology bundle's chinook rearing pick no longer matches the bundle's `minimal` setup (the published
   network since 2026-11-13, #120; the bundle's setup `published` is #145's full-network run).
