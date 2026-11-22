@@ -39,3 +39,15 @@ brought `.knw_link_flow_sql()` to 3 s. `test-link_flow.R`'s live tie test (two l
 one row per source and month under `historical` is a property of the load, not of the table. The window walk takes a
 segment only where it finds exactly the window's months on one source; Phase 4 counts the picked segments that fail
 that before walking.
+
+## Four visits hold a tied parent's flow from before #161 (2026-11-22)
+
+The evidence run stopped on its first pass: 4 of 45,529 visits' MAD, read again, was not the published `mad_pick`
+(`172777_1_1` TABR, `95183_49_1` and `97120_75_1` LHAF, `95796_73_1` UPCE). Each sits on a river-polygon line (edge
+1250) with no flow of its own and two parents 0 m away; the published evidence (built 2026-11-03) took one, and the
+query since #161 (0.4.32) takes the lower id. None is in a stream-branch scoring population. The script now requires
+equality at every visit with a flow of its own and at every scored visit, and counts the tied ones.
+
+| Error | Resolution |
+|-------|------------|
+| `Error: 4 visits' MAD, read again, is not the evidence's mad_pick` | parent ties from before #161; equality is required where the flow is the visit's own and at scored visits, the rest counted |

@@ -12,7 +12,9 @@
 #     2026-11-21): it learns the column only if a window wins.
 #   - THE WINDOW FLOW ON THE SEGMENT MAD CAME FROM (knw_link_flow_window()): its own segment, or the parent
 #     knw_link_flow() fell back to, on that segment's pick source. So it is present exactly where mad_pick is and
-#     every reading scores the same visits. The annual flow read with it must equal the evidence's mad_pick.
+#     every reading scores the same visits. The annual flow read with it must equal the evidence's mad_pick at
+#     every visit with a flow of its own and at every scored visit; a visit on a tied parent may hold the other
+#     parent's flow, from before #161, and is counted.
 #   - THE WINDOW WALK (knw_link_walks(window = )): inst/sql/ch_dist_profile_window.sql, the annual walk but for
 #     the flow it reads. Its rows carry src `pick@0815-0915`, beside the published rows on `pick`. It passes over
 #     a segment that lacks one of the window's months on its source, so before any walk the script counts such
@@ -136,7 +138,15 @@ m <- match(vl$linear_feature_id, fl$linear_feature_id)
 if (anyNA(m)) stop(sum(is.na(m)), " visits' segments are not in the Atlas", call. = FALSE)
 same <- (is.na(fl$mad_pick[m]) & is.na(vl$mad_pick)) |
   (!is.na(fl$mad_pick[m]) & !is.na(vl$mad_pick) & abs(fl$mad_pick[m] - vl$mad_pick) < 1e-9)
-if (!all(same)) stop(sum(!same), " visits' MAD, read again, is not the evidence's mad_pick", call. = FALSE)
+# A visit whose flow is a parent's can differ: the published evidence was built before the parent tie went to the
+# lower id (#161, knowledge 0.4.32), so where two parents are equally near it may hold the other one's flow. Such a
+# visit keeps its published mad_pick, and its window flow is read on the parent the query takes now. A visit with a
+# flow of its own must agree, and so must every visit the tuning scores (checked below, once they are cut).
+if (any(!same & !vl$flow_from %in% "parent")) {
+  stop(sum(!same & !vl$flow_from %in% "parent"), " visits' own MAD, read again, is not the evidence's mad_pick",
+       call. = FALSE)
+}
+tied <- vl$site_visit[!same]
 win_flow <- fl[[col_rear]][m]
 if (!identical(is.na(win_flow), is.na(vl$mad_pick))) {
   stop(sum(is.na(win_flow) != is.na(vl$mad_pick)), " visits carry one of MAD and the window flow, not both",
@@ -147,10 +157,12 @@ has <- !is.na(win_flow)
 # the curve, which reads log size, leaves it out. Counted, so a reading's curve is read knowing how many it lost
 n_dry <- sum(win_flow[has] <= 0 & vl$mad_pick[has] > 0)
 cat(sprintf(paste("\nwindow flow %s to %s (%s): %d visits on %d segments, %d with a flow, %d without (as mad_pick);",
-                  "MAD equal at every visit; %d with a MAD and no window flow above zero; %d with no MAD above zero",
-                  "(%.0f s)\n"),
-            rear$start, rear$end, col_rear, nrow(vl), nrow(fl), sum(has), sum(!has), n_dry,
-            sum(vl$mad_pick[has] <= 0), secs(t0)))
+                  "MAD read again equal at %d visits, and at %d of the %d whose flow is a parent's (the rest hold a",
+                  "tied parent's, from before #161: %s); %d with a MAD and no window flow above zero; %d with no MAD",
+                  "above zero (%.0f s)\n"),
+            rear$start, rear$end, col_rear, nrow(vl), nrow(fl), sum(has), sum(!has), sum(same),
+            sum(same & vl$flow_from %in% "parent"), sum(vl$flow_from %in% "parent"),
+            if (length(tied)) paste(tied, collapse = ", ") else "none", n_dry, sum(vl$mad_pick[has] <= 0), secs(t0)))
 
 # ---- against Phase 1: the scored visits' window share of MAD ----
 fm <- formals(knw_tune_run)
@@ -162,6 +174,9 @@ d <- .tune_modelled(pop$d, "U")
 n_mod <- c(nrow(d), sum(d$U), nlevels(d$wsg))
 if (!identical(n_mod, c(as.integer(pub$n_visits), as.integer(pub$n_detect), as.integer(pub$n_wsg)))) {
   stop("the scored visits are not the tune table's: ", paste(n_mod, collapse = " / "), call. = FALSE)
+}
+if (any(d$site_visit %in% tied)) {
+  stop(sum(d$site_visit %in% tied), " scored visits' MAD, read again, is not the evidence's mad_pick", call. = FALSE)
 }
 ratio <- d[[col_rear]] / d$mad_pick
 med <- stats::median(ratio[is.finite(ratio)])
@@ -310,7 +325,8 @@ run <- data.frame(
   weights_river = paste(sprintf("%.17g", wts$weights), collapse = ";"),
   q_grid = paste(q_grid, collapse = ";"), picked_segments = short$segments,
   picked_segments_short = short$window_short,
-  visits = nrow(vl), visits_with_flow = sum(has), visits_dry_in_window = n_dry, starts = nrow(starts),
+  visits = nrow(vl), visits_with_flow = sum(has), visits_dry_in_window = n_dry,
+  visits_tied_parent_differs = length(tied), starts = nrow(starts),
   walk_found = unname(status["found"]), walk_rows = nrow(w), walk_trial_s = round(t_trial, 1),
   walk_min = round(t_walk / 60, 2), workers = workers,
   scored_visits = nrow(d), med_rear_visit = med, river_ladder_only = sum(in_a & !in_e),
