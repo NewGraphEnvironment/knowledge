@@ -1,22 +1,49 @@
 # Chinook rearing: does flow in a seasonal window size streams differently from MAD?
 
-**Verified:** 2026-11-18 (Phase 1: the question, the readings and the stop rule set and committed at `d6eff92f` before
-any flip was counted, and run the same day); 2026-11-22 (Phase 2's readings and verdict rule, set at the plan gate and
-committed before any score was made) · **Issues:** #105 (Phase 1), #226 (Phase 2), #42 (window flow per segment,
-below), move 5 (#174), move 14 (#233) · **Produced by:** `data-raw/chinook_window_flow.R` (tables
-`data/tune/flow_window/ch_rear_*.csv`, log `scripts/logs/flow_window/20261118_chinook_window_flow.txt`);
-`data-raw/segment_window_flow.R` (ignored `data/flow_window/segment_windows.parquet`, log
-`scripts/logs/flow_window/20261118_segment_window_flow.txt`) · **Status:** Phase 1 done. Phase 2 (#226): the rule
-below is on record; nothing is scored yet.
+**Verified:** 2026-11-22 (Phase 2 scored; its readings and verdict rule were committed at `267fcd06`, before any
+score was made); 2026-11-18 (Phase 1: the stop rule committed at `d6eff92f` before any flip was counted, and run the
+same day) · **Issues:** #105 (Phase 1), #226 (Phase 2), #42 (window flow per segment, below), move 5 (#174), move 14
+(#233) · **Produced by:**
+- Phase 1: `data-raw/chinook_window_flow.R` (tables `data/tune/flow_window/ch_rear_{run,flips,flips_by_group,ratio_by_group}.csv`,
+  log `scripts/logs/flow_window/20261118_chinook_window_flow.txt`).
+- Phase 2: `data-raw/chinook_window_evidence.R` (ignored `data/fdis/derived_window/`, record
+  `data/tune/flow_window/ch_rear_window_evidence_run.csv`) and `data-raw/chinook_window_tune.R` (tables
+  `data/tune/flow_window/ch_rear_{readings,pairs,verdict,tune_run}.csv` and `<reading>/CH_rear_*.csv`); logs
+  `scripts/logs/flow_window/20261122_chinook_window_*`.
+- #42: `data-raw/segment_window_flow.R` (ignored `data/flow_window/segment_windows.parquet`, log
+  `scripts/logs/flow_window/20261118_segment_window_flow.txt`).
+
+**Status:** done. No window reading beats MAD by the rule set beforehand, so the rule stays on MAD.
 
 ## Short answer
 
-Reading late-summer flow instead of MAD moves **6.2 % of the 4,858 scored visits and 6.8 % of the 234 with chinook**
-to the other side of the rule when both windows are read. That passes the 5 % the stop rule set, so a tuning on
-window flow could come back different, and Phase 2 is worth running. Either window alone moves fewer than 5 %. The
-change is concentrated: one group, the lower Fraser (LFRA), holds 138 of the 300 visits that move, and only 16
-visits with chinook move in all. What a juvenile stream holds in August and September, as a share of its MAD, runs
-from about a tenth in coastal rain-fed groups to above one and a half in snow- and glacier-fed ones.
+**The chinook rearing rule stays on MAD.** Tuned again with late-summer flow in MAD's place, it predicts where
+chinook were caught no better on watershed groups it was not fitted to.
+
+- **What the rule reads now.** A stream counts where it carries at least 0.75 m³/s of mean annual discharge (MAD)
+  and is no steeper than 9 %; a smaller stream also counts if it passes the slope test and a river of at least
+  3 m³/s MAD lies within 1 km downstream.
+- **What was asked.** MAD is a year-round average, and a juvenile meets the flow of the months it is in the stream.
+  Phase 1 asked whether reading August and September instead changes which sampled sites the rule takes in. It does:
+  **6.2 % of the 4,858 scored visits, and 6.8 % of the 234 with chinook**, fall on the other side of the rule, past
+  the 5 % set beforehand. Phase 2 asked whether that changed set predicts chinook better.
+- **How it was judged.** The rule was tuned four times, each as the published rule was: on MAD (the control), on
+  late-summer flow at the stream, on late-summer flow at the river downstream, and on both. Each tuning's
+  recommended rule was scored on the same visits, in the same held-out groups, by held-out deviance (the score; lower
+  is better). A window had to score lower than MAD by more than one SE of the difference, stay lower on at least
+  three of four other splits of the groups, and stay lower with the lower Fraser left out.
+- **What came back.** None does. Late-summer flow at the stream ties MAD, and late-summer flow at the river scores
+  worse.
+
+| reading | the rule its tuning recommends | score | less MAD's | SE | other splits lower | less MAD's, without the lower Fraser |
+|---|---|---|---|---|---|---|
+| MAD (control) | 0.75 m³/s, 9 %, river of 3 m³/s within 1 km | 1,222.2 | | | | |
+| window at the stream | 0.75 m³/s of window flow, 9 %, river of 3 m³/s MAD within 1 km | 1,222.9 | +0.7 | 22.7 | 2 of 4 | −0.2 |
+| window at the river | 1 m³/s, 5.49 %, river of 5 m³/s of window flow within 1 km | 1,271.6 | +49.5 | 43.8 | 0 of 4 | +53.9 |
+| both | 0.75 m³/s of window flow, 5.49 %, river of 5 m³/s of window flow within 1 km | 1,262.2 | +40.1 | 41.2 | 0 of 4 | +45.2 |
+
+The control gave the published run back rule for rule. The caveats are at the end; the largest is that the flows
+are 30-year means, so no dry year is in either reading.
 
 ## The question
 
@@ -102,7 +129,7 @@ are 0.44 m³/s for the stream and 3.11 m³/s for the river.
 | both | 1,220 | 300 | 60 | 240 | 6.2 % | 16 | 6.8 % |
 
 **The verdict.** "Both" reaches 5 % of visits and of chinook visits. By the rule set beforehand, Phase 2 (a tuning on
-window flow) goes ahead, and like any tuning it waits on Al's word.
+window flow) went ahead; its result is below.
 
 **Where they move.** A flip happens where a stream's or river's late-summer share departs from the typical one. That
 happens far more in some groups than others:
@@ -190,6 +217,75 @@ rule and their held-out deviance, the size of its region, the rule each nested f
 the rule each other seed picked (the exact rule, and each of its parts), the bootstrap's share for the exact rule and
 for each part, and the curve's held-out deviance.
 
+### What came back (Phase 2, 2026-11-22)
+
+**The checks held.**
+- The evidence is the published run's, copied, with one column and the window walk's rows added; the published
+  values read back unchanged.
+- Every one of the 4,532,843 picked segments in the flow load carries the window's months on one source, so the
+  window walk passes over none.
+- The window share of MAD at the scored visits is Phase 1's (median 0.590271; no group's median moved).
+- The control gave back all 6,149 rules' held-out deviance of run `20261103_0838`, its pick, its recommended rule
+  and its region, with the same nested selection, seeds and bootstrap share.
+- All four readings scored the same 4,858 visits (234 with chinook) of 45 groups, in the same folds.
+
+**The verdict.** No window reading beats MAD. By condition:
+
+| reading | 1. lower than MAD by more than one SE, seed 54 | 2. lower on three of seeds 55 to 58 | 3. lower without LFRA | beats MAD |
+|---|---|---|---|---|
+| stream | no: +0.7, SE 22.7 | no: +4.6, +5.3, −3.8, −4.0 | yes: −0.2 (SE 23.9) | no |
+| river | no: +49.5, SE 43.8 | no: +59.0, +49.1, +60.7, +45.7 | no: +53.9 (SE 46.5) | no |
+| both | no: +40.1, SE 41.2 | no: +46.2, +34.5, +44.6, +29.0 | no: +45.2 (SE 44.3) | no |
+
+**Every check, and the way it points.** Each value is the window reading's less the control's unless it says
+otherwise; held-out deviance throughout, lower is better.
+
+| check | control | stream | river | both | points to |
+|---|---|---|---|---|---|
+| recommended rule's score | 1,222.2 | +0.7 | +49.5 | +40.1 | neither for stream; MAD for river and both |
+| the same, without LFRA | 1,132.5 | −0.2 | +53.9 | +45.2 | neither for stream; MAD for river and both |
+| best rule's score | 1,222.2 | +0.7 | +6.3 | +5.1 | MAD, narrowly, for all three |
+| rules in the one-SE region, of 6,149 | 102 | 56 | 130 | 122 | a narrower choice for stream; a wider one for river and both |
+| nested selection (the choosing, scored on the fold it did not see) | 1,322.7 | −40.1 | −8.8 | −36.8 | the window, for all three |
+| nested folds that pick the recommended rule, of 5 | 2 | 3 | 3 | 4 | the window |
+| nested folds that pick its size, of 5 | 2 | 5 | 3 | 5 | the window at the stream |
+| other seeds that recommend the same rule, of 4 | 4 | 4 | 0 | 4 | against river |
+| bootstrap share on the recommended rule | 0.095 | 0.190 | 0.140 | 0.235 | the window |
+| bootstrap share on its size | 0.335 | 0.535 | 0.295 | 0.645 | the window at the stream |
+| bootstrap share on its gradient | 0.440 | 0.490 | 0.320 | 0.410 | neither |
+| bootstrap share on its exception | 0.445 | 0.510 | 0.310 | 0.325 | MAD at the river |
+| the curve's score, on the same 4,855 visits | 1,167.6 | −21.7 | +12.1 | +8.5 | the window at the stream; MAD at the river |
+| the curve's score, without LFRA (4,209 visits) | 1,063.5 | +12.8 | +27.2 | +38.1 | MAD, for all three |
+
+Only the first two rows carry an SE. The differences in nested selection and in the curve have none here, so they
+say which way a check points, not that it is beyond chance.
+
+**How to read it.**
+- **The window at the stream changes little.** Its tuning recommends the same numbers as MAD's (0.75 m³/s, 9 %, a
+  river of 3 m³/s within 1 km), read on window flow, and the two rules score the same: 0.7 apart on a difference
+  whose SE is 22.7, and split two against two on the other seeds. They are not the same set of streams. A stream
+  holds a median 0.59 of its MAD in the window, so 0.75 m³/s of window flow is a larger stream: the window rule
+  takes in 1,211 visits (189 with chinook) where MAD's takes 1,400 (197). Fewer streams, the same score.
+- **What the stream window does change is how steadily the size is chosen.** Every nested fold and 54 % of
+  bootstrap redraws choose 0.75 m³/s on window flow, against two folds and 34 % on MAD, and the region holds 56
+  rules against 102. The nested selection scores 40 lower. That is the choosing, not the rule: it says a tuning on
+  window flow would wander less, not that its rule predicts better.
+- **Its gain in the curve is the lower Fraser's.** With all groups the curve on window flow scores 21.7 lower; with
+  LFRA left out it scores 12.8 higher. Phase 1 found LFRA's streams hold a third of the typical late-summer share
+  and held 138 of the 300 visits that moved.
+- **The window at the river is worse.** Its tuning moves to a larger size, a lower slope limit and a larger river,
+  and that rule scores 49.5 higher than MAD's (SE 43.8) and higher on every other seed; "both" is 40.1 higher (SE
+  41.2). Part of that is where the pick lands: the region is wide (130 and 122 rules), and the recommended rule, the
+  fewest steps from link's default inside it, sits 43.2 and 34.9 behind that reading's own best. On best rules the
+  four readings are within 6.3 of each other, and MAD's is the lowest.
+- **The exact walk barely differs from Phase 1's approximation.** At Phase 1's matched threshold it puts a river
+  within 1 km of 980 scored visits where the ladder reading had 969: 11 more, none with chinook. The window walk
+  finds a river for 233,984 of its 258,496 start-and-size rows, against 240,312 for the annual walk.
+
+**What follows.** By the rule, nothing is filed for link, for the evidence build, or for windows that move by
+group. `research/chinook_stream_size.md` and the methodology article's limits say the rule was tried on late-summer
+flow.
+
 ## Window flow on every segment (#42)
 
 `data-raw/segment_window_flow.R` reads every complete window of `data/life_history_timing.csv` onto every FWA segment
@@ -230,21 +326,30 @@ says little about a small stream.
 
 ## Caveats
 
-- **Phase 1 counts flips; it does not score them.** A flip says the window reading takes a different set of visits.
-  Whether that set predicts chinook better is Phase 2's held-out score. 16 chinook visits is a small difference to
-  tune on.
-- **Most of the change is one group's.** A tuning on window flow could move largely because of the lower Fraser's
-  rain-fed streams. Phase 2 should read its result with and without LFRA.
-- **The river reading is approximate** (above): it sees only the ladder's rivers.
-- **Both flow sources are 30-year means.** No dry year is in them, and the monthly basis is weakest on small basins
-  (`research/chinook_stream_size.md`, `research/modelled_discharge.md`).
-- **The windows are fixed province-wide.** Stock timing differs by a month between neighbouring groups (BULK and MORR).
-  Windows that move by group are not here.
+- **Both flow sources are 30-year means.** No dry year is in them, so Phase 2 compares a normal late summer with a
+  normal year, not a dry one (#227). The monthly basis is weakest on small basins (`research/chinook_stream_size.md`,
+  `research/modelled_discharge.md`).
+- **Late summer is where one source reads high.** At wet's calibration gauges routed PCIC reads 17 % high in July
+  and August and its balance within 6 % (NewGraphEnvironment/wet#6). A window flow mixes the two by each segment's
+  pick, as MAD does, but MAD averages that error over the year.
+- **The windows are fixed province-wide.** Stock timing differs by a month between neighbouring groups (BULK and
+  MORR). Windows that move by group were not scored, and by the verdict are not filed.
+- **The grid's size steps were laid out for MAD** (0.1 to 1 m³/s). On window flow the tuning chose 0.75, one step
+  under the top, so the ladder did not bind; the size that matches 0.75 m³/s of MAD by the median share, 0.44, lies
+  between two steps.
+- **The verdict compares recommended rules**, as set beforehand. Where a region is wide the recommended rule is far
+  from the best one, which is what happened at the river.
+- **Most of Phase 1's change is one group's**, and so is the stream reading's gain in the curve.
+- **16 chinook visits moved in Phase 1.** A difference that small was always going to be hard to score.
+- **Four visits carry a MAD from before a tie was settled.** The published evidence was built before a segment with
+  two equally near parents took the lower id's flow (#161); 4 of the 45,529 visits hold the other parent's. All sit
+  on river-polygon lines, none is scored, and their window flow is read on the parent the query takes now.
+- **One of the 45,529 visits has a MAD and no flow in the window.** A rule's size test fails it. It costs the curve
+  nothing: the curve fits the same 4,855 of the 4,858 scored visits under every reading.
 
 ## What next
 
-Phase 2 is #226, carried by move 14 (#233): the window column and the window walk on a copy of the published
-evidence, the four readings scored into `data/tune/flow_window/`, and the verdict by the rule above. The low flows
-and dry years the 30-year means cannot show are #227.
+Nothing from this file: the rule stays on MAD. How low flow gets in a window, and how far a dry year falls below
+the normal, is #227, which the 30-year means here cannot answer.
 
-Nothing is graded, compared or published without Al's word.
+Nothing was graded, compared or published, and none of it would be without Al's word.

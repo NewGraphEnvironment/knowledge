@@ -497,6 +497,12 @@ Seeds `data/life_history_timing.csv` from the fish-passage reporting template's
   names its reach's group; it stops unless it reproduces the UFRA, COTR and BULK chinook windows. It writes no row.
 - `data-raw/segment_window_flow.R` reads every complete window onto every FWA segment of its group (#42; ignored
   `data/flow_window/`); rerun it after a timing change.
+- `data-raw/chinook_window_evidence.R`, then `data-raw/chinook_window_tune.R` (#226): the published evidence copied
+  into ignored `data/fdis/derived_window/` with the rearing window's flow on every visit and a walk to the first
+  river by its spawning-window flow (the first needs the database; `0310` is not run), then chinook rearing tuned on
+  four readings (MAD, the window at the stream, at the river, both) into `data/tune/flow_window/`, with the verdict
+  by the rule `research/chinook_window_flow.md` set first. `STAGE=smoke` runs the smoke gates alone. Nothing here is
+  graded, compared or published.
 - Logs: `scripts/logs/timing/`.
 
 <br>

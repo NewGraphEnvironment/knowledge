@@ -162,15 +162,15 @@ Mine, stated so they can be overruled (mechanism, not scope):
 
 ## Phase 6: Read it and write it up
 
-- [ ] `research/chinook_window_flow.md`, revised in place: the plain-language walk first (what the rule reads
+- [x] `research/chinook_window_flow.md`, revised in place: the plain-language walk first (what the rule reads
       now, what was asked, how it was judged, what came back), a table of the four readings, then every check
       with its direction (held-out score, the nested folds' picks, the seeds, the bootstrap shares by exact
       rule and by reading, with and without LFRA, the curve's deviance), the verdict by the rule, the caveats;
       header (`Verified`, `Produced by`, `Status`) and "What next" brought up to date.
-- [ ] If a window beats MAD: file the follow-ups, each naming move 14 (windows that move by group with timing;
+- [x] If a window beats MAD: file the follow-ups, each naming move 14 (windows that move by group with timing;
       link reading a window flow; the column in `0310`). If not: say so in `research/chinook_stream_size.md`
       and the limits of `vignettes/tuning-method.Rmd`. Either way #226's body carries the result.
-- [ ] `CLAUDE.md` (the `data/tune/flow_window/` and `data/flow_window/` lines), `scripts/README.md`,
+- [x] `CLAUDE.md` (the `data/tune/flow_window/` and `data/flow_window/` lines), `scripts/README.md`,
       `research/README.md` row.
 
 ## Owed at the end (reported, done after merge)

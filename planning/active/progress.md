@@ -72,3 +72,12 @@
 - Verdict: no window reading beats MAD. Recommended rule less the control's: stream +0.7 (SE 22.7), river +49.5
   (SE 43.8), both +40.1 (SE 41.2); seeds lower 2, 0 and 0 of 4; without LFRA -0.2, +53.9, +45.2.
 - Next: Phase 6, the write-up.
+
+## Phase 6, 2026-11-22
+
+- Completed: `research/chinook_window_flow.md` revised in place (the plain-language answer and table first, Phase
+  2's checks with the way each points, the reading, the caveats); the limit in `research/chinook_stream_size.md` and
+  in the methodology article (rendered to a scratch directory: it builds, and the sentence links #226); #226's body
+  carries the result; `CLAUDE.md`, `scripts/README.md`, `research/README.md`.
+- By the verdict, no follow-up is filed for link, the evidence build or group windows.
+- Next: the full tests, lint against main, `/code-check branch`, the archive and the PR.
