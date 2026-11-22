@@ -21,6 +21,13 @@ knitr::opts_chunk$set(
   message = FALSE,
   warning = FALSE
 )
+# a figure's alt text is its caption without the code-font marks: knitr gives alt the caption's source, backticks
+# and all, and a screen reader would read them out. knitr evaluates `fig.cap` after the chunk, so when this hook
+# runs a caption built by paste0() is still a call: the alt is given as a call too, evaluated when the caption is
+knitr::opts_hooks$set(fig.cap = function(options) {
+  if (is.null(options$fig.alt)) options$fig.alt <- bquote(gsub("`", "", .(options$fig.cap), fixed = TRUE))
+  options
+})
 library(knowledge)
 library(ggplot2)
 ```

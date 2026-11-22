@@ -22,9 +22,10 @@ knitr::opts_chunk$set(
   warning = FALSE
 )
 # a figure's alt text is its caption without the code-font marks: knitr gives alt the caption's source, backticks
-# and all, and a screen reader would read them out
+# and all, and a screen reader would read them out. knitr evaluates `fig.cap` after the chunk, so when this hook
+# runs a caption built by paste0() is still a call: the alt is given as a call too, evaluated when the caption is
 knitr::opts_hooks$set(fig.cap = function(options) {
-  if (is.null(options$fig.alt)) options$fig.alt <- gsub("`", "", options$fig.cap, fixed = TRUE)
+  if (is.null(options$fig.alt)) options$fig.alt <- bquote(gsub("`", "", .(options$fig.cap), fixed = TRUE))
   options
 })
 library(dplyr)
@@ -524,9 +525,9 @@ the only differences. Two of the four read a slope from somewhere else onto the 
 each segment's **minimal parent**, the minimal-network segment it lies within, and the whole Atlas line it lies on.
 
 ```{r setups}
-how <- c(published = paste("<code>link</code>'s full network, each segment reading its own slope",
+how <- c(published = paste("<code>link</code>’s full network, each segment reading its own slope",
                            "(how <code>link</code> applies a habitat definition)"),
-         minimal = paste("<code>link</code>'s minimal network, without the cuts at fish records, crossings and",
+         minimal = paste("<code>link</code>’s minimal network, without the cuts at fish records, crossings and",
                          "hand-mapped habitat"),
          parent = "The full network's segments, each reading its minimal parent's slope",
          atlas = "The full network's segments, each reading the slope of the whole Atlas line it lies on")

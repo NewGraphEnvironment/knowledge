@@ -23,9 +23,10 @@ knitr::opts_chunk$set(
   warning = FALSE
 )
 # a figure's alt text is its caption without the code-font marks: knitr gives alt the caption's source, backticks
-# and all, and a screen reader would read them out
+# and all, and a screen reader would read them out. knitr evaluates `fig.cap` after the chunk, so when this hook
+# runs a caption built by paste0() is still a call: the alt is given as a call too, evaluated when the caption is
 knitr::opts_hooks$set(fig.cap = function(options) {
-  if (is.null(options$fig.alt)) options$fig.alt <- gsub("`", "", options$fig.cap, fixed = TRUE)
+  if (is.null(options$fig.alt)) options$fig.alt <- bquote(gsub("`", "", .(options$fig.cap), fixed = TRUE))
   options
 })
 library(knowledge)
@@ -156,7 +157,7 @@ The terms are gathered in a [glossary](#terms) at the end.
 ## What does the tuning do? {#tuning}
 
 For each species and life stage, the tuning builds a grid of habitat definitions around those of
-[`link`](https://newgraphenvironment.github.io/link/) [@link], the R package that maps habitat on BC's streams: a
+`link` [@link], the R package that maps habitat on BC's streams: a
 floor on stream size, a ceiling on slope, and for some an exception for small streams near a large river. Each habitat
 definition sorts every site crews electrofished into habitat or not.
 

@@ -22,9 +22,10 @@ knitr::opts_chunk$set(
   warning = FALSE
 )
 # a figure's alt text is its caption without the code-font marks: knitr gives alt the caption's source, backticks
-# and all, and a screen reader would read them out
+# and all, and a screen reader would read them out. knitr evaluates `fig.cap` after the chunk, so when this hook
+# runs a caption built by paste0() is still a call: the alt is given as a call too, evaluated when the caption is
 knitr::opts_hooks$set(fig.cap = function(options) {
-  if (is.null(options$fig.alt)) options$fig.alt <- gsub("`", "", options$fig.cap, fixed = TRUE)
+  if (is.null(options$fig.alt)) options$fig.alt <- bquote(gsub("`", "", .(options$fig.cap), fixed = TRUE))
   options
 })
 library(knowledge)
@@ -161,7 +162,7 @@ Young chinook salmon do not always rear where they hatched: from earlier fish in
 recommend looking for more chinook rearing in the lower reaches of small tributaries, other than the ones they
 hatched in, of large rivers that hold chinook [-@kirsch_etal2014Fishinventory, p. 42]. British Columbia's electrofishing records point the same way, putting young
 chinook in more of the province's small streams near large rivers, and in fewer far from one, than [`link`](`r link_site`)’s current fish
-habitat definition allows. [`link`](`r link_site`) [@link] is an R package that maps where each
+habitat definition allows. `link` [@link] is an R package that maps where each
 fish species can reach and where it can spawn and rear on BC's streams. Its standard settings,
 [`default`](`r link_default`), start from the thresholds New Graph runs [`bcfishpass`](https://github.com/smnorris/bcfishpass) with
 [@norris2024smnorrisbcfishpass]: for chinook rearing, `r words(dflt)`. The records support **`r words(rec)`**.
@@ -211,13 +212,13 @@ chg <- data.frame(
                     pc(r_rec_in), pc(r_rec_out, 1)),
   check.names = FALSE)
 knitr::kable(chg, format = "html", escape = FALSE, align = "lrr",
-             caption = paste("Chinook rearing under <code>link</code>'s current habitat definition",
+             caption = paste("Chinook rearing under <code>link</code>’s current habitat definition",
                              "and the recommended one.")) |>
   kableExtra::kable_styling(full_width = FALSE) |>
   kableExtra::footnote(general_title = "", escape = FALSE, general = paste0(
     "Habitat is summed over the ", nrow(per_group), " watershed groups <code>link</code> classified for chinook when ",
-    "the comparison ran, on <code>link</code>'s minimal network, each habitat definition run ",
-    "through all of <code>link</code>'s steps. Both totals include lines through wetlands, which the two habitat definitions test differently ",
+    "the comparison ran, on <code>link</code>’s minimal network, each habitat definition run ",
+    "through all of <code>link</code>’s steps. Both totals include lines through wetlands, which the two habitat definitions test differently ",
     "(below). ",
     "Sites are the ", n0(sum(fv$n[fv$rule == "default"])), " electrofishing sites of a usual fished area on ",
     "reachable stream, river and wetland lines in those groups, a wider set than the one the habitat definition was chosen on. They overlap the sites it was chosen on, so the rates show it ",
@@ -337,12 +338,12 @@ st[["Chosen at 1 SE"]] <- bold_if(c(cell_size(rec), grad(rec$grad_max), cell_nea
 st[[paste("Chosen at", se_strict, "SE")]] <-
   bold_if(c(cell_size(ch196), grad(ch196$grad_max), cell_near(ch196)), st[["<code>link</code> now"]])
 knitr::kable(st, format = "html", escape = FALSE, align = "llll",
-             caption = "The chinook rearing habitat definition chosen from the close calls at each bar, beside <code>link</code>'s current one.") |>
+             caption = "The chinook rearing habitat definition chosen from the close calls at each bar, beside <code>link</code>’s current one.") |>
   kableExtra::kable_styling(full_width = FALSE, font_size = 13) |>
   kableExtra::footnote(general_title = "", escape = FALSE, general = paste0(
-    "Bold: differs from <code>link</code>'s. Close calls: ", nrow(region),
+    "Bold: differs from <code>link</code>’s. Close calls: ", nrow(region),
     " habitat definitions at one standard error, ",
-    n0(ch196$n_region), " at ", se_strict, "; <code>link</code>'s is a close call at neither. This package's thresholds table (data/thresholds.csv, column ",
+    n0(ch196$n_region), " at ", se_strict, "; <code>link</code>’s is a close call at neither. This package's thresholds table (data/thresholds.csv, column ",
     "rule_196) gives the choice at ", se_strict, " for every species tuned."))
 ```
 
@@ -355,14 +356,14 @@ oc <- data.frame(
             "Chosen on four sets, scored on the fifth",
             paste(meta$spec$n_boot, "redraws of the groups")),
   Result = c(paste0("the recommended habitat definition is a close call on ", sum(seeds$main_rec_in_region), " of ", nrow(seeds),
-                    "; <code>link</code>'s on ", sum(seeds$default_in_region)),
-             paste0("the chosen habitat definition beats <code>link</code>'s on ", sum(honest$dev_rec < honest$dev_default), " of ", nrow(honest),
+                    "; <code>link</code>’s on ", sum(seeds$default_in_region)),
+             paste0("the chosen habitat definition beats <code>link</code>’s on ", sum(honest$dev_rec < honest$dev_default), " of ", nrow(honest),
                     " and ", if (beats_all) "beats it" else "loses to it", " overall"),
              paste0("a flow floor is chosen in ",
                     if (isTRUE(all.equal(boot_mad, 1))) "every draw" else paste(pc(boot_mad, 1), "of draws"),
                     "; the recommended slope limit in ", pc(boot_grad))),
-  `Points to` = c(if (sum(seeds$main_rec_in_region) > sum(seeds$default_in_region)) "the recommended habitat definition" else "<code>link</code>'s habitat definition",
-                  if (beats_all) "choosing from the records" else "<code>link</code>'s habitat definition",
+  `Points to` = c(if (sum(seeds$main_rec_in_region) > sum(seeds$default_in_region)) "the recommended habitat definition" else "<code>link</code>’s habitat definition",
+                  if (beats_all) "choosing from the records" else "<code>link</code>’s habitat definition",
                   "a steady shape; an unsettled slope limit"),
   check.names = FALSE)
 knitr::kable(oc, format = "html", escape = FALSE, align = "lll") |>
