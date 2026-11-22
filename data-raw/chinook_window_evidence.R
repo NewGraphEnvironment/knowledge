@@ -70,7 +70,7 @@ tune <- utils::read.csv("data/tune/CH_rear_tune.csv", stringsAsFactors = FALSE)
 p1 <- utils::read.csv(file.path(run_dir, "ch_rear_run.csv"), stringsAsFactors = FALSE)
 p1_group <- utils::read.csv(file.path(run_dir, "ch_rear_ratio_by_group.csv"), stringsAsFactors = FALSE)
 f_src <- stats::setNames(file.path(src_dir, paste0(tables, ".csv")), tables)
-md5_src <- tools::md5sum(f_src)
+md5_src <- stats::setNames(unname(tools::md5sum(f_src)), tables)   # md5sum() names by path
 if (!identical(paste(unname(md5_src), collapse = ";"), summ$evidence_md5)) {
   stop("the evidence in ", src_dir, " is not the published run's: ", paste(md5_src, collapse = ";"), call. = FALSE)
 }
@@ -314,8 +314,8 @@ if (nrow(walks2) != n_pub + nrow(w) || !same_cols(walks2[seq_len(n_pub), ], walk
       !all(is.na(walks2$target_lake[-seq_len(n_pub)]))) {
   stop("the copy's walks do not read back as the published walks and the window walk", call. = FALSE)
 }
-md5_out <- tools::md5sum(f_out)
-if (!identical(unname(md5_out[["visits_species"]]), unname(md5_src[["visits_species"]]))) {
+md5_out <- stats::setNames(unname(tools::md5sum(f_out)), tables)
+if (!identical(md5_out[["visits_species"]], md5_src[["visits_species"]])) {
   stop("visits_species.csv changed in the copy", call. = FALSE)
 }
 cat(sprintf("\nwrote %s: %d visits (%d columns, one new), %d walk rows (%d published, %d on %s); read back equal\n",
