@@ -87,22 +87,28 @@ Mine, stated so they can be overruled (mechanism, not scope):
 
 ## Phase 3: The window walk (package)
 
-- [ ] `inst/sql/ch_dist_profile_window.sql`: the published walk with two more arguments (`months integer[]`,
+- [x] `inst/sql/ch_dist_profile_window.sql`: the published walk with two more arguments (`months integer[]`,
       `weights float8[]`), function `pg_temp.ch_dist_profile_window`, and the flow read replaced by the
       weighted sum of the months on the source, taken only where every month is present. The changed region
-      is marked (`-- window flow: begin` / `end`). `large_mad` carries the river's window flow.
-- [ ] Test without a database (runs on CI): the two SQL files are the same text outside the header comment,
+      is marked (`-- window flow: begin` / `end`). `large_mad` carries the river's window flow. *Plan review
+      (G2):* the sum is taken per segment before the size filter and the `LIMIT`, only where every month is
+      present on one source; the text test also holds the edge-type list equal in both files, since the marked
+      region holds the line that carries it.
+- [x] Test without a database (runs on CI): the two SQL files are the same text outside the header comment,
       the signature and the marked region; and `knw_walk_md5()` is the md5 every tracked
-      `data/tune/*_grades_record.csv` names.
-- [ ] `knw_link_walks(window = NULL)` in `R/link_walks.R`: with a window it installs the window walk, passes
+      `data/tune/*_grades_record.csv` names (that half runs in the source tree only: `data/` is not in the
+      build).
+- [x] `knw_link_walks(window = NULL)` in `R/link_walks.R`: with a window it installs the window walk, passes
       the weights, and returns `src` as `<source>@<mmdd>-<mmdd>`; a cache row is keyed on that label and
       `knw_walk_md5(window = TRUE)`. Without a window nothing changes (the published path's SQL text and
-      cache key are the same strings as before).
-- [ ] Tests on the database (`tests/testthat/test-link_walks.R`, skipped without one): the window walk given
+      cache key are the same strings as before). *Plan review (G1):* the bare source goes to the SQL function and
+      the label is a separate value in the insert, the hit query and the returned table; the published path's
+      SQL is built by a helper and held to a stored string by a test.
+- [x] Tests on the database (`tests/testthat/test-link_walks.R`, skipped without one): the window walk given
       month 0 at weight 1 returns the published walk's rows on the test starts; at 08-15 to 09-15 each found
       river's `large_mad` is `wet::wet_flow_window()`'s value for that segment and reaches its `qmin`; a cold
       then warm cache; a second window reads none of the first window's rows.
-- [ ] Restore the bug: with the marked region put back to `q.month = 0`, the window tests must fail.
+- [x] Restore the bug: with the marked region put back to `q.month = 0`, the window tests must fail.
 
 ## Phase 4: The evidence with a window (database, on its host)
 
@@ -110,16 +116,21 @@ Mine, stated so they can be overruled (mechanism, not scope):
       `data/fdis/derived` and stops unless its md5s are the `CH_rear` summary's; stops unless the flow load is
       the grade record's; `knw_db_latency_check()`; logs `pg_stat_activity`. Adds `flow_0801_0930` to every
       visit through `knw_link_flow_window()`, walks every start on `pick` for 08-15 to 09-15 on the ladder
-      1, 3, 5, 10, 20, 30, 50 m³/s, adds the lake and regulated target flags as `0310` does, and appends those
-      rows to the walks.
+      1, 3, 5, 10, 20, 30, 50 m³/s, and appends those rows to the walks. *Plan review:* the window rows carry
+      `NA` target flags (the scorer never reads them, and `knw_walk_index()` reads `NA` as `FALSE`), so the
+      width and regulation queries are not run; before any walk the script counts, over the whole load, the
+      segments with a picked annual flow that lack one of the window's months on that source, and stops unless
+      it is zero (G3); and it times 500 starts before the full set.
 - [ ] Assertions in the script: MAD read again equals `mad_pick` at every visit; the window column is present
-      exactly where `mad_pick` is; the published rows of all three tables are unchanged (same row count, and
+      exactly where `mad_pick` is, and positive there (the curve drops a size with no log; G3); the published rows of all three tables are unchanged (same row count, and
       the original columns identical to the source).
 - [ ] Checks against Phase 1, printed: the median window share of MAD at the scored visits is
-      `ch_rear_run.csv`'s `med_rear_visit`, and each group's median is `ch_rear_ratio_by_group.csv`'s; how many
+      `ch_rear_run.csv`'s `med_rear_visit`, and each group's median is `ch_rear_ratio_by_group.csv`'s (to 1e-9;
+      Phase 1 ran on wet 0.4.36); how many
       visits' nearest window river differs between the exact walk and Phase 1's ladder approximation.
 - [ ] Run it: `data/fdis/derived_window/{visits_link,visits_species,walks}.csv` and `window_run.csv` (source
-      md5s, flow load, both walk md5s, weights, versions, commit); log
+      md5s, flow load, both walk md5s, weights, versions, commit), its fields also in tracked
+      `data/tune/flow_window/ch_rear_window_evidence_run.csv`, since `data/fdis/` is ignored (G4); log
       `scripts/logs/flow_window/<date>_chinook_window_evidence.txt`.
 
 ## Phase 5: Score the four readings (no database)
@@ -128,18 +139,25 @@ Mine, stated so they can be overruled (mechanism, not scope):
       (seed 54, 5 folds, 200 bootstrap resamples, seeds 55 to 58, `d_floor` 200, `segment_gradient`), link's
       thresholds at the published ledger's commit from `LINK_REPO`, the readings as `cols[["mad"]]` and `src`.
       `STAGE=smoke` runs the smoke gates for all four and stops on any failure (#84); `STAGE=score` scores.
+      *Plan review (B1):* the score cache's settings hold neither the size column nor the walk source, so each
+      reading, and each run without LFRA, gets a cache directory of its own and its label in `evidence_id`; the
+      control is scored from an empty directory, never `data/tune/`. *(G5):* `thresholds_extra` is passed, as
+      `0320` passes it, and the ledger is the one the summary names.
 - [ ] The control must reproduce the published run: every rule's held-out deviance in
-      `data/tune/CH_rear_tune.csv` (to its 6 decimals), the pick, the recommended rule, the region and the
-      summary's seed and nested-selection values. The script stops otherwise.
-- [ ] The paired comparison: one `knw_tune_score()` over each reading's recommended and best rules together
-      (a `rule_in` that reads each rule's own column and source), which gives each rule's deviance behind the
-      best and the SE of that difference on the same groups and folds; again on seeds 55 to 58.
+      `data/tune/CH_rear_tune.csv` (`max(abs(round(new, 6) - published)) <= 1e-6`, as `0322` compares), the
+      pick, the recommended rule, the region and the summary's seed and nested-selection values. The script
+      stops otherwise.
+- [ ] The paired comparison. *Plan review (B2), replacing one grid of every reading's rules, whose SE is
+      against that grid's best:* one two-row grid per window reading (the control's recommended rule and that
+      reading's; a `rule_in` that reads each row's own size column and walk source), `extra = FALSE`, once per
+      seed 54 to 58. The row that is not the best carries the paired difference and its SE over the 45 groups.
+      Each pair's held-out deviance on seed 54 must equal that reading's own run.
 - [ ] LFRA left out: each reading rescored without the lower Fraser's visits (main seed), and the same paired
       comparison.
 - [ ] Outputs, `data/tune/flow_window/` only: `ch_rear_tune_run.csv`; per reading
       `<reading>/CH_rear_{summary,seeds,honest,groups,smoke,region}.csv`; `ch_rear_readings.csv` (the paired
-      comparison by seed, with and without LFRA). Confirm nothing that publishes lists `data/tune/` below its
-      top level.
+      comparison by seed, with and without LFRA). Nothing that publishes lists `data/tune/` below its top level:
+      the plan review cites every listing, each non-recursive (`planning/active/review-plan.md`).
 - [ ] Run the smoke stage, read it, then score; log `scripts/logs/flow_window/<date>_chinook_window_tune.txt`.
 
 ## Phase 6: Read it and write it up

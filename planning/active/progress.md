@@ -23,3 +23,20 @@
   wet); four tests in `test-link_flow.R`, 21 expectations passing on the database's host; wet declared in `Suggests`
   and `Remotes` (the package had no declared use of it); pkgdown index.
 - Next: Phase 3, the window walk.
+
+## Phase 3, 2026-11-22
+
+- Plan review reported at 05:04 UTC: two blockers (the score cache does not know the reading; one grid of every
+  reading's rules does not give the paired SE), five gaps and a scope cut, each probed and folded into Phases 3 to 5
+  (`planning/active/review-plan.md`).
+- Completed: `inst/sql/ch_dist_profile_window.sql` (generated from the annual walk: its text outside three marked
+  regions); `knw_link_walks(window = )` with the query built by `.knw_walk_sql()`, the bare source to SQL and the
+  window in the row's `src`; `knw_walk_md5(window = )`; six tests added to `test-link_walks.R` (all 13 in the file
+  pass on the database's host, 121 expectations).
+- Measured: the window walk given month 0 at weight 1 returns the annual walk's rows on 3 starts x 3 sources x 4
+  sizes; with the annual-flow read put back into the window file the window test fails (2 expectations), and the
+  file was restored to md5 `6f584e5f...`. The annual walk's md5 is unchanged (`c3f7bdbe...`, the grade records').
+- Found: `knw_link_flow()`'s query on an unanalysed temporary table of two segments took 168 s on this database
+  (3 s once analysed). `.knw_link_flow_window()` analyses its own; the existing function is left as it is, an issue
+  to file.
+- Next: Phase 4, the evidence with a window.

@@ -25,3 +25,17 @@ When the plan finds that a batch, or one of its members, is more than one PR's w
 
 | Error | Resolution |
 |-------|------------|
+
+## The flow query is slow on a few segments (2026-11-22)
+
+`knw_link_flow(conn, <2 ids>)` took 168 s on the published build's database: `dbWriteTable()` leaves the temporary
+table without statistics, the planner assumes thousands of rows and joins the whole network. `ANALYZE` on the table
+brought `.knw_link_flow_sql()` to 3 s. `test-link_flow.R`'s live tie test (two lines) takes 160 s for the same reason.
+`.knw_link_flow_window()` analyses its table; `knw_link_flow()` is unchanged on this branch.
+
+## The monthly flow table's key holds `forcing` and `period` (2026-11-22)
+
+`discharge.fwa_v1_segment_monthly`'s primary key is (scenario, forcing, source, linear_feature_id, month, period), so
+one row per source and month under `historical` is a property of the load, not of the table. The window walk takes a
+segment only where it finds exactly the window's months on one source; Phase 4 counts the picked segments that fail
+that before walking.

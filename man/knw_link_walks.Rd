@@ -11,7 +11,8 @@ knw_link_walks(
   sources = c("pick", "pcic_routed", "wet_balance"),
   workers = 4L,
   batch = 500L,
-  cache = FALSE
+  cache = FALSE,
+  window = NULL
 )
 }
 \arguments{
@@ -33,6 +34,9 @@ removes almost all of a walk's time.}
 
 \item{cache}{\code{FALSE} (the default: walk everything), or a table name,
 \code{schema.table}, to read walks from and keep them in (see above).}
+
+\item{window}{\code{NULL} (the default: the annual flow), or a one-row \code{data.frame}
+with \code{start} and \code{end}, each \code{"MM-DD"}: the window whose flow sizes a river.}
 }
 \value{
 A \code{tibble}: \code{blue_line_key}, \code{downstream_route_measure}, \code{src}, \code{qmin},
@@ -41,7 +45,7 @@ A \code{tibble}: \code{blue_line_key}, \code{downstream_route_measure}, \code{sr
 \code{bank_m}; exactly
 \code{nrow(unique(starts)) * length(sources) * length(q_grid)} rows. With a
 cache, attribute \code{cache} holds the start-and-source pairs read (\code{hit}) and
-walked (\code{miss}).
+walked (\code{miss}). With \code{window}, \code{src} is \verb{<source>@<mmdd>-<mmdd>}.
 }
 \description{
 \code{scripts/0296}'s walks. From a point on an FWA blue line, the path is walked
@@ -89,6 +93,17 @@ The FWA tables the walk reads carry no load record, so a reload of
 \code{whse_basemapping.fwa_stream_networks_sp} (fwapg#43 moves measures by
 millimetres) or of the river, lake, manmade waterbody and wetland polygons
 it measures the bank on needs the cache truncated by hand.
+
+With \code{window}, a river's size is its flow in that window of the year, not its
+annual flow (#226): the walk is \code{inst/sql/ch_dist_profile_window.sql}, the same
+path, statuses and bank rule, reading for each segment the mean of wet's monthly
+flow over the window's days (each month weighted by the days the window takes
+from it, as \code{wet::wet_flow_window()} weighs them). A segment missing one of the
+window's months on the source is passed over. Each row's \code{src} then carries the
+window, \verb{<source>@<mmdd>-<mmdd>} (\verb{pick@0815-0915}), and \code{large_mad} is the
+river's window flow. A window walk is another walk: its cache rows are keyed on
+that \code{src} and on the window walk's own md5 (\code{knw_walk_md5(window = TRUE)}), so
+no row of one window, or of the annual walk, is read as another's.
 }
 \examples{
 \dontrun{

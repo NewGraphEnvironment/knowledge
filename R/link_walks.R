@@ -45,6 +45,17 @@
 #' millimetres) or of the river, lake, manmade waterbody and wetland polygons
 #' it measures the bank on needs the cache truncated by hand.
 #'
+#' With `window`, a river's size is its flow in that window of the year, not its
+#' annual flow (#226): the walk is `inst/sql/ch_dist_profile_window.sql`, the same
+#' path, statuses and bank rule, reading for each segment the mean of wet's monthly
+#' flow over the window's days (each month weighted by the days the window takes
+#' from it, as `wet::wet_flow_window()` weighs them). A segment missing one of the
+#' window's months on the source is passed over. Each row's `src` then carries the
+#' window, `<source>@<mmdd>-<mmdd>` (`pick@0815-0915`), and `large_mad` is the
+#' river's window flow. A window walk is another walk: its cache rows are keyed on
+#' that `src` and on the window walk's own md5 (`knw_walk_md5(window = TRUE)`), so
+#' no row of one window, or of the annual walk, is read as another's.
+#'
 #' @param connector a function of no arguments returning a `DBI` connection to a
 #'   database holding `discharge` and `whse_basemapping`.
 #' @param starts `data.frame` with `blue_line_key` and `downstream_route_measure`.
@@ -57,13 +68,15 @@
 #'   removes almost all of a walk's time.
 #' @param cache `FALSE` (the default: walk everything), or a table name,
 #'   `schema.table`, to read walks from and keep them in (see above).
+#' @param window `NULL` (the default: the annual flow), or a one-row `data.frame`
+#'   with `start` and `end`, each `"MM-DD"`: the window whose flow sizes a river.
 #' @return A `tibble`: `blue_line_key`, `downstream_route_measure`, `src`, `qmin`,
 #'   `status`, `dist_m`, `large_mad`, `large_lfid`, `large_edge`,
 #'   `large_waterbody_key`, `n_hops`, `max_entry_gap_m`, `dist_centre_m`,
 #'   `bank_m`; exactly
 #'   `nrow(unique(starts)) * length(sources) * length(q_grid)` rows. With a
 #'   cache, attribute `cache` holds the start-and-source pairs read (`hit`) and
-#'   walked (`miss`).
+#'   walked (`miss`). With `window`, `src` is `<source>@<mmdd>-<mmdd>`.
 #' @export
 #' @examples
 #' \dontrun{
@@ -73,7 +86,7 @@
 #' }
 knw_link_walks <- function(connector, starts, q_grid = c(1, 3, 5, 10, 20, 30, 50),
                            sources = c("pick", "pcic_routed", "wet_balance"), workers = 4L, batch = 500L,
-                           cache = FALSE) {
+                           cache = FALSE, window = NULL) {
   chk::chk_function(connector)
   chk::chk_data(starts)
   chk::check_names(starts, c("blue_line_key", "downstream_route_measure"))
@@ -92,27 +105,26 @@ knw_link_walks <- function(connector, starts, q_grid = c(1, 3, 5, 10, 20, 30, 50
   starts <- unique(starts[, c("blue_line_key", "downstream_route_measure")])
   rownames(starts) <- NULL
   if (!nrow(starts)) stop("no starts to walk", call. = FALSE)
-  fn_sql <- paste(readLines(system.file("sql/ch_dist_profile.sql", package = "knowledge", mustWork = TRUE)),
-                  collapse = "\n")
-  walk_cols <- setdiff(names(.knw_walk_cache_cols), c("blue_line_key", "downstream_route_measure", "src", "load_md5",
-                                                      "walk_md5", "walked_at"))
-  from <- paste("unnest($1::integer[], $2::float8[]) WITH ORDINALITY AS s(blk, m, ord)",
-                "CROSS JOIN LATERAL pg_temp.ch_dist_profile(s.blk, s.m, $3::float8[], $4) p")
-  sql <- sprintf("SELECT s.ord, %s FROM %s ORDER BY s.ord", paste0("p.", walk_cols, collapse = ", "), from)
+  # a window walk (#226) is the other SQL file, its months and weights written into the query, and its rows'
+  # `src` carries the window: `label()` is the identity for the annual walk
+  win <- NULL
+  if (!is.null(window)) {
+    win <- .knw_windows(window)
+    if (nrow(win) != 1L) stop("window must be one row: one walk reads one window", call. = FALSE)
+    win <- c(as.list(win), .knw_window_weights(win$start, win$end))
+  }
+  label <- function(src) if (is.null(win)) src else paste0(src, "@", win$label)
+  fn_sql <- paste(readLines(.knw_walk_file(window = !is.null(win))), collapse = "\n")
+  walk_cols <- .knw_walk_cols()
+  sql <- .knw_walk_sql(walk_cols, win = win)
   out <- list()
   todo <- stats::setNames(rep(list(seq_len(nrow(starts))), length(sources)), sources)
   if (cache_on) {
     conn <- connector()
     on.exit(DBI::dbDisconnect(conn), add = TRUE)
-    meta <- .knw_walk_cache_prepare(conn, cache)
+    meta <- .knw_walk_cache_prepare(conn, cache, walk_md5 = knw_walk_md5(window = !is.null(win)))
     # each batch's rows are inserted by the query that walks them, so a worker's walk is kept as it is made
-    sql <- sprintf(paste("WITH w AS (SELECT s.blk, s.m, s.ord, %1$s FROM %2$s),",
-                         "ins AS (INSERT INTO %3$s",
-                         "(blue_line_key, downstream_route_measure, src, load_md5, walk_md5, %4$s)",
-                         "SELECT blk, m, $4, '%5$s', '%6$s', %4$s FROM w ON CONFLICT DO NOTHING)",
-                         "SELECT ord, %4$s FROM w ORDER BY ord"),
-                   paste0("p.", walk_cols, collapse = ", "), from, cache, paste(walk_cols, collapse = ", "),
-                   meta$load_md5, meta$walk_md5)
+    sql <- .knw_walk_sql(walk_cols, win = win, cache = cache, meta = meta)
     DBI::dbWriteTable(conn, "tmp_knw_walk_starts",
                       data.frame(ord = seq_len(nrow(starts)), blue_line_key = starts$blue_line_key,
                                  downstream_route_measure = starts$downstream_route_measure),
@@ -129,18 +141,18 @@ knw_link_walks <- function(connector, starts, q_grid = c(1, 3, 5, 10, 20, 30, 50
     lo <- seq(1L, nrow(starts), by = 500000L)
     hits <- do.call(rbind, lapply(lo, function(l) {
       DBI::dbGetQuery(conn, hit_sql, params = list(l, min(l + 499999L, nrow(starts)),
-                                                   paste0("{", paste(sources, collapse = ","), "}"),
+                                                   paste0("{", paste(label(sources), collapse = ","), "}"),
                                                    .knw_pg_array(q_grid), meta$load_md5, meta$walk_md5))
     }))
     hits$ord <- as.integer(hits$ord)
     # a start is read from the cache on a source only when every size is there; otherwise it is walked whole
-    n_have <- table(factor(paste(hits$ord, hits$src), levels = outer(seq_len(nrow(starts)), sources, paste)))
+    n_have <- table(factor(paste(hits$ord, hits$src), levels = outer(seq_len(nrow(starts)), label(sources), paste)))
     full <- n_have == length(q_grid)
     hits <- hits[full[paste(hits$ord, hits$src)], , drop = FALSE]
     if (nrow(hits)) {
       out$hits <- cbind(starts[hits$ord, , drop = FALSE], hits[, c("src", walk_cols), drop = FALSE], row.names = NULL)
     }
-    for (src in sources) todo[[src]] <- which(!full[paste(seq_len(nrow(starts)), src)])
+    for (src in sources) todo[[src]] <- which(!full[paste(seq_len(nrow(starts)), label(src))])
     n_hit <- sum(full)
     n_miss <- length(full) - n_hit
     message(sprintf("walk cache %s: %d of %d start-and-source pairs read, %d to walk", cache, n_hit, length(full),
@@ -160,7 +172,9 @@ knw_link_walks <- function(connector, starts, q_grid = c(1, 3, 5, 10, 20, 30, 50
     } else {
       w <- lapply(chunks, function(ch) do.call(.knw_walk_chunk, c(list(ch), args)))
     }
-    do.call(rbind, w)
+    w <- do.call(rbind, w)
+    w$src <- label(w$src)   # the worker stamps the bare source it gave the SQL
+    w
   }
   if (!cache_on) {
     out$walked <- walk_set(starts, sources)
@@ -229,6 +243,45 @@ knw_link_walks <- function(connector, starts, q_grid = c(1, 3, 5, 10, 20, 30, 50
   unname(split(seq_len(n), ceiling(seq_len(n) / batch)))
 }
 
+# the walk's output columns, in ch_dist_profile()'s order: the cache's columns less its key and its timestamp
+.knw_walk_cols <- function() {
+  setdiff(names(.knw_walk_cache_cols), c("blue_line_key", "downstream_route_measure", "src", "load_md5", "walk_md5",
+                                         "walked_at"))
+}
+
+# the file a walk is installed from: the annual walk, or the window walk (#226)
+.knw_walk_file <- function(window = FALSE) {
+  system.file(if (window) "sql/ch_dist_profile_window.sql" else "sql/ch_dist_profile.sql", package = "knowledge",
+              mustWork = TRUE)
+}
+
+# The query one batch of starts runs: $1 and $2 the starts' keys and measures, $3 the river sizes, $4 the flow
+# source. With `cache` it also inserts the rows it walks. With `win` (a window's `label`, `months` and `weights`)
+# it calls the window walk, the months and weights written in as literals that read back exactly, and a kept row's
+# `src` is the source with the window's label. Without `win` the text is the annual walk's, which
+# tests/testthat/test-link_walks.R holds to the strings it was before a window existed.
+.knw_walk_sql <- function(walk_cols, win = NULL, cache = NULL, meta = NULL) {
+  fn <- if (is.null(win)) {
+    "pg_temp.ch_dist_profile(s.blk, s.m, $3::float8[], $4)"
+  } else {
+    sprintf("pg_temp.ch_dist_profile_window(s.blk, s.m, $3::float8[], $4, '{%s}'::integer[], '%s'::float8[])",
+            paste(as.integer(win$months), collapse = ","), .knw_pg_array(win$weights))
+  }
+  from <- paste("unnest($1::integer[], $2::float8[]) WITH ORDINALITY AS s(blk, m, ord)",
+                "CROSS JOIN LATERAL", fn, "p")
+  if (is.null(cache)) {
+    return(sprintf("SELECT s.ord, %s FROM %s ORDER BY s.ord", paste0("p.", walk_cols, collapse = ", "), from))
+  }
+  src <- if (is.null(win)) "$4" else sprintf("$4 || '@%s'", win$label)
+  sprintf(paste("WITH w AS (SELECT s.blk, s.m, s.ord, %1$s FROM %2$s),",
+                "ins AS (INSERT INTO %3$s",
+                "(blue_line_key, downstream_route_measure, src, load_md5, walk_md5, %4$s)",
+                "SELECT blk, m, %7$s, '%5$s', '%6$s', %4$s FROM w ON CONFLICT DO NOTHING)",
+                "SELECT ord, %4$s FROM w ORDER BY ord"),
+          paste0("p.", walk_cols, collapse = ", "), from, cache, paste(walk_cols, collapse = ", "),
+          meta$load_md5, meta$walk_md5, src)
+}
+
 # the walk cache's columns, the one source for its DDL and the walk's column list (#87): the key, then the walk's
 # output in ch_dist_profile()'s order
 .knw_walk_cache_cols <- c(
@@ -240,8 +293,9 @@ knw_link_walks <- function(connector, starts, q_grid = c(1, 3, 5, 10, 20, 30, 50
   bank_m = "double precision", walked_at = "timestamptz NOT NULL DEFAULT now()"
 )
 
-# create the cache and its load table when absent, record the live flow load, and return the two md5s a row is keyed on
-.knw_walk_cache_prepare <- function(conn, cache) {
+# create the cache and its load table when absent, record the live flow load, and return the two md5s a row is keyed
+# on: the load's, and the md5 of the walk that makes the rows (the annual walk's unless a window walk gives its own)
+.knw_walk_cache_prepare <- function(conn, cache, walk_md5 = knw_walk_md5()) {
   sch <- sub("\\..*$", "", cache)
   DBI::dbExecute(conn, sprintf("CREATE SCHEMA IF NOT EXISTS %s", sch))
   ddl <- paste("CREATE TABLE IF NOT EXISTS %s (%s,",
@@ -254,7 +308,7 @@ knw_link_walks <- function(connector, starts, q_grid = c(1, 3, 5, 10, 20, 30, 50
   load_md5 <- .knw_load_md5(conn, load)
   DBI::dbExecute(conn, sprintf("INSERT INTO %s_load (load_md5, discharge_load) VALUES ($1, $2) ON CONFLICT DO NOTHING",
                                cache), params = list(load_md5, load))
-  list(load = load, load_md5 = load_md5, walk_md5 = knw_walk_md5())
+  list(load = load, load_md5 = load_md5, walk_md5 = walk_md5)
 }
 
 # the flow load's md5, taken by Postgres, so the key is the same from any R. `load` is forced first: passed as a
@@ -306,10 +360,16 @@ knw_discharge_load <- function(conn) {
 #' keys every row on it, and every grade table records it as `walk_md5`, which
 #' `0320`, `0325` and `0330` compare with this value (#87).
 #'
+#' The window walk (`inst/sql/ch_dist_profile_window.sql`, #226) is another
+#' file with its own md5, which only its own cache rows are keyed on: no grade
+#' is walked by it, so nothing compares a grade with it.
+#'
+#' @param window `logical(1)` the window walk's md5 instead of the annual walk's.
 #' @return `character(1)`, an md5 in hex.
 #' @export
 #' @examples
 #' knw_walk_md5()
-knw_walk_md5 <- function() {
-  unname(tools::md5sum(system.file("sql/ch_dist_profile.sql", package = "knowledge", mustWork = TRUE)))
+knw_walk_md5 <- function(window = FALSE) {
+  chk::chk_flag(window)
+  unname(tools::md5sum(.knw_walk_file(window)))
 }

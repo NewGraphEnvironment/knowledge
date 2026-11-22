@@ -133,6 +133,9 @@ knw_link_flow_window <- function(conn, linear_feature_id, windows) {
   DBI::dbWriteTable(conn, tmp, data.frame(linear_feature_id = unique(linear_feature_id)),
                     temporary = TRUE, overwrite = TRUE)
   on.exit(try(DBI::dbExecute(conn, paste("DROP TABLE IF EXISTS", tmp)), silent = TRUE), add = TRUE)
+  # without its row count the planner takes a new temporary table for thousands of rows and joins the whole
+  # network to it: two segments took 168 s on the published build's database, and 3 s once analysed
+  DBI::dbExecute(conn, paste("ANALYZE", tmp))
   seg <- DBI::dbGetQuery(conn, .knw_link_flow_sql(tmp, fwa = fwa, q = q))
   if (anyDuplicated(seg$linear_feature_id)) stop("a segment matched twice", call. = FALSE)
   # a bigint arrives as integer64 on a default connection, and base ifelse() copies its bits into a double

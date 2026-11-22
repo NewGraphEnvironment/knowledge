@@ -154,8 +154,12 @@ test_that("a window's flow is wet's, on the segment MAD came from and its pick s
   wet_says <- wet::wet_flow_window(data.frame(linear_feature_id = picked$id, source = picked$source,
                                               month = picked$month, q_m3s = picked$q),
                                    data.frame(window = c("a", "b"), start = win$start, end = win$end))
-  expect_identical(f$flow_0801_0930[1:2], wet_says$q_m3s[wet_says$window == "a"][match(c(10, 21), wet_says$linear_feature_id[wet_says$window == "a"])])
-  expect_identical(f$flow_0815_0915[1:2], wet_says$q_m3s[wet_says$window == "b"][match(c(10, 21), wet_says$linear_feature_id[wet_says$window == "b"])])
+  wet_at <- function(w) {
+    x <- wet_says[wet_says$window == w, ]
+    x$q_m3s[match(c(10, 21), x$linear_feature_id)]
+  }
+  expect_identical(f$flow_0801_0930[1:2], wet_at("a"))
+  expect_identical(f$flow_0815_0915[1:2], wet_at("b"))
 })
 
 test_that("a segment without every month on its pick source is refused, not read short", {
