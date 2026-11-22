@@ -101,3 +101,16 @@
   500; the committed evidence log is now this cold pass) and wrote byte-identical tables (`out_md5` unchanged); the
   scoring, read back from its caches in 46 s, changed nothing but the run record's `head` and `evidence_head`. The
   cold scoring's log stays as `20261122_chinook_window_tune.txt`; the rerun's is `...-rerun.txt`.
+
+## Review round 2, 2026-11-22
+
+- Round 2 (`review-round2.md`): no bug; 2 fragile findings, both fixed. One sat inside round 1's fix: the month
+  check held the number of flows to the number of months, not each month once (August twice and no September
+  passed). The other: the weighted sum had no order, so its last bit could depend on row order for three months or
+  more. It confirmed round 1's other fixes by mutation and the rule-commit guard on six states of a scratch clone.
+- Because a finding sat inside a fix, the loop ends on an enumeration: `review-enumeration.md` lists the 14 ways a
+  window's flow can be wrong at a segment with each one's guard, and a mutation table over the walk file (14
+  mutations, each red; unmutated 15 of 15 green). New: a fixture test that runs the walk's own text, table names
+  swapped, on a line of five malformed segments and one whole one; the walk refuses a repeated month and weights
+  that are not positive shares summing to 1; the evidence pre-count holds the same three row conditions and counts
+  flows that are not numbers.

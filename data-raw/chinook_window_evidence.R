@@ -99,23 +99,28 @@ cat("wet:          ", as.character(utils::packageVersion("wet")), "\n\n")
 wts <- .knw_window_weights(spawn$start, spawn$end)
 months <- sort(unique(c(wts$months, .knw_window_weights(rear$start, rear$end)$months)))
 t0 <- Sys.time()
+# the walk's own three conditions on a segment (as many flows as months, each month once, one source), and a flow
+# that is not a number, which the walk would take as larger than any size
 short <- DBI::dbGetQuery(conn, sprintf("
   SELECT count(*) AS segments,
          count(*) FILTER (WHERE n_src <> 1) AS two_sources,
          count(*) FILTER (WHERE n_annual <> 1) AS annual_not_once,
-         count(*) FILTER (WHERE n_win <> %d) AS window_short
+         count(*) FILTER (WHERE n_win <> %1$d OR n_win_months <> %1$d) AS window_short,
+         count(*) FILTER (WHERE n_nan > 0) AS not_a_number
   FROM (SELECT linear_feature_id, count(DISTINCT source) AS n_src,
                count(q_m3s) FILTER (WHERE month = 0) AS n_annual,
-               count(q_m3s) FILTER (WHERE month IN (%s)) AS n_win
+               count(q_m3s) FILTER (WHERE month IN (%2$s)) AS n_win,
+               count(DISTINCT month) FILTER (WHERE month IN (%2$s) AND q_m3s IS NOT NULL) AS n_win_months,
+               count(*) FILTER (WHERE month IN (0, %2$s) AND q_m3s = 'NaN') AS n_nan
         FROM discharge.fwa_v1_segment_monthly
         WHERE scenario = 'historical' AND pick GROUP BY 1) x", length(months), paste(months, collapse = ", ")))
 cat(sprintf(paste("picked segments in the load: %.0f; on two sources %.0f; annual flow not once %.0f;",
-                  "a window month (%s) short %.0f (%.0f s)\n"),
+                  "a window month (%s) short or twice %.0f; a flow that is not a number %.0f (%.0f s)\n"),
             short$segments, short$two_sources, short$annual_not_once, paste(months, collapse = ", "),
-            short$window_short, secs(t0)))
-if (short$two_sources + short$annual_not_once + short$window_short > 0) {
-  stop("a picked segment lacks a window month, or is picked on two sources: the window walk would pass over it",
-       call. = FALSE)
+            short$window_short, short$not_a_number, secs(t0)))
+if (short$two_sources + short$annual_not_once + short$window_short + short$not_a_number > 0) {
+  stop("a picked segment lacks a window month, carries one twice, is picked on two sources or has a flow that is ",
+       "not a number: the window walk would pass over it or misread it", call. = FALSE)
 }
 
 # ---- the visits, as 0320 reads them ----

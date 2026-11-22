@@ -10,10 +10,14 @@
 --   - the signature takes the window as two arrays: `months`, and each month's `weights` in the window's mean
 --     (the share of the window's days that fall in it; knowledge:::.knw_window_weights() takes them from
 --     wet::wet_flow_window(), so the walk weighs months as wet does);
---   - the arrays are checked: one length, at least one month, no NULL in either;
---   - a segment's flow is the weighted sum of those months on the source, taken only where every month
---     carries a flow on one source (the count is of flows, not rows), so a segment missing a month, or with
---     no flow in one, is passed over, never read short. `large_mad` carries that window flow.
+--   - the arrays are checked: one length, at least one month, no NULL in either, no month twice, weights
+--     positive and summing to 1;
+--   - a segment's flow is the weighted sum of those months on the source, summed in month order so its last
+--     bit does not depend on the order rows arrive in, and taken only where each month of the window carries
+--     one flow, on one source: as many flows as months, as many distinct months as months, one source. A
+--     segment missing a month, with no flow in one, with a month twice, or picked on two sources is passed
+--     over, never read short. `large_mad` carries that window flow.
+--     tests/testthat/test-link_walks.R runs this file's text on fixture tables holding each such segment.
 -- With months = {0} and weights = {1} this is ch_dist_profile.sql's walk, which the same test file checks on
 -- the database. The published walk is not this file: its md5 (knw_walk_md5()) is on every grade record.
 -- window flow: begin
@@ -53,6 +57,12 @@ BEGIN
      OR array_position(months, NULL) IS NOT NULL OR array_position(weights, NULL) IS NOT NULL THEN
     RAISE EXCEPTION 'months and weights must be arrays of one length, at least one month, with no NULL';
   END IF;
+  IF (SELECT count(DISTINCT x) FROM unnest(months) x) <> cardinality(months) THEN
+    RAISE EXCEPTION 'months must not repeat a month';
+  END IF;
+  IF (SELECT bool_or(x <= 0) OR abs(sum(x) - 1) > 1e-9 FROM unnest(weights) x) THEN
+    RAISE EXCEPTION 'weights must be positive and sum to 1';
+  END IF;
   -- window flow: end
   LOOP
     done := '{}';
@@ -65,12 +75,13 @@ BEGIN
             FROM whse_basemapping.fwa_stream_networks_sp s
             -- window flow: begin
             JOIN LATERAL (
-              SELECT sum(m.q_m3s * w.wt) AS q_m3s
+              SELECT sum(m.q_m3s * w.wt ORDER BY m.month) AS q_m3s
                 FROM discharge.fwa_v1_segment_monthly m
                 JOIN unnest(months, weights) AS w(mo, wt) ON w.mo = m.month
                WHERE m.linear_feature_id = s.linear_feature_id AND m.scenario = 'historical'
                  AND ((src = 'pick' AND m.pick) OR m.source = src)
-              HAVING count(m.q_m3s) = cardinality(months) AND count(DISTINCT m.source) = 1) q ON true
+              HAVING count(m.q_m3s) = cardinality(months) AND count(DISTINCT m.month) = cardinality(months)
+                 AND count(DISTINCT m.source) = 1) q ON true
             -- window flow: end
            WHERE s.blue_line_key = cur_blk AND s.downstream_route_measure < cur_m
              AND q.q_m3s >= t.qq AND s.edge_type NOT IN (1100, 1150, 1300, 1350, 2300, 1400, 1450)

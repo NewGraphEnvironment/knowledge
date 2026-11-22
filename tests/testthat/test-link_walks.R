@@ -222,8 +222,8 @@ test_that("the window walk reads no window short: a month with no flow is a miss
     DBI::dbGetQuery(conn, sprintf("SELECT * FROM pg_temp.ch_dist_profile_window(360886335, 1520, '{1,3}', 'pick',
                                    %s, %s) ORDER BY qmin", months, weights))
   }
-  # August alone at half weight finds a river on this start's own line
-  aug <- walk("'{8}'", "'{0.5}'")
+  # August alone finds a river on this start's own line
+  aug <- walk("'{8}'", "'{1}'")
   expect_identical(aug$status, c("found", "found"))
   # with a month no segment carries (13), every segment is short a month: none may be taken on August's half alone,
   # and the walk runs to the sea
@@ -236,6 +236,65 @@ test_that("the window walk reads no window short: a month with no flow is a miss
   expect_error(walk("'{8,9}'", "'{0.53125,NULL}'"), "no NULL")
   expect_error(walk("'{8,NULL}'", "'{0.5,0.5}'"), "no NULL")
   expect_error(walk("'{}'", "'{}'"), "one length")
+  # a month twice, and weights that are not a window's shares, are refused
+  expect_error(walk("'{8,8}'", "'{0.5,0.5}'"), "repeat a month")
+  expect_error(walk("'{8,9}'", "'{0.5,0.4}'"), "sum to 1")
+  expect_error(walk("'{8,9}'", "'{1.5,-0.5}'"), "positive")
+})
+
+# The walk reads the Atlas and the flow table by name, and the live load holds no malformed segment, so no start on
+# the live network reaches the month check's branches. This runs the window walk's own text, with only its two table
+# names and its name swapped, on a line whose segments each break one condition; the walk must pass every one and
+# take the whole segment at the bottom.
+window_walk_fixture <- function(conn, sql = readLines(.knw_walk_file(TRUE))) {
+  swap <- c("whse_basemapping.fwa_stream_networks_sp" = "knw_fx_walk_fwa",
+            "discharge.fwa_v1_segment_monthly" = "knw_fx_walk_q",
+            "pg_temp.ch_dist_profile_window(" = "pg_temp.ch_dist_profile_window_fx(")
+  sql <- paste(sql, collapse = "\n")
+  for (from in names(swap)) {
+    if (!grepl(from, sql, fixed = TRUE)) stop("the window walk no longer names ", from, call. = FALSE)
+    sql <- gsub(from, swap[[from]], sql, fixed = TRUE)
+  }
+  for (t in c("knw_fx_walk_fwa", "knw_fx_walk_q")) DBI::dbExecute(conn, paste("DROP TABLE IF EXISTS", t))
+  DBI::dbExecute(conn, "CREATE TEMPORARY TABLE knw_fx_walk_fwa (linear_feature_id bigint, blue_line_key integer,
+    watershed_key integer, downstream_route_measure double precision, upstream_route_measure double precision,
+    edge_type integer, waterbody_key integer, wscode_ltree ltree, geom geometry(LineString, 3005))")
+  DBI::dbExecute(conn, "CREATE TEMPORARY TABLE knw_fx_walk_q (linear_feature_id bigint, scenario text, period text,
+    month integer, pick boolean, q_m3s double precision, source text)")
+  # one line, walked down from measure 1000: six segments, the nearest first
+  seg <- data.frame(id = c(60, 50, 40, 30, 20, 10), lo = c(900, 750, 600, 450, 300, 0), hi = c(950, 800, 650, 500, 350, 100))
+  DBI::dbExecute(conn, sprintf("INSERT INTO knw_fx_walk_fwa VALUES %s", paste(sprintf(
+    "(%d, 1, 1, %d, %d, 1000, NULL, '100', ST_GeomFromText('LINESTRING(0 %d, 0 %d)', 3005))", seg$id, seg$lo, seg$hi,
+    seg$lo, seg$hi), collapse = ", ")))
+  q <- rbind(
+    data.frame(id = 60, period = "a", month = 8, q = 100, source = "wet_balance"),                # September missing
+    data.frame(id = 50, period = "a", month = 8:9, q = c(100, NA), source = "wet_balance"),      # no flow in September
+    data.frame(id = 40, period = c("a", "b"), month = 8, q = 100, source = "wet_balance"),       # August twice, no September
+    data.frame(id = 30, period = c("a", "b", "a"), month = c(8, 8, 9), q = 100, source = "wet_balance"),  # August twice
+    data.frame(id = 20, period = "a", month = 8:9, q = 100, source = c("wet_balance", "pcic_routed")),    # two sources
+    data.frame(id = 10, period = "a", month = 8:9, q = c(100, 60), source = "wet_balance")       # whole
+  )
+  DBI::dbExecute(conn, sprintf("INSERT INTO knw_fx_walk_q VALUES %s", paste(sprintf(
+    "(%d, 'historical', '%s', %d, true, %s, '%s')", q$id, q$period, q$month, ifelse(is.na(q$q), "NULL", q$q), q$source),
+    collapse = ", ")))
+  DBI::dbExecute(conn, sql)
+  DBI::dbGetQuery(conn, "SELECT * FROM pg_temp.ch_dist_profile_window_fx(1, 1000, '{10,1000}', 'pick', '{8,9}',
+                         '{0.25,0.75}') ORDER BY qmin")
+}
+
+test_that("on a line of malformed segments the window walk takes only the whole one, at its weighted flow", {
+  conn <- skip_if_no_pg()
+  ext <- DBI::dbGetQuery(conn, "SELECT extname FROM pg_extension WHERE extname IN ('postgis', 'ltree')")$extname
+  skip_if_not(all(c("postgis", "ltree") %in% ext), "no postgis or ltree in the database")
+  withr::defer(for (t in c("knw_fx_walk_fwa", "knw_fx_walk_q")) DBI::dbExecute(conn, paste("DROP TABLE IF EXISTS", t)))
+  w <- window_walk_fixture(conn)
+  expect_identical(w$status, c("found", "none"))
+  # past five segments that each break one condition, to segment 10: 0.25 of August's 100 and 0.75 of September's 60
+  expect_identical(as.numeric(w$large_lfid[1]), 10)
+  expect_identical(w$large_mad[1], 70)
+  expect_identical(w$dist_m[1], 900)
+  # no segment of the line carries 1000 m3/s, and the line ends at the sea
+  expect_true(is.na(w$large_lfid[2]))
 })
 
 test_that("a window walk finds rivers by their window flow, and says so in the source", {
