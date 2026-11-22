@@ -22,6 +22,12 @@ knitr::opts_chunk$set(
   message = FALSE,
   warning = FALSE
 )
+# a figure's alt text is its caption without the code-font marks: knitr gives alt the caption's source, backticks
+# and all, and a screen reader would read them out
+knitr::opts_hooks$set(fig.cap = function(options) {
+  if (is.null(options$fig.alt)) options$fig.alt <- gsub("`", "", options$fig.cap, fixed = TRUE)
+  options
+})
 library(knowledge)
 library(ggplot2)
 ```
@@ -144,7 +150,7 @@ penalty that finds one best value, not a full posterior (the spread of values th
 the thresholds are reported as one choice and a range, not a distribution. Two things should change: a check on how
 the choice is made does not fully hold its test data out, and the two models the publishing test compares treat a site
 from an unfamiliar data set or period differently. A third, stream slopes that depended on where fish were caught, is
-answered: the habitat definitions are tuned on `link`'s minimal network, which does not cut streams at fish records.
+answered: the habitat definitions are tuned on [`link`](https://newgraphenvironment.github.io/link/)’s minimal network, which does not cut streams at fish records.
 The terms are gathered in a [glossary](#terms) at the end.
 
 ## What does the tuning do? {#tuning}
@@ -165,7 +171,7 @@ sections explain.)
 
 The groups are dealt into `r val("folds")` **folds**, and each fold in turn is left out of the fit and scored. Habitat
 definitions whose scores lie within one standard error of their difference from the best are **close calls**, and
-among them we choose the one that changes `link`'s current habitat definition least, passing over any whose
+among them we choose the one that changes `link`’s current habitat definition least, passing over any whose
 near-river exception reaches less than `r val("d_floor")` m. Then a second model, the **curve**, a smooth surface of how often the
 species is caught against stream size, distance to a river and slope, gives every stream the species can reach that
 has a size and a slope a **grade**. The **publishing test** publishes those grades only if the curve scores better on
@@ -199,7 +205,7 @@ knitr::kable(data.frame(
     "Whole watershed groups are left out of each fit and scored",
     "Yes: the standard error of each difference, over watershed groups",
     "No: each left-out group's base rate is refitted first",
-    "One standard error; the close call nearest link's current habitat definition, passing over short near-river exceptions",
+    "One standard error; the close call nearest `link`’s current habitat definition, passing over short near-river exceptions",
     "Not fully: the scores it chooses from were fitted with its test groups in",
     "Yes, scale 2.5, but normal not Cauchy, complementary log-log not logit, and on the sampling terms only",
     "No: it is fitted as a penalty, which finds one best value",
@@ -211,7 +217,7 @@ knitr::kable(data.frame(
     "Not necessarily: the area fished has a fitted slope, so the rate per square metre can change with area",
     "A miss is read as no catch at that visit",
     "No: placement, slope and flow are estimates read as exact",
-    "Nearly: the tuning reads link's minimal network, which does not cut streams at fish records"),
+    "Nearly: the tuning reads `link`’s minimal network, which does not cut streams at fish records"),
   verdict = c("follows the books", "follows the books", "departs, defensibly", "departs", "should change",
               "follows the books", "departs, defensibly", "departs, defensibly", "departs", "follows the books",
               "departs", "should change", "departs, defensibly", "departs", "departs", "follows the books"),
@@ -246,7 +252,7 @@ The tuning takes the standard error (SE) of each habitat definition's difference
 the units it leaves out, as the book does over sites [@mcelreath2020StatisticalRethinking, p. 228]. Every habitat
 definition within `r val("se_region")` SE of the best is a close call, and the published table gives the range of
 close calls beside the choice, closer to what the book asks than a single winner [@mcelreath2020StatisticalRethinking,
-p. 225]. The width of one SE is a convention neither book sets, and choosing the close call nearest `link`'s current
+p. 225]. The width of one SE is a convention neither book sets, and choosing the close call nearest `link`’s current
 habitat definition is a decision the scores do not make.
 
 Choosing among thousands of habitat definitions also flatters the winner's score. *Bayesian Data Analysis* warns that
@@ -394,16 +400,16 @@ prior's centre; the curve gives it the most common level in the fit. So the two 
 ## Does a stream's slope depend on the catch? {#cuts}
 
 A predictor should not be shaped by the outcome it predicts. The habitat definitions read the slope of the stretch of
-stream, or segment, a site sits on, and `link`'s full network cuts a stream into segments at, among other places, the
+stream, or segment, a site sits on, and `link`’s full network cuts a stream into segments at, among other places, the
 highest record of each species it models on that stream. So there a site that caught fish is more likely to start a
-short segment of its own, whose slope is worked out from the stream just above the catch. `link`'s earlier build cut
+short segment of its own, whose slope is worked out from the stream just above the catch. `link`’s earlier build cut
 at every record; its current one cuts only at the highest, among other changes, and there a site with fish starts its
-own segment less often than before, but still several times as often as an empty site. So the tuning reads `link`'s
+own segment less often than before, but still several times as often as an empty site. So the tuning reads `link`’s
 minimal network, which makes no cut at fish records, crossings or the ends of stretches whose habitat was mapped by
 hand; it still cuts where one Atlas line meets the next, at natural barriers and at slopes a species cannot pass.
 There a site with fish starts its own segment about as often as an empty one.
 
-```{r cuts, fig.height = 2.8, fig.cap = "The share of site visits on the stream branch that start a segment of their own, for visits that caught fish and visits that did not, on link's full network in its earlier and current builds, and on its minimal network, which the tuning reads."}
+```{r cuts, fig.height = 2.8, fig.cap = "The share of site visits on the stream branch that start a segment of their own, for visits that caught fish and visits that did not, on `link`’s full network in its earlier and current builds, and on its minimal network, which the tuning reads."}
 nets <- c(published_92 = "full network, earlier build", published_145 = "full network, current build",
           minimal = "minimal network, tuned on")
 pr$net <- factor(nets[pr$network], levels = rev(nets))
@@ -445,7 +451,7 @@ full.
   cheap tests ride with it: the area fished as a fixed exposure, and a simulation of what the prior implies for the
   catch.
 - **Slopes measured other ways** (`r issue(70)`): modelled slopes checked against field-measured ones, and slopes over
-  fixed lengths of stream scored beside `link`'s segment slope.
+  fixed lengths of stream scored beside `link`’s segment slope.
 
 ## What this review did not test {#limits}
 
@@ -470,13 +476,13 @@ full.
 - **Deviance.** How badly a model predicts the catch, summed over sites; lower is better.
 - **Fold.** One of the `r val("folds")` sets the watershed groups are dealt into; each in turn is left out of the fit
   and scored.
-- **Full network.** `link`'s streams cut, beyond the minimal network's cuts, at fish records, at crossings and at the
+- **Full network.** `link`’s streams cut, beyond the minimal network's cuts, at fish records, at crossings and at the
   ends of hand-mapped habitat; the network `link` draws habitat on. Its current build cuts at each species' highest
   record on a stream and at slopes only where a species' access changes; its earlier build cut at every record and
   every change of slope class.
 - **Grade.** A stream's expected use per standard electrofishing visit, from the curve.
 - **Habitat definition.** The few limits on a stream's size and slope that say where a species spawns or rears.
-- **Minimal network.** `link`'s streams without the cuts at fish records, crossings and the ends of hand-mapped
+- **Minimal network.** `link`’s streams without the cuts at fish records, crossings and the ends of hand-mapped
   habitat; still cut where Atlas lines meet, at natural barriers and at slopes a species cannot pass.
 - **Partial pooling.** Letting groups share what they have in common, so a group with little data borrows from the
   rest; the alternative is a base rate fitted to each group alone.

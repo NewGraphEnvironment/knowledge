@@ -21,6 +21,12 @@ knitr::opts_chunk$set(
   message = FALSE,
   warning = FALSE
 )
+# a figure's alt text is its caption without the code-font marks: knitr gives alt the caption's source, backticks
+# and all, and a screen reader would read them out
+knitr::opts_hooks$set(fig.cap = function(options) {
+  if (is.null(options$fig.alt)) options$fig.alt <- gsub("`", "", options$fig.cap, fixed = TRUE)
+  options
+})
 library(dplyr)
 library(ggplot2)
 sf::sf_use_s2(FALSE)
@@ -151,11 +157,11 @@ modelling engine, runs the recipe: it cuts the streams of the BC Freshwater Atla
 **segments**, works out which segments each species can reach, and classifies their habitat. Because a recipe is a set of
 files, a model can be changed, run beside another and traced back to the values that produced it.
 
-`knowledge`, the package this article belongs to, is our evidence tool for link's habitat definitions. It starts from
+[`knowledge`](https://newgraphenvironment.github.io/knowledge/), the package this article belongs to, is our evidence tool for `link`’s habitat definitions. It starts from
 what is known about each species' life history, from the published literature and past reports, and the biology sets
 the shape of a habitat definition, such as young chinook rearing in small streams close to a large river. Where the Province's
-fish sampling records are rich enough, they tune its values: knowledge scores candidate values against where sampling
-caught the species and where it did not, keeps the smallest change to link's standard settings that fits about as well
+fish sampling records are rich enough, they tune its values: `knowledge` scores candidate values against where sampling
+caught the species and where it did not, keeps the smallest change to `link`’s standard settings that fits about as well
 as the best, and checks it on parts of the province it was not chosen from ([how the tuning
 works](tuning-method.html)). A habitat map steers where restoration and conservation effort goes, and one tuned
 this way rests on where fish have actually been found.
@@ -165,7 +171,7 @@ behind this article and its checks.
 
 A segment's slope is its drop over its whole length, so where a stream is cut decides the slope a habitat definition is
 tested on, and some cuts fall exactly where fish were caught. Change the cuts and the habitat definition chosen from
-those catches can change. Chinook rearing's slope limit is **`r lim(s_of("published")$grad_max)`** on link's full network and
+those catches can change. Chinook rearing's slope limit is **`r lim(s_of("published")$grad_max)`** on `link`’s full network and
 **`r lim(s_of("minimal")$grad_max)`** on its minimal network, which leaves out the cuts at fish records, at crossings
 and at hand-mapped habitat. Yet the two habitat definitions draw much the same habitat; on the map they differ in short pieces
 of small streams:
@@ -218,7 +224,7 @@ lab_over <- streams[streams$stream_order >= 6 & streams$km >= 20, ]
 stopifnot("Fraser River" %in% lab_over$gnis_name, nrow(lab_over) >= 3)
 ```
 
-```{r map, fig.height = round(over_h + zoom_h, 2), fig.cap = paste0("Chinook rearing habitat in the ", mrow$gnis_name, " watershed group, around the ", mrow$joins, " ", n0(mrow$town_km), " km ", mrow$compass, " of ", mrow$town, ", under two habitat definitions, both run on link's full network. Grey: drawn by both. Black: drawn only by the habitat definition tuned on each segment's own slope (a ", lim(s_of("published")$grad_max), " limit). Steel blue: drawn only by the habitat definition tuned on the minimal network, reading each segment's minimal-network slope (", lim(s_of("parent")$grad_max), "). Line width follows stream order. The lower panel enlarges the box outlined above. Stream names are the Freshwater Atlas's. Basemap: Esri World Topographic Map and World Shaded Relief.")}
+```{r map, fig.height = round(over_h + zoom_h, 2), fig.cap = paste0("Chinook rearing habitat in the ", mrow$gnis_name, " watershed group, around the ", mrow$joins, " ", n0(mrow$town_km), " km ", mrow$compass, " of ", mrow$town, ", under two habitat definitions, both run on `link`’s full network. Grey: drawn by both. Black: drawn only by the habitat definition tuned on each segment's own slope (a ", lim(s_of("published")$grad_max), " limit). Steel blue: drawn only by the habitat definition tuned on the minimal network, reading each segment's minimal-network slope (", lim(s_of("parent")$grad_max), "). Line width follows stream order. The lower panel enlarges the box outlined above. Stream names are the Freshwater Atlas's. Basemap: Esri World Topographic Map and World Shaded Relief.")}
 # on the relief basemap the shared habitat is quiet and the two differences carry the map, each over a thin white casing
 cols_map <- stats::setNames(unname(pal[c("mid", "ink", "accent")]), lv)
 lab_col <- gq::gq_reg_main()$layers$stream_labels$label
@@ -342,12 +348,12 @@ site_seg$lab <- sprintf("%s: %s over %s", site_seg$net, grad(site_seg$gradient),
                                paste(n0(site_seg$length_metre), "m")))
 ```
 
-Both of link's networks cut a stream where one Atlas line meets the next, at natural barriers and at the steep sections
+Both of `link`’s networks cut a stream where one Atlas line meets the next, at natural barriers and at the steep sections
 a species cannot pass. The full network adds cuts the minimal network does not make, among them crossings, the ends of
-stretches whose habitat has been mapped by hand, and records of the species link models in each watershed group (in the
-build used here, each such species' highest record on each stream, drawn from bcfishobs
-[@norris2024smnorrisbcfishobs]). link cuts at those records so that a segment can say whether the species has been
-seen at or above it, as bcfishpass [@norris2024smnorrisbcfishpass] does. Every habitat definition is then tested on the
+stretches whose habitat has been mapped by hand, and records of the species `link` models in each watershed group (in the
+build used here, each such species' highest record on each stream, drawn from [`bcfishobs`](https://github.com/smnorris/bcfishobs)
+[@norris2024smnorrisbcfishobs]). `link` cuts at those records so that a segment can say whether the species has been
+seen at or above it, as [`bcfishpass`](https://github.com/smnorris/bcfishpass) [@norris2024smnorrisbcfishpass] does. Every habitat definition is then tested on the
 slope of the shorter segment.
 
 An electrofishing visit that caught fish is often such a record, so the cut lands at the visit, and the slope tested
@@ -468,11 +474,11 @@ The shorter segment does not always read the steeper slope. In the `r ord3` pane
 `r n0(top3)` m above the visit, and the steeper water above it, which the minimal network's segment averages in, is
 read on its own.
 
-How often does it happen? If link cut visits with fish and visits without alike, a slope limit would be judged on the
+How often does it happen? If `link` cut visits with fish and visits without alike, a slope limit would be judged on the
 same footing at both. On the full network it does not: a visit that caught fish starts a segment of its own far more
 often than one that caught none. The minimal network takes that difference away.
 
-```{r premise, fig.height = 2.6, fig.cap = paste0("Electrofishing visits that start a segment of their own, on three of link's networks: dark, visits where fish of any species were caught; light, visits where none were. A visit starts its own segment when the segment begins between 1 m below it and 5 m above it. The same ", n0(sum(pm$visits[pm$network == "minimal"])), " visits are counted on each network (", n0(pm$visits[pm$network == "minimal" & pm$catch_status == "fish"]), " with fish, ", n0(pm$visits[pm$network == "minimal" & pm$catch_status == "zero"]), " without): those with a fished area in the usual range, on the stream lines the tuning scores. The networks are link ", unique(pm$link[pm$network == "published_92"]), "'s, link ", unique(pm$link[pm$network == "published_145"]), "'s and link ", unique(pm$link[pm$network == "minimal"]), "'s.")}
+```{r premise, fig.height = 2.6, fig.cap = paste0("Electrofishing visits that start a segment of their own, on three of `link`’s networks: dark, visits where fish of any species were caught; light, visits where none were. A visit starts its own segment when the segment begins between 1 m below it and 5 m above it. The same ", n0(sum(pm$visits[pm$network == "minimal"])), " visits are counted on each network (", n0(pm$visits[pm$network == "minimal" & pm$catch_status == "fish"]), " with fish, ", n0(pm$visits[pm$network == "minimal" & pm$catch_status == "zero"]), " without): those with a fished area in the usual range, on the stream lines the tuning scores. The networks are `link` ", unique(pm$link[pm$network == "published_92"]), "'s, `link` ", unique(pm$link[pm$network == "published_145"]), "'s and `link` ", unique(pm$link[pm$network == "minimal"]), "'s.")}
 lab_pm <- c(published_92 = "An earlier full network,\ncut at every record",
             published_145 = "The full network compared here, cut at each\nspecies' highest record on a stream",
             minimal = "The minimal network, no cuts at\nrecords, crossings or mapped habitat")
@@ -500,15 +506,15 @@ cuts move them.
 
 ## How does the tuning choose a habitat definition?
 
-A habitat definition decides how much habitat link draws, so it should be one the fish records support. The tuning
+A habitat definition decides how much habitat `link` draws, so it should be one the fish records support. The tuning
 tries many candidate habitat definitions, each a different set of parameters, and scores each by how well it predicts where chinook were caught in watershed groups left out of the
 fit; lower is better. For chinook rearing it scored about `r n0(round(su$n_visits[1], -2))` visits in
 `r n_groups` watershed groups. A score carries error, so every candidate within one standard error of the best is a
 **close call**: the records cannot rank close calls apart. For chinook rearing the tuning varies the three parts of the habitat definition:
 the smallest stream (by flow or by channel width), the steepest slope, and the allowance near a large river (how large
 the river, and how close). Of the close calls the
-tuning chooses the one closest to link's standard settings for the species, and among equals the best scorer; for
-chinook rearing every close call differs from link's standard settings in all three parts, so the choice is the best
+tuning chooses the one closest to `link`’s standard settings for the species, and among equals the best scorer; for
+chinook rearing every close call differs from `link`’s standard settings in all three parts, so the choice is the best
 scorer.
 
 ## What does each network choose?
@@ -518,8 +524,10 @@ the only differences. Two of the four read a slope from somewhere else onto the 
 each segment's **minimal parent**, the minimal-network segment it lies within, and the whole Atlas line it lies on.
 
 ```{r setups}
-how <- c(published = "link's full network, each segment reading its own slope (how link applies a habitat definition)",
-         minimal = "link's minimal network, without the cuts at fish records, crossings and hand-mapped habitat",
+how <- c(published = paste("<code>link</code>'s full network, each segment reading its own slope",
+                           "(how <code>link</code> applies a habitat definition)"),
+         minimal = paste("<code>link</code>'s minimal network, without the cuts at fish records, crossings and",
+                         "hand-mapped habitat"),
          parent = "The full network's segments, each reading its minimal parent's slope",
          atlas = "The full network's segments, each reading the slope of the whole Atlas line it lies on")
 yn <- function(v) ifelse(v, "yes", "no")
@@ -528,7 +536,7 @@ tb <- data.frame(`Segments and slope` = unname(how[su$setup]),
                  `A close call on the full network's records?` = yn(vapply(su$setup, in_reg, TRUE, region_of = "published")),
                  `On the minimal network's?` = yn(vapply(su$setup, in_reg, TRUE, region_of = "minimal")),
                  check.names = FALSE)
-knitr::kable(tb, format = "html", align = "lrcc", row.names = FALSE,
+knitr::kable(tb, format = "html", escape = FALSE, align = "lrcc", row.names = FALSE,
              caption = "The chinook rearing habitat definition chosen on each network and slope.") |>
   kableExtra::kable_styling(full_width = FALSE, font_size = 13) |>
   kableExtra::footnote(general_title = "", general = paste0(
@@ -544,12 +552,12 @@ they choose
 cuts they choose `r lim(s_of("minimal")$grad_max)`, which is a close call on the full network's records as well. Given
 each segment's minimal parent's slope, the full network chooses the minimal network's habitat definition exactly. The Atlas line's
 slopes choose `r lim(s_of("atlas")$grad_max)`, in a habitat definition that is a close call on neither network's records; these
-runs do not show why. How much habitat each habitat definition draws, run through all of link's steps on the segments it was tuned on,
+runs do not show why. How much habitat each habitat definition draws, run through all of `link`’s steps on the segments it was tuned on,
 differs by under `r pc(ceiling(100 * hab_spread) / 100)` across the four.
 
 ## What does it mean for someone using the thresholds?
 
-This package's chinook rearing thresholds, tuned on `r tuned_on`, were tuned on link's minimal network, each segment
+This package's chinook rearing thresholds, tuned on `r tuned_on`, were tuned on `link`’s minimal network, each segment
 reading its own slope; [how the tuning works](tuning-method.html#cuts) says why. On another network, or with slopes read
 another way, the same chinook records choose another habitat definition: the slope limit reads
 `r lim(s_of("published")$grad_max)`, `r lim(s_of("minimal")$grad_max)` or `r lim(s_of("atlas")$grad_max)`, while the
@@ -577,14 +585,14 @@ distance from a segment's downstream end.
 
 ## How was this done?
 
-The numbers were bundled on `r x$meta$written` from the tuning runs and link builds the research notes
+The numbers were bundled on `r x$meta$written` from the tuning runs and `link` builds the research notes
 describe. When it was written, the share of visits starting their own segment, the four tunings'
 choices and habitat, and the other species' choices were checked against the logs that report them there. The visits are the
 Fisheries Data Information System's electrofishing records [@provinceofbritishcolumbia2022FisheriesData], placed on
-the Freshwater Atlas; their flows are [`wet`](https://www.newgraphenvironment.com/wet/)'s [@wet], mostly PCIC's
-modelled flow carried onto Atlas streams by New Graph's fork of `fwapg` [@norris_irvine2026NewGraphEnvironmentfwapg]; fresh runs link's habitat
+the Freshwater Atlas; their flows are [`wet`](https://www.newgraphenvironment.com/wet/)’s [@wet], mostly PCIC's
+modelled flow carried onto Atlas streams by New Graph's fork of [`fwapg`](https://smnorris.github.io/fwapg/) [@norris_irvine2026NewGraphEnvironmentfwapg]; `fresh` runs `link`’s habitat
 definitions. The methodology article answers this article's question in brief
-([Does where link cuts a stream change the habitat definitions?](tuning-method.html#cuts)). The maps' basemap is Esri's World Topographic Map
+([Does where `link` cuts a stream change the habitat definitions?](tuning-method.html#cuts)). The maps' basemap is Esri's World Topographic Map
 blended with its World Shaded Relief.
 
 ## Software and citation
