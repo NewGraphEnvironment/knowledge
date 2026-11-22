@@ -1,11 +1,11 @@
 verdict rule: research/chinook_window_flow.md first committed at 267fcd0624ad197ed2e8a735f813225c9a0b9714 and unchanged since
-HEAD:         6d6ff9708c2ba01b71dc082e4e2ed578f943ab7b 
+HEAD:         44857b2105debd4dec089e15338d4329dcc1bfae 
 stage:        score 
-started:      2026-11-22T06:48:45Z 
+started:      2026-11-22T07:10:16Z 
 
 published run: 20261103_0838 recommended mad>=0.75|g<=0.09|Q3@D1000 
 evidence:      data/fdis/derived_window 8331cd85b1e16670370d3591e437ca66;6a2e28f1afb46a02c357ac044f8d09e3;7f90c14104b4b4e5dbc7acd9d511bf64 
-               from c746c5829c605fb7711feba0ec9d4d93;6a2e28f1afb46a02c357ac044f8d09e3;2e0f0f419022da0f5ac51a3869486a80 at 3edfa6f8a033953bef8fdabd628d13b4567d9634 
+               from c746c5829c605fb7711feba0ec9d4d93;6a2e28f1afb46a02c357ac044f8d09e3;2e0f0f419022da0f5ac51a3869486a80 at a68762a835e043d656b982719303b53ff0158dcc 
 link thresholds at 193cb8aa401376d4278b6c5ee5b24cb57deab8e3 (ledger scripts/logs/habitat/20261103_evidence_build_ledger-derived_minimal.csv )
 workers: 12 
 
@@ -148,4 +148,4 @@ both without LFRA: scored in 0.1 min; 4212 visits (228 with CH) of 44 groups; re
 verdict: NO WINDOW READING BEATS MAD by the rule set before the run 
 
 wrote data/tune/flow_window 
-finished: 2026-11-22T06:49:31Z 
+finished: 2026-11-22T07:11:02Z 
