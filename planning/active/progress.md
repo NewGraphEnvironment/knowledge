@@ -40,3 +40,21 @@
   (3 s once analysed). `.knw_link_flow_window()` analyses its own; the existing function is left as it is, an issue
   to file.
 - Next: Phase 4, the evidence with a window.
+
+## Phase 4, 2026-11-22
+
+- Completed: `data-raw/chinook_window_evidence.R` and its run on the database's host (round trip 1.0 ms, no other
+  active session): `data/fdis/derived_window/` (ignored) with `flow_0801_0930` on all 45,529 visits and 258,496
+  window-walk rows on `pick@0815-0915` beside the 775,488 published; record
+  `data/tune/flow_window/ch_rear_window_evidence_run.csv`; log
+  `scripts/logs/flow_window/20261122_chinook_window_evidence.txt`.
+- Measured: 4,532,843 picked segments in the load, none short of a window month or on two sources. Phase 1's median
+  window share of MAD reproduced (0.590271; largest gap in a group's median 4.9e-15). The window walk: 500 starts in
+  7.3 s uncached on 8 workers, all 36,928 in 1.0 min cold (the committed log is the fourth pass, which read them from
+  `knw.walk_cache_window`). Found 233,984 of 258,496 rows, against 240,312 for the annual walk. The exact walk puts
+  a river within 1 km of 980 scored visits where Phase 1's ladder reading had 969: 11 more, none with chinook.
+- Three passes stopped, each on a check: 4 visits hold a tied parent's flow from before #161 (none scored); readr
+  does not round-trip 17 digits; md5 vectors named by path (`planning/active/findings.md`).
+- 1 visit has a MAD and no window flow above zero; 66 have no MAD above zero.
+- Filed #255 (`knw_link_flow()` takes minutes on a few segments).
+- Next: Phase 5, the smoke gates, then the four readings.

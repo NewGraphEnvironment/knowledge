@@ -112,7 +112,7 @@ Mine, stated so they can be overruled (mechanism, not scope):
 
 ## Phase 4: The evidence with a window (database, on its host)
 
-- [ ] `data-raw/chinook_window_evidence.R`: refuses unless it, `R/` and `inst/sql/` are committed; reads
+- [x] `data-raw/chinook_window_evidence.R`: refuses unless it, `R/` and `inst/sql/` are committed; reads
       `data/fdis/derived` and stops unless its md5s are the `CH_rear` summary's; stops unless the flow load is
       the grade record's; `knw_db_latency_check()`; logs `pg_stat_activity`. Adds `flow_0801_0930` to every
       visit through `knw_link_flow_window()`, walks every start on `pick` for 08-15 to 09-15 on the ladder
@@ -121,14 +121,14 @@ Mine, stated so they can be overruled (mechanism, not scope):
       width and regulation queries are not run; before any walk the script counts, over the whole load, the
       segments with a picked annual flow that lack one of the window's months on that source, and stops unless
       it is zero (G3); and it times 500 starts before the full set.
-- [ ] Assertions in the script: MAD read again equals `mad_pick` at every visit; the window column is present
+- [x] Assertions in the script: MAD read again equals `mad_pick` at every visit; the window column is present
       exactly where `mad_pick` is, and positive there (the curve drops a size with no log; G3); the published rows of all three tables are unchanged (same row count, and
       the original columns identical to the source).
-- [ ] Checks against Phase 1, printed: the median window share of MAD at the scored visits is
+- [x] Checks against Phase 1, printed: the median window share of MAD at the scored visits is
       `ch_rear_run.csv`'s `med_rear_visit`, and each group's median is `ch_rear_ratio_by_group.csv`'s (to 1e-9;
       Phase 1 ran on wet 0.4.36); how many
       visits' nearest window river differs between the exact walk and Phase 1's ladder approximation.
-- [ ] Run it: `data/fdis/derived_window/{visits_link,visits_species,walks}.csv` and `window_run.csv` (source
+- [x] Run it: `data/fdis/derived_window/{visits_link,visits_species,walks}.csv` and `window_run.csv` (source
       md5s, flow load, both walk md5s, weights, versions, commit), its fields also in tracked
       `data/tune/flow_window/ch_rear_window_evidence_run.csv`, since `data/fdis/` is ignored (G4); log
       `scripts/logs/flow_window/<date>_chinook_window_evidence.txt`.
