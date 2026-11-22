@@ -1,28 +1,28 @@
-HEAD:    45369d261f395270f0b9627b77c7a772ef199dfb 
-started: 2026-11-22T05:30:15Z 
+HEAD:    56980624cb16316373ae4a577139abf688b46481 
+started: 2026-11-22T06:17:12Z 
 
 published run: 20261103_0838 rule mad>=0.75|g<=0.09|Q3@D1000 
 evidence:      c746c5829c605fb7711feba0ec9d4d93;6a2e28f1afb46a02c357ac044f8d09e3;2e0f0f419022da0f5ac51a3869486a80 
 database round trip 0.9 ms (median of 20 SELECT 1; limit 20 ms) 
 flow load:     wet_db_load(): discharge/fwa/v1/segment_monthly, scenario historical last loaded from https://fresh-bc.s3.us-west-2.amazonaws.com/discharge/fwa/v1/manifest.json (built 2026-10-24T12:23:01Z, wet b4bbc50) 
 other active sessions on the database: 0 
-walks:         annual c3f7bdbecff1d55107f28afa59d7f532 window 6f584e5f42580f0388241cd7d57c71b8 
+walks:         annual c3f7bdbecff1d55107f28afa59d7f532 window 53d2c1ff832f7f74d619c409979f63c3 
 wet:           0.4.39 
 
-picked segments in the load: 4532843; on two sources 0; annual flow not once 0; a window month (8, 9) short 0 (18 s)
+picked segments in the load: 4532843; on two sources 0; annual flow not once 0; a window month (8, 9) short 0 (15 s)
 
 window flow 08-01 to 09-30 (flow_0801_0930): 45529 visits on 28552 segments, 45529 with a flow, 0 without (as mad_pick); MAD read again equal at 45525 visits, and at 22 of the 26 whose flow is a parent's (the rest hold a tied parent's, from before #161: 172777_1_1, 95183_49_1, 95796_73_1, 97120_75_1); 1 with a MAD and no window flow above zero; 66 with no MAD above zero (4 s)
 scored visits 4858 / 234 / 45 (visits / with CH / groups); median window share of MAD 0.590271 (Phase 1 0.590271); largest gap in a group's median 4.88e-15 over 45 groups
 
-window walk 08-15 to 09-15: 500 starts x 7 sizes in 7.0 s on 8 workers, uncached; 36928 starts to walk
+window walk 08-15 to 09-15: 500 starts x 7 sizes in 6.8 s on 8 workers, uncached; 36928 starts to walk
 NOTICE:  schema "knw" already exists, skipping
 
 NOTICE:  relation "walk_cache_window" already exists, skipping
 
 NOTICE:  relation "walk_cache_window_load" already exists, skipping
 
-walk cache knw.walk_cache_window: 36928 of 36928 start-and-source pairs read, 0 to walk
-walked 36928 starts x 7 sizes in 0.0 min (36928 start-and-source pairs read from knw.walk_cache_window, 0 walked): found 233984, none 24512
+walk cache knw.walk_cache_window: 0 of 36928 start-and-source pairs read, 36928 to walk
+walked 36928 starts x 7 sizes in 1.0 min (0 start-and-source pairs read from knw.walk_cache_window, 36928 walked): found 233984, none 24512
 the annual walk on pick, for the same starts: found 240312, none 18184 
 
 Phase 1's river reading against the exact walk, at 3.1150 m3/s within 1000 m, over the 4858 scored visits:
@@ -30,4 +30,4 @@ Phase 1's river reading against the exact walk, at 3.1150 m3/s within 1000 m, ov
 
 wrote data/fdis/derived_window: 45529 visits (230 columns, one new), 1033984 walk rows (775488 published, 258496 on pick@0815-0915); read back equal
 wrote data/tune/flow_window/ch_rear_window_evidence_run.csv 
-finished: 2026-11-22T05:31:10Z 
+finished: 2026-11-22T06:19:01Z 
