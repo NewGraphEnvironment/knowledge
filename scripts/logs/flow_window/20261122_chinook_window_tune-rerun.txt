@@ -1,0 +1,151 @@
+verdict rule: research/chinook_window_flow.md at 56980624cb16316373ae4a577139abf688b46481 
+HEAD:         879fea8ae451a710a3cab31c6b706d219f53edee 
+stage:        score 
+started:      2026-11-22T06:19:10Z 
+
+published run: 20261103_0838 recommended mad>=0.75|g<=0.09|Q3@D1000 
+evidence:      data/fdis/derived_window 8331cd85b1e16670370d3591e437ca66;6a2e28f1afb46a02c357ac044f8d09e3;7f90c14104b4b4e5dbc7acd9d511bf64 
+               from c746c5829c605fb7711feba0ec9d4d93;6a2e28f1afb46a02c357ac044f8d09e3;2e0f0f419022da0f5ac51a3869486a80 at 56980624cb16316373ae4a577139abf688b46481 
+link thresholds at 193cb8aa401376d4278b6c5ee5b24cb57deab8e3 (ledger scripts/logs/habitat/20261103_evidence_build_ledger-derived_minimal.csv )
+workers: 12 
+
+CH_rear smoke: 4858 visits (234 detections) in 45 groups with both outcomes; 4 rules, 4 fits.
+    null_ratio: no rule 1509.3 held-out against 1516.7 in-sample, ratio 0.995 (limit 1.25): pass
+    clamp: 0 visits at 55.26 over 4 rules (limit 0): pass
+    behind_null: no_rule (none) is +0.0 against no rule (limit 1509.3): pass
+    coef: rule 3.18 on fold 4 of previous (mad>=0.75|g<=0.09|Q3@D1000) (limit 5.0): pass
+    default: width>=1.5|g<=0.0549|none held-out 1460.4 (-48.8 against no rule), converged TRUE
+    link_tuned: mad>=0.28|g<=0.0549|none held-out 1421.4 (-87.8 against no rule), converged TRUE
+    previous: mad>=0.75|g<=0.09|Q3@D1000 held-out 1222.2 (-287.1 against no rule), converged TRUE
+CH_rear smoke: 4858 visits (234 detections) in 45 groups with both outcomes; 4 rules, 4 fits.
+    null_ratio: no rule 1509.3 held-out against 1516.7 in-sample, ratio 0.995 (limit 1.25): pass
+    clamp: 0 visits at 55.26 over 4 rules (limit 0): pass
+    behind_null: no_rule (none) is +0.0 against no rule (limit 1509.3): pass
+    coef: rule 3.04 on fold 4 of previous (mad>=0.75|g<=0.09|Q3@D1000) (limit 5.0): pass
+    default: width>=1.5|g<=0.0549|none held-out 1460.4 (-48.8 against no rule), converged TRUE
+    link_tuned: mad>=0.28|g<=0.0549|none held-out 1411.4 (-97.9 against no rule), converged TRUE
+    previous: mad>=0.75|g<=0.09|Q3@D1000 held-out 1222.9 (-286.3 against no rule), converged TRUE
+CH_rear smoke: 4858 visits (234 detections) in 45 groups with both outcomes; 4 rules, 4 fits.
+    null_ratio: no rule 1509.3 held-out against 1516.7 in-sample, ratio 0.995 (limit 1.25): pass
+    clamp: 0 visits at 55.26 over 4 rules (limit 0): pass
+    behind_null: no_rule (none) is +0.0 against no rule (limit 1509.3): pass
+    coef: rule 3.08 on fold 4 of previous (mad>=0.75|g<=0.09|Q3@D1000) (limit 5.0): pass
+    default: width>=1.5|g<=0.0549|none held-out 1460.4 (-48.8 against no rule), converged TRUE
+    link_tuned: mad>=0.28|g<=0.0549|none held-out 1421.4 (-87.8 against no rule), converged TRUE
+    previous: mad>=0.75|g<=0.09|Q3@D1000 held-out 1240.4 (-268.8 against no rule), converged TRUE
+CH_rear smoke: 4858 visits (234 detections) in 45 groups with both outcomes; 4 rules, 4 fits.
+    null_ratio: no rule 1509.3 held-out against 1516.7 in-sample, ratio 0.995 (limit 1.25): pass
+    clamp: 0 visits at 55.26 over 4 rules (limit 0): pass
+    behind_null: no_rule (none) is +0.0 against no rule (limit 1509.3): pass
+    coef: rule 2.98 on fold 4 of previous (mad>=0.75|g<=0.09|Q3@D1000) (limit 5.0): pass
+    default: width>=1.5|g<=0.0549|none held-out 1460.4 (-48.8 against no rule), converged TRUE
+    link_tuned: mad>=0.28|g<=0.0549|none held-out 1411.4 (-97.9 against no rule), converged TRUE
+    previous: mad>=0.75|g<=0.09|Q3@D1000 held-out 1242.0 (-267.3 against no rule), converged TRUE
+
+smoke gates passed on every reading: control, stream, river, both 
+control: scored in 0.1 min (a score cache was on file: read back if its settings match). 6149 rules; recommended mad>=0.75|g<=0.09|Q3@D1000 (held-out 1222.169); best mad>=0.75|g<=0.09|Q3@D1000 (1222.169); 102 in the region
+stream: scored in 0.1 min (a score cache was on file: read back if its settings match). 6149 rules; recommended mad>=0.75|g<=0.09|Q3@D1000 (held-out 1222.918); best mad>=0.75|g<=0.09|Q3@D1000 (1222.918); 56 in the region
+river: scored in 0.1 min (a score cache was on file: read back if its settings match). 6149 rules; recommended mad>=1|g<=0.0549|Q5@D1000 (held-out 1271.636); best mad>=0.75|g<=0.09|Q1@D2000 (1228.460); 130 in the region
+both: scored in 0.1 min (a score cache was on file: read back if its settings match). 6149 rules; recommended mad>=0.75|g<=0.0549|Q5@D1000 (held-out 1262.236); best mad>=0.75|g<=0.09|Q1@D1000 (1227.304); 122 in the region
+
+control = published run 20261103_0838: 6149 rules' held-out deviance equal to 1e-6, the same pick, recommended rule and region; nested selection 1322.677, 4 of 4 seeds on the same rule, bootstrap share 0.095
+every reading scored the same 4858 visits (234 with CH) of 45 groups, in the same folds
+control without LFRA: scored in 0.1 min; 4212 visits (228 with CH) of 44 groups; recommended mad>=0.75|g<=0.09|Q3@D1000 (held-out 1132.459)
+stream without LFRA: scored in 0.1 min; 4212 visits (228 with CH) of 44 groups; recommended mad>=0.75|g<=0.09|Q3@D1000 (held-out 1132.230)
+river without LFRA: scored in 0.1 min; 4212 visits (228 with CH) of 44 groups; recommended mad>=1|g<=0.0549|Q5@D1000 (held-out 1186.314)
+both without LFRA: scored in 0.1 min; 4212 visits (228 with CH) of 44 groups; recommended mad>=0.75|g<=0.0549|Q5@D1000 (held-out 1177.625)
+
+## each reading's tuning
+ reading             rule_recommended dev_recommended
+ control   mad>=0.75|g<=0.09|Q3@D1000        1222.169
+  stream   mad>=0.75|g<=0.09|Q3@D1000        1222.918
+   river    mad>=1|g<=0.0549|Q5@D1000        1271.636
+    both mad>=0.75|g<=0.0549|Q5@D1000        1262.236
+                  rule_best dev_best region_n dev_curve honest_dev_rec
+ mad>=0.75|g<=0.09|Q3@D1000 1222.169      102  1167.621       1322.677
+ mad>=0.75|g<=0.09|Q3@D1000 1222.918       56  1145.958       1282.580
+ mad>=0.75|g<=0.09|Q1@D2000 1228.460      130  1179.748       1313.886
+ mad>=0.75|g<=0.09|Q1@D1000 1227.304      122  1176.123       1285.871
+ seeds_same_rule boot_share_rule
+               4           0.095
+               4           0.190
+               0           0.140
+               4           0.235
+
+## a window reading's recommended rule less the control's (held-out deviance; negative favours the window)
+ reading   population seed groups visits               rule_control
+  stream   all groups   54     45   4858 mad>=0.75|g<=0.09|Q3@D1000
+  stream   all groups   55     45   4858 mad>=0.75|g<=0.09|Q3@D1000
+  stream   all groups   56     45   4858 mad>=0.75|g<=0.09|Q3@D1000
+  stream   all groups   57     45   4858 mad>=0.75|g<=0.09|Q3@D1000
+  stream   all groups   58     45   4858 mad>=0.75|g<=0.09|Q3@D1000
+   river   all groups   54     45   4858 mad>=0.75|g<=0.09|Q3@D1000
+   river   all groups   55     45   4858 mad>=0.75|g<=0.09|Q3@D1000
+   river   all groups   56     45   4858 mad>=0.75|g<=0.09|Q3@D1000
+   river   all groups   57     45   4858 mad>=0.75|g<=0.09|Q3@D1000
+   river   all groups   58     45   4858 mad>=0.75|g<=0.09|Q3@D1000
+    both   all groups   54     45   4858 mad>=0.75|g<=0.09|Q3@D1000
+    both   all groups   55     45   4858 mad>=0.75|g<=0.09|Q3@D1000
+    both   all groups   56     45   4858 mad>=0.75|g<=0.09|Q3@D1000
+    both   all groups   57     45   4858 mad>=0.75|g<=0.09|Q3@D1000
+    both   all groups   58     45   4858 mad>=0.75|g<=0.09|Q3@D1000
+  stream without LFRA   54     44   4212 mad>=0.75|g<=0.09|Q3@D1000
+   river without LFRA   54     44   4212 mad>=0.75|g<=0.09|Q3@D1000
+    both without LFRA   54     44   4212 mad>=0.75|g<=0.09|Q3@D1000
+                  rule_window dev_control dev_window difference       se
+   mad>=0.75|g<=0.09|Q3@D1000    1222.169   1222.918  0.7490673 22.72510
+   mad>=0.75|g<=0.09|Q3@D1000    1196.366   1200.977  4.6114357 22.64259
+   mad>=0.75|g<=0.09|Q3@D1000    1204.565   1209.881  5.3159447 23.29773
+   mad>=0.75|g<=0.09|Q3@D1000    1219.377   1215.612 -3.7649279 22.38960
+   mad>=0.75|g<=0.09|Q3@D1000    1228.029   1224.029 -3.9997149 24.29629
+    mad>=1|g<=0.0549|Q5@D1000    1222.169   1271.636 49.4664716 43.77641
+    mad>=1|g<=0.0549|Q5@D1000    1196.366   1255.367 59.0009937 42.98161
+    mad>=1|g<=0.0549|Q5@D1000    1204.565   1253.703 49.1372941 42.90184
+    mad>=1|g<=0.0549|Q5@D1000    1219.377   1280.101 60.7233477 43.52038
+    mad>=1|g<=0.0549|Q5@D1000    1228.029   1273.745 45.7161449 42.61975
+ mad>=0.75|g<=0.0549|Q5@D1000    1222.169   1262.236 40.0671516 41.23529
+ mad>=0.75|g<=0.0549|Q5@D1000    1196.366   1242.602 46.2368249 41.80613
+ mad>=0.75|g<=0.0549|Q5@D1000    1204.565   1239.054 34.4888137 41.92700
+ mad>=0.75|g<=0.0549|Q5@D1000    1219.377   1263.947 44.5696550 41.60813
+ mad>=0.75|g<=0.0549|Q5@D1000    1228.029   1257.045 29.0157894 40.49988
+   mad>=0.75|g<=0.09|Q3@D1000    1132.459   1132.230 -0.2290118 23.85070
+    mad>=1|g<=0.0549|Q5@D1000    1132.459   1186.314 53.8548745 46.46888
+ mad>=0.75|g<=0.0549|Q5@D1000    1132.459   1177.625 45.1654642 44.27489
+ converged
+      TRUE
+      TRUE
+      TRUE
+      TRUE
+      TRUE
+      TRUE
+      TRUE
+      TRUE
+      TRUE
+      TRUE
+      TRUE
+      TRUE
+      TRUE
+      TRUE
+      TRUE
+      TRUE
+      TRUE
+      TRUE
+
+## the verdict
+ reading difference       se main_seed_beyond_one_se other_seeds_negative
+  stream  0.7490673 22.72510                   FALSE                    2
+   river 49.4664716 43.77641                   FALSE                    0
+    both 40.0671516 41.23529                   FALSE                    0
+ other_seeds other_seeds_hold difference_without_lfra without_lfra_holds
+           4            FALSE              -0.2290118               TRUE
+           4            FALSE              53.8548745              FALSE
+           4            FALSE              45.1654642              FALSE
+ beats_mad
+     FALSE
+     FALSE
+     FALSE
+
+verdict: NO WINDOW READING BEATS MAD by the rule set before the run 
+
+wrote data/tune/flow_window 
+finished: 2026-11-22T06:19:56Z 

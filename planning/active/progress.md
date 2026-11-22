@@ -96,3 +96,8 @@
   the prose around them, all fixed (the article's sentence on stream size, "most" for 138 of 300, a "points to" cell
   that left out "both", three timings from passes whose logs were overwritten).
 - The window walk's file changed, so the evidence and the scoring are run again on it.
+- Rerun on the corrected window walk (md5 `53d2c1ff...`), after deleting the 258,496 rows this session had kept in
+  `knw.walk_cache_window` under the earlier file's md5: the evidence build walked cold again (1.0 min, 6.8 s for its
+  500; the committed evidence log is now this cold pass) and wrote byte-identical tables (`out_md5` unchanged); the
+  scoring, read back from its caches in 46 s, changed nothing but the run record's `head` and `evidence_head`. The
+  cold scoring's log stays as `20261122_chinook_window_tune.txt`; the rerun's is `...-rerun.txt`.
