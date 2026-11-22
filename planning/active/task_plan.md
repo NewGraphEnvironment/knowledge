@@ -59,16 +59,16 @@ Mine, stated so they can be overruled (mechanism, not scope):
 
 ## Phase 1: The rule on record, and the batch split
 
-- [ ] `research/chinook_window_flow.md`: a "Phase 2" section with the four readings (MAD/MAD as control,
+- [x] `research/chinook_window_flow.md`: a "Phase 2" section with the four readings (MAD/MAD as control,
       window on the stream, window on the river, both), that all four score the same rows, and the verdict
       rule of decision 4, exact; header status updated. Committed before any scoring; the scoring script
       refuses otherwise and logs the commit it read (Phase 1's guard).
-- [ ] #227's body: `wet#6` is closed with its results (monthly error by region and season), carrying
+- [x] #227's body: `wet#6` is closed with its results (monthly error by region and season), carrying
       departures to ungauged segments is wet's donor method (`wet#118`), what is left for knowledge (window
       means, 7-day minimums and departures by year at gauges; then threshold flags on segments), and that it
       was split from move 14. #233's body: the split and the gate decisions. `planning/backlog.md` batch 21:
       #227 left for the next `/backlog-sweep`.
-- [ ] Upgrade wet to 0.4.39 (`pak::pak("NewGraphEnvironment/wet")`); the versions go in each run record.
+- [x] Upgrade wet to 0.4.39 (`pak::pak("NewGraphEnvironment/wet")`); the versions go in each run record.
 
 ## Phase 2: Window flow at a segment (package)
 

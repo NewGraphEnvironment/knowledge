@@ -1,11 +1,13 @@
 # Chinook rearing: does flow in a seasonal window size streams differently from MAD?
 
-**Verified:** 2026-11-18 (the question, the readings and the stop rule set and committed at `d6eff92f` before any
-flip was counted; Phase 1 run the same day) · **Issues:** #105 (Phase 1, this file), #42 (window flow per segment,
-below), move 5 (#174) · **Produced by:** `data-raw/chinook_window_flow.R` (tables `data/tune/flow_window/ch_rear_*.csv`,
-log `scripts/logs/flow_window/20261118_chinook_window_flow.txt`); `data-raw/segment_window_flow.R` (ignored
-`data/flow_window/segment_windows.parquet`, log `scripts/logs/flow_window/20261118_segment_window_flow.txt`) ·
-**Status:** Phase 1 done: by the rule set beforehand, Phase 2 goes ahead, on Al's word.
+**Verified:** 2026-11-18 (Phase 1: the question, the readings and the stop rule set and committed at `d6eff92f` before
+any flip was counted, and run the same day); 2026-11-22 (Phase 2's readings and verdict rule, set at the plan gate and
+committed before any score was made) · **Issues:** #105 (Phase 1), #226 (Phase 2), #42 (window flow per segment,
+below), move 5 (#174), move 14 (#233) · **Produced by:** `data-raw/chinook_window_flow.R` (tables
+`data/tune/flow_window/ch_rear_*.csv`, log `scripts/logs/flow_window/20261118_chinook_window_flow.txt`);
+`data-raw/segment_window_flow.R` (ignored `data/flow_window/segment_windows.parquet`, log
+`scripts/logs/flow_window/20261118_segment_window_flow.txt`) · **Status:** Phase 1 done. Phase 2 (#226): the rule
+below is on record; nothing is scored yet.
 
 ## Short answer
 
@@ -127,6 +129,67 @@ reaches 3.11 m³/s in the spawning window but carries under 3 m³/s of MAD. That
 
 The result does not rest on the monthly approximation.
 
+## Phase 2: is the rule better tuned on window flow? (#226)
+
+Phase 1 counted the visits a window reading moves. Phase 2 asks whether the moved set predicts chinook better: the
+rule is tuned again with window flow in MAD's place, and each tuning's held-out score is set beside MAD's.
+
+### The four readings
+
+The windows are Phase 1's, fixed province-wide, on wet's monthly flow and the source wet picks for the segment.
+
+| reading | the stream's size | the river downstream is found by |
+|---|---|---|
+| control | MAD | MAD |
+| stream | flow in the rearing window, 08-01 to 09-30 | MAD |
+| river | MAD | flow in the spawning window, 08-15 to 09-15 |
+| both | flow in the rearing window | flow in the spawning window |
+
+- **Each reading is tuned as the published rule was.** The same grid of rules, the same five folds of watershed
+  groups (seed 54), the same one-SE region and pick, with the bootstrap, the nested selection and four more fold seeds
+  (55 to 58). Nothing is scaled: where Phase 1 matched thresholds by the median window share, here each reading finds
+  its own thresholds on its own scale.
+- **The river is found by a walk on window flow.** Phase 1 read the river off the MAD walk's ladder, which misses a
+  river under 1 m³/s of MAD and any segment between two rungs. Phase 2 walks downstream to the first segment whose
+  spawning-window flow reaches each size, by the published walk's path and bank rules.
+- **All four score the same visits.** The window flow is read on the segment MAD came from, so it is present exactly
+  where MAD is. A reading changes which side of a rule a visit falls on, never which visits are scored: 4,858 visits,
+  234 with chinook, 45 groups.
+- **The control must give the published table back**: every rule's held-out score, the pick and the region of run
+  `20261103_0838`. The scoring stops otherwise.
+
+### The verdict rule
+
+Set at the plan gate (Al, 2026-11-21) and made exact here before any score was made. The scoring script refuses to
+run unless this file is committed, and logs the commit it read.
+
+A reading's **rule** is the one its tuning recommends (the tuning's `recommended` rule, the fewest-departures pick
+inside the one-SE region). The **difference** between a window reading and the control is the window rule's held-out
+deviance less the control rule's, summed over the same 45 groups on the same folds; lower deviance is better, so a
+negative difference favours the window. Its **SE** is the scorer's: the standard deviation of the 45 groups'
+differences times the square root of 45.
+
+A window reading **beats MAD** only if all three hold:
+
+1. **On the main folds (seed 54)** the difference is negative and larger than one SE.
+2. **On the four other fold seeds (55 to 58)**, with the same two rules scored on each seed's folds, the difference is
+   negative on at least three.
+3. **Without the lower Fraser (LFRA)**, the group that held 138 of Phase 1's 300 moved visits: both readings are
+   tuned again on the visits outside LFRA (seed 54), and the window rule's deviance is still the lower.
+
+If more than one window reading beats MAD, each is reported, the one with the lowest held-out deviance on seed 54
+first.
+
+**What the verdict decides.** Only which follow-ups are filed. If a window beats MAD: windows that move by group
+with timing, link reading a window flow, and the window column in the evidence build. If none does: the rule stays
+on MAD, and `research/chinook_stream_size.md` and the methodology article's limits say so. Nothing is graded,
+compared or published either way; each waits on Al's word.
+
+**Every check is reported whatever the verdict**, each with the way it points: each reading's best and recommended
+rule and their held-out deviance, the size of its region, the rule each nested fold picked and its held-out deviance,
+the rule each other seed picked (the exact rule, and each of its parts), the bootstrap's share for the exact rule and
+for each part, and the curve's held-out deviance.
+
 ## Window flow on every segment (#42)
 
 `data-raw/segment_window_flow.R` reads every complete window of `data/life_history_timing.csv` onto every FWA segment
@@ -180,11 +243,8 @@ says little about a small stream.
 
 ## What next
 
-Phase 2 is filed as its own issue, split from move 5 (#174). It covers:
-- a window column beside `mad_pick` in the evidence;
-- a window walk (a separate walk, or an edit to the published one that regrades every key: the choice is at its
-  gate);
-- four readings scored by `0320` into `data/tune/flow_window/`, MAD as the control;
-- every check of `CLAUDE.md`'s "Reading the tuning's stability checks".
+Phase 2 is #226, carried by move 14 (#233): the window column and the window walk on a copy of the published
+evidence, the four readings scored into `data/tune/flow_window/`, and the verdict by the rule above. The low flows
+and dry years the 30-year means cannot show are #227.
 
 Nothing is graded, compared or published without Al's word.
