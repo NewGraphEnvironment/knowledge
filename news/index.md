@@ -1,5 +1,18 @@
 # Changelog
 
+## knowledge 0.4.50
+
+- The articles put a package or lower-case tool name in code font at
+  every mention and link it at its first only
+  ([\#258](https://github.com/NewGraphEnvironment/knowledge/issues/258)),
+  so `link`, `fresh` and `wet` read as names and not as English words.
+  The methodology article’s definition of a tuned threshold now says it
+  starts as the value `link` uses now, which came from the literature
+  and/or judgment, and changes only where the fish records support a
+  different value. Two possessives that rendered as an opening quote are
+  corrected, and a figure’s alt text is its caption without backticks.
+  No package code changed.
+
 ## knowledge 0.4.49
 
 - Chinook rearing tuned on late-summer flow beside MAD

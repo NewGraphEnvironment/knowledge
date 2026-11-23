@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">knowledge</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.4.49</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.4.50</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -40,9 +40,13 @@
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="../logo.png" class="logo" alt=""><h1>Changelog</h1>
-      <small>Source: <a href="https://github.com/NewGraphEnvironment/knowledge/blob/main/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
+      <small>Source: <a href="https://github.com/NewGraphEnvironment/knowledge/blob/v0.4.50/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
     </div>
 
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="0.4.50" id="knowledge-0450">knowledge 0.4.50<a class="anchor" aria-label="anchor" href="#knowledge-0450"></a></h2>
+<ul><li>The articles put a package or lower-case tool name in code font at every mention and link it at its first only (<a href="https://github.com/NewGraphEnvironment/knowledge/issues/258" class="external-link">#258</a>), so <code>link</code>, <code>fresh</code> and <code>wet</code> read as names and not as English words. The methodology article’s definition of a tuned threshold now says it starts as the value <code>link</code> uses now, which came from the literature and/or judgment, and changes only where the fish records support a different value. Two possessives that rendered as an opening quote are corrected, and a figure’s alt text is its caption without backticks. No package code changed.</li>
+</ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.4.49" id="knowledge-0449">knowledge 0.4.49<a class="anchor" aria-label="anchor" href="#knowledge-0449"></a></h2>
 <ul><li>Chinook rearing tuned on late-summer flow beside MAD (<a href="https://github.com/NewGraphEnvironment/knowledge/issues/226" class="external-link">#226</a>): no window reading beats MAD on held-out watershed groups, by a verdict rule committed before any score, so the rule stays on MAD and nothing is graded, compared or published. New in the package: <code><a href="../reference/knw_link_flow_window.html">knw_link_flow_window()</a></code> (wet’s flow in a window of the year, on the segment MAD came from) and a window walk, <code>knw_link_walks(window = )</code>, which finds the first river downstream by its flow in a window. The window walk is its own file, <code>inst/sql/ch_dist_profile_window.sql</code>, so the published walk and its md5 did not move. <code>wet</code> is now in <code>Suggests</code>. The result, every check and the caveats are in <code>research/chinook_window_flow.md</code>.</li>
