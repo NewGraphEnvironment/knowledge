@@ -1,5 +1,20 @@
 # Changelog
 
+## knowledge 0.4.49
+
+- Chinook rearing tuned on late-summer flow beside MAD
+  ([\#226](https://github.com/NewGraphEnvironment/knowledge/issues/226)):
+  no window reading beats MAD on held-out watershed groups, by a verdict
+  rule committed before any score, so the rule stays on MAD and nothing
+  is graded, compared or published. New in the package:
+  [`knw_link_flow_window()`](https://newgraphenvironment.github.io/knowledge/reference/knw_link_flow_window.md)
+  (wet’s flow in a window of the year, on the segment MAD came from) and
+  a window walk, `knw_link_walks(window = )`, which finds the first
+  river downstream by its flow in a window. The window walk is its own
+  file, `inst/sql/ch_dist_profile_window.sql`, so the published walk and
+  its md5 did not move. `wet` is now in `Suggests`. The result, every
+  check and the caveats are in `research/chinook_window_flow.md`.
+
 ## knowledge 0.4.48
 
 - NuSEDS spawning windows for every watershed group and species with

@@ -628,7 +628,7 @@ at commit c275e250. To cite this package:
 Irvine A (2026). *knowledge: Tests Fish Habitat Definitions Against What
 is Known About Where Fish Live, and Tunes Them from the Fish Records*.
 New Graph Environment Ltd. <doi:10.5281/zenodo.23990335>
-<https://doi.org/10.5281/zenodo.23990335>. Version 0.4.48,
+<https://doi.org/10.5281/zenodo.23990335>. Version 0.4.49,
 <https://newgraphenvironment.github.io/knowledge/>.
 
 ## References

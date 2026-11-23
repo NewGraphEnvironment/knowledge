@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">knowledge</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.4.48</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.4.49</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -40,9 +40,13 @@
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="../logo.png" class="logo" alt=""><h1>Changelog</h1>
-      <small>Source: <a href="https://github.com/NewGraphEnvironment/knowledge/blob/main/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
+      <small>Source: <a href="https://github.com/NewGraphEnvironment/knowledge/blob/v0.4.49/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
     </div>
 
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="0.4.49" id="knowledge-0449">knowledge 0.4.49<a class="anchor" aria-label="anchor" href="#knowledge-0449"></a></h2>
+<ul><li>Chinook rearing tuned on late-summer flow beside MAD (<a href="https://github.com/NewGraphEnvironment/knowledge/issues/226" class="external-link">#226</a>): no window reading beats MAD on held-out watershed groups, by a verdict rule committed before any score, so the rule stays on MAD and nothing is graded, compared or published. New in the package: <code><a href="../reference/knw_link_flow_window.html">knw_link_flow_window()</a></code> (wet’s flow in a window of the year, on the segment MAD came from) and a window walk, <code>knw_link_walks(window = )</code>, which finds the first river downstream by its flow in a window. The window walk is its own file, <code>inst/sql/ch_dist_profile_window.sql</code>, so the published walk and its md5 did not move. <code>wet</code> is now in <code>Suggests</code>. The result, every check and the caveats are in <code>research/chinook_window_flow.md</code>.</li>
+</ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.4.48" id="knowledge-0448">knowledge 0.4.48<a class="anchor" aria-label="anchor" href="#knowledge-0448"></a></h2>
 <ul><li>NuSEDS spawning windows for every watershed group and species with dated records (<a href="https://github.com/NewGraphEnvironment/knowledge/issues/240" class="external-link">#240</a>): <code>data-raw/timing_nuseds.R</code> reads the published <code>knowledge/nuseds/v1</code> set (its sha256 held to the manifest), takes <code>WSG=</code> and <code>SPECIES=</code>, and writes 6,112 windows over 480 group and species pairs in 126 groups, each population’s beside its group’s, then sets every row of <code>data/life_history_timing.csv</code> beside its group’s window. A population on a watershed code that crosses several groups, a mainstem such as the Morice or the Bulkley, joins no group’s window and is listed apart under each, unless the new <code>data/nuseds_reach_groups.csv</code> names the group its reach lies in; it holds UFRA’s Fraser above Tete Jaune, so the published UFRA window is unchanged. The script writes no table row: BULK chinook spawning starts 14 days later than its row, and MORR chinook migration runs 41 days into spawning, for <a href="https://github.com/NewGraphEnvironment/knowledge/issues/241" class="external-link">#241</a> and <a href="https://github.com/NewGraphEnvironment/knowledge/issues/242" class="external-link">#242</a> to review (<code>research/nuseds_timing.md</code>). <code>0340</code>’s documented run writes its log outside the repo and copies it in after a run that succeeded, so <code>PUBLISH=TRUE</code> no longer refuses on its own log (<a href="https://github.com/NewGraphEnvironment/knowledge/issues/230" class="external-link">#230</a>). Backlog move 16 (<a href="https://github.com/NewGraphEnvironment/knowledge/issues/244" class="external-link">#244</a>) carried both. Nothing published moves.</li>
