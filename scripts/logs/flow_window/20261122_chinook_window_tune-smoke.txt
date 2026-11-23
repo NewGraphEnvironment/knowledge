@@ -1,0 +1,46 @@
+verdict rule: research/chinook_window_flow.md at 267fcd0624ad197ed2e8a735f813225c9a0b9714 
+HEAD:         662eb1e7f23061b46c8082d4e6eb8ff386127513 
+stage:        smoke 
+started:      2026-11-22T05:31:26Z 
+
+published run: 20261103_0838 recommended mad>=0.75|g<=0.09|Q3@D1000 
+evidence:      data/fdis/derived_window 8331cd85b1e16670370d3591e437ca66;6a2e28f1afb46a02c357ac044f8d09e3;7f90c14104b4b4e5dbc7acd9d511bf64 
+               from c746c5829c605fb7711feba0ec9d4d93;6a2e28f1afb46a02c357ac044f8d09e3;2e0f0f419022da0f5ac51a3869486a80 at 45369d261f395270f0b9627b77c7a772ef199dfb 
+link thresholds at 193cb8aa401376d4278b6c5ee5b24cb57deab8e3 (ledger scripts/logs/habitat/20261103_evidence_build_ledger-derived_minimal.csv )
+workers: 12 
+
+CH_rear smoke: 4858 visits (234 detections) in 45 groups with both outcomes; 4 rules, 4 fits.
+    null_ratio: no rule 1509.3 held-out against 1516.7 in-sample, ratio 0.995 (limit 1.25): pass
+    clamp: 0 visits at 55.26 over 4 rules (limit 0): pass
+    behind_null: no_rule (none) is +0.0 against no rule (limit 1509.3): pass
+    coef: rule 3.18 on fold 4 of previous (mad>=0.75|g<=0.09|Q3@D1000) (limit 5.0): pass
+    default: width>=1.5|g<=0.0549|none held-out 1460.4 (-48.8 against no rule), converged TRUE
+    link_tuned: mad>=0.28|g<=0.0549|none held-out 1421.4 (-87.8 against no rule), converged TRUE
+    previous: mad>=0.75|g<=0.09|Q3@D1000 held-out 1222.2 (-287.1 against no rule), converged TRUE
+CH_rear smoke: 4858 visits (234 detections) in 45 groups with both outcomes; 4 rules, 4 fits.
+    null_ratio: no rule 1509.3 held-out against 1516.7 in-sample, ratio 0.995 (limit 1.25): pass
+    clamp: 0 visits at 55.26 over 4 rules (limit 0): pass
+    behind_null: no_rule (none) is +0.0 against no rule (limit 1509.3): pass
+    coef: rule 3.04 on fold 4 of previous (mad>=0.75|g<=0.09|Q3@D1000) (limit 5.0): pass
+    default: width>=1.5|g<=0.0549|none held-out 1460.4 (-48.8 against no rule), converged TRUE
+    link_tuned: mad>=0.28|g<=0.0549|none held-out 1411.4 (-97.9 against no rule), converged TRUE
+    previous: mad>=0.75|g<=0.09|Q3@D1000 held-out 1222.9 (-286.3 against no rule), converged TRUE
+CH_rear smoke: 4858 visits (234 detections) in 45 groups with both outcomes; 4 rules, 4 fits.
+    null_ratio: no rule 1509.3 held-out against 1516.7 in-sample, ratio 0.995 (limit 1.25): pass
+    clamp: 0 visits at 55.26 over 4 rules (limit 0): pass
+    behind_null: no_rule (none) is +0.0 against no rule (limit 1509.3): pass
+    coef: rule 3.08 on fold 4 of previous (mad>=0.75|g<=0.09|Q3@D1000) (limit 5.0): pass
+    default: width>=1.5|g<=0.0549|none held-out 1460.4 (-48.8 against no rule), converged TRUE
+    link_tuned: mad>=0.28|g<=0.0549|none held-out 1421.4 (-87.8 against no rule), converged TRUE
+    previous: mad>=0.75|g<=0.09|Q3@D1000 held-out 1240.4 (-268.8 against no rule), converged TRUE
+CH_rear smoke: 4858 visits (234 detections) in 45 groups with both outcomes; 4 rules, 4 fits.
+    null_ratio: no rule 1509.3 held-out against 1516.7 in-sample, ratio 0.995 (limit 1.25): pass
+    clamp: 0 visits at 55.26 over 4 rules (limit 0): pass
+    behind_null: no_rule (none) is +0.0 against no rule (limit 1509.3): pass
+    coef: rule 2.98 on fold 4 of previous (mad>=0.75|g<=0.09|Q3@D1000) (limit 5.0): pass
+    default: width>=1.5|g<=0.0549|none held-out 1460.4 (-48.8 against no rule), converged TRUE
+    link_tuned: mad>=0.28|g<=0.0549|none held-out 1411.4 (-97.9 against no rule), converged TRUE
+    previous: mad>=0.75|g<=0.09|Q3@D1000 held-out 1242.0 (-267.3 against no rule), converged TRUE
+
+smoke gates passed on every reading: control, stream, river, both 
+finished: 2026-11-22T05:31:35Z 

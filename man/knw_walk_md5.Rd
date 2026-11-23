@@ -4,7 +4,10 @@
 \alias{knw_walk_md5}
 \title{The walk's code, by its md5}
 \usage{
-knw_walk_md5()
+knw_walk_md5(window = FALSE)
+}
+\arguments{
+\item{window}{\code{logical(1)} the window walk's md5 instead of the annual walk's.}
 }
 \value{
 \code{character(1)}, an md5 in hex.
@@ -14,6 +17,11 @@ The md5 of the walk \code{\link[=knw_link_walks]{knw_link_walks()}} installs (\c
 A change to the walk changes every distance it can return, so the walk cache
 keys every row on it, and every grade table records it as \code{walk_md5}, which
 \code{0320}, \code{0325} and \code{0330} compare with this value (#87).
+}
+\details{
+The window walk (\code{inst/sql/ch_dist_profile_window.sql}, #226) is another
+file with its own md5, which only its own cache rows are keyed on: no grade
+is walked by it, so nothing compares a grade with it.
 }
 \examples{
 knw_walk_md5()
