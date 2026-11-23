@@ -29,18 +29,18 @@ check on how the choice is made does not fully hold its test data out,
 and the two models the publishing test compares treat a site from an
 unfamiliar data set or period differently. A third, stream slopes that
 depended on where fish were caught, is answered: the habitat definitions
-are tuned on `link`’s minimal network, which does not cut streams at
-fish records. The terms are gathered in a [glossary](#terms) at the end.
+are tuned on [`link`](https://newgraphenvironment.github.io/link/)’s
+minimal network, which does not cut streams at fish records. The terms
+are gathered in a [glossary](#terms) at the end.
 
 ## What does the tuning do?
 
 For each species and life stage, the tuning builds a grid of habitat
-definitions around those of
-[`link`](https://newgraphenvironment.github.io/link/) ([Irvine
-2026](#ref-link)), the R package that maps habitat on BC’s streams: a
-floor on stream size, a ceiling on slope, and for some an exception for
-small streams near a large river. Each habitat definition sorts every
-site crews electrofished into habitat or not.
+definitions around those of `link` ([Irvine 2026](#ref-link)), the R
+package that maps habitat on BC’s streams: a floor on stream size, a
+ceiling on slope, and for some an exception for small streams near a
+large river. Each habitat definition sorts every site crews
+electrofished into habitat or not.
 
 The **scorer** is a regression of whether the species was caught at a
 site on that sorting. Beside it sit the area fished (the effort) and two
@@ -77,7 +77,7 @@ where that leaves it. The sections below take them in turn.
 | Is the score taken on data the fit did not see? | Whole watershed groups are left out of each fit and scored | follows the books |
 | Are two scores told apart by the uncertainty of their difference? | Yes: the standard error of each difference, over watershed groups | follows the books |
 | Does the score predict a new watershed group? | No: each left-out group’s base rate is refitted first | departs, defensibly |
-| How wide is a close call, and which close call is chosen? | One standard error; the close call nearest link’s current habitat definition, passing over short near-river exceptions | departs |
+| How wide is a close call, and which close call is chosen? | One standard error; the close call nearest `link`’s current habitat definition, passing over short near-river exceptions | departs |
 | Does the check on the choosing hold its test data out? | Not fully: the scores it chooses from were fitted with its test groups in | should change |
 | Is the prior a regularising prior at Bayesian Data Analysis’s default scale? | Yes, scale 2.5, but normal not Cauchy, complementary log-log not logit, and on the sampling terms only | follows the books |
 | Does the prior give a posterior? | No: it is fitted as a penalty, which finds one best value | departs, defensibly |
@@ -89,7 +89,7 @@ where that leaves it. The sections below take them in turn.
 | Is the catch rate per square metre the same however much area is fished? | Not necessarily: the area fished has a fitted slope, so the rate per square metre can change with area | departs, defensibly |
 | Is a miss an absence? | A miss is read as no catch at that visit | departs |
 | Are the inputs measured? | No: placement, slope and flow are estimates read as exact | departs |
-| Is a stream’s slope independent of the catch? | Nearly: the tuning reads link’s minimal network, which does not cut streams at fish records | follows the books |
+| Is a stream’s slope independent of the catch? | Nearly: the tuning reads `link`’s minimal network, which does not cut streams at fish records | follows the books |
 
 Where the tuning stands against the two books, one row per question.
 {.table}
@@ -331,13 +331,13 @@ often as an empty one.
 
 ![The share of site visits on the stream branch that start a segment of
 their own, for visits that caught fish and visits that did not, on
-link's full network in its earlier and current builds, and on its
+link’s full network in its earlier and current builds, and on its
 minimal network, which the tuning
 reads.](tuning-bayesian-practice_files/figure-html/cuts-1.png)
 
 The share of site visits on the stream branch that start a segment of
 their own, for visits that caught fish and visits that did not, on
-link’s full network in its earlier and current builds, and on its
+`link`’s full network in its earlier and current builds, and on its
 minimal network, which the tuning reads.
 
 The network moves the result. Tuned on the full network, chinook
@@ -411,7 +411,7 @@ shows this in full.
   lower is better.
 - **Fold.** One of the 5 sets the watershed groups are dealt into; each
   in turn is left out of the fit and scored.
-- **Full network.** `link`‘s streams cut, beyond the minimal network’s
+- **Full network.** `link`’s streams cut, beyond the minimal network’s
   cuts, at fish records, at crossings and at the ends of hand-mapped
   habitat; the network `link` draws habitat on. Its current build cuts
   at each species’ highest record on a stream and at slopes only where a

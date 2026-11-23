@@ -91,23 +91,25 @@ R package that maps where each species can reach and where it can spawn
 and rear on BC’s streams, running its habitat definitions on the BC
 Freshwater Atlas through <a href="https://github.com/NewGraphEnvironment/fresh" class="external-link"><code>fresh</code></a>
 <span class="citation">(<a href="#ref-fresh">Irvine 2026a</a>)</span>.
-link builds on bcfishpass <span class="citation">(<a href="#ref-norris2024smnorrisbcfishpass">Norris 2024b</a>)</span>, which
+<code>link</code> builds on <a href="https://github.com/smnorris/bcfishpass" class="external-link"><code>bcfishpass</code></a>
+<span class="citation">(<a href="#ref-norris2024smnorrisbcfishpass">Norris 2024b</a>)</span>, which
 models which streams fish can reach below natural barriers such as falls
 and steep slopes, and which could hold spawning or rearing from their
 slope and size, so that crews can choose where to look first among more
-than half a million mapped road and rail crossings and dams. bcfishpass
-keeps its spawning and rearing limits in its repository as <a href="https://github.com/smnorris/bcfishpass/tree/3bd2824c300c5f9c0c041380d412a52987df1ebb/parameters" class="external-link">parameter
+than half a million mapped road and rail crossings and dams.
+<code>bcfishpass</code> keeps its spawning and rearing limits in its
+repository as <a href="https://github.com/smnorris/bcfishpass/tree/3bd2824c300c5f9c0c041380d412a52987df1ebb/parameters" class="external-link">parameter
 sets</a>, most of them an organization’s own. A fair guess at where fish
 spawn and rear is enough to choose which crossings to look at first; a
 map that steers conservation and restoration effort is worth testing
 against where fish were caught.</p>
-<p>For every stretch of stream link asks a few plain questions: is it
-big enough, is it too steep, and can fish get to it? Each question has a
-cut-off in a config, so one habitat definition can be run beside
-another. We try many, keep the ones that best tell sites with the
-species from sites without it, and check that they hold where they were
-not chosen. The steps below run in order, from the fish records to
-values link can read.</p>
+<p>For every stretch of stream <code>link</code> asks a few plain
+questions: is it big enough, is it too steep, and can fish get to it?
+Each question has a cut-off in a config, so one habitat definition can
+be run beside another. We try many, keep the ones that best tell sites
+with the species from sites without it, and check that they hold where
+they were not chosen. The steps below run in order, from the fish
+records to values <code>link</code> can read.</p>
 <div class="section level2">
 <h2 id="thresholds">What is a threshold, and what does “tuned” mean?<a class="anchor" aria-label="anchor" href="#thresholds"></a>
 </h2>
@@ -116,17 +118,19 @@ stream size or a maximum slope. A <strong>fish habitat
 definition</strong> is the few thresholds a species and life stage uses
 together, with any exception its biology adds, such as chinook rearing’s
 allowance for small streams near a large river. A <strong>tuned</strong>
-threshold is one chosen by the test this article describes rather than
-taken from the literature or set by judgment.</p>
-<p>For chinook rearing, for example, link’s current habitat definition
-counts a stream as habitat if it is at least 1.5 m wide, no steeper than
-5.5 %. The fish records support a habitat definition where it carries at
-least 0.75 m³/s, no steeper than 9 %; a smaller stream also counts if it
-passes the slope test and a river carrying at least 3 m³/s lies within 1
-km downstream. We tested between 6,100 and 8,400 candidate habitat
-definitions for each of the 6 species and life stages with enough
-records. The <a href="tuning-chinook-rearing.html">chinook rearing
-article</a> works through one of them in full.</p>
+threshold starts as the value <code>link</code> uses now, which came
+from the literature and/or judgment. It is then tested against the fish
+records, and it changes only where the records support a different
+value.</p>
+<p>For chinook rearing, for example, <code>link</code>’s current habitat
+definition counts a stream as habitat if it is at least 1.5 m wide, no
+steeper than 5.5 %. The fish records support a habitat definition where
+it carries at least 0.75 m³/s, no steeper than 9 %; a smaller stream
+also counts if it passes the slope test and a river carrying at least 3
+m³/s lies within 1 km downstream. We tested between 6,100 and 8,400
+candidate habitat definitions for each of the 6 species and life stages
+with enough records. The <a href="tuning-chinook-rearing.html">chinook
+rearing article</a> works through one of them in full.</p>
 </div>
 <div class="section level2">
 <h2 id="steps">What happens, in order?<a class="anchor" aria-label="anchor" href="#steps"></a>
@@ -307,13 +311,14 @@ Latest visit year kept: 2022
 </h3>
 <p>Each site’s map point is moved onto a stream of the BC Freshwater
 Atlas <span class="citation">(<a href="#ref-flnrord2021FreshwaterAtlasb">FLNRORD 2021</a>)</span>, held
-in a database by <code>fwapg</code> <span class="citation">(<a href="#ref-norris2024smnorrisfwapg">Norris 2024c</a>)</span>. Where the
-record names the site’s tributary in a form the Atlas can check, the
-site goes to the nearest stream of that tributary, even past a nearer
-stream, if it lies within 500 m, and is dropped if none does. A site
-with no such record goes to the nearest stream, if that lies within 200
-m (<a href="#snap">how a site is placed</a>). About 4,000 visits are
-dropped here, most because the stream is too far away.</p>
+in a database by <a href="https://smnorris.github.io/fwapg/" class="external-link"><code>fwapg</code></a> <span class="citation">(<a href="#ref-norris2024smnorrisfwapg">Norris
+2024c</a>)</span>. Where the record names the site’s tributary in a form
+the Atlas can check, the site goes to the nearest stream of that
+tributary, even past a nearer stream, if it lies within 500 m, and is
+dropped if none does. A site with no such record goes to the nearest
+stream, if that lies within 200 m (<a href="#snap">how a site is
+placed</a>). About 4,000 visits are dropped here, most because the
+stream is too far away.</p>
 <details><summary>
 Code and settings
 </summary><ul>
@@ -349,21 +354,22 @@ checked: 42 characters
 <div class="section level3">
 <h3 id="step-3">3. link’s stream segments<a class="anchor" aria-label="anchor" href="#step-3"></a>
 </h3>
-<p>link <span class="citation">(<a href="#ref-link">Irvine
+<p><code>link</code> <span class="citation">(<a href="#ref-link">Irvine
 2026b</a>)</span> cuts the Atlas streams into short segments and
 records, for each species, whether fish can reach each one and what
-link’s current habitat definitions call habitat. Its full network also
-cuts streams where the species it models have been observed, using
-<code>bcfishobs</code> <span class="citation">(<a href="#ref-norris2024smnorrisbcfishobs">Norris 2024a</a>)</span>, so a
+<code>link</code>’s current habitat definitions call habitat. Its full
+network also cuts streams where the species it models have been
+observed, using <a href="https://github.com/smnorris/bcfishobs" class="external-link"><code>bcfishobs</code></a>
+<span class="citation">(<a href="#ref-norris2024smnorrisbcfishobs">Norris 2024a</a>)</span>, so a
 stream-line site that caught fish is far more likely than one that
 caught none to start a short segment of its own, and the slope it is
 scored on depends on the catch. The habitat definitions here are tuned
-on link’s minimal network, which leaves out those cuts, and those at
-crossings and hand-mapped habitat (<a href="#cuts">why</a>): there a
-stream-line site that caught fish starts a segment of its own about as
-often as one that caught none (3.4 % against 3.0 %). The observations
-never score a habitat definition: they say where fish were seen, not
-where they were looked for and missed.</p>
+on <code>link</code>’s minimal network, which leaves out those cuts, and
+those at crossings and hand-mapped habitat (<a href="#cuts">why</a>):
+there a stream-line site that caught fish starts a segment of its own
+about as often as one that caught none (3.4 % against 3.0 %). The
+observations never score a habitat definition: they say where fish were
+seen, not where they were looked for and missed.</p>
 <details><summary>
 Code and settings
 </summary><ul>
@@ -381,13 +387,15 @@ streams_habitat_&lt;species&gt;
 <div class="section level3">
 <h3 id="step-4">4. How much water each stream carries<a class="anchor" aria-label="anchor" href="#step-4"></a>
 </h3>
-<p>Flows come from <code>wet</code> <span class="citation">(<a href="#ref-wet">Irvine 2026c</a>)</span>. Mostly that is PCIC’s modelled
-streamflow <span class="citation">(<a href="#ref-schnorbus2018VICGlacierVICGL">Schnorbus 2018</a>; <a href="#ref-craig_etal2020Flexiblewatershed">Craig et al.
+<p>Flows come from <a href="https://newgraphenvironment.github.io/wet/" class="external-link"><code>wet</code></a>
+<span class="citation">(<a href="#ref-wet">Irvine 2026c</a>)</span>.
+Mostly that is PCIC’s modelled streamflow <span class="citation">(<a href="#ref-schnorbus2018VICGlacierVICGL">Schnorbus 2018</a>; <a href="#ref-craig_etal2020Flexiblewatershed">Craig et al.
 2020</a>)</span>, carried onto Atlas streams by New Graph’s fork of
 <code>fwapg</code> <span class="citation">(<a href="#ref-norris_irvine2026NewGraphEnvironmentfwapg">Norris and Irvine
 2026</a>)</span>. Where PCIC’s flow does not reach a stream, or carries
-under a fifth of wet’s estimate on a stream’s own line, it is wet’s own
-water balance, fitted to Water Survey of Canada gauges <span class="citation">(<a href="#ref-environmentandclimatechangecanada2021NationalWater">Environment
+under a fifth of <code>wet</code>’s estimate on a stream’s own line, it
+is <code>wet</code>’s own water balance, fitted to Water Survey of
+Canada gauges <span class="citation">(<a href="#ref-environmentandclimatechangecanada2021NationalWater">Environment
 and Climate Change Canada 2021</a>)</span>. About 87 % of the kept sites
 use PCIC’s flow.</p>
 <details><summary>
@@ -479,8 +487,9 @@ Most hops a walk takes before it stops: 60 hops
 <h3 id="step-6">6. Candidate rules<a class="anchor" aria-label="anchor" href="#step-6"></a>
 </h3>
 <p>For each species we build thousands of habitat definitions around
-link’s current values: different minimum stream sizes, slope limits, and
-an allowance for small streams close to a big river.</p>
+<code>link</code>’s current values: different minimum stream sizes,
+slope limits, and an allowance for small streams close to a big
+river.</p>
 <details><summary>
 Code and settings
 </summary><ul>
@@ -602,8 +611,8 @@ scoring the choice on the part left out, for each part in turn; and on
 200 random redraws of the groups. For chinook rearing the exact habitat
 definition came back on 4 of the 4 other splits but in only 10 % of the
 redraws. It stayed a close call on all 4 splits, and choosing this way
-scored better than link’s habitat definition on the parts left out
-(1,323 against 1,460; lower is better).</p>
+scored better than <code>link</code>’s habitat definition on the parts
+left out (1,323 against 1,460; lower is better).</p>
 <details><summary>
 Code and settings
 </summary><ul>
@@ -679,12 +688,14 @@ channel_width
 <div class="section level3">
 <h3 id="step-10">10. Running the rule on link’s streams<a class="anchor" aria-label="anchor" href="#step-10"></a>
 </h3>
-<p>link’s current habitat definition and the chosen one both go through
-the steps link itself uses, run by <code>fresh</code> <span class="citation">(<a href="#ref-fresh">Irvine 2026a</a>)</span>: the
-habitat definition’s test, link’s hand-entered habitat, and dropping
-rearing that has no spawning nearby. On the Bulkley, those last two
-steps removed 562 of the 6,052 segments link’s habitat definition
-passed, so we compare whole runs, not the test alone.</p>
+<p><code>link</code>’s current habitat definition and the chosen one
+both go through the steps <code>link</code> itself uses, run by
+<code>fresh</code> <span class="citation">(<a href="#ref-fresh">Irvine
+2026a</a>)</span>: the habitat definition’s test, <code>link</code>’s
+hand-entered habitat, and dropping rearing that has no spawning nearby.
+On the Bulkley, those last two steps removed 562 of the 6,052 segments
+<code>link</code>’s habitat definition passed, so we compare whole runs,
+not the test alone.</p>
 <details><summary>
 Code and settings
 </summary><ul>
@@ -730,8 +741,8 @@ discharge_source in link’s default bundle: unset
 <div class="section level3">
 <h3 id="step-11">11. Publishing<a class="anchor" aria-label="anchor" href="#step-11"></a>
 </h3>
-<p>The chosen values are written under link’s own parameter names, with
-the grades, so link can read them.</p>
+<p>The chosen values are written under <code>link</code>’s own parameter
+names, with the grades, so <code>link</code> can read them.</p>
 <details><summary>
 Code and settings
 </summary><ul>
@@ -1058,8 +1069,8 @@ error (SE)</strong> of the difference between two habitat definitions’
 scores says how far that difference would move with a different set of
 watershed groups. Habitat definitions whose scores are within 1 SE of
 the best are <strong>close calls</strong>: the records cannot rank them.
-From the close calls we take the one that changes link’s current habitat
-definition least.</p>
+From the close calls we take the one that changes <code>link</code>’s
+current habitat definition least.</p>
 <p>One SE is a rule of thumb, fixed before the run. It began with
 pruning classification trees <span class="citation">(<a href="#ref-breiman_etal1984ClassificationRegression">Breiman et al.
 1984</a>; as cited in <a href="#ref-chen_yang2021OneStandard">Chen and
@@ -1076,13 +1087,15 @@ and Grandvalet 2004</a>; <a href="#ref-bates_etal2024CrossValidationWhat">Bates 
 2021</a>)</span>.</p>
 <p>1.96 SE is the stricter reading, about the width of a 95 % interval:
 more habitat definitions become close calls, and the choice can stay
-nearer link’s habitat definition. Both are reported. How this
-comparison, and the rest of the tuning, stands against Bayesian practice
-is set out in <a href="tuning-bayesian-practice.html">an article of its
-own</a>.</p>
+nearer <code>link</code>’s habitat definition. Both are reported. How
+this comparison, and the rest of the tuning, stands against Bayesian
+practice is set out in <a href="tuning-bayesian-practice.html">an
+article of its own</a>.</p>
 <table class="table">
-<caption>link’s current habitat definition and the one chosen at each
-width of close call, for each species and stage tuned.</caption>
+<caption>
+<code>link</code>’s current habitat definition and the one
+chosen at each width of close call, for each species and stage
+tuned.</caption>
 <colgroup>
 <col width="4%">
 <col width="10%">
@@ -1093,7 +1106,8 @@ width of close call, for each species and stage tuned.</caption>
 </colgroup>
 <thead><tr class="header">
 <th align="left">species and stage</th>
-<th align="left">link’s habitat definition</th>
+<th align="left">
+<code>link</code>’s habitat definition</th>
 <th align="left">close calls at 1 SE</th>
 <th align="left">chosen at 1 SE</th>
 <th align="left">close calls at 1.96 SE</th>
@@ -1176,10 +1190,10 @@ Site visits each step drops, in the order the steps run.
 </div>
 <p>Each species then keeps the sites its habitat definitions can speak
 to: on a stream line (not in a river polygon, a wetland of 1 ha or more
-or a lake of 100 ha or more), of a usual fished area, where link expects
-the species, with no code that could hide it and no natural barrier to
-it downstream. The score uses the groups where the species was caught at
-some sites and not others.</p>
+or a lake of 100 ha or more), of a usual fished area, where
+<code>link</code> expects the species, with no code that could hide it
+and no natural barrier to it downstream. The score uses the groups where
+the species was caught at some sites and not others.</p>
 <table style="width:100%;" class="table">
 <caption>Rearing site visits per species after each filter.</caption>
 <colgroup>
@@ -1264,16 +1278,18 @@ some sites and not others.</p>
 </table>
 </div>
 <div class="section level2">
-<h2 id="cuts">Does where link cuts a stream change the habitat definitions?<a class="anchor" aria-label="anchor" href="#cuts"></a>
+<h2 id="cuts">Does where <code>link</code> cuts a stream change the habitat
+definitions?<a class="anchor" aria-label="anchor" href="#cuts"></a>
 </h2>
-<p>It can, and so the habitat definitions here are tuned on link’s
-minimal network. A habitat definition’s slope test reads each segment’s
-own slope, and link’s full network cuts some streams at fish records, so
-a site that caught fish often starts a short segment whose slope is
-worked out from the catch upstream. Tuned on the full network, chinook
-rearing’s steepest slope is 13 % rather than the minimal network’s 9 %,
-and the network moves the habitat definitions of some other species and
-stages too. link draws habitat on its full network, where each segment
+<p>It can, and so the habitat definitions here are tuned on
+<code>link</code>’s minimal network. A habitat definition’s slope test
+reads each segment’s own slope, and <code>link</code>’s full network
+cuts some streams at fish records, so a site that caught fish often
+starts a short segment whose slope is worked out from the catch
+upstream. Tuned on the full network, chinook rearing’s steepest slope is
+13 % rather than the minimal network’s 9 %, and the network moves the
+habitat definitions of some other species and stages too.
+<code>link</code> draws habitat on its full network, where each segment
 can read the slope of the minimal segment it lies in (<a href="https://github.com/NewGraphEnvironment/link/issues/463" class="external-link">link#463</a>),
 the slope a habitat definition here was tuned on. The article <a href="tuning-stream-splits.html">Splitting streams at fish records
 shifts the steepest slope mapped as habitat</a> shows it on our own
@@ -1287,30 +1303,31 @@ records; these figures come from that article’s data, written on
 <li>A site’s tributary code can name several Atlas streams, and the site
 goes to the nearest of them, which need not be the one the crew fished
 (<a href="https://github.com/NewGraphEnvironment/knowledge/issues/91" class="external-link">#91</a>).</li>
-<li>On link’s minimal network, 3.4 % of stream-line sites that caught
-fish start a segment of their own, against 3.0 % of those that caught
-none, and the median segment is 717 m long against 699 m, so the stretch
-a site’s slope is worked out over hardly depends on what the crew caught
-(<a href="https://github.com/NewGraphEnvironment/knowledge/issues/120" class="external-link">#120</a>).
+<li>On <code>link</code>’s minimal network, 3.4 % of stream-line sites
+that caught fish start a segment of their own, against 3.0 % of those
+that caught none, and the median segment is 717 m long against 699 m, so
+the stretch a site’s slope is worked out over hardly depends on what the
+crew caught (<a href="https://github.com/NewGraphEnvironment/knowledge/issues/120" class="external-link">#120</a>).
 Its segments still end at access gradients, which depend on the species
-link models. Scored on the whole Atlas line’s slope instead, the chosen
-habitat definition is a close call for 3 of the 6 species and stages (<a href="https://github.com/NewGraphEnvironment/knowledge/issues/92" class="external-link">#92</a>);
+<code>link</code> models. Scored on the whole Atlas line’s slope
+instead, the chosen habitat definition is a close call for 3 of the 6
+species and stages (<a href="https://github.com/NewGraphEnvironment/knowledge/issues/92" class="external-link">#92</a>);
 slopes over a fixed length would not depend on where streams are cut (<a href="https://github.com/NewGraphEnvironment/knowledge/issues/70" class="external-link">#70</a>).
 How far the cuts move the habitat definitions is <a href="#cuts">above</a>.</li>
-<li>The results are on the segments of link’s minimal network, built on
-2026-11-02 (<a href="https://github.com/NewGraphEnvironment/link/issues/441" class="external-link">link#441</a>),
+<li>The results are on the segments of <code>link</code>’s minimal
+network, built on 2026-11-02 (<a href="https://github.com/NewGraphEnvironment/link/issues/441" class="external-link">link#441</a>),
 which cuts streams at barriers and access gradients but not at fish
 records, crossings or hand-mapped habitat.</li>
 <li>Crews measured the slope of the channel at 18,759 of the 45,529
-placed sites. On the stretches the habitat definitions score, link’s
-segment slope puts those sites in much the same order as the crews’
-readings (a rank correlation of 0.68, where 1 is the same order and a
-second reading at the same site gives 0.90), but differs from the site’s
-by a median of 2.3 percentage points. So a tuned slope limit sorts sites
-well taken together, but reads as a slope on the ground only to within a
-few points: counting each species’ sites within one step of its own
-limit (1,527 in all), 37 % sit on the other side of it as the crews
-measured it (<a href="https://github.com/NewGraphEnvironment/knowledge/issues/121" class="external-link">#121</a>).</li>
+placed sites. On the stretches the habitat definitions score,
+<code>link</code>’s segment slope puts those sites in much the same
+order as the crews’ readings (a rank correlation of 0.68, where 1 is the
+same order and a second reading at the same site gives 0.90), but
+differs from the site’s by a median of 2.3 percentage points. So a tuned
+slope limit sorts sites well taken together, but reads as a slope on the
+ground only to within a few points: counting each species’ sites within
+one step of its own limit (1,527 in all), 37 % sit on the other side of
+it as the crews measured it (<a href="https://github.com/NewGraphEnvironment/knowledge/issues/121" class="external-link">#121</a>).</li>
 <li>Flows are 30-year averages, so no single dry year is in them. They
 are also averages over the whole year: sizing chinook rearing streams by
 their average flow in August and September instead was tried, and
@@ -1323,8 +1340,8 @@ predicted where chinook were caught no better (<a href="https://github.com/NewGr
 <p>Every number below shapes a result. Each was checked against the code
 and the run when this article’s data were written.
 <strong>Source</strong> says where the value came from: a published
-source, a convention set here, a value inherited from link or bcfishpass
-<span class="citation">(<a href="#ref-norris2024smnorrisbcfishpass">Norris 2024b</a>)</span>, or a
+source, a convention set here, a value inherited from <code>link</code>
+or <code>bcfishpass</code> <span class="citation">(<a href="#ref-norris2024smnorrisbcfishpass">Norris 2024b</a>)</span>, or a
 value measured from data. <strong>Tested</strong> says whether the
 result has been compared with another value. The untested rows come
 first: they are the work still to do.</p>

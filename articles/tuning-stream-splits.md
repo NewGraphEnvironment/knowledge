@@ -19,16 +19,17 @@ which segments each species can reach, and classifies their habitat.
 Because a recipe is a set of files, a model can be changed, run beside
 another and traced back to the values that produced it.
 
-`knowledge`, the package this article belongs to, is our evidence tool
-for link’s habitat definitions. It starts from what is known about each
-species’ life history, from the published literature and past reports,
-and the biology sets the shape of a habitat definition, such as young
-chinook rearing in small streams close to a large river. Where the
-Province’s fish sampling records are rich enough, they tune its values:
-knowledge scores candidate values against where sampling caught the
-species and where it did not, keeps the smallest change to link’s
-standard settings that fits about as well as the best, and checks it on
-parts of the province it was not chosen from ([how the tuning
+[`knowledge`](https://newgraphenvironment.github.io/knowledge/), the
+package this article belongs to, is our evidence tool for `link`’s
+habitat definitions. It starts from what is known about each species’
+life history, from the published literature and past reports, and the
+biology sets the shape of a habitat definition, such as young chinook
+rearing in small streams close to a large river. Where the Province’s
+fish sampling records are rich enough, they tune its values: `knowledge`
+scores candidate values against where sampling caught the species and
+where it did not, keeps the smallest change to `link`’s standard
+settings that fits about as well as the best, and checks it on parts of
+the province it was not chosen from ([how the tuning
 works](https://newgraphenvironment.github.io/knowledge/articles/tuning-method.md)).
 A habitat map steers where restoration and conservation effort goes, and
 one tuned this way rests on where fish have actually been found.
@@ -41,15 +42,15 @@ A segment’s slope is its drop over its whole length, so where a stream
 is cut decides the slope a habitat definition is tested on, and some
 cuts fall exactly where fish were caught. Change the cuts and the
 habitat definition chosen from those catches can change. Chinook
-rearing’s slope limit is **13 %** on link’s full network and **9 %** on
-its minimal network, which leaves out the cuts at fish records, at
+rearing’s slope limit is **13 %** on `link`’s full network and **9 %**
+on its minimal network, which leaves out the cuts at fish records, at
 crossings and at hand-mapped habitat. Yet the two habitat definitions
 draw much the same habitat; on the map they differ in short pieces of
 small streams:
 
 ![Chinook rearing habitat in the Morkill River watershed group, around
 the Fraser River 63 km north-west of McBride, under two habitat
-definitions, both run on link's full network. Grey: drawn by both.
+definitions, both run on link’s full network. Grey: drawn by both.
 Black: drawn only by the habitat definition tuned on each segment's own
 slope (a 13 % limit). Steel blue: drawn only by the habitat definition
 tuned on the minimal network, reading each segment's minimal-network
@@ -60,8 +61,8 @@ Relief.](tuning-stream-splits_files/figure-html/map-1.png)
 
 Chinook rearing habitat in the Morkill River watershed group, around the
 Fraser River 63 km north-west of McBride, under two habitat definitions,
-both run on link’s full network. Grey: drawn by both. Black: drawn only
-by the habitat definition tuned on each segment’s own slope (a 13 %
+both run on `link`’s full network. Grey: drawn by both. Black: drawn
+only by the habitat definition tuned on each segment’s own slope (a 13 %
 limit). Steel blue: drawn only by the habitat definition tuned on the
 minimal network, reading each segment’s minimal-network slope (9 %).
 Line width follows stream order. The lower panel enlarges the box
@@ -78,18 +79,19 @@ this article disagree over the most km.
 
 ## Why does a cut at a catch matter?
 
-Both of link’s networks cut a stream where one Atlas line meets the
+Both of `link`’s networks cut a stream where one Atlas line meets the
 next, at natural barriers and at the steep sections a species cannot
 pass. The full network adds cuts the minimal network does not make,
 among them crossings, the ends of stretches whose habitat has been
-mapped by hand, and records of the species link models in each watershed
-group (in the build used here, each such species’ highest record on each
-stream, drawn from bcfishobs ([Norris
-2024a](#ref-norris2024smnorrisbcfishobs))). link cuts at those records
+mapped by hand, and records of the species `link` models in each
+watershed group (in the build used here, each such species’ highest
+record on each stream, drawn from
+[`bcfishobs`](https://github.com/smnorris/bcfishobs) ([Norris
+2024a](#ref-norris2024smnorrisbcfishobs))). `link` cuts at those records
 so that a segment can say whether the species has been seen at or above
-it, as bcfishpass ([Norris 2024b](#ref-norris2024smnorrisbcfishpass))
-does. Every habitat definition is then tested on the slope of the
-shorter segment.
+it, as [`bcfishpass`](https://github.com/smnorris/bcfishpass) ([Norris
+2024b](#ref-norris2024smnorrisbcfishpass)) does. Every habitat
+definition is then tested on the slope of the shorter segment.
 
 An electrofishing visit that caught fish is often such a record, so the
 cut lands at the visit, and the slope tested there is worked out from
@@ -157,14 +159,14 @@ second panel, the full network’s segment ends 79 m above the visit, and
 the steeper water above it, which the minimal network’s segment averages
 in, is read on its own.
 
-How often does it happen? If link cut visits with fish and visits
+How often does it happen? If `link` cut visits with fish and visits
 without alike, a slope limit would be judged on the same footing at
 both. On the full network it does not: a visit that caught fish starts a
 segment of its own far more often than one that caught none. The minimal
 network takes that difference away.
 
 ![Electrofishing visits that start a segment of their own, on three of
-link's networks: dark, visits where fish of any species were caught;
+link’s networks: dark, visits where fish of any species were caught;
 light, visits where none were. A visit starts its own segment when the
 segment begins between 1 m below it and 5 m above it. The same 29,335
 visits are counted on each network (13,058 with fish, 16,277 without):
@@ -173,13 +175,13 @@ tuning scores. The networks are link 0.66.0's, link 0.78.2's and link
 0.78.1's.](tuning-stream-splits_files/figure-html/premise-1.png)
 
 Electrofishing visits that start a segment of their own, on three of
-link’s networks: dark, visits where fish of any species were caught;
+`link`’s networks: dark, visits where fish of any species were caught;
 light, visits where none were. A visit starts its own segment when the
 segment begins between 1 m below it and 5 m above it. The same 29,335
 visits are counted on each network (13,058 with fish, 16,277 without):
 those with a fished area in the usual range, on the stream lines the
-tuning scores. The networks are link 0.66.0’s, link 0.78.2’s and link
-0.78.1’s.
+tuning scores. The networks are `link` 0.66.0’s, `link` 0.78.2’s and
+`link` 0.78.1’s.
 
 Visits without chinook move too. Of the roughly 7,800 visits in
 chinook’s range that the tuning starts from, the two networks put the
@@ -189,7 +191,7 @@ move them.
 
 ## How does the tuning choose a habitat definition?
 
-A habitat definition decides how much habitat link draws, so it should
+A habitat definition decides how much habitat `link` draws, so it should
 be one the fish records support. The tuning tries many candidate habitat
 definitions, each a different set of parameters, and scores each by how
 well it predicts where chinook were caught in watershed groups left out
@@ -200,10 +202,10 @@ cannot rank close calls apart. For chinook rearing the tuning varies the
 three parts of the habitat definition: the smallest stream (by flow or
 by channel width), the steepest slope, and the allowance near a large
 river (how large the river, and how close). Of the close calls the
-tuning chooses the one closest to link’s standard settings for the
+tuning chooses the one closest to `link`’s standard settings for the
 species, and among equals the best scorer; for chinook rearing every
-close call differs from link’s standard settings in all three parts, so
-the choice is the best scorer.
+close call differs from `link`’s standard settings in all three parts,
+so the choice is the best scorer.
 
 ## What does each network choose?
 
@@ -216,8 +218,8 @@ on.
 
 | Segments and slope | Slope limit chosen | A close call on the full network’s records? | On the minimal network’s? |
 |:---|---:|:--:|:--:|
-| link’s full network, each segment reading its own slope (how link applies a habitat definition) | 13 % | yes | no |
-| link’s minimal network, without the cuts at fish records, crossings and hand-mapped habitat | 9 % | yes | yes |
+| `link`’s full network, each segment reading its own slope (how `link` applies a habitat definition) | 13 % | yes | no |
+| `link`’s minimal network, without the cuts at fish records, crossings and hand-mapped habitat | 9 % | yes | yes |
 | The full network’s segments, each reading its minimal parent’s slope | 9 % | yes | yes |
 | The full network’s segments, each reading the slope of the whole Atlas line it lies on | 15 % | no | no |
 |  Every habitat definition chosen keeps the same flow floor and the same allowance for small streams near a large river; only the slope limit differs. A verdict is on the habitat definition chosen, not on its limit alone: on the minimal network’s records, 13 other candidates with a 13 % limit, differing in their flow floor or their allowance, are close calls. |  |  |  |
@@ -235,13 +237,13 @@ the full network chooses the minimal network’s habitat definition
 exactly. The Atlas line’s slopes choose 15 %, in a habitat definition
 that is a close call on neither network’s records; these runs do not
 show why. How much habitat each habitat definition draws, run through
-all of link’s steps on the segments it was tuned on, differs by under 3
-% across the four.
+all of `link`’s steps on the segments it was tuned on, differs by under
+3 % across the four.
 
 ## What does it mean for someone using the thresholds?
 
 This package’s chinook rearing thresholds, tuned on 3 November 2026,
-were tuned on link’s minimal network, each segment reading its own
+were tuned on `link`’s minimal network, each segment reading its own
 slope; [how the tuning
 works](https://newgraphenvironment.github.io/knowledge/articles/tuning-method.html#cuts)
 says why. On another network, or with slopes read another way, the same
@@ -278,7 +280,7 @@ from a segment’s downstream end.
 
 ## How was this done?
 
-The numbers were bundled on 2026-11-05 from the tuning runs and link
+The numbers were bundled on 2026-11-05 from the tuning runs and `link`
 builds the research notes describe. When it was written, the share of
 visits starting their own segment, the four tunings’ choices and
 habitat, and the other species’ choices were checked against the logs
@@ -286,12 +288,13 @@ that report them there. The visits are the Fisheries Data Information
 System’s electrofishing records ([Province of British Columbia
 2022](#ref-provinceofbritishcolumbia2022FisheriesData)), placed on the
 Freshwater Atlas; their flows are
-[`wet`](https://www.newgraphenvironment.com/wet/)‘s ([Irvine
+[`wet`](https://www.newgraphenvironment.com/wet/)’s ([Irvine
 2026c](#ref-wet)), mostly PCIC’s modelled flow carried onto Atlas
-streams by New Graph’s fork of `fwapg` ([Norris and Irvine
-2026](#ref-norris_irvine2026NewGraphEnvironmentfwapg)); fresh runs
-link’s habitat definitions. The methodology article answers this
-article’s question in brief ([Does where link cuts a stream change the
+streams by New Graph’s fork of
+[`fwapg`](https://smnorris.github.io/fwapg/) ([Norris and Irvine
+2026](#ref-norris_irvine2026NewGraphEnvironmentfwapg)); `fresh` runs
+`link`’s habitat definitions. The methodology article answers this
+article’s question in brief ([Does where `link` cuts a stream change the
 habitat
 definitions?](https://newgraphenvironment.github.io/knowledge/articles/tuning-method.html#cuts)).
 The maps’ basemap is Esri’s World Topographic Map blended with its World

@@ -100,18 +100,17 @@ should change: a check on how the choice is made does not fully hold its
 test data out, and the two models the publishing test compares treat a
 site from an unfamiliar data set or period differently. A third, stream
 slopes that depended on where fish were caught, is answered: the habitat
-definitions are tuned on <code>link</code>’s minimal network, which does
-not cut streams at fish records. The terms are gathered in a <a href="#terms">glossary</a> at the end.</p>
+definitions are tuned on <a href="https://newgraphenvironment.github.io/link/" class="external-link"><code>link</code></a>’s
+minimal network, which does not cut streams at fish records. The terms
+are gathered in a <a href="#terms">glossary</a> at the end.</p>
 <div class="section level2">
 <h2 id="tuning">What does the tuning do?<a class="anchor" aria-label="anchor" href="#tuning"></a>
 </h2>
 <p>For each species and life stage, the tuning builds a grid of habitat
-definitions around those of <a href="https://newgraphenvironment.github.io/link/" class="external-link"><code>link</code></a>
-<span class="citation">(<a href="#ref-link">Irvine 2026</a>)</span>, the
-R package that maps habitat on BC’s streams: a floor on stream size, a
-ceiling on slope, and for some an exception for small streams near a
-large river. Each habitat definition sorts every site crews
-electrofished into habitat or not.</p>
+definitions around those of <code>link</code> <span class="citation">(<a href="#ref-link">Irvine 2026</a>)</span>, the R package that maps
+habitat on BC’s streams: a floor on stream size, a ceiling on slope, and
+for some an exception for small streams near a large river. Each habitat
+definition sorts every site crews electrofished into habitat or not.</p>
 <p>The <strong>scorer</strong> is a regression of whether the species
 was caught at a site on that sorting. Beside it sit the area fished (the
 effort) and two <strong>sampling terms</strong>, the data set the record
@@ -179,9 +178,9 @@ first</td>
 <tr class="even">
 <td align="left">How wide is a close call, and which close call is
 chosen?</td>
-<td align="left">One standard error; the close call nearest link’s
-current habitat definition, passing over short near-river
-exceptions</td>
+<td align="left">One standard error; the close call nearest
+<code>link</code>’s current habitat definition, passing over short
+near-river exceptions</td>
 <td align="left">departs</td>
 </tr>
 <tr class="odd">
@@ -253,8 +252,8 @@ exact</td>
 </tr>
 <tr class="even">
 <td align="left">Is a stream’s slope independent of the catch?</td>
-<td align="left">Nearly: the tuning reads link’s minimal network, which
-does not cut streams at fish records</td>
+<td align="left">Nearly: the tuning reads <code>link</code>’s minimal
+network, which does not cut streams at fish records</td>
 <td align="left">follows the books</td>
 </tr>
 </tbody>
@@ -493,11 +492,11 @@ mapped by hand; it still cuts where one Atlas line meets the next, at
 natural barriers and at slopes a species cannot pass. There a site with
 fish starts its own segment about as often as an empty one.</p>
 <div class="figure">
-<img src="tuning-bayesian-practice_files/figure-html/cuts-1.png" class="r-plt" alt="The share of site visits on the stream branch that start a segment of their own, for visits that caught fish and visits that did not, on link's full network in its earlier and current builds, and on its minimal network, which the tuning reads." width="100%"><p class="caption">
+<img src="tuning-bayesian-practice_files/figure-html/cuts-1.png" class="r-plt" alt="The share of site visits on the stream branch that start a segment of their own, for visits that caught fish and visits that did not, on link’s full network in its earlier and current builds, and on its minimal network, which the tuning reads." width="100%"><p class="caption">
 The share of site visits on the stream branch that start a segment of
 their own, for visits that caught fish and visits that did not, on
-link’s full network in its earlier and current builds, and on its
-minimal network, which the tuning reads.
+<code>link</code>’s full network in its earlier and current builds, and
+on its minimal network, which the tuning reads.
 </p>
 </div>
 <p>The network moves the result. Tuned on the full network, chinook
@@ -585,7 +584,7 @@ summed over sites; lower is better.</li>
 <strong>Fold.</strong> One of the 5 sets the watershed groups are
 dealt into; each in turn is left out of the fit and scored.</li>
 <li>
-<strong>Full network.</strong> <code>link</code>‘s streams cut,
+<strong>Full network.</strong> <code>link</code>’s streams cut,
 beyond the minimal network’s cuts, at fish records, at crossings and at
 the ends of hand-mapped habitat; the network <code>link</code> draws
 habitat on. Its current build cuts at each species’ highest record on a
