@@ -51,7 +51,7 @@ split piece, or one filed since the last pass): run `/backlog-sweep` to place it
 | - [ ] 11 | #180 | 17: report-priority pipeline for any group (3 issues) | **waiting** on Al's word to resume the report-priority work, parked 2026-09-04 | C | 10 | opus |
 | - [ ] 12 | #231 | 19: article wording and one method-bundle rebuild (3 issues) | open | E | — | opus |
 | - [ ] 13 | #232 | 20: one research page per key (3 issues) | open | E | 10, 12 | fable then opus |
-| - [ ] 14 | #233 | 21: window flow follow-ups (2 issues) | open | G | — | fable then opus |
+| - [x] 14 | #233 | 21: window flow follow-ups (2 issues) | done: https://github.com/NewGraphEnvironment/knowledge/pull/257 | G | — | fable then opus |
 | - [ ] 15 | #236 | 24: PSCIS stream slope against link's gradient, the gradient track's first piece (1 issue) | open | F | — | opus |
 | - [x] 16 | #244 | 25, 26: NuSEDS windows for every group, the timing track's first piece; a publish that runs as documented (2 issues) | done: https://github.com/NewGraphEnvironment/knowledge/pull/250 | H | — | opus |
 Tracks are separate efforts, not moves: baselines (#139, `track:baselines`: #140 next), speed (`track:speed`: #85,
@@ -301,7 +301,7 @@ directory
 
 ### 21. Window flow follow-ups
 
-- [ ] Carried by move 14, #233
+- [x] Carried by move 14, #233 (merged in https://github.com/NewGraphEnvironment/knowledge/pull/257)
 
 #226 (#105's Phase 2: score chinook rearing on window flow beside MAD, four readings, outputs only under
 `data/tune/flow_window/`). The batch also held the rest of #42 (7-day minimums and dry-year departures at gauges, then
