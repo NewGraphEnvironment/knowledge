@@ -23,7 +23,16 @@ Issue and PR numbers in the seeded history and in `planning/archive/2026-07-*` r
 - `vignettes/tuning-chinook-rearing.Rmd` — "Tuning habitat: chinook rearing", the case study of chinook rearing (#62). The
   articles are one series, `tuning-<name>` (#118): `_pkgdown.yml` groups them as the method, the case studies
   (`tuning-<species>-<stage>`), checks on the method and one internal article, and redirects their earlier names. Their prose says "fish
-  habitat definition" at first mention and "habitat definition" after, never "rule" (#156). It reads
+  habitat definition" at first mention and "habitat definition" after, never "rule" (#156). A package or lower-case
+  tool name (`link`, `wet`, `bcfishpass`) is in code font at every mention and linked at its first only (#258; the
+  methodology article's "Software and citation" links four again, and the text it prints from its bundle is #201's).
+  Three things to know, found by rendering before and after and comparing the text and then the attributes: after a
+  code span pandoc can turn a straight apostrophe into an opening quote, in prose and in a table's string alike, so
+  write the possessive with the apostrophe itself (`` `link`’s ``); an HTML kable's caption, footnote, header and cells
+  take a backtick as prose does, with the default `escape` (pandoc reads markdown inside HTML blocks), so they need no
+  `<code>` tag and no `escape = FALSE`; and knitr gives a figure's alt text the caption's source, backticks and all,
+  so each article's setup chunk strips them with a `fig.cap` hook, which must hand knitr a call, since a caption
+  built by `paste0()` is not yet evaluated when the hook runs. The chinook article reads
   `inst/vignette-data/`, which `data-raw/vignette_chinook.R` writes from the tune and compare tables and the
   database (`SCHEMA` names the run's schema, as `0320` and `0330` take it). A promotion (`0335`) reruns it, and only a
   promotion changes its sources, because `tests/testthat/test-vignette-data.R` fails when a tracked source's md5 moves
@@ -66,7 +75,7 @@ Issue and PR numbers in the seeded history and in `planning/archive/2026-07-*` r
   that `data-raw/cut_points_stage.R` copies on the database's host into the ignored `data/stage/` (both builds, the
   setup runs, the evidence), and `cut_points_places.rds` (`data-raw/vignette_cut_points_places.R`). The stage stays on
   that host; the bundle needs nothing else, and the staged md5s are tested only where the stage exists. The methodology
-  article's "Does where link cuts a stream change the rules?" (`#cuts`) answers it in brief and links it, reading
+  article's "Does where `link` cuts a stream change the habitat definitions?" (`#cuts`) answers it in brief and links it, reading
   `cut_points.rds` for its two numbers; a promotion does not rebuild that bundle, so the section's guard stops the build
   when the methodology bundle's chinook rearing pick no longer matches the bundle's `minimal` setup (the published
   network since 2026-11-13, #120; the bundle's setup `published` is #145's full-network run).
