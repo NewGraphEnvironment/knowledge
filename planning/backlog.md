@@ -304,8 +304,9 @@ directory
 - [ ] Carried by move 14, #233
 
 #226 (#105's Phase 2: score chinook rearing on window flow beside MAD, four readings, outputs only under
-`data/tune/flow_window/`) and #227 (the rest of #42: 7-day minimums and dry-year departures at gauges, then whether to
-carry them to segments). Gate: a separate window walk or the published one (whose md5 moves every grade); the window
+`data/tune/flow_window/`). The batch also held the rest of #42 (7-day minimums and dry-year departures at gauges, then
+whether to carry them to segments), which move 14's plan gate split out on 2026-11-21: it is its own issue, left for
+the next `/backlog-sweep` to place. Gate (answered in #233's body): a separate window walk or the published one (whose md5 moves every grade); the window
 column in the published evidence build or a tagged evidence directory; and how much of #227 is wet's, which has open
 work on monthly error by region and season and on donor departures at ungauged sites. Grading, comparing or publishing
 a window rule waits on Al's word.

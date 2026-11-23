@@ -1,6 +1,6 @@
 # Stream size where Chinook are caught: CH detection by MAD, and small streams near large rivers
 
-**Verified:** 2026-10-15; figures rerun 2026-10-17 without repeated surveys (#35) · **Issues:** #52 (this); beside #42 (flow in stage windows); uses #18 (FDIS
+**Verified:** 2026-10-15; figures rerun 2026-10-17 without repeated surveys (#35) · **Issues:** #52 (this); beside #42 (flow in stage windows) and #226 (the rule tuned on late-summer flow: no better than MAD); uses #18 (FDIS
 export), #28's design (`habitat_weights.md`) and wet's published flow (`modelled_discharge.md`); tuned in #54;
 link's move onto wet's flow is NewGraphEnvironment/link#331 · **Produced by:**
 - `scripts/0294-ch-mad-build.R` with `scripts/sql/ch_dist_large.sql`: visits, flow, distance and flags;
@@ -168,6 +168,10 @@ link's `default` CH rearing bounds come from Rebellato et al. 2024 (evidence dat
 - **Juveniles only.** FDIS caught 2 CH ≥ 150 mm in the whole export.
 - **Margins, not channels.** 702 of the 978 analysed detections are on segments inside a river polygon or on
   river-polygon edges. The data do measure large rivers, at their electrofishable margins.
+- **Annual flow, not the flow of a season.** MAD is a year-round average. The tuned rearing rule was scored again
+  with the stream's and the river's flow in August and September in MAD's place (#226, 2026-11-22): at the stream
+  the two tie, at the river the window scores worse, so the rule stays on MAD (`research/chinook_window_flow.md`).
+  Both are 30-year means; a dry year is in neither.
 - **Modelled, natural flow.**
   - The two sources put a visit in the same class 53–67 % of the time between 0.1 and 1 m³/s.
   - On regulated rivers, natural flow is not the flow in the channel. Those visits are flagged, and a

@@ -119,3 +119,302 @@ test_that("the flow load is refused unless its comment names the historical load
   expect_error(load_of(NA_character_), "no load comment")
   expect_error(load_of(""), "no load comment")
 })
+
+# ---- the window walk (#226): another file, the same walk but for the flow it reads --------------------------------
+
+# a region marker is a line holding nothing else; the header's prose names the markers without being one
+walk_mark <- function(x, which) trimws(x) == paste("-- window flow:", which)
+# a walk file's lines after its leading comment block (a region marker is not part of that block)
+walk_body <- function(window) {
+  x <- readLines(.knw_walk_file(window))
+  head_line <- startsWith(x, "--") & !walk_mark(x, "begin") & !walk_mark(x, "end")
+  x[seq_along(x) > max(which(cumsum(!head_line) == 0L))]
+}
+
+test_that("the window walk's file is the annual walk's text outside its three marked regions", {
+  pub <- walk_body(FALSE)
+  win <- walk_body(TRUE)
+  mark <- cumsum(walk_mark(win, "begin")) - cumsum(c(FALSE, head(walk_mark(win, "end"), -1L)))
+  expect_setequal(mark, c(0L, 1L))                       # the markers pair up and never nest
+  expect_identical(c(sum(walk_mark(win, "begin")), sum(walk_mark(win, "end"))), c(3L, 3L))
+  expect_false(any(walk_mark(pub, "begin") | walk_mark(pub, "end")))
+  core <- win[mark == 0L]
+  # walk the annual file: each of its lines is the window file's next unmarked line, or belongs to the annual
+  # walk alone
+  only_pub <- character()
+  k <- 1L
+  for (line in pub) {
+    if (k <= length(core) && identical(line, core[k])) k <- k + 1L else only_pub <- c(only_pub, line)
+  }
+  expect_identical(k, length(core) + 1L)                 # every unmarked line of the window file was met, in order
+  # what the annual walk alone holds: its signature, and its read of the annual flow
+  expect_identical(only_pub, c(
+    "CREATE OR REPLACE FUNCTION pg_temp.ch_dist_profile(start_blk integer, start_m double precision,",
+    "                                                   qmins double precision[], src text)",
+    "            JOIN discharge.fwa_v1_segment_monthly q",
+    "              ON q.linear_feature_id = s.linear_feature_id AND q.scenario = 'historical'",
+    "             AND q.month = 0 AND ((src = 'pick' AND q.pick) OR q.source = src)"
+  ))
+  # so the edge types a river may be, the path and the bank rule are one text
+  expect_true(any(grepl("s.edge_type NOT IN (1100, 1150, 1300, 1350, 2300, 1400, 1450)", core, fixed = TRUE)))
+})
+
+test_that("the annual walk is the walk every grade was walked by, and the window walk is another", {
+  expect_match(knw_walk_md5(window = TRUE), "^[0-9a-f]{32}$")
+  expect_false(identical(knw_walk_md5(window = TRUE), knw_walk_md5()))
+  expect_identical(knw_walk_md5(window = FALSE), knw_walk_md5())
+  # the tracked grade records name the annual walk's md5 (the source tree only: data/ is not in the build)
+  recs <- list.files(test_path("..", "..", "data", "tune"), "_grades_record\\.csv$", full.names = TRUE)
+  skip_if(length(recs) == 0L, "no tracked grade records beside the tests (an installed package)")
+  md5 <- unique(unlist(lapply(recs, function(f) utils::read.csv(f, stringsAsFactors = FALSE)$walk_md5)))
+  expect_identical(md5, knw_walk_md5())
+})
+
+test_that("the annual walk's query is the text it was before a window existed", {
+  walk_cols <- c("qmin", "dist_m", "large_mad", "large_lfid", "large_edge", "large_waterbody_key", "n_hops",
+                 "max_entry_gap_m", "status", "dist_centre_m", "bank_m")
+  expect_identical(.knw_walk_cols(), walk_cols)
+  # knw_link_walks()'s own construction before #226, kept here as it was written
+  from <- paste("unnest($1::integer[], $2::float8[]) WITH ORDINALITY AS s(blk, m, ord)",
+                "CROSS JOIN LATERAL pg_temp.ch_dist_profile(s.blk, s.m, $3::float8[], $4) p")
+  expect_identical(.knw_walk_sql(walk_cols),
+                   sprintf("SELECT s.ord, %s FROM %s ORDER BY s.ord", paste0("p.", walk_cols, collapse = ", "), from))
+  meta <- list(load_md5 = "aa", walk_md5 = "bb")
+  expect_identical(.knw_walk_sql(walk_cols, cache = "knw.walk_cache", meta = meta),
+                   sprintf(paste("WITH w AS (SELECT s.blk, s.m, s.ord, %1$s FROM %2$s),",
+                                 "ins AS (INSERT INTO %3$s",
+                                 "(blue_line_key, downstream_route_measure, src, load_md5, walk_md5, %4$s)",
+                                 "SELECT blk, m, $4, '%5$s', '%6$s', %4$s FROM w ON CONFLICT DO NOTHING)",
+                                 "SELECT ord, %4$s FROM w ORDER BY ord"),
+                           paste0("p.", walk_cols, collapse = ", "), from, "knw.walk_cache",
+                           paste(walk_cols, collapse = ", "), "aa", "bb"))
+  # a window's query calls the other function and keeps the window in the row's source
+  skip_if_not_installed("wet")
+  win <- c(list(label = "0815-0915"), .knw_window_weights("08-15", "09-15"))
+  q <- .knw_walk_sql(walk_cols, win = win, cache = "knw.walk_cache_window", meta = meta)
+  expect_match(q, paste0("pg_temp.ch_dist_profile_window(s.blk, s.m, $3::float8[], $4, '{8,9}'::integer[], ",
+                         "'{0.53125,0.46875}'::float8[])"), fixed = TRUE)
+  expect_match(q, "SELECT blk, m, $4 || '@0815-0915', 'aa', 'bb',", fixed = TRUE)
+})
+
+test_that("the window walk given the annual flow as its window is the annual walk, row for row", {
+  conn <- skip_if_no_pg("discharge")
+  for (w in c(FALSE, TRUE)) DBI::dbExecute(conn, paste(readLines(.knw_walk_file(w)), collapse = "\n"))
+  starts <- data.frame(blk = c(360886335, 360873822, 360886335), m = c(1520, 0, 2040.5))
+  for (src in c("pick", "pcic_routed", "wet_balance")) {
+    for (i in seq_len(nrow(starts))) {
+      p <- list(starts$blk[i], starts$m[i], src)
+      a <- DBI::dbGetQuery(conn, "SELECT * FROM pg_temp.ch_dist_profile($1::integer, $2::float8, '{1,3,10,50}', $3)
+                                  ORDER BY qmin", params = p)
+      b <- DBI::dbGetQuery(conn, "SELECT * FROM pg_temp.ch_dist_profile_window($1::integer, $2::float8,
+                                  '{1,3,10,50}', $3, '{0}', '{1}') ORDER BY qmin", params = p)
+      expect_identical(nrow(a), 4L)
+      expect_identical(b, a)
+    }
+  }
+  expect_true(TRUE)
+})
+
+test_that("the window walk reads no window short: a month with no flow is a missing month, and a NULL is refused", {
+  conn <- skip_if_no_pg("discharge")
+  DBI::dbExecute(conn, paste(readLines(.knw_walk_file(TRUE)), collapse = "\n"))
+  walk <- function(months, weights) {
+    DBI::dbGetQuery(conn, sprintf("SELECT * FROM pg_temp.ch_dist_profile_window(360886335, 1520, '{1,3}', 'pick',
+                                   %s, %s) ORDER BY qmin", months, weights))
+  }
+  # August alone finds a river on this start's own line
+  aug <- walk("'{8}'", "'{1}'")
+  expect_identical(aug$status, c("found", "found"))
+  # with a month no segment carries (13), every segment is short a month: none may be taken on August's half alone,
+  # and the walk runs to the sea
+  short <- walk("'{8,13}'", "'{0.5,0.5}'")
+  expect_false(any(short$status == "found"))
+  # a NULL array, a NULL weight or month, and arrays of two lengths are refused, never walked
+  expect_error(walk("'{8,9}'", "'{1}'"), "one length")
+  expect_error(walk("'{8,9}'", "NULL::float8[]"), "one length")
+  expect_error(walk("NULL::integer[]", "'{0.5,0.5}'"), "one length")
+  expect_error(walk("'{8,9}'", "'{0.53125,NULL}'"), "no NULL")
+  expect_error(walk("'{8,NULL}'", "'{0.5,0.5}'"), "no NULL")
+  expect_error(walk("'{}'", "'{}'"), "one length")
+  # a month twice, and weights that are not a window's shares, are refused
+  expect_error(walk("'{8,8}'", "'{0.5,0.5}'"), "repeat a month")
+  expect_error(walk("'{8,9}'", "'{0.5,0.4}'"), "sum to 1")
+  expect_error(walk("'{8,9}'", "'{1.5,-0.5}'"), "positive")
+  expect_error(walk("'{8,9}'", "'{1,0}'"), "positive")
+})
+
+# The walk reads the Atlas and the flow table by name, and the live load holds no malformed segment, so no start on
+# the live network reaches the month condition's branches. These run the window walk's own text, with only its two
+# table names and its name swapped, on fixture tables.
+window_walk_install <- function(conn, sql = readLines(.knw_walk_file(TRUE))) {
+  swap <- c("whse_basemapping.fwa_stream_networks_sp" = "knw_fx_walk_fwa",
+            "discharge.fwa_v1_segment_monthly" = "knw_fx_walk_q",
+            "pg_temp.ch_dist_profile_window(" = "pg_temp.ch_dist_profile_window_fx(")
+  sql <- paste(sql, collapse = "\n")
+  for (from in names(swap)) {
+    if (!grepl(from, sql, fixed = TRUE)) stop("the window walk no longer names ", from, call. = FALSE)
+    sql <- gsub(from, swap[[from]], sql, fixed = TRUE)
+  }
+  for (t in c("knw_fx_walk_fwa", "knw_fx_walk_q")) DBI::dbExecute(conn, paste("DROP TABLE IF EXISTS", t))
+  DBI::dbExecute(conn, "CREATE TEMPORARY TABLE knw_fx_walk_fwa (linear_feature_id bigint, blue_line_key integer,
+    watershed_key integer, downstream_route_measure double precision, upstream_route_measure double precision,
+    edge_type integer, waterbody_key integer, wscode_ltree ltree, geom geometry(LineString, 3005))")
+  DBI::dbExecute(conn, "CREATE TEMPORARY TABLE knw_fx_walk_q (linear_feature_id bigint, scenario text, period text,
+    month integer, pick boolean, q_m3s double precision, source text)")
+  DBI::dbExecute(conn, sql)
+  invisible(NULL)
+}
+# segments (`id`, `blk`, `lo`, `hi`) and their flow rows (`id`, `period`, `month`, `q`, `source`), all picked
+window_walk_fill <- function(conn, seg, q) {
+  DBI::dbExecute(conn, sprintf("INSERT INTO knw_fx_walk_fwa VALUES %s", paste(sprintf(
+    "(%d, %d, %d, %d, %d, 1000, NULL, '100', ST_GeomFromText('LINESTRING(%d %d, %d %d)', 3005))", seg$id, seg$blk,
+    seg$blk, seg$lo, seg$hi, seg$blk, seg$lo, seg$blk, seg$hi), collapse = ", ")))
+  DBI::dbExecute(conn, sprintf("INSERT INTO knw_fx_walk_q VALUES %s", paste(sprintf(
+    "(%d, 'historical', '%s', %d, true, %s, '%s')", q$id, q$period, q$month, ifelse(is.na(q$q), "NULL", q$q),
+    q$source), collapse = ", ")))
+}
+skip_if_no_walk_fixture <- function() {
+  conn <- skip_if_no_pg()
+  ext <- DBI::dbGetQuery(conn, "SELECT extname FROM pg_extension WHERE extname IN ('postgis', 'ltree')")$extname
+  skip_if_not(all(c("postgis", "ltree") %in% ext), "no postgis or ltree in the database")
+  conn
+}
+
+test_that("on a line of malformed segments the window walk takes only the whole one, at its weighted flow", {
+  conn <- skip_if_no_walk_fixture()
+  withr::defer(for (t in c("knw_fx_walk_fwa", "knw_fx_walk_q")) DBI::dbExecute(conn, paste("DROP TABLE IF EXISTS", t)))
+  window_walk_install(conn)
+  # one line, walked down from measure 1000: six segments, the nearest first
+  seg <- data.frame(id = c(60, 50, 40, 30, 20, 10), blk = 1, lo = c(900, 750, 600, 450, 300, 0),
+                    hi = c(950, 800, 650, 500, 350, 100))
+  q <- rbind(
+    data.frame(id = 60, period = "a", month = 8, q = 100, source = "wet_balance"),                # no September
+    data.frame(id = 50, period = "a", month = 8:9, q = c(100, NA), source = "wet_balance"),      # no flow in September
+    data.frame(id = 40, period = c("a", "b"), month = 8, q = 100, source = "wet_balance"),       # August twice
+    data.frame(id = 30, period = c("a", "b", "a"), month = c(8, 8, 9), q = c(100, 100, NA),
+               source = "wet_balance"),                                    # August twice and no flow in September
+    data.frame(id = 20, period = "a", month = 8:9, q = 100, source = c("wet_balance", "pcic_routed")),  # two sources
+    data.frame(id = 10, period = "a", month = 8:9, q = c(100, 60), source = "wet_balance")       # whole
+  )
+  window_walk_fill(conn, seg, q)
+  w <- DBI::dbGetQuery(conn, "SELECT * FROM pg_temp.ch_dist_profile_window_fx(1, 1000, '{10,1000}', 'pick', '{8,9}',
+                              '{0.25,0.75}') ORDER BY qmin")
+  expect_identical(w$status, c("found", "none"))
+  # past five segments that are not whole, to segment 10: 0.25 of August's 100 and 0.75 of September's 60
+  expect_identical(as.numeric(w$large_lfid[1]), 10)
+  expect_identical(w$large_mad[1], 70)
+  expect_identical(w$dist_m[1], 900)
+  # no segment of the line carries 1000 m3/s, and the line ends at the sea
+  expect_true(is.na(w$large_lfid[2]))
+})
+
+test_that("of every shape a two-month window's rows can take, the walk takes the whole segments and no other", {
+  conn <- skip_if_no_walk_fixture()
+  withr::defer(for (t in c("knw_fx_walk_fwa", "knw_fx_walk_q")) DBI::dbExecute(conn, paste("DROP TABLE IF EXISTS", t)))
+  window_walk_install(conn)
+  # a month's rows: none, one or two, each with a flow or without, on source a or b. Fifteen shapes a month, so
+  # 225 segments, each alone on its own line. Three review rounds each found a shape the counts then written let
+  # through; this holds the walk to the whole population, not to the shapes anyone thought of.
+  kinds <- expand.grid(flow = c(TRUE, FALSE), source = c("a", "b"), stringsAsFactors = FALSE)
+  one <- lapply(seq_len(nrow(kinds)), function(i) kinds[i, ])
+  two <- unlist(lapply(seq_len(nrow(kinds)), function(i) {
+    lapply(i:nrow(kinds), function(j) kinds[c(i, j), ])
+  }), recursive = FALSE)
+  shapes <- c(list(kinds[0, ]), one, two)
+  expect_length(shapes, 15L)
+  grid <- expand.grid(aug = seq_along(shapes), sep = seq_along(shapes))
+  flow_of <- c(`8` = 100, `9` = 60)
+  rows <- do.call(rbind, lapply(seq_len(nrow(grid)), function(i) {
+    do.call(rbind, lapply(c(8, 9), function(mo) {
+      sh <- shapes[[if (mo == 8) grid$aug[i] else grid$sep[i]]]
+      if (!nrow(sh)) return(NULL)
+      data.frame(id = i, period = letters[seq_len(nrow(sh))], month = mo,
+                 q = ifelse(sh$flow, flow_of[[as.character(mo)]], NA), source = sh$source)
+    }))
+  }))
+  seg <- data.frame(id = seq_len(nrow(grid)), blk = seq_len(nrow(grid)), lo = 0, hi = 100)
+  window_walk_fill(conn, seg, rows)
+  w <- DBI::dbGetQuery(conn, "SELECT s.blk, p.status, p.large_lfid, p.large_mad
+                              FROM generate_series(1, 225) AS s(blk)
+                              CROSS JOIN LATERAL pg_temp.ch_dist_profile_window_fx(s.blk, 1000, '{10}', 'pick',
+                                                                                    '{8,9}', '{0.25,0.75}') p
+                              ORDER BY s.blk")
+  expect_identical(nrow(w), 225L)
+  # whole: each month one row, with a flow, both on one source
+  is_whole <- vapply(seq_len(nrow(grid)), function(i) {
+    a <- shapes[[grid$aug[i]]]
+    s <- shapes[[grid$sep[i]]]
+    nrow(a) == 1L && nrow(s) == 1L && a$flow && s$flow && a$source == s$source
+  }, logical(1))
+  expect_identical(sum(is_whole), 2L)
+  expect_identical(w$status == "found", is_whole)
+  expect_identical(w$large_mad[is_whole], c(70, 70))
+  expect_true(all(is.na(w$large_mad[!is_whole])))
+})
+
+test_that("a window walk finds rivers by their window flow, and says so in the source", {
+  skip_if_not_installed("wet")
+  conn <- skip_if_no_pg("discharge")
+  pg <- function() DBI::dbConnect(RPostgres::Postgres(), bigint = "numeric")
+  starts <- data.frame(blue_line_key = c(360886335, 360873822, 360886335),
+                       downstream_route_measure = c(1520, 0, 2040.5))
+  win <- data.frame(start = "08-15", end = "09-15")
+  w <- knw_link_walks(pg, starts, q_grid = c(1, 3, 10), sources = c("pick", "wet_balance"), workers = 1L, window = win)
+  expect_identical(nrow(w), 18L)
+  expect_setequal(w$src, c("pick@0815-0915", "wet_balance@0815-0915"))
+  f <- w[w$status == "found" & w$src == "pick@0815-0915", ]
+  expect_gt(nrow(f), 0)
+  # the river found carries the window flow knw_link_flow_window() reads on it, and that flow reaches the size
+  fl <- knw_link_flow_window(conn, unique(f$large_lfid), win)
+  expect_false(anyNA(fl$flow_0815_0915))
+  expect_equal(f$large_mad, fl$flow_0815_0915[match(f$large_lfid, fl$linear_feature_id)], tolerance = 1e-12)
+  expect_true(all(f$large_mad >= f$qmin))
+  # and it is a different walk from the annual one somewhere on these starts: a river's September is not its year
+  a <- knw_link_walks(pg, starts, q_grid = c(1, 3, 10), sources = "pick", workers = 1L)
+  expect_false(isTRUE(all.equal(f$large_mad, a$large_mad[a$status == "found"])))
+  expect_error(knw_link_walks(pg, starts, window = data.frame(start = c("08-01", "08-15"), end = c("09-30", "09-15"))),
+               "one row")
+})
+
+test_that("a window's cache rows are its own: no other window, and not the annual walk, reads them", {
+  skip_if_not_installed("wet")
+  conn <- skip_if_no_pg("discharge")
+  pg <- function() DBI::dbConnect(RPostgres::Postgres(), bigint = "numeric")
+  tbl <- paste0("public.knw_walk_cache_wintest_", Sys.getpid())
+  on.exit({
+    DBI::dbExecute(conn, sprintf("DROP TABLE IF EXISTS %s", tbl))
+    DBI::dbExecute(conn, sprintf("DROP TABLE IF EXISTS %s_load", tbl))
+  }, add = TRUE)
+  starts <- data.frame(blue_line_key = c(360886335, 360873822), downstream_route_measure = c(1520, 0))
+  spawn <- data.frame(start = "08-15", end = "09-15")
+  rear <- data.frame(start = "08-01", end = "09-30")
+  walk <- function(window = NULL, cache = tbl) {
+    knw_link_walks(pg, starts, q_grid = c(3, 10), sources = "pick", workers = 1L, cache = cache, window = window)
+  }
+  expect_message(cold <- walk(spawn), "0 of 2 start-and-source pairs read, 2 to walk")
+  expect_message(warm <- walk(spawn), "2 of 2 start-and-source pairs read, 0 to walk")
+  plain <- walk(spawn, cache = FALSE)
+  attr(cold, "cache") <- NULL
+  attr(warm, "cache") <- NULL
+  expect_identical(warm, plain)
+  expect_identical(cold, plain)
+  kept <- DBI::dbGetQuery(conn, sprintf("SELECT DISTINCT src, walk_md5 FROM %s", tbl))
+  expect_identical(kept$src, "pick@0815-0915")
+  # keyed on the window walk's file and on the months and weights it was walked with
+  expect_identical(kept$walk_md5, paste0(knw_walk_md5(window = TRUE), "|8,9|{0.53125,0.46875}"))
+  expect_identical(.knw_walk_key(NULL), knw_walk_md5())
+  # rows walked on other weights for the same dates are never read
+  DBI::dbExecute(conn, sprintf("UPDATE %s SET walk_md5 = '%s'", tbl,
+                               paste0(knw_walk_md5(window = TRUE), "|8,9|{0.5,0.5}")))
+  expect_message(walk(spawn), "0 of 2 start-and-source pairs read, 2 to walk")
+  # another window, and the annual walk, each start cold in the same table
+  expect_message(walk(rear), "0 of 2 start-and-source pairs read, 2 to walk")
+  expect_message(annual <- walk(), "0 of 2 start-and-source pairs read, 2 to walk")
+  # and the annual walk's rows, kept beside the windows', are the annual walk's
+  expect_message(annual_warm <- walk(), "2 of 2 start-and-source pairs read, 0 to walk")
+  annual_plain <- walk(cache = FALSE)
+  attr(annual_warm, "cache") <- NULL
+  expect_identical(annual_warm, annual_plain)
+  expect_setequal(DBI::dbGetQuery(conn, sprintf("SELECT DISTINCT src FROM %s", tbl))$src,
+                  c("pick@0815-0915", "pick@0801-0930", "pick"))
+})

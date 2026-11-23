@@ -174,8 +174,13 @@ Issue and PR numbers in the seeded history and in `planning/archive/2026-07-*` r
   when a review places it.
 - `data/flow_window/` — ignored: the window flow per FWA segment for every complete timing window
   (`data-raw/segment_window_flow.R`, #42), both of wet's sources from one published build. `data/tune/flow_window/`
-  (tracked) holds #105's Phase 1 tables (`data-raw/chinook_window_flow.R`), which `0325`, `0330` and
-  `knw_thresholds_table()` never read; `research/chinook_window_flow.md` is their write-up.
+  (tracked) holds #105's Phase 1 tables (`data-raw/chinook_window_flow.R`) and #226's Phase 2 (chinook rearing tuned
+  on late-summer flow beside MAD: `ch_rear_{readings,pairs,verdict,tune_run}.csv` and a directory per reading, from
+  `data-raw/chinook_window_tune.R`), which `0325`, `0330` and `knw_thresholds_table()` never read;
+  `research/chinook_window_flow.md` is their write-up (no window beats MAD, so the rule stays on MAD). Phase 2 scores
+  a copy of the published evidence, ignored `data/fdis/derived_window/` (`data-raw/chinook_window_evidence.R`): the
+  published tables with `flow_0801_0930` on every visit and the window walk's rows on `pick@0815-0915`, built without
+  `0310`, so it has no ledger and `0320` cannot read it.
 
 ## One discipline: everything here is public
 
@@ -647,6 +652,23 @@ and from any point (a visit's own; the grade starts it at a segment's downstream
 is the check against fresh's walk on one group (BULK, 2026-10-22: 0 of 2,460 starts differ by the bank rule; the
 `path` class is the two walks' entry conventions, fresh by local code, ours by nearest point). `scripts/sql/` keeps
 #54's centreline walk for the frozen `0298`.
+
+A window walk (`knw_link_walks(window = )`, #226) is another file, `inst/sql/ch_dist_profile_window.sql`: the annual
+walk's text outside three marked regions, which `test-link_walks.R` holds it to, sizing a river by the day-weighted
+mean of the window's months (`knw_link_flow_window()` reads the same flow at a segment, by `wet::wet_flow_window()`).
+Its rows' `src` is `<source>@<mmdd>-<mmdd>`, and its cache rows are keyed on that and on its own md5 with the months
+and weights it was walked on, in `knw.walk_cache_window`. It takes a segment only where every month of the window
+carries a flow on one source, and refuses a NULL month or weight. `knw_walk_md5()` stays the annual walk's, the one every grade names: never edit the annual
+walk for a variant, because its md5 moving regrades every key. A reading on another size column or walk is scored
+with `knw_tune_run(cols =, src =)`, and each reading needs a `cache_dir` of its own: the score cache records neither,
+so two readings in one directory read each other's scores. To set two readings' rules beside each other, score a
+grid of the two rows (`data-raw/chinook_window_tune.R`): `se_diff` is against the grid's best, so only then is it the
+pair's.
+
+The evidence's numbers are what readr reads: `write_csv()` writes 15 significant digits and `read_csv()` does not
+return a 17-digit number's nearest double, so hold a value read from the database to the evidence within a tolerance
+(`1e-9`), never to equality. And 4 of the published evidence's 45,529 visits carry a parent's flow from before #161
+gave a tie to the lower id, so a re-read of MAD differs there (river-polygon lines, none scored).
 
 The schema can change under a run too: a provincial run in link renames `fresh_default` to `fresh_default_<date>` and
 builds a new `fresh_default` in its place (link#361 did so on 2026-10-23 while #73's chain was running, and the comparison
