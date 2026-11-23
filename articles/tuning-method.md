@@ -154,7 +154,8 @@ Survey of Canada gauges ([Environment and Climate Change Canada
 
 Code and settings
 
-- Run by: wet’s discharge build; `wet::wet_db_load()`
+- Run by: wet’s discharge build;
+  [`wet::wet_db_load()`](https://newgraphenvironment.github.io/wet/reference/wet_db_load.html)
 - In: PCIC VIC-GL runoff routed by Raven; wet’s water balance. Out:
   discharge.fwa_v1_segment_monthly
 - Routed flow kept unless under this share of the balance’s: 0.2 ratio
@@ -514,7 +515,11 @@ data, written on 2026-11-05 at commit 4590e2f.
   limit (1,527 in all), 37 % sit on the other side of it as the crews
   measured it
   ([\#121](https://github.com/NewGraphEnvironment/knowledge/issues/121)).
-- Flows are 30-year averages, so no single dry year is in them.
+- Flows are 30-year averages, so no single dry year is in them. They are
+  also averages over the whole year: sizing chinook rearing streams by
+  their average flow in August and September instead was tried, and
+  predicted where chinook were caught no better
+  ([\#226](https://github.com/NewGraphEnvironment/knowledge/issues/226)).
 
 ## Which numbers shape the result, and which have been tested?
 

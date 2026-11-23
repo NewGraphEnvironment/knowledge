@@ -78,7 +78,8 @@ link rule.</p>
 <span>  sources <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"pick"</span>, <span class="st">"pcic_routed"</span>, <span class="st">"wet_balance"</span><span class="op">)</span>,</span>
 <span>  workers <span class="op">=</span> <span class="fl">4L</span>,</span>
 <span>  batch <span class="op">=</span> <span class="fl">500L</span>,</span>
-<span>  cache <span class="op">=</span> <span class="cn">FALSE</span></span>
+<span>  cache <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  window <span class="op">=</span> <span class="cn">NULL</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -118,6 +119,11 @@ removes almost all of a walk's time.</p></dd>
 <dd><p><code>FALSE</code> (the default: walk everything), or a table name,
 <code>schema.table</code>, to read walks from and keep them in (see above).</p></dd>
 
+
+<dt id="arg-window">window<a class="anchor" aria-label="anchor" href="#arg-window"></a></dt>
+<dd><p><code>NULL</code> (the default: the annual flow), or a one-row <code>data.frame</code>
+with <code>start</code> and <code>end</code>, each <code>"MM-DD"</code>: the window whose flow sizes a river.</p></dd>
+
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
@@ -127,7 +133,7 @@ removes almost all of a walk's time.</p></dd>
 <code>bank_m</code>; exactly
 <code>nrow(unique(starts)) * length(sources) * length(q_grid)</code> rows. With a
 cache, attribute <code>cache</code> holds the start-and-source pairs read (<code>hit</code>) and
-walked (<code>miss</code>).</p>
+walked (<code>miss</code>). With <code>window</code>, <code>src</code> is <code>&lt;source&gt;@&lt;mmdd&gt;-&lt;mmdd&gt;</code>.</p>
     </div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
@@ -164,6 +170,18 @@ The FWA tables the walk reads carry no load record, so a reload of
 <code>whse_basemapping.fwa_stream_networks_sp</code> (fwapg#43 moves measures by
 millimetres) or of the river, lake, manmade waterbody and wetland polygons
 it measures the bank on needs the cache truncated by hand.</p>
+<p>With <code>window</code>, a river's size is its flow in that window of the year, not its
+annual flow (#226): the walk is <code>inst/sql/ch_dist_profile_window.sql</code>, the same
+path, statuses and bank rule, reading for each segment the mean of wet's monthly
+flow over the window's days (each month weighted by the days the window takes
+from it, as <code><a href="https://newgraphenvironment.github.io/wet/reference/wet_flow_window.html" class="external-link">wet::wet_flow_window()</a></code> weighs them). A segment with no flow in
+one of the window's months on the source is passed over. Each row's <code>src</code> then
+carries the window, <code>&lt;source&gt;@&lt;mmdd&gt;-&lt;mmdd&gt;</code> (<code>pick@0815-0915</code>), and <code>large_mad</code>
+is the river's window flow. A window walk is another walk: its cache rows are
+keyed on that <code>src</code> and on the window walk's own md5
+(<code>knw_walk_md5(window = TRUE)</code>) with the months and weights it was walked on,
+so no row of one window, of other weights, or of the annual walk, is read as
+another's.</p>
     </div>
 
     <div class="section level2">

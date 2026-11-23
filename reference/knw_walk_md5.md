@@ -10,12 +10,24 @@ and every grade table records it as `walk_md5`, which `0320`, `0325` and
 ## Usage
 
 ``` r
-knw_walk_md5()
+knw_walk_md5(window = FALSE)
 ```
+
+## Arguments
+
+- window:
+
+  `logical(1)` the window walk's md5 instead of the annual walk's.
 
 ## Value
 
 `character(1)`, an md5 in hex.
+
+## Details
+
+The window walk (`inst/sql/ch_dist_profile_window.sql`, \#226) is
+another file with its own md5, which only its own cache rows are keyed
+on: no grade is walked by it, so nothing compares a grade with it.
 
 ## Examples
 

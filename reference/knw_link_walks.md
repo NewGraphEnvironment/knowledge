@@ -19,7 +19,8 @@ knw_link_walks(
   sources = c("pick", "pcic_routed", "wet_balance"),
   workers = 4L,
   batch = 500L,
-  cache = FALSE
+  cache = FALSE,
+  window = NULL
 )
 ```
 
@@ -58,6 +59,12 @@ knw_link_walks(
   `FALSE` (the default: walk everything), or a table name,
   `schema.table`, to read walks from and keep them in (see above).
 
+- window:
+
+  `NULL` (the default: the annual flow), or a one-row `data.frame` with
+  `start` and `end`, each `"MM-DD"`: the window whose flow sizes a
+  river.
+
 ## Value
 
 A `tibble`: `blue_line_key`, `downstream_route_measure`, `src`, `qmin`,
@@ -66,7 +73,7 @@ A `tibble`: `blue_line_key`, `downstream_route_measure`, `src`, `qmin`,
 `bank_m`; exactly
 `nrow(unique(starts)) * length(sources) * length(q_grid)` rows. With a
 cache, attribute `cache` holds the start-and-source pairs read (`hit`)
-and walked (`miss`).
+and walked (`miss`). With `window`, `src` is `<source>@<mmdd>-<mmdd>`.
 
 ## Details
 
@@ -109,6 +116,22 @@ reads carry no load record, so a reload of
 `whse_basemapping.fwa_stream_networks_sp` (fwapg#43 moves measures by
 millimetres) or of the river, lake, manmade waterbody and wetland
 polygons it measures the bank on needs the cache truncated by hand.
+
+With `window`, a river's size is its flow in that window of the year,
+not its annual flow (#226): the walk is
+`inst/sql/ch_dist_profile_window.sql`, the same path, statuses and bank
+rule, reading for each segment the mean of wet's monthly flow over the
+window's days (each month weighted by the days the window takes from it,
+as
+[`wet::wet_flow_window()`](https://newgraphenvironment.github.io/wet/reference/wet_flow_window.html)
+weighs them). A segment with no flow in one of the window's months on
+the source is passed over. Each row's `src` then carries the window,
+`<source>@<mmdd>-<mmdd>` (`pick@0815-0915`), and `large_mad` is the
+river's window flow. A window walk is another walk: its cache rows are
+keyed on that `src` and on the window walk's own md5
+(`knw_walk_md5(window = TRUE)`) with the months and weights it was
+walked on, so no row of one window, of other weights, or of the annual
+walk, is read as another's.
 
 ## Examples
 

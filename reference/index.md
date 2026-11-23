@@ -114,6 +114,9 @@ parent; and check that a database-bound run is on the database’s host.
   access, for grading
 - [`knw_link_flow()`](https://newgraphenvironment.github.io/knowledge/reference/knw_link_flow.md)
   : wet's annual flow on FWA segments, with a parent fallback
+- [`knw_link_flow_window()`](https://newgraphenvironment.github.io/knowledge/reference/knw_link_flow_window.md)
+  : wet's flow in a seasonal window on FWA segments, on the segment MAD
+  came from
 - [`knw_link_width()`](https://newgraphenvironment.github.io/knowledge/reference/knw_link_width.md)
   : The channel width link reads on a stream nobody measured, and the
   waterbody tests

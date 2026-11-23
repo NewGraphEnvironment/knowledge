@@ -59,12 +59,26 @@ keys every row on it, and every grade table records it as <code>walk_md5</code>,
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">knw_walk_md5</span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">knw_walk_md5</span><span class="op">(</span>window <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
+    <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
+
+
+<dl><dt id="arg-window">window<a class="anchor" aria-label="anchor" href="#arg-window"></a></dt>
+<dd><p><code>logical(1)</code> the window walk's md5 instead of the annual walk's.</p></dd>
+
+</dl></div>
+    <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
     <p><code>character(1)</code>, an md5 in hex.</p>
+    </div>
+    <div class="section level2">
+    <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
+    <p>The window walk (<code>inst/sql/ch_dist_profile_window.sql</code>, #226) is another
+file with its own md5, which only its own cache rows are keyed on: no grade
+is walked by it, so nothing compares a grade with it.</p>
     </div>
 
     <div class="section level2">
