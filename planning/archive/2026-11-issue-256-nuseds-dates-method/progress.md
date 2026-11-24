@@ -23,3 +23,7 @@
 - `research/nuseds_timing.md` opens with what a NuSEDS date is (upper Bulkley worked, Morice and Nanika beside it), the rule test and choice, the four readings, the note wording, and the four groups' rows refilled estimate against estimate, with UFRA and COTR under the method.
 - Every number checked against `20261124_nuseds_dates_check.txt` and `20261124_timing_nuseds*`; three statements corrected in that pass (the grid share, the accuracy wording, the MORR coho direction).
 - Next: Phase 4, the UFRA and COTR notes and the issue bodies.
+
+## Phase 4 and validation, 2026-11-24
+- UFRA and COTR chinook notes rewritten in the method's wording, dates unchanged; #241 and #242's "Waits on #256" lines point at the branch.
+- `/code-check branch`: five rounds; rounds 2 to 5 each found a defect inside an earlier fix or the same mechanism (a set built twice); ended on round 5's enumeration of 80 claims, fixed and re-checked (`review-verdict.md`). Tests: 0 failures, 2678 passing.

@@ -56,7 +56,7 @@ Decided in the plan (mechanism, one line of why each):
 
 - [x] UFRA and COTR chinook (#96, which wet's run of Swift and Naver creeks reads, NewGraphEnvironment/wet#182): their spawning windows under the method beside the published rows, with what moved, in `research/nuseds_timing.md` (UFRA's records run 1967-2000, before bins, so the bin rule should move it little; finding 11).
 - [x] Rewrite the UFRA and COTR chinook spawning and migration notes in `data/life_history_timing.csv` in the method's wording, citing the new log beside `20261118_timing_nuseds.txt` (finding 15); dates unchanged. `knw_timing_read()` reads the table cleanly after the edit.
-- [ ] Edit #241's and #242's "Waits on #256" lines to say the method is in this PR (linked) and that the Morice and Nanika are read here; the final wording follows the merge (finding 14).
+- [x] Edit #241's and #242's "Waits on #256" lines to say the method is in this PR (linked) and that the Morice and Nanika are read here; the final wording follows the merge (finding 14).
 
 ## Owed at the end (reported, done after merge)
 
@@ -67,8 +67,8 @@ Decided in the plan (mechanism, one line of why each):
 
 - [x] Tests pass (`devtools::test()`; no test reads these scripts today, so this checks nothing broke)
 - [x] `/code-check` clean (once over the branch with `/code-check branch`)
-- [ ] PWF checkboxes match landed work
-- [ ] `/planning-archive` on completion
+- [x] PWF checkboxes match landed work
+- [x] `/planning-archive` on completion
 
 How each change is proved:
 - Phase 1's counts are re-derived from the parquet by the script, never by hand; the upper Bulkley figures it prints are checked against #241's body (27 records 1953–1991, 13 records 2008–2020, the 2009, 2016 and 2017 starts before the survey).
