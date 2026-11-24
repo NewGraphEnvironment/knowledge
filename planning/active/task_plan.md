@@ -55,7 +55,7 @@ Decided in the plan (mechanism, one line of why each):
 ## Phase 4: Recheck UFRA and COTR, and hand the method to the reviews
 
 - [x] UFRA and COTR chinook (#96, which wet's run of Swift and Naver creeks reads, NewGraphEnvironment/wet#182): their spawning windows under the method beside the published rows, with what moved, in `research/nuseds_timing.md` (UFRA's records run 1967-2000, before bins, so the bin rule should move it little; finding 11).
-- [ ] Rewrite the UFRA and COTR chinook spawning and migration notes in `data/life_history_timing.csv` in the method's wording, citing the new log beside `20261118_timing_nuseds.txt` (finding 15); dates unchanged. `knw_timing_read()` reads the table cleanly after the edit.
+- [x] Rewrite the UFRA and COTR chinook spawning and migration notes in `data/life_history_timing.csv` in the method's wording, citing the new log beside `20261118_timing_nuseds.txt` (finding 15); dates unchanged. `knw_timing_read()` reads the table cleanly after the edit.
 - [ ] Edit #241's and #242's "Waits on #256" lines to say the method is in this PR (linked) and that the Morice and Nanika are read here; the final wording follows the merge (finding 14).
 
 ## Owed at the end (reported, done after merge)
