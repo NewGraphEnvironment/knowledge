@@ -30,3 +30,57 @@ A gate for #241 and #242: neither revises a row against NuSEDS before this sets 
 
 Part of #243 (umbrella). Relates to #240, #244, #96.
 
+
+## Phase 1: what a NuSEDS date is made of (2026-11-24, `scripts/logs/timing/20261124_nuseds_dates_check.txt`)
+
+Published `knowledge/nuseds/v1` (release 20260601), 102,800 dated records of the six species.
+
+- **Form.** Before 1990 the start is a single date on the five-day grid on 87 to 92 % of records (15th alone: 42,489 of
+  all single starts). Bins arrive in the 1990s (3,009 of 12,542 starts) and are nearly every start from 2000 (5,511
+  of 7,129; 7,157 of 8,173). Of 15,678 start bins, 15,004 are 10 or 11 days, 654 span 12 to 31, 10 exceed 31 and 3
+  run backwards; 15,652 open on the 1st, 11th or 21st. End bins: 12,004 of 10-11 days, 1,562 of 12-31, 30 backwards.
+  630 records give an end only as `end_spawn_dt_to`.
+- **Survey.** 463 records give survey dates over a year from their own year or ending before they start (the upper
+  Bulkley's 2020 record: 20-OCT-08 to 20-SEP-30); 165 end before they start. Visits are recorded from the 1980s on
+  (16 records before 1970, 5 in the 1970s). A start recorded before the survey began: 10,377 records before 1970,
+  1,345 from 2010.
+- **NONE OBSERVED.** 3,725 dated records say NONE OBSERVED; 2,478 give survey dates and 1,908 of those were surveyed
+  inside the very window they give; 3,625 give a peak; none gives a spawner count above 0. NOT INSPECTED: 332 dated,
+  72 surveyed inside their window, 304 with a peak. Their dates are the stream's expected timing, written whatever
+  was seen, so the method drops both presences from its windows (the `as_recorded` window keeps them).
+- **Candidate rules** (present records with a start and an end): a3 (survey brackets both edges, 3+ visits) 2,077;
+  a3s (the start, 3+) 5,671; a3e (the end, 3+) 3,209; b (fence or fixed-site) 560; c (off the grid) 1,603; d (area
+  under the curve) 3,667. Chinook pooled groups with 5+: a3 12, a3s 18, a3e 19, b 1, c 15, d 13.
+- **The test set before it ran.** Every rule but b passes: NONE OBSERVED records meet its conditions at 0.01 to
+  0.14 of the present rate, and under half its records put an edge on the grid. b fails on the grid (0.63 of its
+  records), and its records' recorded start falls a median 20 days after their arrival (quartiles 10 and 37). Within
+  eras the separation holds where visits are recorded (1990s, a3: 0.058 present against 0.004 none observed); from
+  2000 the NONE OBSERVED samples are 36 and 42 records.
+- **The five chinook groups.** BULK has 1 a3s record and 0 a3e; MORR 2 and 9; KISP 2 and 3; UFRA 11 and 4; COTR 0
+  and 0. So under the threshold (5) MORR's end and UFRA's start are the only edges any of these groups can be given.
+- **Morice and Nanika.** To 1991: 34 of 39 Morice and 19 of 21 Nanika starts on the grid, median 2 visits where
+  given, no record passing a3s or a3e. From 1995: 24 of 25 starts bins in each, median 4 visits, mostly "Area Under
+  the Curve"; Morice 5 a3s and 4 a3e, Nanika 2 and 9. A start before the survey: Morice 15 of 20 surveyed records to
+  1991 and 8 of 20 after; Nanika 9 of 12 and 10 of 19. The same kind of dates as the upper Bulkley before 1992; better
+  surveyed after, but still a start recorded before the survey on about half the records.
+- **Upper Bulkley** reproduces #241: 40 dated records, 27 from 1953-1991, 13 from 2008-2020; the 2009, 2016 and 2017
+  starts precede their surveys. Buck Creek's 1970, 1977 and 1982 records say NONE OBSERVED and carry full windows.
+
+## The method (Phase 2, decided 2026-11-24 from the above)
+
+- The window is the **bulk** (median start to median end; a bin enters as its midpoint) and the **peak** (median
+  peak, 10th and 90th percentiles), over records whose adults were present.
+- An **edge** is "consistent with an edge someone saw" only on a3s records (start) or a3e records (end): the survey
+  began before the recorded start, or ended after the recorded end, with at least 3 visits, the fewest that can put a
+  visit before, during and after spawning. Written for a group and species only with 5 or more such records. Never
+  "bounds": NuSEDS keeps no count per visit.
+- Rejected: b (fails the test; a fence dates passage), c (an off-grid day needs no visit before it), d (repeated
+  counts, but no visit before the start is required; its records that do bracket are in a3s and a3e), a3 (both
+  edges at once, review finding 1).
+
+## Errors Encountered
+
+| Error | Resolution |
+|-------|------------|
+| `arrow::read_parquet(col_select = if (is.null(cols)) NULL else ...)` returned 0 columns | `col_select` is tidy-evaluated; branch the call. `nuseds_read()` refuses a read with no columns |
+| The separation test passed a rule on low NONE OBSERVED rates that might be era, not separation | The same rates printed within each era; the separation holds in the 1990s, where both samples are large |
