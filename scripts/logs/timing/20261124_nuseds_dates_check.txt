@@ -1,0 +1,450 @@
+NuSEDS knowledge/nuseds/v1 release 20260601 published from knowledge 3e4e83f 
+ nuseds_records.parquet sha256 ecc4716f46d85e7625a2e98e0bfbc677962fba83fdb52c5e0419a2fc0dfeaee4 (the manifest's), 421001 rows
+7 records give a start only as start_spawn_dt_to and no end; 9464 give only a peak; outside the dated records, 0 qualify as an edge
+102807 dated records (a spawning start or end) of the six species
+
+==== the start of spawning, by era and form (counts)
+         start
+era       grid day other day    bin   <NA>    Sum
+  to 1969    31271      2679      0    113  34063
+  1970s      17684      1734      0    336  19754
+  1980s      19375      1219      1    544  21139
+  1990s       8308       769   3009    456  12542
+  2000s        387       319   5511    917   7134
+  2010 on      126       172   7157    720   8175
+  Sum        77151      6892  15678   3086 102807
+
+==== the end of spawning, by era and form
+         end
+era       grid day other day    bin   <NA>    Sum
+  to 1969    31899      1257      0    907  34063
+  1970s      18213       840      1    700  19754
+  1980s      19816       562      1    760  21139
+  1990s       8266       421   2734   1121  12542
+  2000s        463       345   4955   1371   7134
+  2010 on      173       175   6179   1648   8175
+  Sum        78830      3600  13870   6507 102807
+
+==== the peak, by era and form (NA: no peak given)
+         peak
+era       grid day other day    bin   <NA>    Sum
+  to 1969    27885      1927      0   4251  34063
+  1970s      17775      1521      0    458  19754
+  1980s      18972      1242      3    922  21139
+  1990s       8141       610   2905    886  12542
+  2000s        367       245   5262   1260   7134
+  2010 on      116       138   6770   1151   8175
+  Sum        73256      5683  14940   8928 102807
+
+==== bins by width (from and to both given and different)
+             start  peak   end
+reversed         2     3     0
+2-9 days         7   141   263
+10-11 days   15005 14010 12034
+12-31 days     654   766  1562
+over 31 days    10    20    11
+end given only as end_spawn_dt_to (no _from): 630 
+start bins opening on the 1st, 11th or 21st: 15652 of 15678 
+day of month of single start dates (the ten most common):
+
+   15     5    25     1    20    10    30    12    18     8 
+42491  8954  8055  7888  3788  3738  2005   538   434   397 
+ends in January to March, by species: CH 5, CM 540, CO 2512, PK 10, SK 8 
+
+ 372 records' surveys are not compared: 98 give a survey year over a year from their own (the upper Bulkley's 2020 record: 20-OCT-08 to 20-SEP-30), 309 a survey that ends before it starts on the season year, and 35 both
+98 records end before they start on the season year: kept out of every rule
+165 present records end before they start on their written years; 98 of them run forward on the season year (by species: CH 4, CM 7, CO 76, PK 3, SK 8 )
+adult presence of dated records (present means any but NONE OBSERVED and NOT INSPECTED):
+adult_presence
+NONE OBSERVED NOT INSPECTED       PRESENT       UNKNOWN          <NA> 
+         3725           332         98705            43             2 
+
+==== the survey beside the window, by era (records)
+        records survey_started survey_ended visits_given visits_median start_before_survey end_after_survey brackets_start brackets_end brackets_both
+to 1969   34063          21773        16224           16           3.5               10249             6057           9950         8335          4074
+1970s     19754           8252         6774            5           3.0                2108             3836           5694         2294          1430
+1980s     21139          16318        14990         1553           3.0                4533             8935          11077         5168          3207
+1990s     12542          10189         9624         5468           3.0                2551             5320           6999         3457          2093
+2000s      7134           4382         3976         6661           3.0                 694             1425           2699         1474           635
+2010 on    8175           7117         6191         7870           3.0                1341             2116           4236         2326          1086
+
+estimate_method on dated records:
+
+     Unknown Estimate Method         Area Under the Curve               Expert Opinion               Not Applicable        Other Estimate Method             Peak Live + Dead 
+                       82437                         5558                         4950                         3993                         2655                         1713 
+ Peak Live + Cumulative Dead            Fixed Site Census        Peak Live * Expansion         Addition/Subtraction   Mark & Recapture: Petersen                   Redd Count 
+                         518                          290                          272                          144                          117                           63 
+    Insufficient Information       Calibrated Time Series               Cumulative New   Mark & Recapture: Bayesian Mark & Recapture: Open Model             Combined Methods 
+                          32                           28                           17                            6                            5                            3 
+                     Unknown          Resistivity Counter                 Sonar-DIDSON                Video Counter 
+                           3                            1                            1                            1 
+
+==== 3725 dated records say NONE OBSERVED ; by species and era:
+       era
+species to 1969 1970s 1980s 1990s 2000s 2010 on  Sum
+    CH      107    48   138    63     3       0  359
+    CM      280    93   220   167     8      11  779
+    CO      331   115   512   289    14       6 1267
+    PK      341   105   317   151     7      17  938
+    SK      151    47   113    57     5       8  381
+    ST        0     0     0     1     0       0    1
+    Sum    1210   408  1300   728    37      42 3725
+2479 give both survey dates; 1910 had a survey overlapping the spawning window they give; 3625 give a peak; 0 give a spawner count above 0
+
+==== 332 dated records say NOT INSPECTED ; by species and era:
+       era
+species to 1969 1970s 1980s 1990s 2000s 2010 on Sum
+    CH        4     9     6     6     1       2  28
+    CM       22    11    15    17     0       5  70
+    CO       51    14    18    23     3       2 111
+    PK       20    16    12    14     2       4  68
+    SK       39     4     1     8     0       3  55
+    Sum     136    54    52    68     6      16 332
+129 give both survey dates; 74 had a survey overlapping the spawning window they give; 305 give a peak; 1 give a spawner count above 0
+
+==== records each candidate rule admits, by species (present; a3s and a3e with that edge, the rest with a start and an end)
+                                                       rule  CH   CO  SK   PK   CM ST  all
+                  a2: survey brackets both edges, 2+ visits 270  225 320  730  917  2 2464
+                  a3: survey brackets both edges, 3+ visits 218  186 265  627  778  2 2076
+                  a4: survey brackets both edges, 4+ visits 169  149 205  482  551  2 1558
+                  a5: survey brackets both edges, 5+ visits 133  105 134  340  364  2 1078
+ a3s: survey brackets the start, 3+ visits (the start edge) 390 1794 687 2040 2104  8 7023
+     a3e: survey brackets the end, 3+ visits (the end edge) 389  373 458  967 1660  2 3849
+                              b: fence or fixed-site census  68  232  68   70  120  2  560
+                     c: start and end off the five-day grid 245  358  91  264  647  0 1605
+                                    d: area under the curve 276  615 678 1121  988  1 3679
+                                                   a3 and c  11    9   1    6   20  0   47
+
+==== does each rule separate dates someone saw from dates written regardless?
+                                                       rule present_rate none_observed_rate none_over_present admitted grid_share bin_share passes
+                  a2: survey brackets both edges, 2+ visits       0.0276             0.0038              0.14     2464       0.33      0.66   TRUE
+                  a3: survey brackets both edges, 3+ visits       0.0233             0.0019              0.08     2076       0.29      0.69   TRUE
+                  a4: survey brackets both edges, 4+ visits       0.0175             0.0011              0.06     1558       0.28      0.70   TRUE
+                  a5: survey brackets both edges, 5+ visits       0.0121             0.0005              0.05     1078       0.29      0.68   TRUE
+ a3s: survey brackets the start, 3+ visits (the start edge)       0.0735             0.0076              0.10     7023       0.27      0.70   TRUE
+     a3e: survey brackets the end, 3+ visits (the end edge)       0.0418             0.0035              0.08     3849       0.24      0.70   TRUE
+                              b: fence or fixed-site census       0.0063             0.0005              0.09      560       0.63      0.37  FALSE
+                     c: start and end off the five-day grid       0.0180             0.0022              0.12     1605       0.00      0.00   TRUE
+                                    d: area under the curve       0.0413             0.0003              0.01     3679       0.03      0.96   TRUE
+                                                   a3 and c       0.0005             0.0000              0.00       47       0.00      0.00   TRUE
+
+the same rates within each era, present / NONE OBSERVED (NONE OBSERVED records are mostly before 1990, when visits were seldom recorded):
+     era present_n none_observed_n a2: survey brackets both edges, 2+ visits a3: survey brackets both edges, 3+ visits a4: survey brackets both edges, 4+ visits
+ to 1969     31692            1185                             0.000 / 0.000                             0.000 / 0.000                             0.000 / 0.000
+   1970s     18259             398                             0.000 / 0.000                             0.000 / 0.000                             0.000 / 0.000
+   1980s     18485            1276                             0.011 / 0.001                             0.008 / 0.001                             0.006 / 0.001
+   1990s     10179             710                             0.074 / 0.011                             0.058 / 0.004                             0.043 / 0.001
+   2000s      4798              36                             0.114 / 0.056                             0.100 / 0.028                             0.081 / 0.028
+ 2010 on      5749              42                             0.167 / 0.071                             0.148 / 0.048                             0.108 / 0.024
+ a5: survey brackets both edges, 5+ visits a3s: survey brackets the start, 3+ visits (the start edge) a3e: survey brackets the end, 3+ visits (the end edge) b: fence or fixed-site census
+                             0.000 / 0.000                                              0.000 / 0.000                                          0.000 / 0.000                 0.000 / 0.000
+                             0.000 / 0.000                                              0.000 / 0.000                                          0.000 / 0.000                 0.000 / 0.000
+                             0.004 / 0.000                                              0.031 / 0.002                                          0.011 / 0.002                 0.009 / 0.001
+                             0.032 / 0.001                                              0.149 / 0.022                                          0.081 / 0.010                 0.017 / 0.000
+                             0.059 / 0.028                                              0.306 / 0.081                                          0.181 / 0.056                 0.025 / 0.028
+                             0.068 / 0.000                                              0.384 / 0.143                                          0.269 / 0.048                 0.015 / 0.000
+ c: start and end off the five-day grid d: area under the curve      a3 and c
+                          0.021 / 0.004           0.000 / 0.000 0.000 / 0.000
+                          0.024 / 0.000           0.000 / 0.000 0.000 / 0.000
+                          0.012 / 0.000           0.000 / 0.000 0.000 / 0.000
+                          0.019 / 0.004           0.019 / 0.000 0.002 / 0.000
+                          0.015 / 0.000           0.208 / 0.028 0.002 / 0.000
+                          0.006 / 0.000           0.432 / 0.000 0.001 / 0.000
+
+fence and fixed-site records with an arrival date: 537 ; days from arrival to the recorded start, quartiles: 10, 20, 37 
+
+ 554 dated records carry no FWA watershed code
+1017 dated records carry a watershed code the Atlas does not hold
+named reaches (data/nuseds_reach_groups.csv): FRASER RIVER - ABOVE TETE JAUNE -> UFRA
+
+==== pooled groups (a population on a code in one group, or a named reach) with records each rule admits
+ rule species groups_1 groups_5 records
+ all:      CH       81       73    7095
+ all:      CO       77       73   26714
+ all:      SK       75       61    7657
+ all:      PK       62       58   20211
+ all:      CM       55       51   32087
+ all:      ST        6        1      14
+ a2:       CH       39       14     251
+ a2:       CO       41       17     199
+ a2:       SK       41       16     294
+ a2:       PK       44       24     720
+ a2:       CM       45       33     896
+ a2:       ST        2        0       2
+ a3:       CH       36       12     203
+ a3:       CO       41       13     163
+ a3:       SK       40       15     240
+ a3:       PK       42       16     618
+ a3:       CM       44       32     760
+ a3:       ST        2        0       2
+ a4:       CH       33       10     154
+ a4:       CO       36        9     132
+ a4:       SK       36       11     184
+ a4:       PK       38       14     474
+ a4:       CM       41       27     536
+ a4:       ST        2        0       2
+ a5:       CH       27        8     122
+ a5:       CO       33        7      94
+ a5:       SK       30        8     124
+ a5:       PK       37       12     334
+ a5:       CM       38       21     350
+ a5:       ST        2        0       2
+ a3s:      CH       45       19     348
+ a3s:      CO       63       50    1694
+ a3s:      SK       47       25     640
+ a3s:      PK       48       30    2006
+ a3s:      CM       46       38    2058
+ a3s:      ST        3        0       8
+ a3e:      CH       43       19     339
+ a3e:      CO       42       20     323
+ a3e:      SK       41       21     413
+ a3e:      PK       48       29     931
+ a3e:      CM       47       35    1536
+ a3e:      ST        2        0       2
+ b: f      CH       15        1      34
+ b: f      CO       28       14     204
+ b: f      SK       11        3      52
+ b: f      PK       17        2      63
+ b: f      CM       25        8     115
+ b: f      ST        2        0       2
+ c: s      CH       34       15     173
+ c: s      CO       34       19     333
+ c: s      SK       27        2      87
+ c: s      PK       41       11     252
+ c: s      CM       37       25     619
+ c: s      ST        0        0       0
+ d: a      CH       20       13     203
+ d: a      CO       40       26     598
+ d: a      SK       34       22     618
+ d: a      PK       31       18    1100
+ d: a      CM       31       21     973
+ d: a      ST        1        0       1
+ a3 a      CH        5        1      11
+ a3 a      CO        4        0       8
+ a3 a      SK        1        0       1
+ a3 a      PK        6        0       6
+ a3 a      CM       13        0      18
+ a3 a      ST        0        0       0
+
+==== chinook windows (medians, bins as midpoints) on each rule's records, pooled groups
+  wsg rule records start  peak   end
+ BULK a2:        0  <NA>  <NA>  <NA>
+ BULK a3:        0  <NA>  <NA>  <NA>
+ BULK a4:        0  <NA>  <NA>  <NA>
+ BULK a5:        0  <NA>  <NA>  <NA>
+ BULK a3s:       2 08-25 08-25 09-05
+ BULK a3e:       0  <NA>  <NA>  <NA>
+ BULK b: f       0  <NA>  <NA>  <NA>
+ BULK c: s       0  <NA>  <NA>  <NA>
+ BULK d: a       0  <NA>  <NA>  <NA>
+ BULK a3 a       0  <NA>  <NA>  <NA>
+ MORR a2:        2 08-31 09-15 09-25
+ MORR a3:        2 08-31 09-15 09-25
+ MORR a4:        2 08-31 09-15 09-25
+ MORR a5:        2 08-31 09-15 09-25
+ MORR a3s:       4 09-10 09-15 09-25
+ MORR a3e:       9 08-25 09-05 09-25
+ MORR b: f       0  <NA>  <NA>  <NA>
+ MORR c: s       0  <NA>  <NA>  <NA>
+ MORR d: a      12 08-25 09-05 09-25
+ MORR a3 a       0  <NA>  <NA>  <NA>
+ KISP a2:        1 08-15 09-05 09-15
+ KISP a3:        1 08-15 09-05 09-15
+ KISP a4:        1 08-15 09-05 09-15
+ KISP a5:        0  <NA>  <NA>  <NA>
+ KISP a3s:       2 08-10 08-25 09-10
+ KISP a3e:       4 08-15 08-31 09-15
+ KISP b: f       1 08-05 08-25 09-15
+ KISP c: s       0  <NA>  <NA>  <NA>
+ KISP d: a       5 08-05 08-15 09-05
+ KISP a3 a       0  <NA>  <NA>  <NA>
+ UFRA a2:        1 08-15 09-05 08-15
+ UFRA a3:        1 08-15 09-05 08-15
+ UFRA a4:        1 08-15 09-05 08-15
+ UFRA a5:        0  <NA>  <NA>  <NA>
+ UFRA a3s:      11 08-15 08-26 09-15
+ UFRA a3e:       4 08-05 08-15 08-25
+ UFRA b: f       0  <NA>  <NA>  <NA>
+ UFRA c: s       5 08-16 08-26 09-08
+ UFRA d: a       0  <NA>  <NA>  <NA>
+ UFRA a3 a       0  <NA>  <NA>  <NA>
+ COTR a2:        0  <NA>  <NA>  <NA>
+ COTR a3:        0  <NA>  <NA>  <NA>
+ COTR a4:        0  <NA>  <NA>  <NA>
+ COTR a5:        0  <NA>  <NA>  <NA>
+ COTR a3s:       0  <NA>  <NA>  <NA>
+ COTR a3e:       0  <NA>  <NA>  <NA>
+ COTR b: f       0  <NA>  <NA>  <NA>
+ COTR c: s       5 08-21 08-30 09-09
+ COTR d: a       0  <NA>  <NA>  <NA>
+ COTR a3 a       0  <NA>  <NA>  <NA>
+
+==== chinook populations in BULK, MORR, KISP, UFRA and COTR, and apart on codes crossing them
+ pop_id                                    waterbody                                                                          wsg records     years start_grid start_other start_bin visits_given
+  47096                                 MARIA SLOUGH apart: BBAR,CHWK,COTR,DOGC,FRCN,HARR,LFRA,MFRA,MORK,NARC,SETN,TABR,TWAC,UFRA      37 1953-2011         33           0         0            5
+  45991                 WEST ROAD (BLACKWATER) RIVER                                                        apart: BLAR,COTR,EUCL      35 1960-2009         19          10         3            7
+  47859                        BULKLEY RIVER - UPPER                                                        apart: BULK,KISP,MORR      33 1953-2020         17           3        13           13
+  47854                        BULKLEY RIVER - LOWER                                                        apart: BULK,KISP,MORR      12 1965-2008         10           1         1            1
+  49188                                 MORICE RIVER                                                             apart: BULK,MORR      64 1953-2025         35           5        24           25
+  48448           SKEENA RIVER; SKEENA RIVER - NORTH                                         apart: KISP,KLUM,LKEL,LSKE,MSKE,USKE      19 1975-2008         18           0         1            1
+  47869                                 SUSKWA RIVER                                                                         BULK       9 1983-2004          8           0         1            1
+  49223                                   BUCK CREEK                                                                         BULK       7 1970-1988          7           0         0            0
+  44917                                SIMPSON CREEK                                                                         BULK       6 2000-2025          0           0         5            6
+  47874                           HAROLD PRICE CREEK                                                                         BULK       4 1986-2009          3           0         1            1
+  49173                                 CANYON CREEK                                                                         BULK       1 1978-1978          1           0         0            0
+  49228                              RICHFIELD CREEK                                                                         BULK       1 1955-1955          0           1         0            0
+  49233                                  MAXAN CREEK                                                                         BULK       1 1988-1988          1           0         0            0
+  47277                                  SWIFT RIVER                                                                         COTR      21 1953-1974         14           7         0            0
+  47307                                  NAVER CREEK                                                                         COTR      12 1985-2009          4           3         3            5
+   2483                                  SWIFT RIVER                                                                         COTR       4 1996-2000          1           0         3            3
+  49238                                KISPIOX RIVER                                                                         KISP      39 1954-2018         34           0         4            5
+  47594                               KITWANGA RIVER                                                                         KISP      32 1953-2005         30           0         1            0
+  49333 STEPHENS CREEK (DOWNSTREAM OF STEPHENS LAKE)                                                                         KISP      27 1953-2010         25           0         1            2
+  49303                                SWEETIN RIVER                                                                         KISP      25 1966-2023         21           0         4            4
+  49313                               NANGEESE RIVER                                                                         KISP      24 1966-2012         20           0         2            4
+  47634                               SHEGUNIA RIVER                                                                         KISP      18 1966-2009         15           0         2            2
+  47839                            KITSEGUECLA RIVER                                                                         KISP      18 1966-2017         11           0         7            7
+  49253                                MCCULLY CREEK                                                                         KISP      14 1966-1992         14           0         0            0
+  49243                                   DATE CREEK                                                                         KISP       9 1964-1992          9           0         0            0
+  49343                           CLUB CREEK - UPPER                                                                         KISP       3 1964-1967          2           1         0            0
+  49248                                HEVENOR CREEK                                                                         KISP       2 1986-1987          2           0         0            0
+  49263                                 CULLON CREEK                                                                         KISP       1 1979-1979          1           0         0            0
+  49213                                 NANIKA RIVER                                                                         MORR      46 1959-2025         20           1        24           24
+  46931                                 HOLMES RIVER                                                                         UFRA      33 1967-2008         21           6         4            7
+  46961                                  SWIFT CREEK                                                                         UFRA      28 1970-2000         16           8         3            6
+  46941                                  NEVIN CREEK                                                                         UFRA      24 1971-2000         17           4         3            6
+  46951                                 HORSEY CREEK                                                                         UFRA      24 1971-2000         17           3         3            6
+  44549              FRASER RIVER - ABOVE TETE JAUNE                                                                         UFRA      16 1982-2000         12           0         3            3
+  45325                                  SMALL CREEK                                                                         UFRA       3 1996-2000          0           0         3            2
+   2076                                 ROBSON RIVER                                                                         UFRA       1 1996-1996          0           0         1            0
+ visits_median survey_started start_before_survey survey_ended end_after_survey brackets_both a3s a3e fence auc                  method
+           9.0              7                   4           11                1             3   0   1     0   0 Unknown Estimate Method
+           1.0             29                   8           27               20             5   1   1     0   0 Unknown Estimate Method
+           2.0             19                   8           19                5             5   1   3     1   1 Unknown Estimate Method
+           1.0              5                   1            5                1             0   0   0     0   0 Unknown Estimate Method
+           4.0             44                  23           38               14             5   5   4     0  16 Unknown Estimate Method
+           1.0             17                   7           14                3             4   0   0     0   0 Unknown Estimate Method
+           8.0              6                   3            6                2             1   0   0     0   0 Unknown Estimate Method
+            NA              2                   2            1                1             0   0   0     0   0          Not Applicable
+           3.0              3                   0            3                2             0   1   0     0   0          Expert Opinion
+           3.0              4                   2            4                2             0   1   0     0   0 Unknown Estimate Method
+            NA              0                   0            0                0             0   0   0     0   0          Not Applicable
+            NA              0                   0            0                0             0   0   0     0   0 Unknown Estimate Method
+            NA              1                   1            1                1             0   0   0     0   0 Unknown Estimate Method
+            NA             20                   6           20                9             8   0   0     0   0 Unknown Estimate Method
+           1.0              9                   5            9                4             0   0   0     0   0 Unknown Estimate Method
+           1.0              3                   1            3                3             0   0   0     0   0   Peak Live * Expansion
+           4.0             32                  16           29                5             9   1   2     0   2 Unknown Estimate Method
+            NA             29                  16           28                2             8   0   0     1   0 Unknown Estimate Method
+           2.0             25                  21           20                6             2   0   1     0   0 Unknown Estimate Method
+           2.5             24                  16           18                4             1   1   0     0   2 Unknown Estimate Method
+           1.0             21                  11           18                1             6   0   1     0   1 Unknown Estimate Method
+           1.5             11                   4           12                2             0   0   0     0   0 Unknown Estimate Method
+           1.0             18                  12           18                0             2   0   0     0   0 Unknown Estimate Method
+            NA             13                   9           10                0             3   0   0     0   0 Unknown Estimate Method
+            NA              6                   2            5                1             3   0   0     0   0 Unknown Estimate Method
+            NA              3                   1            1                0             1   0   0     0   0 Unknown Estimate Method
+            NA              1                   1            1                0             0   0   0     0   0 Unknown Estimate Method
+            NA              1                   1            1                0             0   0   0     0   0          Not Applicable
+           3.5             34                  19           28                5             3   4   9     0  12 Unknown Estimate Method
+           4.0             22                   8           22               16             5   2   0     0   0 Unknown Estimate Method
+           4.5             16                   6           17                7             5   3   2     0   0 Unknown Estimate Method
+           2.0             17                   6           16               12             2   1   1     0   0 Unknown Estimate Method
+           3.0             16                   7           16               12             1   3   1     0   0 Unknown Estimate Method
+           5.0              3                   1            3                3             0   1   0     0   0 Unknown Estimate Method
+           2.5              2                   0            2                2             0   1   0     0   0   Peak Live * Expansion
+            NA              0                   0            0                0             0   0   0     0   0 Unknown Estimate Method
+
+==== the Morice (pop_id 49188) and Nanika (49213) chinook, before and after 1992
+    waterbody  period records     years start_grid start_bin visits_median survey_started start_before_survey survey_ended end_after_survey a3s a3e auc none_observed                  method
+ MORICE RIVER 1992 on      25 1995-2025          1        24             4             20                   8           18                7   5   4  16             0    Area Under the Curve
+ NANIKA RIVER 1992 on      25 1995-2025          1        24             4             19                  10           17                1   4   9  12             0    Area Under the Curve
+ MORICE RIVER to 1991      39 1953-1991         34         0             2             24                  15           20                7   0   0   0             0 Unknown Estimate Method
+ NANIKA RIVER to 1991      21 1959-1989         19         0             2             15                   9           11                4   0   0   0             0 Unknown Estimate Method
+
+==== the upper Bulkley chinook (pop_id 47859, 49223), record by record
+ pop_id             waterbody analysis_yr start_spawn_dt_from start_spawn_dt_to peak_spawn_dt_from peak_spawn_dt_to end_spawn_dt_from end_spawn_dt_to start_dtt   end_dtt no_inspections_used
+  47859 BULKLEY RIVER - UPPER        1953           05-AUG-53              <NA>          15-AUG-53             <NA>         15-SEP-53            <NA>      <NA>      <NA>                  NA
+  47859 BULKLEY RIVER - UPPER        1955           22-AUG-55              <NA>               <NA>             <NA>              <NA>            <NA>      <NA>      <NA>                  NA
+  47859 BULKLEY RIVER - UPPER        1956           20-AUG-56              <NA>               <NA>             <NA>         20-SEP-56            <NA>      <NA>      <NA>                  NA
+  47859 BULKLEY RIVER - UPPER        1957           15-AUG-57              <NA>               <NA>             <NA>         15-SEP-57            <NA>      <NA>      <NA>                  NA
+  47859 BULKLEY RIVER - UPPER        1959           05-AUG-59              <NA>          14-AUG-59             <NA>         05-SEP-59            <NA>      <NA>      <NA>                  NA
+  47859 BULKLEY RIVER - UPPER        1962           15-AUG-62              <NA>               <NA>             <NA>         10-SEP-62            <NA>      <NA>      <NA>                  NA
+  47859 BULKLEY RIVER - UPPER        1965           18-AUG-65              <NA>          31-AUG-65             <NA>         15-SEP-65            <NA> 01-AUG-65 16-NOV-65                  NA
+  47859 BULKLEY RIVER - UPPER        1967           15-AUG-67              <NA>          30-AUG-67             <NA>         10-SEP-67            <NA> 15-AUG-67 10-NOV-67                  NA
+  47859 BULKLEY RIVER - UPPER        1969           15-AUG-69              <NA>          15-AUG-69             <NA>         15-SEP-69            <NA>      <NA>      <NA>                  NA
+  47859 BULKLEY RIVER - UPPER        1972           15-AUG-72              <NA>          15-AUG-72             <NA>         15-SEP-72            <NA>      <NA>      <NA>                  NA
+  47859 BULKLEY RIVER - UPPER        1973           15-AUG-73              <NA>          15-AUG-73             <NA>         15-SEP-73            <NA>      <NA>      <NA>                  NA
+  47859 BULKLEY RIVER - UPPER        1975           15-AUG-75              <NA>          15-AUG-75             <NA>         15-SEP-75            <NA>      <NA>      <NA>                  NA
+  47859 BULKLEY RIVER - UPPER        1980           15-AUG-80              <NA>          15-SEP-80             <NA>         15-SEP-80            <NA> 07-AUG-80 22-SEP-80                  NA
+  47859 BULKLEY RIVER - UPPER        1982           15-AUG-82              <NA>          15-AUG-82             <NA>         15-SEP-82            <NA>      <NA>      <NA>                  NA
+  47859 BULKLEY RIVER - UPPER        1985           20-AUG-85              <NA>               <NA>             <NA>              <NA>            <NA>      <NA>      <NA>                  NA
+  47859 BULKLEY RIVER - UPPER        1986           15-AUG-86              <NA>          20-AUG-86             <NA>         10-SEP-86            <NA> 20-AUG-86 20-OCT-86                  NA
+  47859 BULKLEY RIVER - UPPER        1987           15-AUG-87              <NA>          30-AUG-87             <NA>         30-SEP-87            <NA> 04-SEP-87 30-SEP-87                  NA
+  47859 BULKLEY RIVER - UPPER        1988           05-AUG-88              <NA>          15-AUG-88             <NA>         30-AUG-88            <NA> 20-AUG-88 24-AUG-88                  NA
+  47859 BULKLEY RIVER - UPPER        1989           15-AUG-89              <NA>          26-AUG-89             <NA>         10-SEP-89            <NA>      <NA>      <NA>                  NA
+  47859 BULKLEY RIVER - UPPER        1991           16-AUG-91              <NA>          26-AUG-91             <NA>         09-SEP-91            <NA> 16-AUG-91 28-OCT-91                  NA
+  47859 BULKLEY RIVER - UPPER        2008           11-AUG-08         20-AUG-08          21-AUG-08        30-AUG-08         01-SEP-08       10-SEP-08 06-AUG-08 20-SEP-08                   2
+  47859 BULKLEY RIVER - UPPER        2009           11-AUG-09         20-AUG-09          21-AUG-09        30-AUG-09         01-SEP-09       10-SEP-09 10-SEP-09 10-SEP-09                   1
+  47859 BULKLEY RIVER - UPPER        2010           11-AUG-10         20-AUG-10          21-AUG-10        30-AUG-10         11-SEP-10       20-SEP-10 04-AUG-10 09-SEP-10                   2
+  47859 BULKLEY RIVER - UPPER        2011           21-AUG-11         30-AUG-11          01-SEP-11        10-SEP-11         21-SEP-11       30-SEP-11 04-AUG-11 14-SEP-11                   1
+  47859 BULKLEY RIVER - UPPER        2012           21-AUG-12         30-AUG-12          01-SEP-12        10-SEP-12         21-SEP-12       30-SEP-12 18-AUG-12 20-SEP-12                   3
+  47859 BULKLEY RIVER - UPPER        2013           11-AUG-13         20-AUG-13          21-AUG-13        30-AUG-13         11-SEP-13       20-SEP-13 08-AUG-13 27-SEP-13                   1
+  47859 BULKLEY RIVER - UPPER        2014           21-AUG-14         30-AUG-14          01-SEP-14        10-SEP-14         01-OCT-14       10-OCT-14 13-AUG-14 27-SEP-14                   1
+  47859 BULKLEY RIVER - UPPER        2015           21-AUG-15         30-AUG-15          01-SEP-15        10-SEP-15         11-SEP-15       20-SEP-15 19-AUG-15 30-SEP-15                   1
+  47859 BULKLEY RIVER - UPPER        2016           11-AUG-16         20-AUG-16          21-AUG-16        30-AUG-16         01-SEP-16       10-SEP-16 28-AUG-16 28-SEP-16                   1
+  47859 BULKLEY RIVER - UPPER        2017           11-AUG-17         20-AUG-17          21-AUG-17        30-AUG-17         01-SEP-17       10-SEP-17 30-SEP-17 12-OCT-17                   3
+  47859 BULKLEY RIVER - UPPER        2018           11-AUG-18         20-AUG-18          01-SEP-18        10-SEP-18         21-SEP-18       30-SEP-18 23-AUG-18 12-OCT-18                   3
+  47859 BULKLEY RIVER - UPPER        2019           01-AUG-19         10-AUG-19          21-AUG-19        30-AUG-19         01-SEP-19       10-SEP-19 17-AUG-19 22-SEP-19                   3
+  47859 BULKLEY RIVER - UPPER        2020           21-AUG-20         30-AUG-20          21-AUG-20        30-AUG-20         01-SEP-20       10-SEP-20 20-OCT-08 20-SEP-30                   4
+  49223            BUCK CREEK        1970           15-SEP-70              <NA>          15-SEP-70             <NA>         15-SEP-70            <NA>      <NA>      <NA>                  NA
+  49223            BUCK CREEK        1977           15-AUG-77              <NA>          15-SEP-77             <NA>         15-SEP-77            <NA>      <NA>      <NA>                  NA
+  49223            BUCK CREEK        1978           15-AUG-78              <NA>          15-SEP-78             <NA>         15-OCT-78            <NA>      <NA>      <NA>                  NA
+  49223            BUCK CREEK        1982           15-AUG-82              <NA>          15-AUG-82             <NA>         15-SEP-82            <NA> 01-SEP-82      <NA>                  NA
+  49223            BUCK CREEK        1983           15-AUG-83              <NA>          15-AUG-83             <NA>         15-SEP-83            <NA>      <NA>      <NA>                  NA
+  49223            BUCK CREEK        1987           15-AUG-87              <NA>          25-AUG-87             <NA>         05-SEP-87            <NA>      <NA>      <NA>                  NA
+  49223            BUCK CREEK        1988           20-AUG-88              <NA>          25-AUG-88             <NA>         30-AUG-88            <NA> 23-AUG-88 23-AUG-88                  NA
+         estimate_method adult_presence
+ Unknown Estimate Method        PRESENT
+ Unknown Estimate Method        PRESENT
+ Unknown Estimate Method        PRESENT
+ Unknown Estimate Method        PRESENT
+ Unknown Estimate Method        PRESENT
+ Unknown Estimate Method        PRESENT
+ Unknown Estimate Method        PRESENT
+ Unknown Estimate Method        PRESENT
+ Unknown Estimate Method        PRESENT
+ Unknown Estimate Method        PRESENT
+ Unknown Estimate Method        PRESENT
+ Unknown Estimate Method        PRESENT
+ Unknown Estimate Method        PRESENT
+ Unknown Estimate Method        PRESENT
+ Unknown Estimate Method        PRESENT
+ Unknown Estimate Method        PRESENT
+ Unknown Estimate Method        PRESENT
+ Unknown Estimate Method        PRESENT
+ Unknown Estimate Method        PRESENT
+ Unknown Estimate Method        PRESENT
+        Peak Live + Dead        PRESENT
+        Peak Live + Dead        PRESENT
+        Peak Live + Dead        PRESENT
+        Peak Live + Dead        PRESENT
+        Peak Live + Dead        PRESENT
+        Peak Live + Dead        PRESENT
+          Expert Opinion        PRESENT
+        Peak Live + Dead        PRESENT
+        Peak Live + Dead        PRESENT
+        Peak Live + Dead        PRESENT
+        Peak Live + Dead        PRESENT
+        Peak Live + Dead        PRESENT
+    Area Under the Curve        PRESENT
+ Unknown Estimate Method        PRESENT
+          Not Applicable  NONE OBSERVED
+          Not Applicable  NONE OBSERVED
+ Unknown Estimate Method        PRESENT
+          Not Applicable  NONE OBSERVED
+          Not Applicable        PRESENT
+ Unknown Estimate Method        PRESENT
+check: the upper Bulkley holds 40 dated records, 27 from 1953-1991 and 13 from 2008-2020, and its 2009, 2016 and 2017 starts precede their surveys, as #241 read them
+every upper Bulkley record whose start precedes its survey: BULKLEY RIVER - UPPER 1986; BULKLEY RIVER - UPPER 1987; BULKLEY RIVER - UPPER 1988; BULKLEY RIVER - UPPER 2009; BULKLEY RIVER - UPPER 2016; BULKLEY RIVER - UPPER 2017; BULKLEY RIVER - UPPER 2018; BULKLEY RIVER - UPPER 2019; BUCK CREEK 1982; BUCK CREEK 1988 
+upper Bulkley records saying NONE OBSERVED: BUCK CREEK 1977; BUCK CREEK 1978; BUCK CREEK 1983 

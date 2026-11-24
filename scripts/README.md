@@ -495,6 +495,10 @@ Seeds `data/life_history_timing.csv` from the fish-passage reporting template's
   code (`WSG=`, `SPECIES=`; `OUT=` for the windows CSV), and sets each row of the table beside its group's window.
   A population on a code that crosses several groups is listed apart under each, unless `data/nuseds_reach_groups.csv`
   names its reach's group; it stops unless it reproduces the UFRA, COTR and BULK chinook windows. It writes no row.
+  Since #256 each window carries four readings: as recorded (#240's), the bulk of spawning (bins as midpoints, records
+  whose adults were present), the peak, and an edge only where 5 or more records had a survey of 3 or more visits
+  beyond it; `research/nuseds_timing.md` says what each may claim. `data-raw/nuseds_dates_check.R` measures what each
+  NuSEDS date is made of and tests the candidate edge rules; both read the set through `data-raw/nuseds_dates_read.R`.
 - `data-raw/segment_window_flow.R` reads every complete window onto every FWA segment of its group (#42; ignored
   `data/flow_window/`); rerun it after a timing change.
 - `data-raw/chinook_window_evidence.R`, then `data-raw/chinook_window_tune.R` (#226): the published evidence copied
