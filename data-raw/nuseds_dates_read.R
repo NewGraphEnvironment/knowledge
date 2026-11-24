@@ -93,6 +93,7 @@ nuseds_date <- function(d, yr) {
 # present record bracketed at that edge, with a midpoint there). An edge so read is consistent with one someone saw,
 # never proof of one: NuSEDS keeps no count per visit.
 nuseds_edge_visits <- 3L
+nuseds_edge_min <- 5L   # an edge is given for a group and species only with this many qualifying records
 nuseds_survey <- function(x) {
   yr <- as.integer(x$analysis_yr)
   sp <- x$species_code

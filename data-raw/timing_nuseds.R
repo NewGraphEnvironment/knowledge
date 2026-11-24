@@ -90,7 +90,7 @@ filtered <- length(want_groups) > 0L || length(want_species) > 0L
 if (filtered && nzchar(out)) {
   stop("OUT is the full run's table: a run with WSG or SPECIES prints only, so it never replaces it", call. = FALSE)
 }
-edge_min <- 5L
+edge_min <- nuseds_edge_min
 
 # ---- the published records ----
 cols <- c("pop_id", "gfe_id", "waterbody", "species", "run_type", "analysis_yr", "fwa_watershed_cde",
@@ -169,6 +169,11 @@ pop_rows <- function(d, scope, w, sp) {
   }))
 }
 has_date <- !is.na(x$start_day) | !is.na(x$end_day)
+# windows exist where #240's as-recorded dates put them; a population whose only bulk or edge record lies outside them
+# would vanish from the windows while the check counts it: stop on one
+lost <- !has_date & (!is.na(x$start_mid) | !is.na(x$end_mid)) &
+  !paste(x$pop_id, x$species_code) %in% paste(x$pop_id, x$species_code)[has_date]
+if (any(lost)) stop(sum(lost), " bulk records belong to populations with no as-recorded date", call. = FALSE)
 pooled_keys <- unique(x[has_date & !is.na(x$wsg), c("wsg", "species_code")])
 apart_x <- x[is.na(x$wsg), , drop = FALSE]
 apart_keys <- if (nrow(apart_x)) {

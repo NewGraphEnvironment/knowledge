@@ -108,8 +108,12 @@ b <- x$start_form %in% "bin"
 bin_from <- as.integer(substr(x$start_spawn_dt_from[b], 1, 2))
 cat("start bins opening on the 1st, 11th or 21st:", sum(bin_from %in% c(1L, 11L, 21L)), "of", sum(b), "\n")
 cat("day of month of single start dates (the ten most common):\n")
-print(utils::head(sort(table(as.integer(substr(x$start_spawn_dt_from[!b & !is.na(x$start_spawn_dt_from)], 1, 2))),
-                       decreasing = TRUE), 10))
+one_start <- ifelse(is.na(x$start_spawn_dt_from), x$start_spawn_dt_to, x$start_spawn_dt_from)   # as form() reads it
+print(utils::head(sort(table(as.integer(substr(one_start[!b & !is.na(one_start)], 1, 2))), decreasing = TRUE), 10))
+# spawning ends past the new year (a January-to-March end), by species
+end_month <- as.integer(format(as.Date(nuseds_doy(x$end_one, "nuseds") - 1L, origin = "2000-01-01"), "%m"))
+cat("ends in January to March, by species:", paste(names(table(x$species_code[end_month %in% 1:3])),
+    table(x$species_code[end_month %in% 1:3]), collapse = ", "), "\n")
 
 # ---- the window and the survey on the season year (nuseds_survey(), shared with timing_nuseds.R) ----
 x <- nuseds_survey(x)
@@ -224,13 +228,13 @@ cat("\nfence and fixed-site records with an arrival date:", nrow(fz), "; days fr
 # ---- placed in watershed groups ----
 cat("\n", sum(is.na(x$fwa_watershed_cde)), "dated records carry no FWA watershed code\n")
 x <- nuseds_place(x[!is.na(x$fwa_watershed_cde), , drop = FALSE])
-rules <- c(list("all: dated records (a start or an end), present" = x$method), lapply(rules_of(x), function(r) r$admit))
+rules <- c(list("all: dated records (a start or an end), present, not backwards" = x$method), lapply(rules_of(x), function(r) r$admit))
 cat("\n==== pooled groups (a population on a code in one group, or a named reach) with records each rule admits\n")
 pg <- !is.na(x$wsg)
 print(do.call(rbind, lapply(names(rules), function(r) {
   do.call(rbind, lapply(nuseds_species, function(sp) {
     k <- table(x$wsg[rules[[r]] & pg & x$species_code == sp])
-    data.frame(rule = substr(r, 1, 4), species = sp, groups_1 = sum(k >= 1), groups_5 = sum(k >= 5),
+    data.frame(rule = substr(r, 1, 4), species = sp, groups_1 = sum(k >= 1), groups_5 = sum(k >= nuseds_edge_min),
                records = sum(k))
   }))
 })), row.names = FALSE)

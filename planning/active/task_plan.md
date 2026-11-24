@@ -65,8 +65,8 @@ Decided in the plan (mechanism, one line of why each):
 
 ## Validation
 
-- [ ] Tests pass (`devtools::test()`; no test reads these scripts today, so this checks nothing broke)
-- [ ] `/code-check` clean (once over the branch with `/code-check branch`)
+- [x] Tests pass (`devtools::test()`; no test reads these scripts today, so this checks nothing broke)
+- [x] `/code-check` clean (once over the branch with `/code-check branch`)
 - [ ] PWF checkboxes match landed work
 - [ ] `/planning-archive` on completion
 

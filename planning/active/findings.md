@@ -135,3 +135,14 @@ the Nanika's 1992-on a3s is 4; AUC counts replace "mostly"; denominators say the
 - Denominators that were records, not starts: the grid share before 1990 is 91 to 94 % of starts; bins are 3,009 of
   12,086 starts in the 1990s and 7,157 of 7,455 from 2010; UFRA 83 of 124 grid starts and 28 of 76 before the survey.
 - "Six candidate rules" is ten (the table shows six); a hand-probe clause about NONE OBSERVED in UFRA and COTR removed.
+
+## Code-check round 5 and the end of the loop (2026-11-24, `review-round5.md`)
+
+Round 5 enumerated 80 quantified claims (the six research sections and the four UFRA/COTR notes), each against a
+printed log line or CSV cell over the set it names. Three were wrong and are fixed: PRESENT is 98,705 at HEAD (98,698
+was #240's population); the day-of-month table read a single start a second way (now as `form()` does: 42,491 on the
+15th); and a parenthetical about rule d's records was false for 2 records and is gone, with a3s and a3e said to need a
+day to read. Guards added: `edge_min` is one constant (`nuseds_edge_min`), and `timing_nuseds.R` stops if a
+population's only bulk record has no as-recorded date (it would vanish from the windows). The check now prints the
+January-to-March ends (coho 2,512, chum 540), which #240's sentence quotes. After the rerun only those log lines moved
+and the windows CSV is unchanged; each fixed claim was re-read against the new line. The loop ends on that enumeration.

@@ -17,7 +17,7 @@ Four things in the 102,807 dated records of the six species (a start or an end; 
 where `start_spawn_dt_from` gives it) show it (`20261124_nuseds_dates_check.txt`):
 
 - **The dates are rounded.** Before 1990 a start is a single date on the five-day grid (the 1st, 5th, 10th, 15th,
-  20th, 25th, 30th or 31st) on 91 to 94 % of starts; the 15th alone holds 42,489 single starts. From the 1990s the
+  20th, 25th, 30th or 31st) on 91 to 94 % of starts; the 15th alone holds 42,491 single starts. From the 1990s the
   dates are ten-day bins (1 to 10, 11 to 20, 21 to the month's end): 3,009 of 12,086 starts in the 1990s, 7,157 of
   7,455 from 2010. Of 15,678 start bins, 15,005 are 10 or 11 days long; 664 are longer, and 2 run backwards.
 - **The start is often recorded before the survey began.** Where a record's survey is compared (372 are set aside,
@@ -52,8 +52,9 @@ precedes the survey on 8 of 20 Morice and 10 of 19 Nanika records.
 
 ## Which records can bound an edge
 
-Ten candidate rules were measured over records whose adults were present: a3s over those giving a start, a3e over
-those giving an end, the others over those giving both. The table shows the six that differ in kind (a2, a4 and a5
+Ten candidate rules were measured over records whose adults were present: a3s over those giving a start with a day
+to read (a bin over 31 days or running backwards gives none), a3e likewise over those giving an end, the others over
+those giving both. The table shows the six that differ in kind (a2, a4 and a5
 vary a3's visits, and a fourth joins a3 and c):
 
 | rule | records | chinook groups with 5 or more |
@@ -76,8 +77,7 @@ after their arrival.
 **The rule chosen:** an edge is taken from a3s records for the start and a3e records for the end, apart, because the
 start and the end are separate claims and a survey can stand before one without standing after the other. Three
 visits are the fewest that can put one before, one during and one after spawning. Rule c needs no visit before the
-date, and d needs repeated counts but no visit beyond either edge (its records with 3 or more visits beyond an edge
-are counted in a3s or a3e).
+date, and d needs repeated counts but no visit beyond either edge.
 An edge is given for a group and species only where 5 or more records qualify, a threshold set before the results.
 
 ## The window: bulk, peak and edges
@@ -89,7 +89,7 @@ An edge is given for a group and species only where 5 or more records qualify, a
   `end_spawn_dt_from`) over every dated record. Kept so the windows the UFRA and COTR rows rest on stay
   reproducible; every one of its 6,112 rows equals #240's.
 - **The bulk of spawning** (`bulk_`): the median start to the median end, a bin entering as its midpoint, over
-  records whose adults were present (any adult presence but NONE OBSERVED and NOT INSPECTED: 98,698 dated records say
+  records whose adults were present (any adult presence but NONE OBSERVED and NOT INSPECTED: 98,705 dated records say
   PRESENT, 43 UNKNOWN and 2 nothing) and whose window does not end before it starts on the season year. Each edge is
   read over the records that give it, so the bulk carries its own years (`bulk_first_year`, `bulk_last_year`); a start
   given only as `start_spawn_dt_to`, which the as-recorded window skips, enters it. Reading a
