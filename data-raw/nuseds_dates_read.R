@@ -84,12 +84,14 @@ nuseds_date <- function(d, yr) {
 # s1 (the survey's first and last days, cleared where a written survey year lies over a year from the record's year
 # (survey_off_year) or the survey ends before it starts on the season year (survey_reversed), either a slip flagged in
 # survey_slip; a survey opening before the season start, its first day written in the record's year or before, is kept
-# in the season it opened); and visits0
+# in the season it opened); visits0
 # (no_inspections_used, 0 where blank), backwards (the window ends before it starts on the season year), present
-# (adult presence neither NONE OBSERVED nor NOT INSPECTED, whose dates are a stream's expected timing), and
-# edge_start and edge_end: a present record whose survey began before the recorded start (ended after the recorded
-# end) with at least nuseds_edge_visits visits. That is consistent with an edge someone saw, never proof of one:
-# NuSEDS keeps no count per visit.
+# (adult presence other than NONE OBSERVED or NOT INSPECTED, whose dates are a stream's expected timing; UNKNOWN and
+# blank count as present); method (present and not backwards), start_mid, end_mid and peak_mid (nuseds_mid() on
+# method records); start_bracket3 and end_bracket3 (the survey began before the recorded start, or ended after the
+# recorded end, with at least nuseds_edge_visits visits, the window not backwards); and edge_start and edge_end (a
+# present record bracketed at that edge, with a midpoint there). An edge so read is consistent with one someone saw,
+# never proof of one: NuSEDS keeps no count per visit.
 nuseds_edge_visits <- 3L
 nuseds_survey <- function(x) {
   yr <- as.integer(x$analysis_yr)
@@ -122,8 +124,18 @@ nuseds_survey <- function(x) {
   x$present <- !x$adult_presence %in% c("NONE OBSERVED", "NOT INSPECTED")
   x$brackets_start <- !is.na(x$start_lo) & !is.na(x$s0) & x$s0 < x$start_lo
   x$brackets_end <- !is.na(x$end_hi) & !is.na(x$s1) & x$s1 > x$end_hi
-  x$edge_start <- x$present & !x$backwards & x$brackets_start & x$visits0 >= nuseds_edge_visits
-  x$edge_end <- x$present & !x$backwards & x$brackets_end & x$visits0 >= nuseds_edge_visits
+  # the sets both scripts read, defined here once: the bulk and peak take a record whose adults were present and whose
+  # window does not run backwards, each column by itself (a start with no end enters the start's median); an edge
+  # takes such a record whose survey stands beyond that edge with enough visits, whatever the other edge gives
+  x$method <- x$present & !x$backwards
+  mid <- function(from, to) ifelse(x$method, nuseds_mid(from, to, sp), NA_integer_)
+  x$start_mid <- mid(x$start_spawn_dt_from, x$start_spawn_dt_to)
+  x$end_mid <- mid(x$end_spawn_dt_from, x$end_spawn_dt_to)
+  x$peak_mid <- mid(x$peak_spawn_dt_from, x$peak_spawn_dt_to)
+  x$start_bracket3 <- !x$backwards & x$brackets_start & x$visits0 >= nuseds_edge_visits
+  x$end_bracket3 <- !x$backwards & x$brackets_end & x$visits0 >= nuseds_edge_visits
+  x$edge_start <- x$present & x$start_bracket3 & !is.na(x$start_mid)
+  x$edge_end <- x$present & x$end_bracket3 & !is.na(x$end_mid)
   x$survey_slip <- slip
   x
 }

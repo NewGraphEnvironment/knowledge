@@ -51,6 +51,11 @@ day of month of single start dates (the ten most common):
 
  372 records' surveys are not compared: 98 give a survey year over a year from their own (the upper Bulkley's 2020 record: 20-OCT-08 to 20-SEP-30), 309 a survey that ends before it starts on the season year, and 35 both
 98 records end before they start on the season year: kept out of every rule
+165 present records end before they start on their written years; 98 of them run forward on the season year (by species: CH 4, CM 7, CO 76, PK 3, SK 8 )
+adult presence of dated records (present means any but NONE OBSERVED and NOT INSPECTED):
+adult_presence
+NONE OBSERVED NOT INSPECTED       PRESENT       UNKNOWN          <NA> 
+         3725           332         98698            43             2 
 
 ==== the survey beside the window, by era (records)
         records survey_started survey_ended visits_given visits_median start_before_survey end_after_survey brackets_start brackets_end brackets_both
@@ -95,33 +100,33 @@ species to 1969 1970s 1980s 1990s 2000s 2010 on Sum
     Sum     136    54    52    68     6      16 332
 129 give both survey dates; 74 had a survey overlapping the spawning window they give; 305 give a peak; 1 give a spawner count above 0
 
-==== records each candidate rule admits, by species (present, with a start and an end)
-                                      rule  CH   CO  SK   PK   CM ST  all
- a2: survey brackets both edges, 2+ visits 270  225 320  730  917  2 2464
- a3: survey brackets both edges, 3+ visits 218  186 265  627  778  2 2076
- a4: survey brackets both edges, 4+ visits 169  149 205  482  551  2 1558
- a5: survey brackets both edges, 5+ visits 133  105 134  340  364  2 1078
- a3s: survey brackets the start, 3+ visits 353 1325 561 1650 1786  3 5678
-   a3e: survey brackets the end, 3+ visits 361  243 441  899 1265  2 3211
-             b: fence or fixed-site census  68  232  68   70  120  2  560
-    c: start and end off the five-day grid 245  358  91  264  647  0 1605
-                   d: area under the curve 276  615 678 1121  988  1 3679
-                                  a3 and c  11    9   1    6   20  0   47
+==== records each candidate rule admits, by species (present; a3s and a3e with that edge, the rest with a start and an end)
+                                                       rule  CH   CO  SK   PK   CM ST  all
+                  a2: survey brackets both edges, 2+ visits 270  225 320  730  917  2 2464
+                  a3: survey brackets both edges, 3+ visits 218  186 265  627  778  2 2076
+                  a4: survey brackets both edges, 4+ visits 169  149 205  482  551  2 1558
+                  a5: survey brackets both edges, 5+ visits 133  105 134  340  364  2 1078
+ a3s: survey brackets the start, 3+ visits (the start edge) 389 1794 687 2040 2104  8 7022
+     a3e: survey brackets the end, 3+ visits (the end edge) 389  373 458  967 1660  2 3849
+                              b: fence or fixed-site census  68  232  68   70  120  2  560
+                     c: start and end off the five-day grid 245  358  91  264  647  0 1605
+                                    d: area under the curve 276  615 678 1121  988  1 3679
+                                                   a3 and c  11    9   1    6   20  0   47
 
 ==== does each rule separate dates someone saw from dates written regardless?
-                                      rule present_rate none_observed_rate none_over_present admitted grid_share bin_share passes
- a2: survey brackets both edges, 2+ visits       0.0276             0.0038              0.14     2464       0.33      0.66   TRUE
- a3: survey brackets both edges, 3+ visits       0.0233             0.0019              0.08     2076       0.29      0.69   TRUE
- a4: survey brackets both edges, 4+ visits       0.0175             0.0011              0.06     1558       0.28      0.70   TRUE
- a5: survey brackets both edges, 5+ visits       0.0121             0.0005              0.05     1078       0.29      0.68   TRUE
- a3s: survey brackets the start, 3+ visits       0.0637             0.0074              0.12     5678       0.30      0.68   TRUE
-   a3e: survey brackets the end, 3+ visits       0.0360             0.0036              0.10     3211       0.26      0.73   TRUE
-             b: fence or fixed-site census       0.0063             0.0005              0.09      560       0.63      0.37  FALSE
-    c: start and end off the five-day grid       0.0180             0.0022              0.12     1605       0.00      0.00   TRUE
-                   d: area under the curve       0.0413             0.0003              0.01     3679       0.03      0.96   TRUE
-                                  a3 and c       0.0005             0.0000              0.00       47       0.00      0.00   TRUE
+                                                       rule present_rate none_observed_rate none_over_present admitted grid_share bin_share passes
+                  a2: survey brackets both edges, 2+ visits       0.0276             0.0038              0.14     2464       0.33      0.66   TRUE
+                  a3: survey brackets both edges, 3+ visits       0.0233             0.0019              0.08     2076       0.29      0.69   TRUE
+                  a4: survey brackets both edges, 4+ visits       0.0175             0.0011              0.06     1558       0.28      0.70   TRUE
+                  a5: survey brackets both edges, 5+ visits       0.0121             0.0005              0.05     1078       0.29      0.68   TRUE
+ a3s: survey brackets the start, 3+ visits (the start edge)       0.0735             0.0076              0.10     7022       0.27      0.70   TRUE
+     a3e: survey brackets the end, 3+ visits (the end edge)       0.0418             0.0035              0.08     3849       0.24      0.70   TRUE
+                              b: fence or fixed-site census       0.0063             0.0005              0.09      560       0.63      0.37  FALSE
+                     c: start and end off the five-day grid       0.0180             0.0022              0.12     1605       0.00      0.00   TRUE
+                                    d: area under the curve       0.0413             0.0003              0.01     3679       0.03      0.96   TRUE
+                                                   a3 and c       0.0005             0.0000              0.00       47       0.00      0.00   TRUE
 
-the same rates within each era (NONE OBSERVED records are mostly before 1990, when visits were seldom recorded):
+the same rates within each era, present / NONE OBSERVED (NONE OBSERVED records are mostly before 1990, when visits were seldom recorded):
      era present_n none_observed_n a2: survey brackets both edges, 2+ visits a3: survey brackets both edges, 3+ visits a4: survey brackets both edges, 4+ visits
  to 1969     31692            1185                             0.000 / 0.000                             0.000 / 0.000                             0.000 / 0.000
    1970s     18259             398                             0.000 / 0.000                             0.000 / 0.000                             0.000 / 0.000
@@ -129,20 +134,20 @@ the same rates within each era (NONE OBSERVED records are mostly before 1990, wh
    1990s     10179             710                             0.074 / 0.011                             0.058 / 0.004                             0.043 / 0.001
    2000s      4798              36                             0.114 / 0.056                             0.100 / 0.028                             0.081 / 0.028
  2010 on      5749              42                             0.167 / 0.071                             0.148 / 0.048                             0.108 / 0.024
- a5: survey brackets both edges, 5+ visits a3s: survey brackets the start, 3+ visits a3e: survey brackets the end, 3+ visits b: fence or fixed-site census c: start and end off the five-day grid
-                             0.000 / 0.000                             0.000 / 0.000                           0.000 / 0.000                 0.000 / 0.000                          0.021 / 0.004
-                             0.000 / 0.000                             0.000 / 0.000                           0.000 / 0.000                 0.000 / 0.000                          0.024 / 0.000
-                             0.004 / 0.000                             0.031 / 0.002                           0.011 / 0.002                 0.009 / 0.001                          0.012 / 0.000
-                             0.032 / 0.001                             0.143 / 0.021                           0.077 / 0.010                 0.017 / 0.000                          0.019 / 0.004
-                             0.059 / 0.028                             0.286 / 0.083                           0.165 / 0.056                 0.025 / 0.028                          0.015 / 0.000
-                             0.068 / 0.000                             0.395 / 0.143                           0.246 / 0.048                 0.015 / 0.000                          0.006 / 0.000
- d: area under the curve      a3 and c
-           0.000 / 0.000 0.000 / 0.000
-           0.000 / 0.000 0.000 / 0.000
-           0.000 / 0.000 0.000 / 0.000
-           0.019 / 0.000 0.002 / 0.000
-           0.208 / 0.028 0.002 / 0.000
-           0.432 / 0.000 0.001 / 0.000
+ a5: survey brackets both edges, 5+ visits a3s: survey brackets the start, 3+ visits (the start edge) a3e: survey brackets the end, 3+ visits (the end edge) b: fence or fixed-site census
+                             0.000 / 0.000                                              0.000 / 0.000                                          0.000 / 0.000                 0.000 / 0.000
+                             0.000 / 0.000                                              0.000 / 0.000                                          0.000 / 0.000                 0.000 / 0.000
+                             0.004 / 0.000                                              0.031 / 0.002                                          0.011 / 0.002                 0.009 / 0.001
+                             0.032 / 0.001                                              0.149 / 0.022                                          0.081 / 0.010                 0.017 / 0.000
+                             0.059 / 0.028                                              0.306 / 0.081                                          0.181 / 0.056                 0.025 / 0.028
+                             0.068 / 0.000                                              0.384 / 0.143                                          0.269 / 0.048                 0.015 / 0.000
+ c: start and end off the five-day grid d: area under the curve      a3 and c
+                          0.021 / 0.004           0.000 / 0.000 0.000 / 0.000
+                          0.024 / 0.000           0.000 / 0.000 0.000 / 0.000
+                          0.012 / 0.000           0.000 / 0.000 0.000 / 0.000
+                          0.019 / 0.004           0.019 / 0.000 0.002 / 0.000
+                          0.015 / 0.000           0.208 / 0.028 0.002 / 0.000
+                          0.006 / 0.000           0.432 / 0.000 0.001 / 0.000
 
 fence and fixed-site records with an arrival date: 537 ; days from arrival to the recorded start, quartiles: 10, 20, 37 
 
@@ -152,12 +157,12 @@ named reaches (data/nuseds_reach_groups.csv): FRASER RIVER - ABOVE TETE JAUNE ->
 
 ==== pooled groups (a population on a code in one group, or a named reach) with records each rule admits
  rule species groups_1 groups_5 records
- all       CH       79       72    6660
- all       CO       75       72   23989
- all       SK       74       60    6958
- all       PK       62       58   18207
- all       CM       54       51   29089
- all       ST        5        0       8
+ all:      CH       81       73    7093
+ all:      CO       77       73   26713
+ all:      SK       75       61    7657
+ all:      PK       62       58   20211
+ all:      CM       55       51   32087
+ all:      ST        6        1      14
  a2:       CH       39       14     251
  a2:       CO       41       17     199
  a2:       SK       41       16     294
@@ -182,17 +187,17 @@ named reaches (data/nuseds_reach_groups.csv): FRASER RIVER - ABOVE TETE JAUNE ->
  a5:       PK       37       12     334
  a5:       CM       38       21     350
  a5:       ST        2        0       2
- a3s:      CH       44       18     313
- a3s:      CO       59       48    1247
- a3s:      SK       47       24     520
- a3s:      PK       47       28    1624
- a3s:      CM       46       38    1750
- a3s:      ST        2        0       3
- a3e:      CH       43       19     313
- a3e:      CO       41       16     220
- a3e:      SK       41       21     396
- a3e:      PK       48       25     867
- a3e:      CM       47       34    1228
+ a3s:      CH       45       19     348
+ a3s:      CO       63       50    1694
+ a3s:      SK       47       25     640
+ a3s:      PK       48       30    2006
+ a3s:      CM       46       38    2058
+ a3s:      ST        3        0       8
+ a3e:      CH       43       19     339
+ a3e:      CO       42       20     323
+ a3e:      SK       41       21     413
+ a3e:      PK       48       29     931
+ a3e:      CM       47       35    1536
  a3e:      ST        2        0       2
  b: f      CH       15        1      34
  b: f      CO       28       14     204
@@ -221,40 +226,40 @@ named reaches (data/nuseds_reach_groups.csv): FRASER RIVER - ABOVE TETE JAUNE ->
 
 ==== chinook windows (medians, bins as midpoints) on each rule's records, pooled groups
   wsg rule records start  peak   end
- BULK all       20 08-15 08-25 09-05
+ BULK all:      23 08-15 08-25 09-05
  BULK a2:        0  <NA>  <NA>  <NA>
  BULK a3:        0  <NA>  <NA>  <NA>
  BULK a4:        0  <NA>  <NA>  <NA>
  BULK a5:        0  <NA>  <NA>  <NA>
- BULK a3s:       1 08-15 08-25 09-05
+ BULK a3s:       2 08-25 08-25 09-05
  BULK a3e:       0  <NA>  <NA>  <NA>
  BULK b: f       0  <NA>  <NA>  <NA>
  BULK c: s       0  <NA>  <NA>  <NA>
  BULK d: a       0  <NA>  <NA>  <NA>
  BULK a3 a       0  <NA>  <NA>  <NA>
- MORR all       42 08-25 09-15 09-25
+ MORR all:      46 08-25 09-15 09-25
  MORR a2:        2 08-31 09-15 09-25
  MORR a3:        2 08-31 09-15 09-25
  MORR a4:        2 08-31 09-15 09-25
  MORR a5:        2 08-31 09-15 09-25
- MORR a3s:       2 08-31 09-15 09-25
+ MORR a3s:       4 09-10 09-15 09-25
  MORR a3e:       9 08-25 09-05 09-25
  MORR b: f       0  <NA>  <NA>  <NA>
  MORR c: s       0  <NA>  <NA>  <NA>
  MORR d: a      12 08-25 09-05 09-25
  MORR a3 a       0  <NA>  <NA>  <NA>
- KISP all      189 08-15 08-30 09-15
+ KISP all:     200 08-15 08-30 09-15
  KISP a2:        1 08-15 09-05 09-15
  KISP a3:        1 08-15 09-05 09-15
  KISP a4:        1 08-15 09-05 09-15
  KISP a5:        0  <NA>  <NA>  <NA>
  KISP a3s:       2 08-10 08-25 09-10
- KISP a3e:       3 08-15 08-25 09-15
+ KISP a3e:       4 08-15 08-31 09-15
  KISP b: f       1 08-05 08-25 09-15
  KISP c: s       0  <NA>  <NA>  <NA>
  KISP d: a       5 08-05 08-15 09-05
  KISP a3 a       0  <NA>  <NA>  <NA>
- UFRA all      121 08-12 08-25 09-05
+ UFRA all:     128 08-12 08-25 09-05
  UFRA a2:        1 08-15 09-05 08-15
  UFRA a3:        1 08-15 09-05 08-15
  UFRA a4:        1 08-15 09-05 08-15
@@ -265,7 +270,7 @@ named reaches (data/nuseds_reach_groups.csv): FRASER RIVER - ABOVE TETE JAUNE ->
  UFRA c: s       5 08-16 08-26 09-08
  UFRA d: a       0  <NA>  <NA>  <NA>
  UFRA a3 a       0  <NA>  <NA>  <NA>
- COTR all       34 08-09 08-23 09-05
+ COTR all:      37 08-10 08-22 09-05
  COTR a2:        0  <NA>  <NA>  <NA>
  COTR a3:        0  <NA>  <NA>  <NA>
  COTR a4:        0  <NA>  <NA>  <NA>
@@ -315,50 +320,50 @@ named reaches (data/nuseds_reach_groups.csv): FRASER RIVER - ABOVE TETE JAUNE ->
   44549              FRASER RIVER - ABOVE TETE JAUNE                                                                         UFRA      16 1982-2000         12           0         3            3
   45325                                  SMALL CREEK                                                                         UFRA       3 1996-2000          0           0         3            2
    2076                                 ROBSON RIVER                                                                         UFRA       1 1996-1996          0           0         1            0
- visits_median survey_started start_before_survey survey_ended end_after_survey brackets_both a3 fence auc                  method
-           9.0              7                   4           11                1             3  0     0   0 Unknown Estimate Method
-           1.0             29                   8           27               20             5  1     0   0 Unknown Estimate Method
-           2.0             19                   8           19                5             5  0     1   1 Unknown Estimate Method
-           1.0              5                   1            5                1             0  0     0   0 Unknown Estimate Method
-           4.0             44                  23           38               14             5  1     0  16 Unknown Estimate Method
-           1.0             17                   7           14                3             4  0     0   0 Unknown Estimate Method
-           8.0              6                   3            6                2             1  0     0   0 Unknown Estimate Method
-            NA              2                   2            1                1             0  0     0   0          Not Applicable
-           3.0              3                   0            3                2             0  0     0   0          Expert Opinion
-           3.0              4                   2            4                2             0  0     0   0 Unknown Estimate Method
-            NA              0                   0            0                0             0  0     0   0          Not Applicable
-            NA              0                   0            0                0             0  0     0   0 Unknown Estimate Method
-            NA              1                   1            1                1             0  0     0   0 Unknown Estimate Method
-            NA             20                   6           20                9             8  0     0   0 Unknown Estimate Method
-           1.0              9                   5            9                4             0  0     0   0 Unknown Estimate Method
-           1.0              3                   1            3                3             0  0     0   0   Peak Live * Expansion
-           4.0             32                  16           29                5             9  1     0   2 Unknown Estimate Method
-            NA             29                  16           28                2             8  0     1   0 Unknown Estimate Method
-           2.0             25                  21           20                6             2  0     0   0 Unknown Estimate Method
-           2.5             24                  16           18                4             1  0     0   2 Unknown Estimate Method
-           1.0             21                  11           18                1             6  0     0   1 Unknown Estimate Method
-           1.5             11                   4           12                2             0  0     0   0 Unknown Estimate Method
-           1.0             18                  12           18                0             2  0     0   0 Unknown Estimate Method
-            NA             13                   9           10                0             3  0     0   0 Unknown Estimate Method
-            NA              6                   2            5                1             3  0     0   0 Unknown Estimate Method
-            NA              3                   1            1                0             1  0     0   0 Unknown Estimate Method
-            NA              1                   1            1                0             0  0     0   0 Unknown Estimate Method
-            NA              1                   1            1                0             0  0     0   0          Not Applicable
-           3.5             34                  19           28                5             3  2     0  12 Unknown Estimate Method
-           4.5             21                   8           22               16             5  0     0   0 Unknown Estimate Method
-           4.5             16                   6           17                7             5  0     0   0 Unknown Estimate Method
-           2.0             17                   6           16               12             2  1     0   0 Unknown Estimate Method
-           3.0             16                   7           16               12             1  0     0   0 Unknown Estimate Method
-           5.0              3                   1            3                3             0  0     0   0 Unknown Estimate Method
-           2.5              2                   0            2                2             0  0     0   0   Peak Live * Expansion
-            NA              0                   0            0                0             0  0     0   0 Unknown Estimate Method
+ visits_median survey_started start_before_survey survey_ended end_after_survey brackets_both a3s a3e fence auc                  method
+           9.0              7                   4           11                1             3   0   1     0   0 Unknown Estimate Method
+           1.0             29                   8           27               20             5   1   1     0   0 Unknown Estimate Method
+           2.0             19                   8           19                5             5   1   3     1   1 Unknown Estimate Method
+           1.0              5                   1            5                1             0   0   0     0   0 Unknown Estimate Method
+           4.0             44                  23           38               14             5   5   4     0  16 Unknown Estimate Method
+           1.0             17                   7           14                3             4   0   0     0   0 Unknown Estimate Method
+           8.0              6                   3            6                2             1   0   0     0   0 Unknown Estimate Method
+            NA              2                   2            1                1             0   0   0     0   0          Not Applicable
+           3.0              3                   0            3                2             0   1   0     0   0          Expert Opinion
+           3.0              4                   2            4                2             0   1   0     0   0 Unknown Estimate Method
+            NA              0                   0            0                0             0   0   0     0   0          Not Applicable
+            NA              0                   0            0                0             0   0   0     0   0 Unknown Estimate Method
+            NA              1                   1            1                1             0   0   0     0   0 Unknown Estimate Method
+            NA             20                   6           20                9             8   0   0     0   0 Unknown Estimate Method
+           1.0              9                   5            9                4             0   0   0     0   0 Unknown Estimate Method
+           1.0              3                   1            3                3             0   0   0     0   0   Peak Live * Expansion
+           4.0             32                  16           29                5             9   1   2     0   2 Unknown Estimate Method
+            NA             29                  16           28                2             8   0   0     1   0 Unknown Estimate Method
+           2.0             25                  21           20                6             2   0   1     0   0 Unknown Estimate Method
+           2.5             24                  16           18                4             1   1   0     0   2 Unknown Estimate Method
+           1.0             21                  11           18                1             6   0   1     0   1 Unknown Estimate Method
+           1.5             11                   4           12                2             0   0   0     0   0 Unknown Estimate Method
+           1.0             18                  12           18                0             2   0   0     0   0 Unknown Estimate Method
+            NA             13                   9           10                0             3   0   0     0   0 Unknown Estimate Method
+            NA              6                   2            5                1             3   0   0     0   0 Unknown Estimate Method
+            NA              3                   1            1                0             1   0   0     0   0 Unknown Estimate Method
+            NA              1                   1            1                0             0   0   0     0   0 Unknown Estimate Method
+            NA              1                   1            1                0             0   0   0     0   0          Not Applicable
+           3.5             34                  19           28                5             3   4   9     0  12 Unknown Estimate Method
+           4.5             21                   8           22               16             5   2   0     0   0 Unknown Estimate Method
+           4.5             16                   6           17                7             5   3   2     0   0 Unknown Estimate Method
+           2.0             17                   6           16               12             2   1   1     0   0 Unknown Estimate Method
+           3.0             16                   7           16               12             1   3   1     0   0 Unknown Estimate Method
+           5.0              3                   1            3                3             0   1   0     0   0 Unknown Estimate Method
+           2.5              2                   0            2                2             0   1   0     0   0   Peak Live * Expansion
+            NA              0                   0            0                0             0   0   0     0   0 Unknown Estimate Method
 
 ==== the Morice (pop_id 49188) and Nanika (49213) chinook, before and after 1992
-    waterbody  period records     years start_grid start_bin visits_median survey_started start_before_survey survey_ended end_after_survey a3s a3e none_observed                  method
- MORICE RIVER 1992 on      25 1995-2025          1        24             4             20                   8           18                7   5   4             0    Area Under the Curve
- NANIKA RIVER 1992 on      25 1995-2025          1        24             4             19                  10           17                1   2   9             0    Area Under the Curve
- MORICE RIVER to 1991      39 1953-1991         34         0             2             24                  15           20                7   0   0             0 Unknown Estimate Method
- NANIKA RIVER to 1991      21 1959-1989         19         0             2             15                   9           11                4   0   0             0 Unknown Estimate Method
+    waterbody  period records     years start_grid start_bin visits_median survey_started start_before_survey survey_ended end_after_survey a3s a3e auc none_observed                  method
+ MORICE RIVER 1992 on      25 1995-2025          1        24             4             20                   8           18                7   5   4  16             0    Area Under the Curve
+ NANIKA RIVER 1992 on      25 1995-2025          1        24             4             19                  10           17                1   4   9  12             0    Area Under the Curve
+ MORICE RIVER to 1991      39 1953-1991         34         0             2             24                  15           20                7   0   0   0             0 Unknown Estimate Method
+ NANIKA RIVER to 1991      21 1959-1989         19         0             2             15                   9           11                4   0   0   0             0 Unknown Estimate Method
 
 ==== the upper Bulkley chinook (pop_id 47859, 49223), record by record
  pop_id             waterbody analysis_yr start_spawn_dt_from start_spawn_dt_to peak_spawn_dt_from peak_spawn_dt_to end_spawn_dt_from end_spawn_dt_to start_dtt   end_dtt no_inspections_used

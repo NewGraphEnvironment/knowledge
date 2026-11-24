@@ -39,7 +39,7 @@
 #     mainstem, and 49223, Buck Creek) record by record, the worked example #241 read first. The script stops unless
 #     it reproduces #241's counts of those records.
 #   - NONE OBSERVED AND NOT INSPECTED. Records with these adult presences that carry spawning dates are counted, with
-#     whether their survey fell inside the window they give: a window on a stream where no spawner was seen is the
+#     whether their survey overlapped the window they give: a window on a stream where no spawner was seen is the
 #     stream's expected timing, not an observation.
 #
 # INPUT:  https://fresh-bc.s3.us-west-2.amazonaws.com/knowledge/nuseds/<VERSION>/ (manifest.json,
@@ -108,6 +108,16 @@ cat("\n", sum(x$survey_slip), "records' surveys are not compared:", sum(x$survey
     "year from their own (the upper Bulkley's 2020 record: 20-OCT-08 to 20-SEP-30),", sum(x$survey_reversed),
     "a survey that ends before it starts on the season year, and", sum(x$survey_off_year & x$survey_reversed), "both\n")
 cat(sum(x$backwards), "records end before they start on the season year: kept out of every rule\n")
+or <- function(a, b) ifelse(is.na(a), b, a)
+w0 <- nuseds_date(or(x$start_spawn_dt_from, x$start_spawn_dt_to), x$yr)
+w1 <- nuseds_date(or(x$end_spawn_dt_to, x$end_spawn_dt_from), x$yr)
+wb <- x$present & !is.na(w0) & !is.na(w1) & w1 < w0
+cat(sum(wb), "present records end before they start on their written years;", sum(wb & !x$backwards),
+    "of them run forward on the season year (by species:",
+    paste(names(table(x$species_code[wb & !x$backwards])), table(x$species_code[wb & !x$backwards]), collapse = ", "),
+    ")\n")
+cat("adult presence of dated records (present means any but NONE OBSERVED and NOT INSPECTED):\n")
+print(table(adult_presence = x$adult_presence, useNA = "ifany"))
 # each against the records that give the survey day it is compared with
 x$survey_started <- !is.na(x$s0) & !is.na(x$start_hi)
 x$survey_ended <- !is.na(x$s1) & !is.na(x$end_lo)
@@ -138,41 +148,48 @@ for (pr in c("NONE OBSERVED", "NOT INSPECTED")) {
 }
 
 # ---- the candidate rules ----
-# each rule's conditions, whatever the adult presence; a rule admits only present records with a start and an end
+# Each rule is a condition, a base (the records it can be asked of) and the records it admits (present ones). A3s and
+# a3e are nuseds_survey()'s edge sets exactly, asked of records with that edge; the others need a start and an end.
 x$fence <- x$estimate_method %in% "Fixed Site Census" | grepl("Fence", x$enumeration_methods, fixed = TRUE)
 x$exact <- x$start_form %in% "other day" & x$end_form %in% "other day"
 x$auc <- x$estimate_method %in% "Area Under the Curve"
 x$bracket <- x$brackets_start & x$brackets_end
 x$whole <- !is.na(x$start_lo) & !is.na(x$end_hi) & !x$backwards
-conds <- function(x) list(
-  "a2: survey brackets both edges, 2+ visits" = x$bracket & x$visits0 >= 2L,
-  "a3: survey brackets both edges, 3+ visits" = x$bracket & x$visits0 >= 3L,
-  "a4: survey brackets both edges, 4+ visits" = x$bracket & x$visits0 >= 4L,
-  "a5: survey brackets both edges, 5+ visits" = x$bracket & x$visits0 >= 5L,
-  "a3s: survey brackets the start, 3+ visits" = x$brackets_start & x$visits0 >= 3L,
-  "a3e: survey brackets the end, 3+ visits" = x$brackets_end & x$visits0 >= 3L,
-  "b: fence or fixed-site census" = x$fence,
-  "c: start and end off the five-day grid" = x$exact,
-  "d: area under the curve" = x$auc,
-  "a3 and c" = x$bracket & x$visits0 >= 3L & x$exact)
-cs <- conds(x)
-cat("\n==== records each candidate rule admits, by species (present, with a start and an end)\n")
-print(do.call(rbind, lapply(names(cs), function(r) {
-  t <- table(factor(x$species_code[cs[[r]] & x$present & x$whole], nuseds_species))
+rules_of <- function(x) {
+  both <- function(cond) list(cond = cond, base = x$whole, admit = cond & x$present & x$whole)
+  list(
+    "a2: survey brackets both edges, 2+ visits" = both(x$bracket & x$visits0 >= 2L),
+    "a3: survey brackets both edges, 3+ visits" = both(x$bracket & x$visits0 >= 3L),
+    "a4: survey brackets both edges, 4+ visits" = both(x$bracket & x$visits0 >= 4L),
+    "a5: survey brackets both edges, 5+ visits" = both(x$bracket & x$visits0 >= 5L),
+    "a3s: survey brackets the start, 3+ visits (the start edge)" =
+      list(cond = x$start_bracket3, base = !is.na(x$start_lo) & !x$backwards, admit = x$edge_start),
+    "a3e: survey brackets the end, 3+ visits (the end edge)" =
+      list(cond = x$end_bracket3, base = !is.na(x$end_hi) & !x$backwards, admit = x$edge_end),
+    "b: fence or fixed-site census" = both(x$fence),
+    "c: start and end off the five-day grid" = both(x$exact),
+    "d: area under the curve" = both(x$auc),
+    "a3 and c" = both(x$bracket & x$visits0 >= 3L & x$exact))
+}
+rs <- rules_of(x)
+cat("\n==== records each candidate rule admits, by species (present; a3s and a3e with that edge, the rest with a start",
+    "and an end)\n")
+print(do.call(rbind, lapply(names(rs), function(r) {
+  t <- table(factor(x$species_code[rs[[r]]$admit], nuseds_species))
   data.frame(rule = r, as.list(t), all = sum(t), check.names = FALSE)
 })), row.names = FALSE)
 
 # the test set before the results (task_plan.md): a rule fails if dated NONE OBSERVED records meet its conditions
 # at half or more of the rate present records do, or if over half its admitted records put a start or end on the
-# five-day grid
-none <- x$adult_presence %in% "NONE OBSERVED" & x$whole
-pres <- x$present & x$whole
+# five-day grid; both rates over the rule's own base
+none_rec <- x$adult_presence %in% "NONE OBSERVED"
 grid_edge <- x$start_form %in% "grid day" | x$end_form %in% "grid day"
+rate <- function(r, i) mean(r$cond[r$base & i])
 cat("\n==== does each rule separate dates someone saw from dates written regardless?\n")
-sep <- do.call(rbind, lapply(names(cs), function(r) {
-  rp <- mean(cs[[r]][pres])
-  rn <- mean(cs[[r]][none])
-  adm <- cs[[r]] & pres
+sep <- do.call(rbind, lapply(names(rs), function(r) {
+  rp <- rate(rs[[r]], x$present)
+  rn <- rate(rs[[r]], none_rec)
+  adm <- rs[[r]]$admit
   g <- if (any(adm)) mean(grid_edge[adm]) else NA_real_
   data.frame(rule = r, present_rate = round(rp, 4), none_observed_rate = round(rn, 4),
              none_over_present = round(rn / rp, 2), admitted = sum(adm), grid_share = round(g, 2),
@@ -180,16 +197,17 @@ sep <- do.call(rbind, lapply(names(cs), function(r) {
              passes = rn < rp / 2 & !is.na(g) & g <= 0.5)
 }))
 print(sep, row.names = FALSE)
-cat("\nthe same rates within each era (NONE OBSERVED records are mostly before 1990, when visits were seldom recorded):\n")
+cat("\nthe same rates within each era, present / NONE OBSERVED (NONE OBSERVED records are mostly before 1990, when",
+    "visits were seldom recorded):\n")
 print(do.call(rbind, lapply(unique(x$era[order(x$yr)]), function(e) {
   i <- x$era == e
-  data.frame(era = e, present_n = sum(pres & i), none_observed_n = sum(none & i),
-             t(vapply(cs, function(v) sprintf("%.3f / %.3f", mean(v[pres & i]), mean(v[none & i])), "")),
+  data.frame(era = e, present_n = sum(x$present & x$whole & i), none_observed_n = sum(none_rec & x$whole & i),
+             t(vapply(rs, function(r) sprintf("%.3f / %.3f", rate(r, x$present & i), rate(r, none_rec & i)), "")),
              check.names = FALSE)
 })), row.names = FALSE)
 
 # a fence counts fish as they pass, which dates arrival: its records' arrival beside their start of spawning
-fz <- x[x$fence & pres & !is.na(x$stream_arrival_dt_from), , drop = FALSE]
+fz <- x[rs[["b: fence or fixed-site census"]]$admit & !is.na(x$stream_arrival_dt_from), , drop = FALSE]
 fa <- fz$start_lo - nuseds_season(nuseds_doy(fz$stream_arrival_dt_from, "nuseds"), fz$species_code)
 cat("\nfence and fixed-site records with an arrival date:", nrow(fz), "; days from arrival to the recorded start,",
     "quartiles:", paste(stats::quantile(fa, c(0.25, 0.5, 0.75), na.rm = TRUE), collapse = ", "), "\n")
@@ -197,8 +215,7 @@ cat("\nfence and fixed-site records with an arrival date:", nrow(fz), "; days fr
 # ---- placed in watershed groups ----
 cat("\n", sum(is.na(x$fwa_watershed_cde)), "dated records carry no FWA watershed code\n")
 x <- nuseds_place(x[!is.na(x$fwa_watershed_cde), , drop = FALSE])
-x$ok <- x$present & x$whole
-rules <- c(list("all dated, present" = x$ok), lapply(conds(x), function(r) r & x$ok))
+rules <- c(list("all: the bulk's records" = x$method), lapply(rules_of(x), function(r) r$admit))
 cat("\n==== pooled groups (a population on a code in one group, or a named reach) with records each rule admits\n")
 pg <- !is.na(x$wsg)
 print(do.call(rbind, lapply(names(rules), function(r) {
@@ -209,12 +226,8 @@ print(do.call(rbind, lapply(names(rules), function(r) {
   }))
 })), row.names = FALSE)
 
-# ---- chinook windows on each rule's records, five groups ----
+# ---- chinook windows on each rule's records, five groups (nuseds_survey()'s midpoints, as timing_nuseds.R reads) ----
 focus <- c("BULK", "MORR", "KISP", "UFRA", "COTR")
-# a bin's midpoint (a single date is itself), as timing_nuseds.R reads it
-x$start_mid <- nuseds_mid(x$start_spawn_dt_from, x$start_spawn_dt_to, x$species_code)
-x$end_mid <- nuseds_mid(x$end_spawn_dt_from, x$end_spawn_dt_to, x$species_code)
-x$peak_mid <- nuseds_mid(x$peak_spawn_dt_from, x$peak_spawn_dt_to, x$species_code)
 med <- function(v) if (all(is.na(v))) NA_character_ else nuseds_day_str(stats::median(v, na.rm = TRUE))
 cat("\n==== chinook windows (medians, bins as midpoints) on each rule's records, pooled groups\n")
 print(do.call(rbind, lapply(focus, function(w) do.call(rbind, lapply(names(rules), function(r) {
@@ -235,7 +248,7 @@ pops <- do.call(rbind, lapply(split(ch, ch$pop_id), function(d) data.frame(
   visits_given = sum(!is.na(d$visits)), visits_median = if (any(!is.na(d$visits))) stats::median(d$visits, na.rm = TRUE)
   else NA, survey_started = sum(d$survey_started), start_before_survey = sum(d$start_before_survey),
   survey_ended = sum(d$survey_ended), end_after_survey = sum(d$end_after_survey), brackets_both = sum(d$brackets_start & d$brackets_end),
-  a3 = sum(d$bracket & d$visits0 >= 3L & d$ok), fence = sum(d$fence), auc = sum(d$auc),
+  a3s = sum(d$edge_start), a3e = sum(d$edge_end), fence = sum(d$fence), auc = sum(d$auc),
   method = names(sort(table(d$estimate_method), decreasing = TRUE))[1])))
 print(pops[order(pops$wsg, -pops$records), ], row.names = FALSE)
 
@@ -247,8 +260,8 @@ print(do.call(rbind, lapply(split(mn, list(mn$waterbody, ifelse(mn$yr < 1992, "t
     records = nrow(d), years = paste(min(d$yr), max(d$yr), sep = "-"), start_grid = sum(d$start_form %in% "grid day"),
     start_bin = sum(d$start_form %in% "bin"), visits_median = if (any(!is.na(d$visits))) stats::median(d$visits,
     na.rm = TRUE) else NA, survey_started = sum(d$survey_started), start_before_survey = sum(d$start_before_survey),
-    survey_ended = sum(d$survey_ended), end_after_survey = sum(d$end_after_survey), a3s = sum(d$brackets_start & d$visits0 >= 3L & d$ok),
-    a3e = sum(d$brackets_end & d$visits0 >= 3L & d$ok), none_observed = sum(d$adult_presence %in% "NONE OBSERVED"),
+    survey_ended = sum(d$survey_ended), end_after_survey = sum(d$end_after_survey), a3s = sum(d$edge_start), a3e = sum(d$edge_end),
+    auc = sum(d$auc), none_observed = sum(d$adult_presence %in% "NONE OBSERVED"),
     method = names(sort(table(d$estimate_method), decreasing = TRUE))[1]))), row.names = FALSE)
 
 # ---- the worked example: the upper Bulkley, record by record ----

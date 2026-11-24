@@ -27,12 +27,14 @@
 #               the published rows rest on (#96's UFRA and COTR) stay reproducible.
 #       bulk_*  THE BULK OF SPAWNING: the median start to the median end, a bin entering as its midpoint (a bin over 31
 #               days, or one running backwards, gives none), over records whose adults were present (adult presence
-#               neither NONE OBSERVED nor NOT INSPECTED) and whose window does not end before it starts.
+#               other than NONE OBSERVED or NOT INSPECTED) and whose window does not end before it starts, each edge
+#               over the records that give it, so it carries its own years (a start given only as START_SPAWN_DT_TO,
+#               which the as-recorded reading skips, enters it). The sets are nuseds_survey()'s.
 #       peak_*  THE PEAK, read the same way over present records that give a peak, some of which give no start or
 #               end (UFRA's chinook peaks run to 2014, its starts to 2000), so it carries its own years.
-#       edge_*  AN EDGE CONSISTENT WITH ONE SOMEONE SAW: the median start over records whose survey began before the
-#               recorded start with at least 3 visits, and the median end over records whose survey ended after the
-#               recorded end with at least 3 visits, each given only where 5 or more records qualify (its n is
+#       edge_*  AN EDGE CONSISTENT WITH ONE SOMEONE SAW: the median start over present records whose survey began
+#               before the recorded start with at least 3 visits, and the median end over present records whose survey
+#               ended after the recorded end with at least 3 visits (whatever the other edge gives), each given only where 5 or more records qualify (its n is
 #               always given). NuSEDS keeps no count per visit, so this is never proof of an edge.
 #     Dates are DD-MON-YY; only the month and day are read for a day. Medians come with the 10th and 90th
 #     percentiles. A record is one population, stream (gfe_id) and year, so n counts population-years except where a
@@ -109,11 +111,7 @@ x$start_day <- nuseds_season(nuseds_doy(x$start_spawn_dt_from, "nuseds"), x$spec
 x$end_day <- nuseds_season(nuseds_doy(x$end_dt, "nuseds"), x$species_code)
 x$arrival_day <- nuseds_season(nuseds_doy(x$stream_arrival_dt_from, "nuseds"), x$species_code)
 x <- nuseds_survey(x)
-x$method <- x$present & !x$backwards
-mid <- function(from, to) ifelse(x$method, nuseds_mid(from, to, x$species_code), NA_integer_)
-x$start_mid <- mid(x$start_spawn_dt_from, x$start_spawn_dt_to)
-x$end_mid <- mid(x$end_spawn_dt_from, x$end_spawn_dt_to)
-x$peak_mid <- mid(x$peak_spawn_dt_from, x$peak_spawn_dt_to)
+# nuseds_survey() defines the bulk, peak and edge sets (method, start_mid, end_mid, peak_mid, edge_start, edge_end)
 x$edge_start_day <- ifelse(x$edge_start, x$start_mid, NA_integer_)
 x$edge_end_day <- ifelse(x$edge_end, x$end_mid, NA_integer_)
 has_start <- !is.na(x$start_spawn_dt_from) | !is.na(x$start_spawn_dt_to)
@@ -135,6 +133,7 @@ yr <- function(d, f) {
   y <- as.integer(d$analysis_yr[!is.na(d$start_day) | !is.na(d$end_day)])
   if (length(y)) f(y) else NA_integer_
 }
+yrs <- function(d, i, f) if (any(i)) f(as.integer(d$analysis_yr[i])) else NA_integer_
 edge <- function(v) if (sum(!is.na(v)) >= edge_min) ds(v, 0.5) else NA_character_
 summ <- function(d) data.frame(
   records = nrow(d), first_year = yr(d, min), last_year = yr(d, max),
@@ -142,12 +141,13 @@ summ <- function(d) data.frame(
   rec_start_median = ds(d$start_day, 0.5), rec_start_q10 = ds(d$start_day, 0.1), rec_start_q90 = ds(d$start_day, 0.9),
   rec_end_median = ds(d$end_day, 0.5), rec_end_q10 = ds(d$end_day, 0.1), rec_end_q90 = ds(d$end_day, 0.9),
   bulk_n_start = sum(!is.na(d$start_mid)), bulk_n_end = sum(!is.na(d$end_mid)),
+  bulk_first_year = yrs(d, !is.na(d$start_mid) | !is.na(d$end_mid), min),
+  bulk_last_year = yrs(d, !is.na(d$start_mid) | !is.na(d$end_mid), max),
   bulk_start_median = ds(d$start_mid, 0.5), bulk_start_q10 = ds(d$start_mid, 0.1),
   bulk_start_q90 = ds(d$start_mid, 0.9), bulk_end_median = ds(d$end_mid, 0.5), bulk_end_q10 = ds(d$end_mid, 0.1),
   bulk_end_q90 = ds(d$end_mid, 0.9),
   peak_n = sum(!is.na(d$peak_mid)),
-  peak_first_year = if (any(!is.na(d$peak_mid))) min(as.integer(d$analysis_yr[!is.na(d$peak_mid)])) else NA_integer_,
-  peak_last_year = if (any(!is.na(d$peak_mid))) max(as.integer(d$analysis_yr[!is.na(d$peak_mid)])) else NA_integer_,
+  peak_first_year = yrs(d, !is.na(d$peak_mid), min), peak_last_year = yrs(d, !is.na(d$peak_mid), max),
   peak_median = ds(d$peak_mid, 0.5), peak_q10 = ds(d$peak_mid, 0.1),
   peak_q90 = ds(d$peak_mid, 0.9),
   edge_n_start = sum(!is.na(d$edge_start_day)), edge_start_median = edge(d$edge_start_day),
@@ -217,7 +217,7 @@ win <- do.call(rbind, win)
 rownames(win) <- NULL
 cols_csv <- c("scope", "run_type", "pop_id", "waterbody", "groups", "records", "first_year", "last_year",
               "rec_n_start", "rec_n_end", "rec_start_median", "rec_start_q10", "rec_start_q90", "rec_end_median",
-              "rec_end_q10", "rec_end_q90", "bulk_n_start", "bulk_n_end", "bulk_start_median", "bulk_start_q10",
+              "rec_end_q10", "rec_end_q90", "bulk_n_start", "bulk_n_end", "bulk_first_year", "bulk_last_year", "bulk_start_median", "bulk_start_q10",
               "bulk_start_q90", "bulk_end_median", "bulk_end_q10", "bulk_end_q90", "peak_n", "peak_median",
               "peak_q10", "peak_q90", "peak_first_year", "peak_last_year", "edge_n_start", "edge_start_median", "edge_n_end", "edge_end_median",
               "arrival_median", "n_arrival")

@@ -114,3 +114,14 @@ Eight findings, all real; the logs were rerun after the fixes and supersede the 
   totals itself.
 - UFRA has 20 start bins of 123 (COTR 6), so "before bins were used" was false; the widening sentence counts end bins
   (1,573 longer than 11 days) and says the 21 over 31 days leave the bulk.
+
+## Code-check round 3 corrections (2026-11-24, `review-round3.md`)
+
+The mechanism behind rounds 1 to 3, named by round 3: a sentence names a set in plain words while its number comes from a
+set the code builds twice, differently (the check gated every rule on a start and an end; the windows did not), and
+numbers taken from hand probes rather than the scripts. Fixed at the source: `nuseds_survey()` now defines the bulk,
+peak and edge sets once (`method`, `start_mid`, `end_mid`, `peak_mid`, `start_bracket3`, `end_bracket3`, `edge_start`,
+`edge_end`); the check's a3s and a3e are those edge sets exactly (7,022 and 3,849 records; 19 chinook groups each,
+matching the windows), each rule's test runs over the records it can be asked of, and the check prints the presence
+counts and the written-year backwards records (165, 98 rescued). The bulk carries its own years (UFRA's runs to 2008);
+the Nanika's 1992-on a3s is 4; AUC counts replace "mostly"; denominators say they exclude the 372 set aside.
