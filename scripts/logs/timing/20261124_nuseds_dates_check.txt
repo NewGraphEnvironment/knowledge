@@ -49,7 +49,7 @@ day of month of single start dates (the ten most common):
    15     5    25     1    20    10    30    12    18     8 
 42489  8954  8055  7888  3785  3737  2005   538   434   396 
 
- 371 records' surveys are not compared: 62 give a survey year over a year from their own (the upper Bulkley's 2020 record: 20-OCT-08 to 20-SEP-30) and 309 a survey that ends before it starts on the season year
+ 372 records' surveys are not compared: 98 give a survey year over a year from their own (the upper Bulkley's 2020 record: 20-OCT-08 to 20-SEP-30), 309 a survey that ends before it starts on the season year, and 35 both
 98 records end before they start on the season year: kept out of every rule
 
 ==== the survey beside the window, by era (records)
@@ -59,7 +59,7 @@ to 1969   34063          21773        16224           16           3.5          
 1980s     21139          16318        14990         1553           3.0                4533             8935          11077         5168          3207
 1990s     12542          10189         9624         5468           3.0                2551             5320           6999         3457          2093
 2000s      7129           4377         3976         6656           3.0                 694             1425           2697         1474           635
-2010 on    8173           7115         6192         7868           3.0                1341             2116           4234         2327          1086
+2010 on    8173           7115         6191         7868           3.0                1341             2116           4234         2326          1086
 
 estimate_method on dated records:
 

@@ -104,10 +104,9 @@ print(utils::head(sort(table(as.integer(substr(x$start_spawn_dt_from[!b & !is.na
 
 # ---- the window and the survey on the season year (nuseds_survey(), shared with timing_nuseds.R) ----
 x <- nuseds_survey(x)
-off_year <- x$survey_slip & !(!is.na(x$start_dtt) & !is.na(x$end_dtt) & sday(x$end_dtt) < sday(x$start_dtt))
-cat("\n", sum(x$survey_slip), "records' surveys are not compared:", sum(off_year), "give a survey year over a year from",
-    "their own (the upper Bulkley's 2020 record: 20-OCT-08 to 20-SEP-30) and", sum(x$survey_slip & !off_year),
-    "a survey that ends before it starts on the season year\n")
+cat("\n", sum(x$survey_slip), "records' surveys are not compared:", sum(x$survey_off_year), "give a survey year over a",
+    "year from their own (the upper Bulkley's 2020 record: 20-OCT-08 to 20-SEP-30),", sum(x$survey_reversed),
+    "a survey that ends before it starts on the season year, and", sum(x$survey_off_year & x$survey_reversed), "both\n")
 cat(sum(x$backwards), "records end before they start on the season year: kept out of every rule\n")
 # each against the records that give the survey day it is compared with
 x$survey_started <- !is.na(x$s0) & !is.na(x$start_hi)

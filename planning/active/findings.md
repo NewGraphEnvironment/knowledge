@@ -102,3 +102,15 @@ Eight findings, all real; the logs were rerun after the fixes and supersede the 
 - **The peak** is read over present records that give one, some with no start or end, and carries its own years
   (UFRA's run to 2014). The as-recorded reading moves each edge outward by half a bin, not nine days. NONE OBSERVED
   surveys overlap the window they give (1,910), not lie inside it.
+
+## Code-check round 2 corrections (2026-11-24, `review-round2.md`)
+
+- Inside round 1's fix: the check script re-derived the survey reversal without `nuseds_survey()`'s `early` step, so
+  its split of slips was wrong. `nuseds_survey()` now returns `survey_off_year` and `survey_reversed` and the check
+  prints them: 372 slips, 98 off-year, 309 reversed, 35 both. The `early` rule now needs the survey's first day
+  written in the record's year or before (Belcharton Creek chum 2015, 10-JAN-16 to 30-DEC-15, is a slip, not a
+  whole-year survey; its code places it in no group, so no window moved).
+- The end-edge total is 124, not 123: my count was a hand probe, not the script. `timing_nuseds.R` now prints the edge
+  totals itself.
+- UFRA has 20 start bins of 123 (COTR 6), so "before bins were used" was false; the widening sentence counts end bins
+  (1,573 longer than 11 days) and says the 21 over 31 days leave the bulk.

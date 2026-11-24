@@ -226,6 +226,10 @@ show <- c("scope", "run_type", "pop_id", "waterbody", "groups", "records", "firs
           "peak_median", "edge_n_start", "edge_start_median", "edge_n_end", "edge_end_median", "arrival_median")
 cat("\nreadings: rec_ as recorded (#240), bulk_ the bulk of spawning (bins as midpoints, present records), peak_ the",
     "peak, edge_ an edge a survey of 3+ visits stood beyond (given with", edge_min, "or more records)\n")
+gw <- win[win$scope == "group", , drop = FALSE]
+cat("group windows:", nrow(gw), "; with a start edge", sum(!is.na(gw$edge_start_median)), ", an end edge",
+    sum(!is.na(gw$edge_end_median)), "; chinook", sum(gw$species_code == "CH"), "of which",
+    sum(gw$species_code == "CH" & (!is.na(gw$edge_start_median) | !is.na(gw$edge_end_median))), "have either\n")
 for (k in seq_len(nrow(keys))) {
   w <- keys$wsg[k]
   sp <- keys$species_code[k]

@@ -37,8 +37,8 @@ visit, on 10 September), 2016 (survey from 28 August) and 2017 (survey from 30 S
 to 20 August, and 2018 and 2019. It does so on the mainstem's 1986 to 1988 records too, and on Buck Creek's 1982 and
 1988.
 No record shows a visit that found no spawners before the start or after the end. The 2020 record's survey runs 20 October 2008 to
-20 September 2030, a typing slip. 371 dated records' surveys are not compared: 62 give a survey year over a year
-from the record's own, and 309 a survey that ends before it starts even on the season year (below).
+20 September 2030, a typing slip. 372 dated records' surveys are not compared: 98 give a survey year over a year
+from the record's own, 309 a survey that ends before it starts even on the season year (below), and 35 both.
 
 **The Morice and Nanika** (#241 asked for them before any MORR row is revised). To 1991 they read as the upper
 Bulkley does: 34 of 39 Morice and 19 of 21 Nanika starts on the grid, a median of 2 visits where any is given, and
@@ -85,12 +85,13 @@ An edge is given for a group and species only where 5 or more records qualify, a
 - **The bulk of spawning** (`bulk_`): the median start to the median end, a bin entering as its midpoint, over
   records whose adults were present and whose window does not end before it starts on the season year. Reading a
   start bin's first day and an end bin's last day, as the as-recorded window does, moves each edge outward by half
-  the bin: four or five days for a ten-day bin, more for the 664 wider ones.
+  the bin: four or five days for a ten-day bin, more for the 664 start bins and 1,573 end bins longer than 11 days.
+  The 21 longer than 31 days give no midpoint and leave the bulk.
 - **The peak** (`peak_`): the median peak, read the same way over present records that give a peak, some of which
   give no start or end, so it carries its own years (`peak_first_year`, `peak_last_year`): UFRA's chinook peaks run to
   2014, its starts and ends to 2000.
 - **An edge** (`edge_`): the median start over a3s records and the median end over a3e records, given where 5 or
-  more qualify. 162 of 357 group windows have a start edge and 123 an end edge; chinook 24 of 81 either.
+  more qualify. 162 of 357 group windows have a start edge and 124 an end edge; chinook 24 of 81 either.
 
 ## What a NuSEDS window may claim beside a cited row
 
@@ -168,8 +169,8 @@ by 37 days. BULK's chinook window pools seven tributary populations; the Bulkley
 apart.
 
 **UFRA and COTR** (#96, read by NewGraphEnvironment/wet#182). Their spawning rows are NuSEDS's as-recorded windows,
-which the script still reproduces. Under the method they barely move: UFRA's starts and ends run 1967 to 2000, before
-bins were used, and neither group holds a NONE OBSERVED record. UFRA's bulk is 08-12 to 09-05, peaking 08-24 (over 172 peaks,
+which the script still reproduces. Under the method they barely move: UFRA's starts and ends run 1967 to 2000, only 20
+of its 123 starts are bins (1996 to 2000, and 6 of COTR's 35), and neither group holds a NONE OBSERVED record. UFRA's bulk is 08-12 to 09-05, peaking 08-24 (over 172 peaks,
 1967 to 2014; after 2000 only peaks are given), and its start has an edge, 08-15 on 11 records; COTR's bulk is 08-10 to 09-05, peaking 08-24, with no edge. Their start dates are
 estimates like any other: 82 of UFRA's 123 starts and 19 of COTR's 35 fall on the five-day grid, and 28 of UFRA's 75
 and 12 of COTR's 32 starts with a survey's first day precede it. The rows keep their dates, and their notes say

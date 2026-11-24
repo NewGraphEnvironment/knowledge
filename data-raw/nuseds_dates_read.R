@@ -82,8 +82,9 @@ nuseds_date <- function(d, yr) {
 # (start 25-SEP-93, end 25-FEB-93), so the written year would put it before the start. Adds, as season days:
 # start_lo and start_hi (a start bin's ends, or the single date twice), end_lo and end_hi, peak_lo and peak_hi, s0 and
 # s1 (the survey's first and last days, cleared where a written survey year lies over a year from the record's year
-# or the survey ends before it starts on the season year, a slip flagged in survey_slip; a survey opening before the
-# season start is kept in the season it opened); and visits0
+# (survey_off_year) or the survey ends before it starts on the season year (survey_reversed), either a slip flagged in
+# survey_slip; a survey opening before the season start, its first day written in the record's year or before, is kept
+# in the season it opened); and visits0
 # (no_inspections_used, 0 where blank), backwards (the window ends before it starts on the season year), present
 # (adult presence neither NONE OBSERVED nor NOT INSPECTED, whose dates are a stream's expected timing), and
 # edge_start and edge_end: a present record whose survey began before the recorded start (ended after the recorded
@@ -103,15 +104,16 @@ nuseds_survey <- function(x) {
   x$peak_hi <- sday(or(x$peak_spawn_dt_to, x$peak_spawn_dt_from))
   x$s0 <- sday(x$start_dtt)
   x$s1 <- sday(x$end_dtt)
+  wy <- function(v) as.integer(format(nuseds_date(v, yr), "%Y"))   # the year as written
   # a survey that opens before the season start (a whole-year survey from 2 January, a steelhead survey from August)
-  # reads past its own last day once moved onto the next season; it opened in this season, before its start
-  early <- !is.na(x$s0) & !is.na(x$s1) & x$s1 < x$s0 & x$s0 > 366L
+  # reads past its own last day once moved onto the next season; where its first day is written in the record's
+  # year or before, it opened in this season, before its start
+  early <- !is.na(x$s0) & !is.na(x$s1) & x$s1 < x$s0 & x$s0 > 366L & !is.na(wy(x$start_dtt)) & wy(x$start_dtt) <= yr
   x$s0[early] <- x$s0[early] - 366L
-  off <- function(v) {
-    d <- nuseds_date(v, yr)
-    !is.na(d) & abs(as.integer(format(d, "%Y")) - yr) > 1L
-  }
-  slip <- off(x$start_dtt) | off(x$end_dtt) | (!is.na(x$s0) & !is.na(x$s1) & x$s1 < x$s0)
+  off <- function(v) !is.na(v) & abs(wy(v) - yr) > 1L
+  x$survey_off_year <- off(x$start_dtt) | off(x$end_dtt)
+  x$survey_reversed <- !is.na(x$s0) & !is.na(x$s1) & x$s1 < x$s0
+  slip <- x$survey_off_year | x$survey_reversed
   x$s0[slip] <- NA
   x$s1[slip] <- NA
   x$visits <- suppressWarnings(as.integer(x$no_inspections_used))
