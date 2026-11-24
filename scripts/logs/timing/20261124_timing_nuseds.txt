@@ -1,7 +1,7 @@
 NuSEDS knowledge/nuseds/v1 release 20260601 published from knowledge 3e4e83f 
  nuseds_records.parquet sha256 ecc4716f46d85e7625a2e98e0bfbc677962fba83fdb52c5e0419a2fc0dfeaee4 (the manifest's), 421001 rows
 102800 dated records of 5221 populations; 554 dated records carry no FWA watershed code
-the bulk and peak leave out 4047 dated records whose adults were NONE OBSERVED or NOT INSPECTED and 164 that end before they start; 12 starts and 11 ends are bins over 31 days or running backwards (no midpoint); 463 dated records' surveys, with a date over a year from the record's or ending before they start, are not compared
+the bulk and peak leave out 4047 dated records whose adults were NONE OBSERVED or NOT INSPECTED and 98 that end before they start; 12 starts and 11 ends are bins over 31 days or running backwards (no midpoint); 371 dated records' surveys, with a date over a year from the record's or ending before they start, are not compared
 1017 dated records carry a watershed code the Atlas does not hold
 named reaches (data/nuseds_reach_groups.csv): FRASER RIVER - ABOVE TETE JAUNE -> UFRA
 480 group x species keys in 126 groups
@@ -410,10 +410,10 @@ readings: rec_ as recorded (#240), bulk_ the bulk of spawning (bins as midpoints
 
 ==== ATNA CO : 0 populations pooled, 2 apart (on a stream crossing several groups)
  scope run_type pop_id                waterbody    groups records first_year last_year rec_n_start rec_start_median rec_end_median bulk_n_start bulk_start_median bulk_end_median peak_n peak_median
- apart     none  45642 ATNARKO SPAWNING CHANNEL ATNA,BELA      68       1986      1994           9            09-25          02-25            1             09-25           01-25      2       11-30
+ apart     none  45642 ATNARKO SPAWNING CHANNEL ATNA,BELA      68       1986      1994           9            09-25          02-25            9             09-25           02-25     10       12-20
  apart     none  51781            ATNARKO RIVER ATNA,BELA      65       2025      2025           0             <NA>          11-30            0              <NA>           11-15      3       11-15
  edge_n_start edge_start_median edge_n_end edge_end_median arrival_median
-            0              <NA>          0            <NA>          07-05
+            1              <NA>          0            <NA>          07-05
             0              <NA>          0            <NA>          10-01
 
 ==== ATNA SK : 0 populations pooled, 2 apart (on a stream crossing several groups)
@@ -526,7 +526,7 @@ readings: rec_ as recorded (#240), bulk_ the bulk of spawning (bins as midpoints
       apart       none  49364   BABINE RIVER - SECTION 4 BABL,BABR,MSKE      75       1985      2025          20            09-21          10-30           20             09-25           10-25     22
       apart       none  45457   BABINE RIVER - SECTION 5 BABL,BABR,MSKE      37       2010      2025           8            09-21          10-15            8             09-25           10-10     11
  peak_median edge_n_start edge_start_median edge_n_end edge_end_median arrival_median
-       08-19          115             08-15         86           09-15          08-01
+       08-19          114             08-15         86           09-15          08-01
        08-15            9             08-05         11           09-25          08-01
        08-25           14             08-05          7           09-25          07-21
        08-15           11             08-05          9           09-05          07-25
@@ -541,7 +541,7 @@ readings: rec_ as recorded (#240), bulk_ the bulk of spawning (bins as midpoints
        09-15            0              <NA>          0            <NA>          08-10
        09-01            0              <NA>          0            <NA>          08-01
        08-15           11             08-05          8           09-05          07-21
-       08-15            6             08-20          5           09-05          08-01
+       08-15            5             08-25          5           09-05          08-01
        09-15            1              <NA>          2            <NA>          08-21
        09-10            2              <NA>          1            <NA>          08-01
        08-15            1              <NA>          0            <NA>          09-01
@@ -704,10 +704,10 @@ readings: rec_ as recorded (#240), bulk_ the bulk of spawning (bins as midpoints
 
 ==== BELA CH : 3 populations pooled, 2 apart (on a stream crossing several groups)
       scope      run_type pop_id                waterbody    groups records first_year last_year rec_n_start rec_start_median rec_end_median bulk_n_start bulk_start_median bulk_end_median peak_n
-      group 1; FALL; none   <NA>                     <NA>      BELA     179       1953      2025          57            08-15          10-15           56             08-15           10-15     53
-   run_type             1   <NA>                     <NA>      BELA      71       1953      2009          47            08-15          10-15           46             08-15           10-15     45
+      group 1; FALL; none   <NA>                     <NA>      BELA     179       1953      2025          57            08-15          10-15           57             08-15           10-15     54
+   run_type             1   <NA>                     <NA>      BELA      71       1953      2009          47            08-15          10-15           47             08-15           10-15     46
    run_type          none   <NA>                     <NA>      BELA      97       2009      2025          10            08-11          09-10           10             08-15           09-05      8
- population             1  51773        BELLA COOLA RIVER      BELA      71       1953      2009          47            08-15          10-15           46             08-15           10-15     45
+ population             1  51773        BELLA COOLA RIVER      BELA      71       1953      2009          47            08-15          10-15           47             08-15           10-15     46
  population          none   7552           SALLOOMT RIVER      BELA      16       2010      2025           9            08-11          09-10            9             08-15           09-05      8
  population          none  51779            SNOOTLI CREEK      BELA      57       2009      2009           1            09-11           <NA>            1             09-15            <NA>      0
       apart          none  45645 ATNARKO SPAWNING CHANNEL ATNA,BELA      69       1986      1994           9            08-25          09-25            9             08-25           09-25      9
@@ -724,11 +724,11 @@ readings: rec_ as recorded (#240), bulk_ the bulk of spawning (bins as midpoints
 
 ==== BELA CO : 24 populations pooled, 3 apart (on a stream crossing several groups)
       scope      run_type pop_id                waterbody    groups records first_year last_year rec_n_start rec_start_median rec_end_median bulk_n_start bulk_start_median bulk_end_median peak_n
-      group 1; FALL; none   <NA>                     <NA>      BELA     639       1953      2025         327            10-25          12-20          309             11-05           12-10    315
+      group 1; FALL; none   <NA>                     <NA>      BELA     639       1953      2025         327            10-25          12-20          327             10-25           12-15    333
    run_type          FALL   <NA>                     <NA>      BELA     442       2003      2025         257            11-01          12-10          257             11-05           12-05    264
-   run_type             1   <NA>                     <NA>      BELA      71       1953      2009          47            09-25          01-25           29             09-15           12-15     28
+   run_type             1   <NA>                     <NA>      BELA      71       1953      2009          47            09-25          01-25           47             09-25           01-25     46
    run_type          none   <NA>                     <NA>      BELA     126       2003      2025          23            10-25          12-15           23             10-25           12-10     23
- population             1  51767        BELLA COOLA RIVER      BELA      71       1953      2009          47            09-25          01-25           29             09-15           12-15     28
+ population             1  51767        BELLA COOLA RIVER      BELA      71       1953      2009          47            09-25          01-25           47             09-25           01-25     46
  population          FALL   3136             SNOOKA CREEK      BELA      23       2003      2025          19            11-01          12-20           19             11-05           12-15     20
  population          FALL   3164        HAGENSBORG SLOUGH      BELA      23       2003      2025          19            11-01          11-30           19             11-01           11-25     17
  population          FALL   3140       NOOKLIKONNIK CREEK      BELA      23       2003      2025          18            10-30          12-20           18             11-01           12-10     14
@@ -753,14 +753,14 @@ readings: rec_ as recorded (#240), bulk_ the bulk of spawning (bins as midpoints
  population          FALL   3179           NUSATSUM RIVER      BELA      17       2004      2021           2            10-26          11-30            2             10-30           11-25      2
  population          none   7810          NOOSGULCH RIVER      BELA       3       2023      2023           1            11-01           <NA>            1             11-15            <NA>      1
       apart          none  51786     NECLEETSCONNAY RIVER BELA,NECL      73       1953      2022          31            09-25          10-22           29             09-30           11-07     34
-      apart          none  45642 ATNARKO SPAWNING CHANNEL ATNA,BELA      68       1986      1994           9            09-25          02-25            1             09-25           01-25      2
+      apart          none  45642 ATNARKO SPAWNING CHANNEL ATNA,BELA      68       1986      1994           9            09-25          02-25            9             09-25           02-25     10
       apart          none  51781            ATNARKO RIVER ATNA,BELA      65       2025      2025           0             <NA>          11-30            0              <NA>           11-15      3
  peak_median edge_n_start edge_start_median edge_n_end edge_end_median arrival_median
        11-15          160             11-05         32           11-25          10-21
        11-15          145             11-05         28           11-25          11-01
-       10-10            0              <NA>          0            <NA>          07-05
+       11-05            0              <NA>          0            <NA>          07-05
        11-15           15             11-05          4            <NA>          10-21
-       10-10            0              <NA>          0            <NA>          07-05
+       11-05            0              <NA>          0            <NA>          07-05
        11-15           13             11-05          3            <NA>          11-01
        11-15            5             11-05          3            <NA>          10-18
        11-15           15             10-27          2            <NA>          10-26
@@ -785,7 +785,7 @@ readings: rec_ as recorded (#240), bulk_ the bulk of spawning (bins as midpoints
        11-20            0              <NA>          0            <NA>           <NA>
        11-15            0              <NA>          0            <NA>           <NA>
        11-15            0              <NA>          0            <NA>          09-15
-       11-30            0              <NA>          0            <NA>          07-05
+       12-20            1              <NA>          0            <NA>          07-05
        11-15            0              <NA>          0            <NA>          10-01
 
 ==== BELA SK : 2 populations pooled, 3 apart (on a stream crossing several groups)
@@ -810,11 +810,11 @@ readings: rec_ as recorded (#240), bulk_ the bulk of spawning (bins as midpoints
 
 ==== BELA PK : 14 populations pooled, 3 apart (on a stream crossing several groups)
       scope      run_type pop_id                waterbody    groups records first_year last_year rec_n_start rec_start_median rec_end_median bulk_n_start bulk_start_median bulk_end_median peak_n
-      group 1; FALL; none   <NA>                     <NA>      BELA     500       1953      2025         114            08-15          10-05          111             08-15           10-05    103
-   run_type             1   <NA>                     <NA>      BELA      71       1953      2009          47            08-15          10-10           46             08-15           10-10     47
+      group 1; FALL; none   <NA>                     <NA>      BELA     500       1953      2025         114            08-15          10-05          112             08-15           10-05    104
+   run_type             1   <NA>                     <NA>      BELA      71       1953      2009          47            08-15          10-10           47             08-15           10-10     48
    run_type          FALL   <NA>                     <NA>      BELA     280       2003      2025          37            08-11          09-30           37             08-15           09-25     29
    run_type          none   <NA>                     <NA>      BELA     149       1954      2025          30            08-21          09-25           28             08-18           09-23     27
- population             1  51769        BELLA COOLA RIVER      BELA      71       1953      2009          47            08-15          10-10           46             08-15           10-10     47
+ population             1  51769        BELLA COOLA RIVER      BELA      71       1953      2009          47            08-15          10-10           47             08-15           10-10     48
  population          none  51762               CAMP CREEK      BELA      66       1954      1993          23            08-15          09-25           21             08-15           09-21     24
  population          FALL   3133            THORSEN CREEK      BELA      23       2003      2025          11            08-11          09-30           11             08-15           09-25      9
  population          FALL   3162           SALLOOMT RIVER      BELA      23       2009      2025           7            08-11           <NA>            7             08-15            <NA>      5
@@ -832,7 +832,7 @@ readings: rec_ as recorded (#240), bulk_ the bulk of spawning (bins as midpoints
       apart          none  45643 ATNARKO SPAWNING CHANNEL ATNA,BELA      69       1986      1995          10            08-25          10-15           10             08-25           10-15     11
       apart          none  51782            ATNARKO RIVER ATNA,BELA      66       2018      2025           4            08-27          09-30            4             08-31           09-25      4
  peak_median edge_n_start edge_start_median edge_n_end edge_end_median arrival_median
-       09-10           35             08-15          4            <NA>          08-11
+       09-12           35             08-15          4            <NA>          08-11
        09-15            0              <NA>          0            <NA>          07-15
        09-05           29             08-15          4            <NA>          08-11
        09-15            6             08-23          0            <NA>          08-15
@@ -856,11 +856,11 @@ readings: rec_ as recorded (#240), bulk_ the bulk of spawning (bins as midpoints
 
 ==== BELA CM : 16 populations pooled, 3 apart (on a stream crossing several groups)
       scope           run_type pop_id                waterbody    groups records first_year last_year rec_n_start rec_start_median rec_end_median bulk_n_start bulk_start_median bulk_end_median peak_n
-      group FALL; none; SUMMER   <NA>                     <NA>      BELA     538       1953      2025         268            08-01          09-20          255             08-05           09-15    252
-   run_type             SUMMER   <NA>                     <NA>      BELA     465       1953      2025         254            08-01          09-20          250             08-05           09-15    251
+      group FALL; none; SUMMER   <NA>                     <NA>      BELA     538       1953      2025         268            08-01          09-20          256             08-05           09-15    253
+   run_type             SUMMER   <NA>                     <NA>      BELA     465       1953      2025         254            08-01          09-20          251             08-05           09-15    252
    run_type               FALL   <NA>                     <NA>      BELA      63       1984      1994          10            09-15          11-05            1             09-15           11-05      1
    run_type               none   <NA>                     <NA>      BELA      10       2019      2023           4            08-06           <NA>            4             08-15            <NA>      0
- population             SUMMER  51771        BELLA COOLA RIVER      BELA      71       1953      2014          52            07-21          11-15           51             07-25           11-15     49
+ population             SUMMER  51771        BELLA COOLA RIVER      BELA      71       1953      2014          52            07-21          11-15           52             07-25           11-15     50
  population             SUMMER  51763               CAMP CREEK      BELA      72       1954      1993          33            09-01          09-25           31             09-01           09-25     34
  population             SUMMER   3135            THORSEN CREEK      BELA      23       2003      2025          21            07-21          09-20           21             07-25           09-15     22
  population             SUMMER   3163           SALLOOMT RIVER      BELA      23       2003      2025          20            08-01          09-10           20             08-05           09-05     20
@@ -1690,8 +1690,8 @@ readings: rec_ as recorded (#240), bulk_ the bulk of spawning (bins as midpoints
  population               FALL    52302                    FUNDY CREEK   CLAY      65       2001      2001           1            10-20          12-10            1             10-20           12-10
  population               FALL 63623884              MURIEL LAKE CREEK   CLAY       8       2001      2001           1            11-01           <NA>            0              <NA>            <NA>
  peak_n peak_median edge_n_start edge_start_median edge_n_end edge_end_median arrival_median
-    524       11-15           59             10-20          8           12-08          10-01
-    517       11-15           59             10-20          8           12-08          10-01
+    524       11-15           60             10-22          8           12-08          10-01
+    517       11-15           60             10-22          8           12-08          10-01
       3       11-15            0              <NA>          0            <NA>          10-23
       4       11-20            0              <NA>          0            <NA>          10-20
      29       11-10            8             10-26          1            <NA>          09-21
@@ -1732,7 +1732,7 @@ readings: rec_ as recorded (#240), bulk_ the bulk of spawning (bins as midpoints
       0        <NA>            0              <NA>          0            <NA>          10-25
       0        <NA>            0              <NA>          0            <NA>          10-25
       2       11-11            2              <NA>          0            <NA>          10-16
-      2       11-05            2              <NA>          0            <NA>          09-01
+      2       11-05            3              <NA>          0            <NA>          09-01
       0        <NA>            0              <NA>          0            <NA>          10-25
       1       11-15            0              <NA>          0            <NA>          10-15
       3       11-15            0              <NA>          0            <NA>          09-15
@@ -2374,11 +2374,11 @@ readings: rec_ as recorded (#240), bulk_ the bulk of spawning (bins as midpoints
 
 ==== COWN CO : 25 populations pooled, 0 apart (on a stream crossing several groups)
       scope   run_type pop_id           waterbody groups records first_year last_year rec_n_start rec_start_median rec_end_median bulk_n_start bulk_start_median bulk_end_median peak_n peak_median
-      group FALL; none   <NA>                <NA>   COWN    1404       1953      2004         454            11-01          12-27          453             11-01           12-26    452       11-22
+      group FALL; none   <NA>                <NA>   COWN    1404       1953      2004         454            11-01          12-27          454             11-01           12-26    453       11-22
  population       FALL  39987       BONSALL CREEK   COWN      72       1953      2004          44            10-31          01-04           44             10-31           01-03     47       11-25
  population       FALL  40017      COWICHAN RIVER   COWN      73       1953      2001          44            10-15          01-01           44             10-15           01-01     43       11-25
  population       FALL  51562          BUSH CREEK   COWN      69       1953      2003          43            10-26          12-15           43             10-26           12-15     42       11-15
- population       FALL  40027      KOKSILAH RIVER   COWN      65       1953      2000          41            10-15          12-31           40             10-15           12-31     40       11-13
+ population       FALL  40027      KOKSILAH RIVER   COWN      65       1953      2000          41            10-15          12-31           41             10-15           12-31     41       11-15
  population       FALL  51512       NANAIMO RIVER   COWN      71       1954      1998          41            10-01          01-01           41             10-01           01-01     42       11-13
  population       FALL  51552        WALKER CREEK   COWN      72       1953      1999          41            11-10          12-28           41             11-10           12-28     40       11-27
  population       FALL  39977     CHEMAINUS RIVER   COWN      70       1953      1992          38            10-15          01-10           38             10-15           01-10     37       11-28
@@ -2445,10 +2445,10 @@ readings: rec_ as recorded (#240), bulk_ the bulk of spawning (bins as midpoints
  population     FALL  39979 CHEMAINUS RIVER   COWN      39       1955      1955           1            10-01          10-10            1             10-01           10-10      1       10-06
  population        1  51584   HOLLAND CREEK   COWN      13       1970      1970           1            10-27          11-06            1             10-27           11-06      1       10-30
  edge_n_start edge_start_median edge_n_end edge_end_median arrival_median
-            0              <NA>          0            <NA>          09-15
-            0              <NA>          0            <NA>          09-12
+            1              <NA>          1            <NA>          09-15
+            1              <NA>          1            <NA>          09-12
             0              <NA>          0            <NA>          10-26
-            0              <NA>          0            <NA>          09-12
+            1              <NA>          1            <NA>          09-12
             0              <NA>          0            <NA>           <NA>
             0              <NA>          0            <NA>          10-26
 
@@ -2473,14 +2473,14 @@ readings: rec_ as recorded (#240), bulk_ the bulk of spawning (bins as midpoints
  population          FALL    216  PATRICIA CREEK   COWN      33       2002      2002           0             <NA>          11-24            0              <NA>           11-24      0        <NA>
  population          FALL    236 ROBERTSON RIVER   COWN      34       2002      2002           0             <NA>          11-29            0              <NA>           11-29      1       11-22
  edge_n_start edge_start_median edge_n_end edge_end_median arrival_median
-           26             10-20         14           11-25          10-15
+           27             10-20         15           11-25          10-15
             4              <NA>          2            <NA>          10-01
             2              <NA>          3            <NA>          10-05
             5             10-15          2            <NA>          10-11
             3              <NA>          1            <NA>          10-17
             2              <NA>          1            <NA>          09-30
             2              <NA>          2            <NA>          10-30
-            0              <NA>          0            <NA>          09-28
+            1              <NA>          1            <NA>          09-28
             4              <NA>          0            <NA>          10-15
             1              <NA>          0            <NA>          11-05
             0              <NA>          0            <NA>          11-09
@@ -2894,13 +2894,13 @@ readings: rec_ as recorded (#240), bulk_ the bulk of spawning (bins as midpoints
 
 ==== GOLD SK : 28 populations pooled, 0 apart (on a stream crossing several groups)
       scope      run_type pop_id                  waterbody groups records first_year last_year rec_n_start rec_start_median rec_end_median bulk_n_start bulk_start_median bulk_end_median peak_n
-      group 1; FALL; none   <NA>                       <NA>   GOLD    1736       1953      2009         218            09-15          11-01          215             09-15           11-01    238
-   run_type          FALL   <NA>                       <NA>   GOLD     939       1953      2009         209            09-15          11-01          206             09-15           11-01    225
+      group 1; FALL; none   <NA>                       <NA>   GOLD    1736       1953      2009         218            09-15          11-01          214             09-15           11-01    237
+   run_type          FALL   <NA>                       <NA>   GOLD     939       1953      2009         209            09-15          11-01          205             09-15           11-01    224
    run_type             1   <NA>                       <NA>   GOLD     570       1991      1997           5            10-01          10-31            5             10-16           10-16      5
    run_type          none   <NA>                       <NA>   GOLD     227       1956      1992           4            09-08          10-28            4             09-08           10-28      8
  population          FALL  41340                 GOLD RIVER   GOLD      56       1954      1994          27            06-15          11-05           27             06-15           11-05     26
  population          FALL  41490               LEINER RIVER   GOLD      50       1976      2009          22            10-15          11-15           22             10-15           11-15     23
- population          FALL  41615            OWOSSITSA CREEK   GOLD      55       1953      1997          21            06-15          08-31           21             06-15           08-31     24
+ population          FALL  41615            OWOSSITSA CREEK   GOLD      55       1953      1997          21            06-15          08-31           20             06-15           09-15     23
  population          FALL  41510               TAHSIS RIVER   GOLD      48       1977      2009          19            09-15          11-15           19             09-15           11-15     19
  population          FALL  41430               CONUMA RIVER   GOLD      51       1957      2009          18            09-21          11-01           18             09-23           11-01     18
  population          FALL  41705             ZEBALLOS RIVER   GOLD      57       1953      2009          18            09-15          10-31           18             09-15           10-28     21
@@ -2933,7 +2933,7 @@ readings: rec_ as recorded (#240), bulk_ the bulk of spawning (bins as midpoints
        08-30            0              <NA>          0            <NA>          07-05
        10-01            2              <NA>          0            <NA>          06-01
        10-25            7             10-15          1            <NA>          09-01
-       07-08            0              <NA>          0            <NA>          06-15
+       07-15            0              <NA>          0            <NA>          06-15
        10-26            6             10-20          3            <NA>          08-18
        10-16            6             10-12          3            <NA>          08-25
        10-05            6             09-30          3            <NA>          08-27
@@ -3618,7 +3618,7 @@ readings: rec_ as recorded (#240), bulk_ the bulk of spawning (bins as midpoints
       apart     none  46026 LILLOOET RIVER - UPPER                                                             HARR,LILL      16       1982      1992           7            11-05          12-25
       apart     none  47073       CHILLIWACK CREEK                                                             CHWK,HARR      34       1985      1987           3            11-25          01-20
  bulk_n_start bulk_start_median bulk_end_median peak_n peak_median edge_n_start edge_start_median edge_n_end edge_end_median arrival_median
-          592             11-15           01-15    571       12-15           26             11-15         37           01-19          11-01
+          604             11-15           01-15    583       12-15           27             11-15         37           01-19          11-01
            42             11-15           02-15     41       12-20            2              <NA>          6           01-23          11-09
            41             10-15           01-29     40       12-07            3              <NA>          0            <NA>          10-15
            39             11-15           01-27     39       12-15            3              <NA>          7           01-27          11-15
@@ -3626,7 +3626,7 @@ readings: rec_ as recorded (#240), bulk_ the bulk of spawning (bins as midpoints
            39             11-01           02-10     39       12-15            1              <NA>          2            <NA>          10-15
            37             11-15           01-30     36       12-15            0              <NA>          0            <NA>          11-10
            37             11-15           01-26     37       12-15            3              <NA>          5           01-31          11-15
-           23             10-15           01-15     22       12-15            0              <NA>          1            <NA>          09-20
+           35             10-10           02-15     34       12-15            1              <NA>          1            <NA>          09-20
            36             11-15           01-15     36       12-15            4              <NA>          7           01-13          11-15
            36             10-31           12-30     24       11-20            0              <NA>          0            <NA>          10-22
            33             11-15           01-15     33       12-15            1              <NA>          0            <NA>          11-15
@@ -3747,7 +3747,7 @@ readings: rec_ as recorded (#240), bulk_ the bulk of spawning (bins as midpoints
       apart     none  47075       CHILLIWACK CREEK                                                             CHWK,HARR      31       1985      1987           3            11-15          12-21
       apart     none  47086         GREYELL SLOUGH BBAR,CHWK,COTR,DOGC,FRCN,HARR,LFRA,MFRA,MORK,NARC,SETN,TABR,TWAC,UFRA      44       1986      1986           1            11-07          12-30
  bulk_n_start bulk_start_median bulk_end_median peak_n peak_median edge_n_start edge_start_median edge_n_end edge_end_median arrival_median
-          506             10-15           12-15    594       11-15           11             11-01        162           12-01          10-15
+          506             10-15           12-15    594       11-15           11             11-01        163           12-01          10-15
            41             10-15           12-21     50       11-15            1              <NA>         11           12-21          10-15
            41             10-15           12-15     47       11-01            0              <NA>         10           11-29          10-01
            39             10-20           01-15     38       12-15            0              <NA>          0            <NA>          10-15
@@ -3773,7 +3773,7 @@ readings: rec_ as recorded (#240), bulk_ the bulk of spawning (bins as midpoints
             2             11-13           11-25      8       11-11            0              <NA>          9           11-24          11-01
             2             11-18           11-17      3       11-16            1              <NA>          5           11-17          11-06
             2             10-31           12-16      3       11-22            0              <NA>          1            <NA>          11-12
-            0              <NA>           12-06      8       11-19            0              <NA>         16           12-05          11-08
+            0              <NA>           12-06      8       11-19            0              <NA>         17           12-06          11-08
             0              <NA>           11-22      2       11-10            0              <NA>          2            <NA>          10-27
             0              <NA>           11-25      7       11-09            0              <NA>          9           11-25          10-18
            39             10-15           12-15     41       11-15            1              <NA>          9           11-27          10-15
@@ -4136,10 +4136,10 @@ readings: rec_ as recorded (#240), bulk_ the bulk of spawning (bins as midpoints
 
 ==== JERV CO : 42 populations pooled, 0 apart (on a stream crossing several groups)
       scope      run_type pop_id        waterbody groups records first_year last_year rec_n_start rec_start_median rec_end_median bulk_n_start bulk_start_median bulk_end_median peak_n peak_median
-      group 1; FALL; none   <NA>             <NA>   JERV    3019       1953      2004         399            10-15          12-15          398             10-15           12-15    430       11-15
-   run_type          FALL   <NA>             <NA>   JERV    2721       1953      2004         394            10-15          12-15          393             10-15           12-15    423       11-15
+      group 1; FALL; none   <NA>             <NA>   JERV    3019       1953      2004         399            10-15          12-15          399             10-15           12-15    431       11-15
+   run_type          FALL   <NA>             <NA>   JERV    2721       1953      2004         394            10-15          12-15          394             10-15           12-15    424       11-15
    run_type          none   <NA>             <NA>   JERV     223       1985      1992           5            10-20          12-29            5             10-20           12-29      7       11-15
- population          FALL  48996       LANG CREEK   JERV      73       1953      2001          38            09-22          12-15           37             09-18           12-15     37       10-30
+ population          FALL  48996       LANG CREEK   JERV      73       1953      2001          38            09-22          12-15           38             09-22           12-15     38       10-30
  population          FALL  48876   DESERTED RIVER   JERV      71       1953      1995          31            09-30          12-15           31             09-30           12-15     32       11-15
  population          FALL  48896    SKWAWKA RIVER   JERV      68       1954      1998          29            09-01          12-10           29             09-01           12-10     31       11-15
  population          FALL  48986   WHITTALL CREEK   JERV      63       1956      1999          28            11-05          12-15           28             11-05           12-15     26       11-23
@@ -4230,10 +4230,10 @@ readings: rec_ as recorded (#240), bulk_ the bulk of spawning (bins as midpoints
 
 ==== JERV SK : 4 populations pooled, 0 apart (on a stream crossing several groups)
       scope      run_type pop_id     waterbody groups records first_year last_year rec_n_start rec_start_median rec_end_median bulk_n_start bulk_start_median bulk_end_median peak_n peak_median
-      group 1; FALL; none   <NA>          <NA>   JERV    1283       1953      2004          49            07-15          08-28           44             07-15           08-25     33       08-15
-   run_type          FALL   <NA>          <NA>   JERV     125       1953      2004          47            07-15          08-28           42             07-15           08-25     32       08-15
+      group 1; FALL; none   <NA>          <NA>   JERV    1283       1953      2004          49            07-15          08-28           49             07-15           08-28     38       08-15
+   run_type          FALL   <NA>          <NA>   JERV     125       1953      2004          47            07-15          08-28           47             07-15           08-28     37       08-15
    run_type             1   <NA>          <NA>   JERV     977       1971      1998           2            10-28          12-15            2             10-30           12-15      1       11-25
- population          FALL  48719    RUBY CREEK   JERV      73       1953      2004          31            09-20          11-21           26             09-15           10-09     21       08-15
+ population          FALL  48719    RUBY CREEK   JERV      73       1953      2004          31            09-20          11-21           31             09-20           11-21     26       10-10
  population          FALL  48834 TZOONIE RIVER   JERV      51       1953      1969          16            07-15          08-20           16             07-15           08-20     11       08-15
  population             1  48894 SKWAWKA RIVER   JERV      12       1998      1998           1            10-11           <NA>            1             10-15            <NA>      0        <NA>
  population             1  48964    WEST CREEK   JERV      29       1971      1971           1            11-15          12-15            1             11-15           12-15      1       11-25
@@ -5050,9 +5050,9 @@ readings: rec_ as recorded (#240), bulk_ the bulk of spawning (bins as midpoints
 
 ==== KITL CO : 5 populations pooled, 1 apart (on a stream crossing several groups)
       scope   run_type pop_id         waterbody    groups records first_year last_year rec_n_start rec_start_median rec_end_median bulk_n_start bulk_start_median bulk_end_median peak_n peak_median
-      group FALL; none   <NA>              <NA>      KITL     407       1953      2023          94            09-15          10-15           85             09-15           10-15     62       10-01
+      group FALL; none   <NA>              <NA>      KITL     407       1953      2023          94            09-15          10-15           86             09-15           10-15     63       10-01
  population       none  51981      KAINET CREEK      KITL      75       1953      2023          35            08-25          10-01           34             08-25           10-08     26       09-15
- population       none  51816    KIMSQUIT RIVER      KITL      72       1953      1987          23            10-05          12-15           18             10-15           12-15     17       11-15
+ population       none  51816    KIMSQUIT RIVER      KITL      72       1953      1987          23            10-05          12-15           19             10-15           12-15     18       11-15
  population       none  52006      MUSSEL RIVER      KITL      73       1953      2009          23            09-15          10-15           23             09-15           10-15     15       10-01
  population       none  52001 POISON COVE CREEK      KITL      54       1953      1967           9            09-15          10-15            6             08-15           09-15      2       09-30
  population       none  51986         BIG CREEK      KITL      51       1979      2016           4            09-22          10-20            4             09-22           10-20      2       10-10
@@ -5110,11 +5110,11 @@ readings: rec_ as recorded (#240), bulk_ the bulk of spawning (bins as midpoints
 
 ==== KITL CM : 8 populations pooled, 1 apart (on a stream crossing several groups)
       scope     run_type pop_id         waterbody    groups records first_year last_year rec_n_start rec_start_median rec_end_median bulk_n_start bulk_start_median bulk_end_median peak_n peak_median
-      group none; SUMMER   <NA>              <NA>      KITL     596       1953      2025         404            08-15          10-05          401             08-15           10-05    376       09-12
-   run_type         none   <NA>              <NA>      KITL     449       1953      2025         296            08-15          10-10          293             08-15           10-10    273       09-15
+      group none; SUMMER   <NA>              <NA>      KITL     596       1953      2025         404            08-15          10-05          402             08-15           10-05    377       09-12
+   run_type         none   <NA>              <NA>      KITL     449       1953      2025         296            08-15          10-10          294             08-15           10-10    274       09-15
    run_type       SUMMER   <NA>              <NA>      KITL     147       1953      2025         108            08-05          10-05          108             08-05           10-05    103       09-01
  population         none  51983      KAINET CREEK      KITL      76       1953      2025          63            08-01          10-10           63             08-05           10-10     62       09-05
- population         none  52008      MUSSEL RIVER      KITL      76       1953      2025          61            08-05          10-01           60             08-05           10-01     55       09-05
+ population         none  52008      MUSSEL RIVER      KITL      76       1953      2025          61            08-05          10-01           61             08-05           10-01     56       09-05
  population       SUMMER  51818    KIMSQUIT RIVER      KITL      74       1953      2025          58            08-05          10-05           58             08-05           10-05     55       08-25
  population         none  51993     BIG BAY CREEK      KITL      76       1953      2025          56            09-10          10-20           56             09-10           10-20     51       09-30
  population       SUMMER  51813    GRANTHAM CREEK      KITL      73       1953      2022          50            08-21          10-05           50             08-25           10-05     48       09-15
@@ -5138,8 +5138,8 @@ readings: rec_ as recorded (#240), bulk_ the bulk of spawning (bins as midpoints
 
 ==== KITR CH : 17 populations pooled, 0 apart (on a stream crossing several groups)
       scope   run_type pop_id            waterbody groups records first_year last_year rec_n_start rec_start_median rec_end_median bulk_n_start bulk_start_median bulk_end_median peak_n peak_median
-      group FALL; none   <NA>                 <NA>   KITR    1765       1953      2024         346            08-01          09-15          328             08-05           09-15    326       08-15
- population       none  50364        KITIMAT RIVER   KITR      77       1953      2021          58            07-25          09-15           58             07-25           09-15     55       08-15
+      group FALL; none   <NA>                 <NA>   KITR    1765       1953      2024         346            08-01          09-15          323             08-05           09-15    325       08-15
+ population       none  50364        KITIMAT RIVER   KITR      77       1953      2021          58            07-25          09-15           53             07-25           09-15     54       08-15
  population       none  50339           DALA RIVER   KITR      88       1953      2021          57            07-15          09-15           56             07-15           09-15     56       08-15
  population       none  50384         HIRSCH CREEK   KITR      61       1959      2024          45            08-05          09-15           41             08-05           09-15     40       08-15
  population       none  50399 LITTLE WEDEENE RIVER   KITR      61       1958      2021          42            08-05          09-12           39             08-05           09-05     41       08-15
@@ -5178,8 +5178,8 @@ readings: rec_ as recorded (#240), bulk_ the bulk of spawning (bins as midpoints
 
 ==== KITR CO : 35 populations pooled, 0 apart (on a stream crossing several groups)
       scope   run_type pop_id              waterbody groups records first_year last_year rec_n_start rec_start_median rec_end_median bulk_n_start bulk_start_median bulk_end_median peak_n peak_median
-      group FALL; none   <NA>                   <NA>   KITR    2441       1953      2024         626            10-01          11-25          601             10-05           11-15    569       10-25
- population       none  50361          KITIMAT RIVER   KITR      77       1953      2023          61            10-05          12-15           60             10-15           12-15     56       11-05
+      group FALL; none   <NA>                   <NA>   KITR    2441       1953      2024         626            10-01          11-25          602             10-05           11-15    570       10-25
+ population       none  50361          KITIMAT RIVER   KITR      77       1953      2023          61            10-05          12-15           61             10-15           12-15     57       11-05
  population       none  50336             DALA RIVER   KITR      97       1953      2024          59            09-15          11-15           59             09-15           11-15     55       10-15
  population       none  52426             FOCH RIVER   KITR      90       1953      2023          55            09-15          11-13           54             09-15           11-07     49       10-05
  population       none  50396   LITTLE WEDEENE RIVER   KITR      61       1958      2024          46            10-05          11-30           45             10-15           11-15     45       10-25
@@ -5490,8 +5490,8 @@ readings: rec_ as recorded (#240), bulk_ the bulk of spawning (bins as midpoints
 
 ==== KLUM CO : 28 populations pooled, 3 apart (on a stream crossing several groups)
       scope run_type pop_id                 waterbody                        groups records first_year last_year rec_n_start rec_start_median rec_end_median bulk_n_start bulk_start_median
-      group     none   <NA>                      <NA>                          KLUM    2540       1953      2022         549            10-15          12-05          532             10-15
- population     none  47796                 DRY CREEK                          KLUM      74       1953      2022          57            10-21          12-15           55             10-25
+      group     none   <NA>                      <NA>                          KLUM    2540       1953      2022         549            10-15          12-05          533             10-15
+ population     none  47796                 DRY CREEK                          KLUM      74       1953      2022          57            10-21          12-15           56             10-25
  population     none  47766                DEEP CREEK                          KLUM      85       1953      2004          41            10-15          11-27           41             10-15
  population     none  48590          ZYMAGOTITZ RIVER                          KLUM      97       1956      2021          39            10-15          12-05           37             10-15
  population     none  47801               CLEAR CREEK                          KLUM      73       1953      2000          37            10-15          12-01           37             10-15
@@ -5523,8 +5523,8 @@ readings: rec_ as recorded (#240), bulk_ the bulk of spawning (bins as midpoints
       apart     none  47821     ZYMOETZ RIVER - UPPER                     KLUM,ZYMO      75       1955      2024          22            10-01          11-10           21             10-05
       apart     none  45667              ESKER SLOUGH KISP,KLUM,LKEL,LSKE,MSKE,USKE      66       1980      1994          14            10-01          11-08           14             10-01
  bulk_end_median peak_n peak_median edge_n_start edge_start_median edge_n_end edge_end_median arrival_median
-           12-05    537       11-15           21             10-15          3            <NA>          10-11
-           12-15     53       11-15            6             11-10          1            <NA>          10-21
+           12-05    538       11-15           22             10-15          3            <NA>          10-11
+           12-15     54       11-15            7             11-15          1            <NA>          10-21
            11-25     41       11-01            0              <NA>          0            <NA>          10-10
            12-05     38       11-15            4              <NA>          0            <NA>          09-15
            12-01     34       11-15            0              <NA>          0            <NA>          10-15
@@ -6044,9 +6044,9 @@ readings: rec_ as recorded (#240), bulk_ the bulk of spawning (bins as midpoints
 
 ==== KSHR CO : 13 populations pooled, 0 apart (on a stream crossing several groups)
       scope   run_type pop_id         waterbody groups records first_year last_year rec_n_start rec_start_median rec_end_median bulk_n_start bulk_start_median bulk_end_median peak_n peak_median
-      group FALL; none   <NA>              <NA>   KSHR    1341       1953      2002         149            09-25          11-15          146             09-25           11-15    120       10-15
+      group FALL; none   <NA>              <NA>   KSHR    1341       1953      2002         149            09-25          11-15          147             09-25           11-15    121       10-15
  population       none  43636        BEAR RIVER   KSHR      83       1953      2001          32            09-15          11-15           32             09-15           11-15     28       10-15
- population       none  43546    KITSAULT RIVER   KSHR      94       1953      2002          31            09-15          10-31           30             09-15           10-26     23       10-10
+ population       none  43546    KITSAULT RIVER   KSHR      94       1953      2002          31            09-15          10-31           31             09-15           10-31     24       10-12
  population       none  43536    ILLIANCE RIVER   KSHR      92       1953      2001          28            10-03          11-15           28             10-03           11-15     20       10-25
  population       none  43641      RAINEY CREEK   KSHR      67       1976      2001          16            10-15          12-01           15             10-15           12-01     16       10-25
  population       none  43626     GEORGIE RIVER   KSHR      70       1962      1985          12            09-01          10-08           12             09-01           10-08     13       09-20
@@ -6776,13 +6776,13 @@ readings: rec_ as recorded (#240), bulk_ the bulk of spawning (bins as midpoints
 
 ==== LDEN CH : 0 populations pooled, 1 apart (on a stream crossing several groups)
  scope run_type pop_id  waterbody    groups records first_year last_year rec_n_start rec_start_median rec_end_median bulk_n_start bulk_start_median bulk_end_median peak_n peak_median edge_n_start
- apart     none  51809 DEAN RIVER LDEN,UDEN      72       1953      2025          44            08-15          09-30           43             08-15           09-30     44       09-05            8
+ apart     none  51809 DEAN RIVER LDEN,UDEN      72       1953      2025          44            08-15          09-30           44             08-15           09-28     45       09-05            9
  edge_start_median edge_n_end edge_end_median arrival_median
              08-15          2            <NA>          06-15
 
 ==== LDEN CO : 0 populations pooled, 1 apart (on a stream crossing several groups)
  scope run_type pop_id  waterbody    groups records first_year last_year rec_n_start rec_start_median rec_end_median bulk_n_start bulk_start_median bulk_end_median peak_n peak_median edge_n_start
- apart     none  51806 DEAN RIVER LDEN,UDEN      72       1953      1985          26            09-15          12-15           24             09-15           11-30     23       10-15            0
+ apart     none  51806 DEAN RIVER LDEN,UDEN      72       1953      1985          26            09-15          12-15           26             09-15           12-15     25       10-15            0
  edge_start_median edge_n_end edge_end_median arrival_median
               <NA>          0            <NA>          07-15
 
@@ -6800,7 +6800,7 @@ readings: rec_ as recorded (#240), bulk_ the bulk of spawning (bins as midpoints
 
 ==== LDEN CM : 0 populations pooled, 1 apart (on a stream crossing several groups)
  scope run_type pop_id  waterbody    groups records first_year last_year rec_n_start rec_start_median rec_end_median bulk_n_start bulk_start_median bulk_end_median peak_n peak_median edge_n_start
- apart   SUMMER  51808 DEAN RIVER LDEN,UDEN      74       1953      2025          55            08-15          09-30           53             08-15           09-25     48       09-05           11
+ apart   SUMMER  51808 DEAN RIVER LDEN,UDEN      74       1953      2025          55            08-15          09-30           54             08-15           09-25     49       09-05           11
  edge_start_median edge_n_end edge_end_median arrival_median
              08-15          4            <NA>          08-05
 
@@ -7924,11 +7924,11 @@ readings: rec_ as recorded (#240), bulk_ the bulk of spawning (bins as midpoints
  population       none  43863       OTTY CREEK   LRDO      54       1986      1986           1            09-15          10-05            1             09-15           10-05      1       09-25
  population       FALL   3232      KAMIN CREEK   LRDO      16       2004      2004           0             <NA>          10-10            0              <NA>           10-05      0        <NA>
  edge_n_start edge_start_median edge_n_end edge_end_median arrival_median
-           84             09-05         38           09-25          09-01
-           84             09-05         38           09-25          09-01
+           84             09-05         37           09-25          09-01
+           84             09-05         37           09-25          09-01
             0              <NA>          0            <NA>          08-21
            17             08-25          5           09-25          09-01
-           10             09-05          2            <NA>          08-21
+           10             09-05          1            <NA>          08-21
             2              <NA>          0            <NA>          09-01
            10             09-05          2            <NA>          08-11
             6             09-14          1            <NA>          09-01
@@ -8946,7 +8946,7 @@ readings: rec_ as recorded (#240), bulk_ the bulk of spawning (bins as midpoints
  population     none  41968                     DEENA CREEK   MORI      95       1953      2025          66            09-01          10-20           66             09-05           10-20     66
  population     none  42828                    LAGOON CREEK   MORI      95       1953      2025          66            09-15          10-30           66             09-15           10-30     68
  population     none  42878                    PACOFI CREEK   MORI      93       1953      2025          66            09-11          10-20           66             09-15           10-15     66
- population     none  42683  SECURITY INLET LEFT HAND CREEK   MORI      82       1950      2025          65            09-10          10-15           64             09-10           10-15     63
+ population     none  42683  SECURITY INLET LEFT HAND CREEK   MORI      82       1950      2025          65            09-10          10-15           65             09-10           10-15     64
  population     none  42868              LITTLE GOOSE CREEK   MORI      93       1953      2025          65            09-12          10-25           65             09-15           10-25     65
  population     none  42898            CRESCENT INLET CREEK   MORI      94       1953      2025          65            09-17          10-25           65             09-17           10-25     66
  population     none  42843                 WATERFALL CREEK   MORI      93       1953      2025          64            09-11          10-20           64             09-15           10-15     64
@@ -9045,7 +9045,7 @@ readings: rec_ as recorded (#240), bulk_ the bulk of spawning (bins as midpoints
  population     none  43343   SECTION COVE RIGHT HAND CREEK   MORI      66       1974      1995          16            10-05          10-26           15             10-05           10-25     16
  population     none  41958     EAST NARROWS CAN BUOY CREEK   MORI      69       1985      2013          14            09-25          10-25           13             09-25           10-25     13
  population     none  43108                 SPERM BAY CREEK   MORI      66       1964      1995          14            09-25          10-20           13             09-25           10-18     14
- population     none  43198        DOUGLAS INLET HEAD CREEK   MORI      67       1950      1991          14            10-01          10-20           14             10-01           10-20     14
+ population     none  43198        DOUGLAS INLET HEAD CREEK   MORI      67       1950      1991          14            10-01          10-20           13             10-01           10-20     13
  population     none  43293                      GATE CREEK   MORI      67       1953      2009          13            10-01          10-25           13             10-01           10-25     15
  population     none  43318             SCUDDER POINT CREEK   MORI      64       1977      1993          13            10-05          10-25           13             10-05           10-25     14
  population     none  43368              BALCOM INLET CREEK   MORI      64       1981      1998          13            09-25          10-25           12             09-25           10-25     13
@@ -9085,7 +9085,7 @@ readings: rec_ as recorded (#240), bulk_ the bulk of spawning (bins as midpoints
  population     none  41058                 MACINTYRE CREEK   MORI      55       1988      1988           1            09-25          10-25            1             09-25           10-25      1
  population     none  42928               DE LA BECHE CREEK   MORI      65       1994      1994           1            09-01          11-01            0              <NA>            <NA>      0
  peak_median edge_n_start edge_start_median edge_n_end edge_end_median arrival_median
-       10-05          257             09-25        155           10-25          09-15
+       10-05          257             09-25        154           10-25          09-15
        10-05            5             09-15          2            <NA>          09-05
        09-25            1              <NA>          1            <NA>          08-25
        10-15            5             09-15          1            <NA>          09-11
@@ -9189,7 +9189,7 @@ readings: rec_ as recorded (#240), bulk_ the bulk of spawning (bins as midpoints
        10-20            2              <NA>          1            <NA>          10-04
        10-05            0              <NA>          0            <NA>          09-25
        10-05            0              <NA>          0            <NA>          09-15
-       10-05            5             10-05          4            <NA>          09-25
+       10-05            5             10-05          3            <NA>          09-25
        10-05            1              <NA>          0            <NA>          10-05
        10-15            1              <NA>          1            <NA>          09-25
        10-15            0              <NA>          0            <NA>          09-25
@@ -9567,8 +9567,8 @@ readings: rec_ as recorded (#240), bulk_ the bulk of spawning (bins as midpoints
 
 ==== NASC CO : 38 populations pooled, 0 apart (on a stream crossing several groups)
       scope run_type pop_id            waterbody groups records first_year last_year rec_n_start rec_start_median rec_end_median bulk_n_start bulk_start_median bulk_end_median peak_n peak_median
-      group     none   <NA>                 <NA>   NASC    2812       1953      2025         591            09-15          10-15          570             09-15           10-15    475       10-10
- population     none  51851          ELCHO CREEK   NASC      74       1953      2025          49            10-01          12-01           47             10-05           12-01     44       11-05
+      group     none   <NA>                 <NA>   NASC    2812       1953      2025         591            09-15          10-15          571             09-15           10-15    476       10-10
+ population     none  51851          ELCHO CREEK   NASC      74       1953      2025          49            10-01          12-01           48             10-05           12-01     45       11-05
  population     none  51861         MARTIN RIVER   NASC      75       1953      2023          49            10-01          12-15           49             10-05           12-15     45       10-30
  population     none  51886         ROSCOE CREEK   NASC      74       1953      2025          44            09-15          10-15           44             09-15           10-15     41       10-05
  population     none  51896       QUARTCHA CREEK   NASC      73       1953      2022          44            09-15          10-30           44             09-15           10-30     32       10-02
@@ -9649,8 +9649,8 @@ readings: rec_ as recorded (#240), bulk_ the bulk of spawning (bins as midpoints
 
 ==== NASC SK : 18 populations pooled, 0 apart (on a stream crossing several groups)
       scope   run_type pop_id        waterbody groups records first_year last_year rec_n_start rec_start_median rec_end_median bulk_n_start bulk_start_median bulk_end_median peak_n peak_median
-      group FALL; none   <NA>             <NA>   NASC    1771       1953      2025         300            09-08          10-10          291             09-15           10-10    276       09-25
- population       none  51935   TANKEEAH RIVER   NASC      76       1953      2023          46            09-13          10-20           45             09-15           10-20     42       10-01
+      group FALL; none   <NA>             <NA>   NASC    1771       1953      2025         300            09-08          10-10          292             09-15           10-10    277       09-25
+ population       none  51935   TANKEEAH RIVER   NASC      76       1953      2023          46            09-13          10-20           46             09-15           10-20     43       10-01
  population       none  42745  MARY COVE CREEK   NASC      74       1953      2006          38            09-15          10-15           38             09-15           10-15     39       10-05
  population       none  43260  KWAKUSDIS RIVER   NASC      74       1953      2019          38            09-01          10-08           38             09-10           10-05     40       09-25
  population       none  51850      ELCHO CREEK   NASC      48       1977      2024          23            09-01          10-03           23             09-05           10-03     21       09-15
@@ -9669,8 +9669,8 @@ readings: rec_ as recorded (#240), bulk_ the bulk of spawning (bins as midpoints
  population       none  42760  JAMES BAY CREEK   NASC      30       1985      1985           1            09-29           <NA>            1             09-29            <NA>      0        <NA>
  population       none  51840      WORAN CREEK   NASC      15       2025      2025           0             <NA>          10-20            0              <NA>           10-15      0        <NA>
  edge_n_start edge_start_median edge_n_end edge_end_median arrival_median
-           34             09-15          6           10-05          08-01
-            8             09-20          0            <NA>          07-15
+           35             09-15          6           10-05          08-01
+            9             09-25          0            <NA>          07-15
             0              <NA>          0            <NA>          06-15
             3              <NA>          1            <NA>          07-15
             5             09-05          1            <NA>          08-15
@@ -9691,8 +9691,8 @@ readings: rec_ as recorded (#240), bulk_ the bulk of spawning (bins as midpoints
 
 ==== NASC PK : 48 populations pooled, 0 apart (on a stream crossing several groups)
       scope   run_type pop_id                      waterbody groups records first_year last_year rec_n_start rec_start_median rec_end_median bulk_n_start bulk_start_median bulk_end_median peak_n
-      group FALL; none   <NA>                           <NA>   NASC    3466       1953      2025        1519            09-01          10-06         1492             09-01           10-05   1446
-   run_type       none   <NA>                           <NA>   NASC    3403       1953      2025        1493            09-01          10-05         1466             09-01           10-05   1421
+      group FALL; none   <NA>                           <NA>   NASC    3466       1953      2025        1519            09-01          10-06         1493             09-01           10-05   1447
+   run_type       none   <NA>                           <NA>   NASC    3403       1953      2025        1493            09-01          10-05         1467             09-01           10-05   1422
    run_type       FALL   <NA>                           <NA>   NASC      63       2004      2025          26            09-01          10-15           26             09-15           10-10     25
  population       none  51927                   NEEKAS CREEK   NASC      76       1953      2025          64            08-28          10-18           64             08-28           10-15     62
  population       none  51852                    ELCHO CREEK   NASC      76       1953      2025          61            08-15          10-05           61             08-15           10-05     61
@@ -9703,7 +9703,7 @@ readings: rec_ as recorded (#240), bulk_ the bulk of spawning (bins as midpoints
  population       none  43262                KWAKUSDIS RIVER   NASC      76       1953      2024          54            08-29          10-10           54             08-29           10-10     59
  population       none  51892                      LEE CREEK   NASC      74       1953      2025          52            08-31          10-05           52             08-31           10-05     52
  population       none  51967               SALMON BAY CREEK   NASC      76       1953      2024          52            08-29          10-15           52             08-29           10-15     51
- population       none  51857                FRENCHMAN CREEK   NASC      73       1953      2012          51            08-25          10-10           50             08-25           10-05     48
+ population       none  51857                FRENCHMAN CREEK   NASC      73       1953      2012          51            08-25          10-10           51             08-25           10-05     49
  population       none  51847                  CASCADE RIVER   NASC      75       1953      2025          50            08-15          10-05           50             08-15           10-05     46
  population       none  51972               HIRD POINT CREEK   NASC      76       1953      2024          50            09-01          10-03           49             09-05           10-05     50
  population       none  42762                JAMES BAY CREEK   NASC      76       1953      2024          48            09-01          10-10           48             09-01           10-10     50
@@ -9743,8 +9743,8 @@ readings: rec_ as recorded (#240), bulk_ the bulk of spawning (bins as midpoints
  population       none   7811     BULLOCK CHANNEL EAST CREEK   NASC       2       2023      2023           1            09-11          10-10            1             09-15           10-05      0
  population       none   7817                     FELL CREEK   NASC       3       2023      2025           1            09-11          10-20            1             09-15           10-15      1
  peak_median edge_n_start edge_start_median edge_n_end edge_end_median arrival_median
-       09-15          214             09-05         64           10-05          08-25
-       09-15          199             09-05         63           10-05          08-25
+       09-15          215             09-05         63           10-05          08-25
+       09-15          200             09-05         62           10-05          08-25
        09-25           15             09-15          1            <NA>          09-01
        09-25           15             09-05          2            <NA>          08-15
        09-15           13             08-25         10           10-10          08-10
@@ -9755,8 +9755,8 @@ readings: rec_ as recorded (#240), bulk_ the bulk of spawning (bins as midpoints
        09-20           13             09-01          0            <NA>          08-21
        09-15            4              <NA>          1            <NA>          08-25
        09-17           10             09-04          1            <NA>          08-20
-       09-15            7             08-25          1            <NA>          08-11
-       09-08           11             08-25         11           09-25          08-15
+       09-15            8             08-25          1            <NA>          08-11
+       09-08           11             08-25         10           09-25          08-15
        09-20            8             09-05          0            <NA>          08-29
        09-16            8             09-05          0            <NA>          08-20
        09-15            4              <NA>          5           10-05          08-25
@@ -9797,14 +9797,14 @@ readings: rec_ as recorded (#240), bulk_ the bulk of spawning (bins as midpoints
 
 ==== NASC CM : 51 populations pooled, 0 apart (on a stream crossing several groups)
       scope           run_type pop_id                      waterbody groups records first_year last_year rec_n_start rec_start_median rec_end_median bulk_n_start bulk_start_median bulk_end_median
-      group FALL; none; SUMMER   <NA>                           <NA>   NASC    3532       1953      2025        1691            09-01          10-15         1664             09-05           10-15
-   run_type               none   <NA>                           <NA>   NASC    3179       1953      2025        1576            09-01          10-15         1555             09-05           10-15
+      group FALL; none; SUMMER   <NA>                           <NA>   NASC    3532       1953      2025        1691            09-01          10-15         1665             09-05           10-15
+   run_type               none   <NA>                           <NA>   NASC    3179       1953      2025        1576            09-01          10-15         1556             09-05           10-15
    run_type             SUMMER   <NA>                           <NA>   NASC     270       1953      2019          73            08-15          10-01           67             08-10           09-30
    run_type               FALL   <NA>                           <NA>   NASC      83       2004      2025          42            09-01          10-10           42             09-05           10-05
  population               none  51853                    ELCHO CREEK   NASC      76       1953      2025          65            08-11          10-15           65             08-15           10-15
  population               none  51928                   NEEKAS CREEK   NASC      76       1953      2025          64            09-01          10-30           64             09-01           10-30
  population               none  51878                   CLATSE CREEK   NASC      76       1953      2025          62            09-01          10-25           62             09-04           10-22
- population               none  51888                   ROSCOE CREEK   NASC      76       1953      2025          62            08-21          10-15           61             08-25           10-12
+ population               none  51888                   ROSCOE CREEK   NASC      76       1953      2025          62            08-21          10-15           62             08-25           10-15
  population               none  51898                 QUARTCHA CREEK   NASC      76       1953      2025          60            08-23          10-10           60             08-25           10-10
  population               none  43263                KWAKUSDIS RIVER   NASC      76       1953      2024          58            09-01          10-15           58             09-01           10-15
  population               none  51968               SALMON BAY CREEK   NASC      76       1953      2025          58            09-01          10-15           58             09-01           10-15
@@ -9853,14 +9853,14 @@ readings: rec_ as recorded (#240), bulk_ the bulk of spawning (bins as midpoints
  population               none  51913         ELLERSLIE LAGOON CREEK   NASC      67       1984      1985           2            09-10          09-25            2             09-10           09-25
  population               none   7816                     FELL CREEK   NASC       3       2023      2025           2            09-16          10-15            2             09-20           10-10
  peak_n peak_median edge_n_start edge_start_median edge_n_end edge_end_median arrival_median
-   1585       09-20          205             09-05         68           10-05          09-01
-   1478       09-20          179             09-05         62           10-05          09-01
+   1586       09-20          206             09-05         68           10-05          09-01
+   1479       09-20          180             09-05         62           10-05          09-01
      70       09-03            2              <NA>          1            <NA>          08-15
      37       09-25           24             09-05          5           10-05          09-01
      64       09-15           11             08-15          9           10-15          08-11
      60       09-25           11             09-05          1            <NA>          08-25
-     62       09-25           15             08-25          6           10-20          08-30
-     61       09-15            9             08-25         13           10-05          08-14
+     62       09-25           15             08-25          5           10-25          08-30
+     62       09-15           10             08-25         14           10-05          08-14
      61       09-15            5             08-25          6           10-05          08-15
      57       09-20           11             09-05          0            <NA>          08-25
      51       09-25            8             09-04          1            <NA>          08-25
@@ -10423,10 +10423,10 @@ readings: rec_ as recorded (#240), bulk_ the bulk of spawning (bins as midpoints
 
 ==== NIEL CO : 14 populations pooled, 0 apart (on a stream crossing several groups)
       scope run_type pop_id       waterbody groups records first_year last_year rec_n_start rec_start_median rec_end_median bulk_n_start bulk_start_median bulk_end_median peak_n peak_median
-      group     none   <NA>            <NA>   NIEL    1089       1953      2012         235            09-15          11-15          218             09-15           11-15    213       10-15
+      group     none   <NA>            <NA>   NIEL    1089       1953      2012         235            09-15          11-15          219             09-15           11-15    214       10-15
  population     none  51701    BEAVER CREEK   NIEL      71       1953      1994          35            09-25          11-15           30             09-15           11-15     29       10-15
  population     none  51711     KOEYE RIVER   NIEL      72       1953      2012          34            09-20          12-15           34             09-20           12-15     33       10-15
- population     none  51736    KWATNA RIVER   NIEL      73       1953      1985          32            09-15          10-30           31             09-15           10-22     31       10-15
+ population     none  51736    KWATNA RIVER   NIEL      73       1953      1985          32            09-15          10-30           32             09-15           10-30     32       10-15
  population     none  51671     CLYAK RIVER   NIEL      64       1953      1989          31            09-15          12-05           29             09-15           12-05     29       10-15
  population     none  51721      NAMU RIVER   NIEL      73       1953      1986          23            09-01          10-15           23             09-01           10-15     23       09-20
  population     none  51691   MACNAIR CREEK   NIEL      72       1953      1989          22            09-20          12-05           20             09-25           11-25     17       10-25
@@ -10647,13 +10647,13 @@ readings: rec_ as recorded (#240), bulk_ the bulk of spawning (bins as midpoints
 
 ==== OWIK CH : 16 populations pooled, 0 apart (on a stream crossing several groups)
       scope run_type pop_id        waterbody groups records first_year last_year rec_n_start rec_start_median rec_end_median bulk_n_start bulk_start_median bulk_end_median peak_n peak_median
-      group     none   <NA>             <NA>   OWIK    1770       1953      2025         346            08-15          09-30          310             08-15           09-30    317       09-15
+      group     none   <NA>             <NA>   OWIK    1770       1953      2025         346            08-15          09-30          311             08-15           09-28    318       09-15
  population     none  51669 CHUCKWALLA RIVER   OWIK      73       1953      2025          44            08-12          09-20           44             08-15           09-15     47       09-05
  population     none  51664   KILBELLA RIVER   OWIK      73       1956      2025          43            08-11          09-25           41             08-15           09-25     44       09-05
  population     none  49693      DOCEE RIVER   OWIK      71       1953      2013          42            09-15          10-25           42             09-15           10-25     43       10-05
  population     none  50459    WANNOCK RIVER   OWIK      70       1953      2011          41            10-05          11-15           41             10-05           11-15     41       10-25
  population     none  51634   NEECHANZ RIVER   OWIK      64       1958      2009          29            08-15          09-25           27             08-15           09-25     27       09-15
- population     none  51659       TZEO RIVER   OWIK      57       1967      2009          25            08-15          09-25           18             08-15           09-25     19       09-15
+ population     none  51659       TZEO RIVER   OWIK      57       1967      2009          25            08-15          09-25           19             08-15           09-25     20       09-10
  population     none  51624    ASHLULM CREEK   OWIK      56       1971      2023          24            09-05          10-05           23             09-05           10-05     22       09-15
  population     none  49713     NEKITE RIVER   OWIK      46       1965      1994          22            08-25          10-05           18             08-25           10-05     18       09-15
  population     none  51619    DALLERY CREEK   OWIK      61       1965      2007          20            08-15          09-15           16             08-15           09-15     19       09-15
@@ -10671,8 +10671,8 @@ readings: rec_ as recorded (#240), bulk_ the bulk of spawning (bins as midpoints
             1              <NA>          0            <NA>          08-15
             0              <NA>          0            <NA>          08-15
             1              <NA>          2            <NA>          08-15
-            0              <NA>          3            <NA>          08-15
-            2              <NA>          5           09-25          08-25
+            0              <NA>          4            <NA>          08-15
+            2              <NA>          4            <NA>          08-25
             0              <NA>          0            <NA>          07-15
             0              <NA>          1            <NA>          08-15
             0              <NA>          0            <NA>          07-15
@@ -10757,11 +10757,11 @@ readings: rec_ as recorded (#240), bulk_ the bulk of spawning (bins as midpoints
 
 ==== OWIK SK : 22 populations pooled, 0 apart (on a stream crossing several groups)
       scope run_type pop_id             waterbody groups records first_year last_year rec_n_start rec_start_median rec_end_median bulk_n_start bulk_start_median bulk_end_median peak_n peak_median
-      group     none   <NA>                  <NA>   OWIK    2051       1953      2024         638            09-11          10-20          629             09-15           10-15    658       09-25
+      group     none   <NA>                  <NA>   OWIK    2051       1953      2024         638            09-11          10-20          631             09-15           10-15    660       09-25
  population     none  51620         ASHLULM CREEK   OWIK      74       1953      2023          56            09-11          10-20           56             09-15           10-20     60       09-25
  population     none  51615         DALLERY CREEK   OWIK      74       1953      2024          55            09-15          10-25           55             09-15           10-25     59       10-05
- population     none  51645         INZIANA RIVER   OWIK      74       1953      2023          54            09-05          10-15           53             09-05           10-15     58       09-15
- population     none  51650        WASHWASH RIVER   OWIK      74       1953      2023          53            08-25          10-15           52             08-25           10-15     56       09-15
+ population     none  51645         INZIANA RIVER   OWIK      74       1953      2023          54            09-05          10-15           54             09-05           10-15     59       09-15
+ population     none  51650        WASHWASH RIVER   OWIK      74       1953      2023          53            08-25          10-15           53             08-25           10-15     57       09-15
  population     none  51635         GENESEE CREEK   OWIK      74       1953      2022          51            09-15          11-05           50             09-15           11-05     55       10-15
  population     none  51610          AMBACK CREEK   OWIK      73       1953      2023          50            09-15          11-07           50             09-15           11-05     49       10-15
  population     none  51630        NEECHANZ RIVER   OWIK      74       1953      2022          49            08-25          10-20           49             08-25           10-15     50       09-15
@@ -10781,10 +10781,10 @@ readings: rec_ as recorded (#240), bulk_ the bulk of spawning (bins as midpoints
  population     none  49764 LOCKHART GORDON CREEK   OWIK      24       1985      1985           1            09-05          09-25            1             09-05           09-25      4       09-20
  population     none  49774        JOHNSTON CREEK   OWIK      25       1985      1985           1            09-15          09-25            1             09-15           09-25      1       09-25
  edge_n_start edge_start_median edge_n_end edge_end_median arrival_median
-           41             09-05         12           10-05          08-21
-           12             09-15          4            <NA>          08-21
+           41             09-05         10           10-05          08-21
+           12             09-15          3            <NA>          08-21
             6             09-18          1            <NA>          09-05
-            5             09-05          3            <NA>          08-18
+            5             09-05          2            <NA>          08-18
             4              <NA>          0            <NA>          08-15
             3              <NA>          1            <NA>          09-15
             1              <NA>          2            <NA>          09-15
@@ -10807,9 +10807,9 @@ readings: rec_ as recorded (#240), bulk_ the bulk of spawning (bins as midpoints
 
 ==== OWIK PK : 31 populations pooled, 0 apart (on a stream crossing several groups)
       scope   run_type pop_id               waterbody groups records first_year last_year rec_n_start rec_start_median rec_end_median bulk_n_start bulk_start_median bulk_end_median peak_n peak_median
-      group FALL; none   <NA>                    <NA>   OWIK    2212       1953      2024         579            08-21          09-30          546             08-25           09-25    572       09-15
+      group FALL; none   <NA>                    <NA>   OWIK    2212       1953      2024         579            08-21          09-30          547             08-25           09-25    573       09-15
  population       none  51667        CHUCKWALLA RIVER   OWIK      74       1953      2023          53            08-15          09-25           52             08-15           09-25     50       09-05
- population       none  51662          KILBELLA RIVER   OWIK      74       1953      2024          48            08-15          09-25           47             08-15           09-25     48       09-05
+ population       none  51662          KILBELLA RIVER   OWIK      74       1953      2024          48            08-15          09-25           48             08-15           09-25     49       09-05
  population       none  49776          JOHNSTON CREEK   OWIK      70       1953      2006          46            09-05          10-05           46             09-05           10-05     45       09-15
  population       none  49711            NEKITE RIVER   OWIK      72       1953      2009          45            08-15          10-02           45             08-15           10-02     48       09-15
  population       none  49791       NICKNAQUEET RIVER   OWIK      75       1953      2024          39            08-21          09-30           38             08-25           09-25     41       09-15
@@ -10842,7 +10842,7 @@ readings: rec_ as recorded (#240), bulk_ the bulk of spawning (bins as midpoints
  edge_n_start edge_start_median edge_n_end edge_end_median arrival_median
            46             08-25         26           09-25          08-15
             6             08-23          7           09-25          07-28
-            6             08-19          4            <NA>          08-05
+            6             08-19          5           09-25          08-05
             5             09-05          0            <NA>          08-09
             4              <NA>          0            <NA>          08-15
             7             08-25          0            <NA>          08-15
@@ -10851,7 +10851,7 @@ readings: rec_ as recorded (#240), bulk_ the bulk of spawning (bins as midpoints
             0              <NA>          0            <NA>          08-05
             1              <NA>          2            <NA>          08-15
             0              <NA>          0            <NA>          08-25
-            3              <NA>          3            <NA>          08-15
+            3              <NA>          2            <NA>          08-15
             0              <NA>          0            <NA>          08-15
             0              <NA>          1            <NA>          08-15
             0              <NA>          4            <NA>          08-15
@@ -10875,15 +10875,15 @@ readings: rec_ as recorded (#240), bulk_ the bulk of spawning (bins as midpoints
 
 ==== OWIK CM : 25 populations pooled, 0 apart (on a stream crossing several groups)
       scope           run_type pop_id               waterbody groups records first_year last_year rec_n_start rec_start_median rec_end_median bulk_n_start bulk_start_median bulk_end_median peak_n
-      group FALL; none; SUMMER   <NA>                    <NA>   OWIK    2119       1953      2024         583            09-10          10-15          565             09-15           10-15    571
-   run_type               none   <NA>                    <NA>   OWIK    1890       1953      2024         485            09-15          10-15          470             09-15           10-15    477
+      group FALL; none; SUMMER   <NA>                    <NA>   OWIK    2119       1953      2024         583            09-10          10-15          566             09-14           10-15    572
+   run_type               none   <NA>                    <NA>   OWIK    1890       1953      2024         485            09-15          10-15          471             09-15           10-15    478
    run_type             SUMMER   <NA>                    <NA>   OWIK     213       1953      2008          98            08-15          09-25           95             08-15           09-25     94
  population               none  49767   LOCKHART GORDON CREEK   OWIK      76       1953      2024          56            09-15          10-15           56             09-15           10-15     55
  population               none  51668        CHUCKWALLA RIVER   OWIK      73       1953      2023          50            08-15          10-22           50             08-15           10-22     52
  population               none  49687            TAKUSH RIVER   OWIK      70       1953      2019          48            09-15          11-05           48             09-15           11-05     45
  population               none  49707            WALKUM CREEK   OWIK      69       1953      2019          45            09-15          10-15           45             09-15           10-15     45
  population               none  49712            NEKITE RIVER   OWIK      72       1953      2014          45            08-25          10-15           45             08-25           10-15     50
- population               none  51663          KILBELLA RIVER   OWIK      72       1953      2024          43            09-05          10-15           39             09-05           10-15     41
+ population               none  51663          KILBELLA RIVER   OWIK      72       1953      2024          43            09-05          10-15           40             09-05           10-15     42
  population             SUMMER  51748            ASSEEK RIVER   OWIK      71       1954      1994          36            08-15          09-25           35             08-15           09-25     35
  population               none  50458           WANNOCK RIVER   OWIK      70       1953      1994          35            10-15          11-20           35             10-15           11-20     34
  population             SUMMER  51753          TALEOMEY RIVER   OWIK      71       1957      2008          33            08-15          10-05           32             08-15           10-03     31
@@ -10912,7 +10912,7 @@ readings: rec_ as recorded (#240), bulk_ the bulk of spawning (bins as midpoints
        10-15            3              <NA>          1            <NA>          09-15
        09-20            1              <NA>          1            <NA>          09-05
        09-15            2              <NA>          0            <NA>          08-15
-       09-15            3              <NA>          6           09-25          08-15
+       09-15            3              <NA>          7           09-25          08-15
        09-05            0              <NA>          0            <NA>          08-15
        11-05            0              <NA>          0            <NA>          09-15
        09-05            0              <NA>          0            <NA>          08-05
@@ -10920,7 +10920,7 @@ readings: rec_ as recorded (#240), bulk_ the bulk of spawning (bins as midpoints
        10-10            3              <NA>          0            <NA>          09-05
        09-05            0              <NA>          0            <NA>          08-15
        09-15            2              <NA>          1            <NA>          09-05
-       09-15            2              <NA>          6           09-25          08-20
+       09-15            2              <NA>          5           09-25          08-20
        09-25            2              <NA>          1            <NA>          09-05
        09-15            0              <NA>          2            <NA>          08-15
        09-15            0              <NA>          2            <NA>          08-25
@@ -11429,9 +11429,9 @@ readings: rec_ as recorded (#240), bulk_ the bulk of spawning (bins as midpoints
 
 ==== SANJ SK : 7 populations pooled, 0 apart (on a stream crossing several groups)
       scope      run_type pop_id      waterbody groups records first_year last_year rec_n_start rec_start_median rec_end_median bulk_n_start bulk_start_median bulk_end_median peak_n peak_median
-      group 1; FALL; none   <NA>           <NA>   SANJ    1127       1953      2009         114            10-06          10-15          114             10-06           10-15    114       09-28
+      group 1; FALL; none   <NA>           <NA>   SANJ    1127       1953      2009         114            10-06          10-15           97             10-01           10-30     97       10-05
  population          FALL  40380  HOBITON CREEK   SANJ      68       1953      1991          35            06-01          08-15           35             06-01           08-15     35       06-25
- population          FALL  40345 CHEEWHAT RIVER   SANJ      62       1953      1991          33            02-01          07-24           33             02-01           07-24     32       05-23
+ population          FALL  40345 CHEEWHAT RIVER   SANJ      62       1953      1991          33            02-01          07-24           16             10-12           11-15     15       11-05
  population          FALL  40245 SAN JUAN RIVER   SANJ      60       1960      2009          26            09-15          10-30           26             09-15           10-30     27       09-28
  population          FALL  40355  NITINAT RIVER   SANJ      46       1970      2001          10            10-15          11-15           10             10-15           11-15     10       10-18
  population          FALL  40275  RENFREW CREEK   SANJ      66       1980      1990           4            10-10          10-12            4             10-10           10-12      3       09-29
@@ -11706,11 +11706,11 @@ readings: rec_ as recorded (#240), bulk_ the bulk of spawning (bins as midpoints
  population        2  51113               WAKEMAN RIVER   SEYM       5       1998      1998           1            10-21          12-31            1             10-26           12-26      1
  population        2  51148                EMBLEY CREEK   SEYM       6       2000      2000           1            10-05          11-30            1             10-05           11-30      1
  peak_median edge_n_start edge_start_median edge_n_end edge_end_median arrival_median
-       10-15           54             09-25          5           11-05          09-04
-       10-15           53             09-25          5           11-05          09-01
+       10-15           53             09-25          5           11-05          09-04
+       10-15           52             09-25          5           11-05          09-01
        11-15            1              <NA>          0            <NA>          10-10
        10-15            5             09-15          0            <NA>          09-12
-       10-15            7             09-15          1            <NA>          08-25
+       10-15            6             09-15          1            <NA>          08-25
        09-15            3              <NA>          0            <NA>          07-15
        10-15            6             09-18          2            <NA>          09-05
        10-15            3              <NA>          1            <NA>          09-06
@@ -11857,11 +11857,11 @@ readings: rec_ as recorded (#240), bulk_ the bulk of spawning (bins as midpoints
  population        1  50201                 COHOE CREEK   SEYM      28       1979      1979           1            09-10          10-15            1             09-10           10-15      1
  population        1  50191               KENNETH RIVER   SEYM      27       1986      1986           0             <NA>          11-15            0              <NA>           11-15      1
  peak_median edge_n_start edge_start_median edge_n_end edge_end_median arrival_median
-       09-30           35             09-15         22           10-10          09-10
-       09-30           34             09-12         22           10-10          09-10
+       09-30           34             09-15         22           10-10          09-10
+       09-30           33             09-15         22           10-10          09-10
        10-31            1              <NA>          0            <NA>          09-16
        09-20            5             09-10          1            <NA>          09-01
-       09-15            4              <NA>          4            <NA>          08-19
+       09-15            3              <NA>          4            <NA>          08-19
        10-10            4              <NA>          2            <NA>          09-05
        09-15            3              <NA>          3            <NA>          08-30
        10-10            4              <NA>          2            <NA>          09-15
@@ -12079,28 +12079,28 @@ readings: rec_ as recorded (#240), bulk_ the bulk of spawning (bins as midpoints
 
 ==== SQAM CO : 52 populations pooled, 0 apart (on a stream crossing several groups)
       scope         run_type pop_id                  waterbody groups records first_year last_year rec_n_start rec_start_median rec_end_median bulk_n_start bulk_start_median bulk_end_median peak_n
-      group 1; 2; FALL; none   <NA>                       <NA>   SQAM    2138       1953      2004         708            10-15          12-20          675             10-15           12-19    662
-   run_type             none   <NA>                       <NA>   SQAM    1663       1953      2004         578            10-15          12-25          547             10-15           12-20    537
+      group 1; 2; FALL; none   <NA>                       <NA>   SQAM    2138       1953      2004         708            10-15          12-20          698             10-15           12-20    684
+   run_type             none   <NA>                       <NA>   SQAM    1663       1953      2004         578            10-15          12-25          570             10-15           12-24    559
    run_type                1   <NA>                       <NA>   SQAM     171       1953      2004          93            10-20          12-25           93             10-20           12-25     93
    run_type             FALL   <NA>                       <NA>   SQAM     301       1953      1997          36            10-26          12-15           34             10-25           12-15     31
    run_type                2   <NA>                       <NA>   SQAM       3       1986      1986           1            12-15          01-15            1             12-15           01-15      1
  population                1  49906             STAWAMUS RIVER   SQAM      43       1953      1999          40            10-20          12-17           40             10-20           12-17     40
- population             none  49825               INDIAN RIVER   SQAM      41       1953      1993          39            09-15          01-08           26             09-15           11-25     28
- population             none  49840              SEYMOUR RIVER   SQAM      41       1953      1993          39            07-15          11-30           32             06-27           11-15     29
- population             none  49925             SQUAMISH RIVER   SQAM      40       1953      1990          38            09-15          12-20           36             09-15           11-15     36
+ population             none  49825               INDIAN RIVER   SQAM      41       1953      1993          39            09-15          01-08           39             09-15           01-08     41
+ population             none  49840              SEYMOUR RIVER   SQAM      41       1953      1993          39            07-15          11-30           39             07-15           11-30     36
+ population             none  49925             SQUAMISH RIVER   SQAM      40       1953      1990          38            09-15          12-20           38             09-15           12-20     38
  population             none  49930              MAMQUAM RIVER   SQAM      41       1953      1991          38            10-01          12-17           37             10-01           12-15     37
- population             none  49986            CHEAKAMUS RIVER   SQAM      39       1953      1996          38            09-15          12-30           36             09-12           12-15     35
+ population             none  49986            CHEAKAMUS RIVER   SQAM      39       1953      1996          38            09-15          12-30           38             09-15           12-16     37
  population             none  50031                ASHLU CREEK   SQAM      42       1953      1993          38            09-20          12-13           38             09-20           12-13     38
- population             none  49850                 LYNN CREEK   SQAM      41       1953      1993          36            07-15          12-15           35             07-15           12-13     26
+ population             none  49850                 LYNN CREEK   SQAM      41       1953      1993          36            07-15          12-15           36             07-15           12-15     27
  population                1  50022            PILLCHUCK CREEK   SQAM      43       1953      1999          34            10-15          12-03           34             10-15           12-03     34
  population             none  50071           SHOVELNOSE CREEK   SQAM      41       1953      1992          34            10-10          12-07           34             10-10           12-07     34
- population             none  49870             CAPILANO RIVER   SQAM      56       1953      1993          27            07-09          12-15           26             07-03           12-15     17
+ population             none  49870             CAPILANO RIVER   SQAM      56       1953      1993          27            07-09          12-15           23             06-27           12-15     13
  population             FALL  48936               BISHOP CREEK   SQAM      66       1953      1992          25            10-20          12-15           24             10-20           12-13     20
  population             none  49865               MACKAY CREEK   SQAM      41       1953      1993          17            10-15          12-13           17             10-15           12-13     14
  population             none  50011           TENDERFOOT CREEK   SQAM      43       1980      1997          15            11-15          02-15           15             11-15           02-15     16
  population             none  49971            HOP RANCH CREEK   SQAM      42       1979      1993          14            11-15          01-15           14             11-15           01-15     14
  population             none  50056            CHUK-CHUK CREEK   SQAM      43       1979      1993          13            11-15          01-15           12             11-15           01-15     12
- population             none  49875             BROTHERS CREEK   SQAM      41       1977      1993          12            10-15          12-25           11             10-15           12-21     14
+ population             none  49875             BROTHERS CREEK   SQAM      41       1977      1993          12            10-15          12-25           12             10-15           12-25     15
  population             none  49855             HASTINGS CREEK   SQAM      41       1981      1993          11            10-20          12-15           11             10-20           12-15     13
  population             none  49810                NOONS CREEK   SQAM      41       1984      1993          10            10-18          12-20           10             10-18           12-20     10
  population             none  49920         LOGGERS LANE CREEK   SQAM      43       1979      1988          10            12-15          01-15           10             12-15           01-15     10
@@ -12137,19 +12137,19 @@ readings: rec_ as recorded (#240), bulk_ the bulk of spawning (bins as midpoints
  population             FALL    792           COTTONWOOD CREEK   SQAM       2       1997      1997           1            11-01          01-10            1             11-05           01-05      0
  population             none  44605      LITTLE STAWAMUS CREEK   SQAM       5       1999      2004           0             <NA>          01-06            0              <NA>           01-06      0
  peak_median edge_n_start edge_start_median edge_n_end edge_end_median arrival_median
-       11-15           17             11-15         12           01-05          10-15
-       11-15           14             11-15          9           01-25          10-15
+       11-15           18             11-15         12           01-05          10-15
+       11-15           15             11-15          9           01-25          10-15
        11-15            3              <NA>          3            <NA>          10-15
        11-17            0              <NA>          0            <NA>          11-01
        01-01            0              <NA>          0            <NA>          12-15
        11-25            1              <NA>          1            <NA>          10-15
        10-15            2              <NA>          0            <NA>          08-17
-       09-15            0              <NA>          0            <NA>          06-23
+       09-15            1              <NA>          0            <NA>          06-23
        10-15            0              <NA>          0            <NA>          09-01
        10-30            0              <NA>          0            <NA>          09-15
        10-30            1              <NA>          0            <NA>          08-30
        10-15            1              <NA>          0            <NA>          09-15
-       11-01            0              <NA>          0            <NA>          10-01
+       11-03            0              <NA>          0            <NA>          10-01
        11-03            1              <NA>          1            <NA>          10-03
        10-30            0              <NA>          0            <NA>          10-01
        09-15            0              <NA>          0            <NA>          06-02
@@ -12158,7 +12158,7 @@ readings: rec_ as recorded (#240), bulk_ the bulk of spawning (bins as midpoints
        01-05            0              <NA>          0            <NA>          11-05
        12-15            0              <NA>          1            <NA>          10-25
        11-30            0              <NA>          0            <NA>          11-05
-       11-15            0              <NA>          0            <NA>          09-24
+       11-10            0              <NA>          0            <NA>          09-24
        11-15            0              <NA>          0            <NA>          10-20
        11-15            0              <NA>          0            <NA>          09-18
        12-20            0              <NA>          0            <NA>          11-15
@@ -12609,10 +12609,10 @@ readings: rec_ as recorded (#240), bulk_ the bulk of spawning (bins as midpoints
 
 ==== TAHS CO : 29 populations pooled, 0 apart (on a stream crossing several groups)
       scope run_type pop_id          waterbody groups records first_year last_year rec_n_start rec_start_median rec_end_median bulk_n_start bulk_start_median bulk_end_median peak_n peak_median
-      group     FALL   <NA>               <NA>   TAHS    1767       1953      2025         582            10-04          12-15          556             10-05           12-15    549       10-30
+      group     FALL   <NA>               <NA>   TAHS    1767       1953      2025         582            10-04          12-15          557             10-05           12-15    549       10-30
  population     FALL  41877      TAHSISH RIVER   TAHS      72       1953      2025          43            09-22          12-15           42             09-23           12-15     38       10-26
  population     FALL  41857        KAOUK RIVER   TAHS      69       1953      2025          40            09-28          12-15           39             09-27           12-15     36       10-25
- population     FALL  41867      ARTLISH RIVER   TAHS      72       1953      2025          37            10-01          12-15           35             10-03           12-15     38       10-27
+ population     FALL  41867      ARTLISH RIVER   TAHS      72       1953      2025          37            10-01          12-15           36             10-02           12-15     38       10-27
  population     FALL  41767      HAMMOND CREEK   TAHS      68       1953      2000          31            10-15          12-15           31             10-15           12-15     29       10-16
  population     FALL  39662     MALKSOPE RIVER   TAHS      69       1953      2024          30            10-01          11-23           30             10-01           11-23     31       10-25
  population     FALL  40862     KAUWINCH RIVER   TAHS      67       1954      2001          30            10-04          12-15           30             10-05           12-15     32       10-28
@@ -12673,11 +12673,11 @@ readings: rec_ as recorded (#240), bulk_ the bulk of spawning (bins as midpoints
 
 ==== TAHS SK : 18 populations pooled, 0 apart (on a stream crossing several groups)
       scope run_type pop_id          waterbody groups records first_year last_year rec_n_start rec_start_median rec_end_median bulk_n_start bulk_start_median bulk_end_median peak_n peak_median
-      group  1; FALL   <NA>               <NA>   TAHS     996       1953      2025         127            09-15          10-31          119             09-15           10-26    122       10-08
-   run_type     FALL   <NA>               <NA>   TAHS     502       1953      2025         109            09-11          10-25          102             09-15           10-16    104       10-05
+      group  1; FALL   <NA>               <NA>   TAHS     996       1953      2025         127            09-15          10-31          118             09-15           10-26    121       10-12
+   run_type     FALL   <NA>               <NA>   TAHS     502       1953      2025         109            09-11          10-25          101             09-15           10-16    103       10-05
    run_type        1   <NA>               <NA>   TAHS     494       1957      1998          18            10-05          11-13           17             10-06           11-11     18       10-25
  population     FALL  39610  JANSEN LAKE CREEK   TAHS      62       1953      1992          25            06-25          09-01           25             06-25           09-01     21       07-15
- population     FALL  41755         PARK RIVER   TAHS      59       1953      1998          21            06-15          08-15           21             06-15           08-15     26       07-15
+ population     FALL  41755         PARK RIVER   TAHS      59       1953      1998          21            06-15          08-15           20             05-31           08-31     25       07-15
  population     FALL  41875      TAHSISH RIVER   TAHS      46       1958      2025          16            10-14          11-11           16             10-14           11-11     15       10-20
  population     FALL  41855        KAOUK RIVER   TAHS      41       1954      2025          11            10-01          10-25            8             09-28           10-28      9       10-15
  population     FALL  41865      ARTLISH RIVER   TAHS      42       1981      2025          10            10-08          11-15            8             09-25           11-09      9       10-15
@@ -12973,25 +12973,25 @@ readings: rec_ as recorded (#240), bulk_ the bulk of spawning (bins as midpoints
 
 ==== TOBA CH : 11 populations pooled, 0 apart (on a stream crossing several groups)
       scope   run_type pop_id                        waterbody groups records first_year last_year rec_n_start rec_start_median rec_end_median bulk_n_start bulk_start_median bulk_end_median peak_n
-      group 1; 2; FALL   <NA>                             <NA>   TOBA     891       1953      2006         186            08-15          09-20          164             08-15           09-15    165
-   run_type          1   <NA>                             <NA>   TOBA     795       1953      2006         179            08-15          09-20          158             08-15           09-15    159
-   run_type       FALL   <NA>                             <NA>   TOBA      89       1959      2000           6            09-02          08-15            5             09-25           09-15      4
+      group 1; 2; FALL   <NA>                             <NA>   TOBA     891       1953      2006         186            08-15          09-20          162             08-15           09-15    163
+   run_type          1   <NA>                             <NA>   TOBA     795       1953      2006         179            08-15          09-20          157             08-15           09-15    158
+   run_type       FALL   <NA>                             <NA>   TOBA      89       1959      2000           6            09-02          08-15            4             09-04           09-30      3
    run_type          2   <NA>                             <NA>   TOBA       7       1996      2001           1            09-11          10-10            1             09-15           10-08      2
  population          1  50618 CLEARWATER CREEK; PHILLIPS RIVER   TOBA      99       1953      2006          43            08-15          10-15           43             08-15           10-15     46
  population          1  50538                     ORFORD RIVER   TOBA      74       1953      1999          36            08-15          09-15           32             08-15           09-15     32
  population          1  50528                     QUATAM RIVER   TOBA      69       1954      2000          27            09-15          10-15           12             09-15           10-15     12
  population          1  49802                       TOBA RIVER   TOBA      56       1953      1992          24            07-15          09-15           23             07-15           09-15     22
- population          1  50468                      KLITE RIVER   TOBA      60       1953      1982          20            07-15          08-15           20             07-15           08-15     18
+ population          1  50468                      KLITE RIVER   TOBA      60       1953      1982          20            07-15          08-15           19             07-15           08-15     17
  population          1  50478                LITTLE TOBA RIVER   TOBA      55       1957      1989          20            07-15          08-15           20             07-15           08-15     21
  population          1  50508                       BREM RIVER   TOBA      46       1967      1979           8            08-21          10-02            8             08-21           10-02      8
  population       FALL  49062                   SLIAMMON CREEK   TOBA      44       1959      1999           3            07-15          09-02            2             08-25           10-15      2
- population       FALL  49082                  THEODOSIA RIVER   TOBA      45       1967      2000           3            09-21          07-31            3             09-25           07-31      2
+ population       FALL  49082                  THEODOSIA RIVER   TOBA      45       1967      2000           3            09-21          07-31            2             09-04           09-15      1
  population          1  50518             BREM RIVER TRIBUTARY   TOBA      52       1992      1992           1            09-05          11-01            0              <NA>            <NA>      0
  population          2  50619                   PHILLIPS RIVER   TOBA       7       1996      2001           1            09-11          10-10            1             09-15           10-08      2
  peak_median edge_n_start edge_start_median edge_n_end edge_end_median arrival_median
        09-01            2              <NA>          7           09-11          08-15
        09-01            2              <NA>          7           09-11          08-11
-       08-02            0              <NA>          0            <NA>          09-21
+       08-20            0              <NA>          0            <NA>          09-21
        09-17            0              <NA>          0            <NA>           <NA>
        09-15            1              <NA>          6           09-06          07-15
        08-15            0              <NA>          0            <NA>          08-15
@@ -13001,7 +13001,7 @@ readings: rec_ as recorded (#240), bulk_ the bulk of spawning (bins as midpoints
        07-15            1              <NA>          1            <NA>          08-15
        09-18            0              <NA>          0            <NA>          08-15
        08-30            0              <NA>          0            <NA>          09-26
-       07-02            0              <NA>          0            <NA>          08-15
+       08-20            0              <NA>          0            <NA>          08-15
         <NA>            0              <NA>          0            <NA>          08-01
        09-17            0              <NA>          0            <NA>           <NA>
 
@@ -13179,12 +13179,12 @@ readings: rec_ as recorded (#240), bulk_ the bulk of spawning (bins as midpoints
 
 ==== TSAY CH : 5 populations pooled, 1 apart (on a stream crossing several groups)
       scope run_type pop_id     waterbody    groups records first_year last_year rec_n_start rec_start_median rec_end_median bulk_n_start bulk_start_median bulk_end_median peak_n peak_median
-      group     none   <NA>          <NA>      TSAY     439       1953      2024         196            08-01          09-15          190             08-05           09-15    188       08-15
+      group     none   <NA>          <NA>      TSAY     439       1953      2024         196            08-01          09-15          191             08-05           09-15    189       08-15
  population     none  50294    BRIM RIVER      TSAY      70       1953      2020          47            08-05          09-15           46             08-15           09-15     45       08-15
  population     none  50289   WAHOO CREEK      TSAY      69       1967      2024          46            08-01          09-15           45             08-05           09-15     49       08-25
  population     none  50284  KEMANO RIVER      TSAY      89       1953      2019          43            07-15          09-05           43             07-15           09-05     38       08-15
  population     none  50334 KILDALA RIVER      TSAY      90       1953      2021          41            07-15          08-25           40             07-15           08-25     40       08-15
- population     none  50279 TSAYTIS RIVER      TSAY      73       1962      1989          19            08-15          09-15           16             08-15           09-15     16       08-15
+ population     none  50279 TSAYTIS RIVER      TSAY      73       1962      1989          19            08-15          09-15           17             08-15           09-15     17       08-15
       apart     none  50274 KITLOPE RIVER KITL,TSAY      93       1953      2024          44            07-15          09-15           44             07-15           09-15     41       08-15
  edge_n_start edge_start_median edge_n_end edge_end_median arrival_median
            20             08-05         20           09-15          06-15
@@ -13262,7 +13262,7 @@ readings: rec_ as recorded (#240), bulk_ the bulk of spawning (bins as midpoints
  population       none  50327     FALLS RIVER      TSAY      63       1953      1966           6            08-15          09-15            4             08-15           09-15      0        <NA>
       apart       none  50272   KITLOPE RIVER KITL,TSAY     101       1953      2024          37            08-15          09-15           36             08-15           09-15     30       09-05
  edge_n_start edge_start_median edge_n_end edge_end_median arrival_median
-          161             08-05        112           09-25          07-25
+          160             08-05        112           09-25          07-25
            19             08-05         16           09-25          07-21
            21             08-05         17           10-05          07-21
            18             08-05          2            <NA>          07-25
@@ -13271,7 +13271,7 @@ readings: rec_ as recorded (#240), bulk_ the bulk of spawning (bins as midpoints
            20             08-05         20           09-15          07-25
             5             08-05         12           09-20          07-25
            20             08-05         15           09-25          08-01
-           19             08-05          6           09-10          07-23
+           18             08-05          6           09-10          07-23
             1              <NA>          1            <NA>          08-07
             0              <NA>          0            <NA>          08-01
             0              <NA>          0            <NA>           <NA>
@@ -13294,7 +13294,7 @@ readings: rec_ as recorded (#240), bulk_ the bulk of spawning (bins as midpoints
  population       none  50328     FALLS RIVER      TSAY      63       1954      1966           5            08-15          09-15            4             08-15           09-15      1       09-15
       apart       none  50273   KITLOPE RIVER KITL,TSAY      98       1953      1999          35            08-15          09-15           34             08-15           09-15     30       09-05
  edge_n_start edge_start_median edge_n_end edge_end_median arrival_median
-          136             08-05        116           09-15          08-01
+          135             08-05        116           09-15          08-01
            19             08-05         13           09-25          07-21
            13             08-05          3            <NA>          08-11
            16             08-05          3            <NA>          08-01
@@ -13303,7 +13303,7 @@ readings: rec_ as recorded (#240), bulk_ the bulk of spawning (bins as midpoints
             5             08-05         13           09-15          07-25
            16             08-05         19           09-15          08-01
            16             08-05         16           09-15          08-01
-           15             08-05          9           09-05          08-03
+           14             08-05          9           09-05          08-03
             2              <NA>          1            <NA>          08-11
             0              <NA>          0            <NA>          08-15
             0              <NA>          0            <NA>           <NA>
@@ -13465,13 +13465,13 @@ readings: rec_ as recorded (#240), bulk_ the bulk of spawning (bins as midpoints
 
 ==== UDEN CH : 0 populations pooled, 1 apart (on a stream crossing several groups)
  scope run_type pop_id  waterbody    groups records first_year last_year rec_n_start rec_start_median rec_end_median bulk_n_start bulk_start_median bulk_end_median peak_n peak_median edge_n_start
- apart     none  51809 DEAN RIVER LDEN,UDEN      72       1953      2025          44            08-15          09-30           43             08-15           09-30     44       09-05            8
+ apart     none  51809 DEAN RIVER LDEN,UDEN      72       1953      2025          44            08-15          09-30           44             08-15           09-28     45       09-05            9
  edge_start_median edge_n_end edge_end_median arrival_median
              08-15          2            <NA>          06-15
 
 ==== UDEN CO : 0 populations pooled, 1 apart (on a stream crossing several groups)
  scope run_type pop_id  waterbody    groups records first_year last_year rec_n_start rec_start_median rec_end_median bulk_n_start bulk_start_median bulk_end_median peak_n peak_median edge_n_start
- apart     none  51806 DEAN RIVER LDEN,UDEN      72       1953      1985          26            09-15          12-15           24             09-15           11-30     23       10-15            0
+ apart     none  51806 DEAN RIVER LDEN,UDEN      72       1953      1985          26            09-15          12-15           26             09-15           12-15     25       10-15            0
  edge_start_median edge_n_end edge_end_median arrival_median
               <NA>          0            <NA>          07-15
 
@@ -13489,7 +13489,7 @@ readings: rec_ as recorded (#240), bulk_ the bulk of spawning (bins as midpoints
 
 ==== UDEN CM : 0 populations pooled, 1 apart (on a stream crossing several groups)
  scope run_type pop_id  waterbody    groups records first_year last_year rec_n_start rec_start_median rec_end_median bulk_n_start bulk_start_median bulk_end_median peak_n peak_median edge_n_start
- apart   SUMMER  51808 DEAN RIVER LDEN,UDEN      74       1953      2025          55            08-15          09-30           53             08-15           09-25     48       09-05           11
+ apart   SUMMER  51808 DEAN RIVER LDEN,UDEN      74       1953      2025          55            08-15          09-30           54             08-15           09-25     49       09-05           11
  edge_start_median edge_n_end edge_end_median arrival_median
              08-15          4            <NA>          08-05
 

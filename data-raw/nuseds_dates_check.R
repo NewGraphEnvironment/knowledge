@@ -15,9 +15,13 @@
 #     edge where it began before the earliest start, or ended after the latest end; the two edges are counted apart.
 #     NuSEDS keeps no count per visit, so nothing says a visit outside the window found no spawners: a bracket is
 #     consistent with an edge, never proof of one. A survey date more than a year from the record's year, or a survey
-#     ending before it starts, is a slip and is not compared; a record that ends before it starts joins no rule.
-#   - YEARS. Every DD-MON-YY date takes the century that puts it nearest the record's analysis year, so a coho end in
-#     January falls in the next year and is compared with a survey that ended in December.
+#     ending before it starts, is a slip and is not compared; a record that ends before it starts joins no rule. A start
+#     before the survey is counted over records that give the survey's first day, an end after it over those that give
+#     its last.
+#   - YEARS. Every date is read by its month and day and placed on the record's season year (nuseds_survey()), as
+#     the windows read them, so a coho end in January falls after an October start even where DFO wrote it with the
+#     record's own year (start 25-SEP-93, end 25-FEB-93). The written year is used only to set aside a survey dated
+#     over a year from the record's own.
 #   - THE CANDIDATE RULES for a record that could bound an edge: (a) its survey brackets both edges with at least N
 #     visits (N from 2 to 5), or the start alone (a3s) or the end alone (a3e) with 3; (b) a fence or fixed-site census
 #     (estimate_method "Fixed Site Census" or a Fence among enumeration_methods), which counts fish as they pass and
@@ -79,13 +83,9 @@ cat("\n==== the end of spawning, by era and form\n")
 tab(era = factor(x$era, unique(x$era[order(x$yr)])), end = factor(x$end_form, lvl))
 cat("\n==== the peak, by era and form (NA: no peak given)\n")
 tab(era = factor(x$era, unique(x$era[order(x$yr)])), peak = factor(x$peak_form, lvl))
-# a bin's width in days, from and to inclusive; 0 or less is a bin that runs backwards
-width <- function(from, to) {
-  i <- !is.na(from) & !is.na(to) & from != to
-  out <- rep(NA_integer_, length(from))
-  out[i] <- as.integer(nuseds_date(to[i], x$yr[i]) - nuseds_date(from[i], x$yr[i])) + 1L
-  out
-}
+# a bin's width in days on the season year, from and to inclusive; 0 or less is a bin that runs backwards
+sday <- function(v) nuseds_season(nuseds_doy(v, "nuseds"), x$species_code)
+width <- function(from, to) ifelse(!is.na(from) & !is.na(to) & from != to, sday(to) - sday(from) + 1L, NA_integer_)
 cls <- function(w) cut(w, c(-Inf, 0, 9, 11, 31, Inf), labels = c("reversed", "2-9 days", "10-11 days",
                                                                   "12-31 days", "over 31 days"))
 bins <- data.frame(start = cls(width(x$start_spawn_dt_from, x$start_spawn_dt_to)),
@@ -102,19 +102,23 @@ cat("day of month of single start dates (the ten most common):\n")
 print(utils::head(sort(table(as.integer(substr(x$start_spawn_dt_from[!b & !is.na(x$start_spawn_dt_from)], 1, 2))),
                        decreasing = TRUE), 10))
 
-# ---- full dates: the window's earliest and latest, and the survey (nuseds_survey(), shared with timing_nuseds.R) ----
+# ---- the window and the survey on the season year (nuseds_survey(), shared with timing_nuseds.R) ----
 x <- nuseds_survey(x)
-dt <- function(v) nuseds_date(v, x$yr)
-cat("\n", sum(x$survey_slip), "records give survey dates more than a year from their own year, or ending before",
-    "they start (the upper Bulkley's 2020 record: 20-OCT-08 to 20-SEP-30): not compared\n")
-cat(sum(x$backwards), "records end before they start on these dates: kept out of every rule\n")
-x$start_before_survey <- !is.na(x$start_hi) & !is.na(x$s0) & x$start_hi < x$s0
-x$end_after_survey <- !is.na(x$end_lo) & !is.na(x$s1) & x$end_lo > x$s1
+off_year <- x$survey_slip & !(!is.na(x$start_dtt) & !is.na(x$end_dtt) & sday(x$end_dtt) < sday(x$start_dtt))
+cat("\n", sum(x$survey_slip), "records' surveys are not compared:", sum(off_year), "give a survey year over a year from",
+    "their own (the upper Bulkley's 2020 record: 20-OCT-08 to 20-SEP-30) and", sum(x$survey_slip & !off_year),
+    "a survey that ends before it starts on the season year\n")
+cat(sum(x$backwards), "records end before they start on the season year: kept out of every rule\n")
+# each against the records that give the survey day it is compared with
+x$survey_started <- !is.na(x$s0) & !is.na(x$start_hi)
+x$survey_ended <- !is.na(x$s1) & !is.na(x$end_lo)
+x$start_before_survey <- x$survey_started & x$start_hi < x$s0
+x$end_after_survey <- x$survey_ended & x$end_lo > x$s1
 x$survey_dated <- !is.na(x$s0) & !is.na(x$s1)
 
 cat("\n==== the survey beside the window, by era (records)\n")
 sv <- do.call(rbind, lapply(split(x, factor(x$era, unique(x$era[order(x$yr)]))), function(d) data.frame(
-  records = nrow(d), survey_dated = sum(d$survey_dated), visits_given = sum(!is.na(d$visits)),
+  records = nrow(d), survey_started = sum(d$survey_started), survey_ended = sum(d$survey_ended), visits_given = sum(!is.na(d$visits)),
   visits_median = if (any(!is.na(d$visits))) stats::median(d$visits, na.rm = TRUE) else NA,
   start_before_survey = sum(d$start_before_survey), end_after_survey = sum(d$end_after_survey),
   brackets_start = sum(d$brackets_start), brackets_end = sum(d$brackets_end),
@@ -126,11 +130,11 @@ print(sort(table(x$estimate_method), decreasing = TRUE))
 # ---- NONE OBSERVED and NOT INSPECTED ----
 for (pr in c("NONE OBSERVED", "NOT INSPECTED")) {
   no <- x[x$adult_presence %in% pr, , drop = FALSE]
-  inside <- no$survey_dated & no$s0 <= no$end_hi & no$s1 >= no$start_lo
+  overlap <- no$survey_dated & no$s0 <= no$end_hi & no$s1 >= no$start_lo
   cat("\n====", nrow(no), "dated records say", pr, "; by species and era:\n")
   tab(species = no$species_code, era = factor(no$era, unique(no$era[order(no$yr)])))
-  cat(sum(no$survey_dated), "give survey dates;", sum(inside, na.rm = TRUE),
-      "were surveyed inside the spawning window they give;", sum(!is.na(no$peak_lo)), "give a peak;",
+  cat(sum(no$survey_dated), "give both survey dates;", sum(overlap, na.rm = TRUE),
+      "had a survey overlapping the spawning window they give;", sum(!is.na(no$peak_lo)), "give a peak;",
       sum(no$natural_adult_spawners > 0 | no$total_return_to_river > 0, na.rm = TRUE), "give a spawner count above 0\n")
 }
 
@@ -187,7 +191,7 @@ print(do.call(rbind, lapply(unique(x$era[order(x$yr)]), function(e) {
 
 # a fence counts fish as they pass, which dates arrival: its records' arrival beside their start of spawning
 fz <- x[x$fence & pres & !is.na(x$stream_arrival_dt_from), , drop = FALSE]
-fa <- as.integer(fz$start_lo - dt(x$stream_arrival_dt_from)[x$fence & pres & !is.na(x$stream_arrival_dt_from)])
+fa <- fz$start_lo - nuseds_season(nuseds_doy(fz$stream_arrival_dt_from, "nuseds"), fz$species_code)
 cat("\nfence and fixed-site records with an arrival date:", nrow(fz), "; days from arrival to the recorded start,",
     "quartiles:", paste(stats::quantile(fa, c(0.25, 0.5, 0.75), na.rm = TRUE), collapse = ", "), "\n")
 
@@ -208,14 +212,10 @@ print(do.call(rbind, lapply(names(rules), function(r) {
 
 # ---- chinook windows on each rule's records, five groups ----
 focus <- c("BULK", "MORR", "KISP", "UFRA", "COTR")
-# a bin's midpoint (a single date is itself), as a day of the chinook season year
-day <- function(lo, hi) {
-  m <- lo + as.integer(hi - lo) %/% 2L
-  nuseds_season(nuseds_doy(ifelse(is.na(m), NA_character_, format(m, "%m-%d")), "mmdd"), "CH")
-}
-x$start_mid <- day(x$start_lo, x$start_hi)
-x$end_mid <- day(x$end_lo, x$end_hi)
-x$peak_mid <- day(x$peak_lo, x$peak_hi)
+# a bin's midpoint (a single date is itself), as timing_nuseds.R reads it
+x$start_mid <- nuseds_mid(x$start_spawn_dt_from, x$start_spawn_dt_to, x$species_code)
+x$end_mid <- nuseds_mid(x$end_spawn_dt_from, x$end_spawn_dt_to, x$species_code)
+x$peak_mid <- nuseds_mid(x$peak_spawn_dt_from, x$peak_spawn_dt_to, x$species_code)
 med <- function(v) if (all(is.na(v))) NA_character_ else nuseds_day_str(stats::median(v, na.rm = TRUE))
 cat("\n==== chinook windows (medians, bins as midpoints) on each rule's records, pooled groups\n")
 print(do.call(rbind, lapply(focus, function(w) do.call(rbind, lapply(names(rules), function(r) {
@@ -234,8 +234,8 @@ pops <- do.call(rbind, lapply(split(ch, ch$pop_id), function(d) data.frame(
   years = paste(min(d$yr), max(d$yr), sep = "-"), start_grid = sum(d$start_form %in% "grid day"),
   start_other = sum(d$start_form %in% "other day"), start_bin = sum(d$start_form %in% "bin"),
   visits_given = sum(!is.na(d$visits)), visits_median = if (any(!is.na(d$visits))) stats::median(d$visits, na.rm = TRUE)
-  else NA, survey_dated = sum(d$survey_dated), start_before_survey = sum(d$start_before_survey),
-  end_after_survey = sum(d$end_after_survey), brackets_both = sum(d$brackets_start & d$brackets_end),
+  else NA, survey_started = sum(d$survey_started), start_before_survey = sum(d$start_before_survey),
+  survey_ended = sum(d$survey_ended), end_after_survey = sum(d$end_after_survey), brackets_both = sum(d$brackets_start & d$brackets_end),
   a3 = sum(d$bracket & d$visits0 >= 3L & d$ok), fence = sum(d$fence), auc = sum(d$auc),
   method = names(sort(table(d$estimate_method), decreasing = TRUE))[1])))
 print(pops[order(pops$wsg, -pops$records), ], row.names = FALSE)
@@ -247,8 +247,8 @@ print(do.call(rbind, lapply(split(mn, list(mn$waterbody, ifelse(mn$yr < 1992, "t
   function(d) data.frame(waterbody = d$waterbody[1], period = if (d$yr[1] < 1992) "to 1991" else "1992 on",
     records = nrow(d), years = paste(min(d$yr), max(d$yr), sep = "-"), start_grid = sum(d$start_form %in% "grid day"),
     start_bin = sum(d$start_form %in% "bin"), visits_median = if (any(!is.na(d$visits))) stats::median(d$visits,
-    na.rm = TRUE) else NA, survey_dated = sum(d$survey_dated), start_before_survey = sum(d$start_before_survey),
-    end_after_survey = sum(d$end_after_survey), a3s = sum(d$brackets_start & d$visits0 >= 3L & d$ok),
+    na.rm = TRUE) else NA, survey_started = sum(d$survey_started), start_before_survey = sum(d$start_before_survey),
+    survey_ended = sum(d$survey_ended), end_after_survey = sum(d$end_after_survey), a3s = sum(d$brackets_start & d$visits0 >= 3L & d$ok),
     a3e = sum(d$brackets_end & d$visits0 >= 3L & d$ok), none_observed = sum(d$adult_presence %in% "NONE OBSERVED"),
     method = names(sort(table(d$estimate_method), decreasing = TRUE))[1]))), row.names = FALSE)
 
@@ -270,3 +270,7 @@ if (!all(pre$start_before_survey)) stop("upper Bulkley: 2009, 2016 and 2017 do n
                                          call. = FALSE)
 cat("check: the upper Bulkley holds 40 dated records, 27 from 1953-1991 and 13 from 2008-2020, and its 2009, 2016",
     "and 2017 starts precede their surveys, as #241 read them\n")
+cat("every upper Bulkley record whose start precedes its survey:", paste(ub$waterbody[ub$start_before_survey],
+    ub$yr[ub$start_before_survey], collapse = "; "), "\n")
+cat("upper Bulkley records saying NONE OBSERVED:", paste(ub$waterbody[!ub$present], ub$yr[!ub$present],
+    collapse = "; "), "\n")

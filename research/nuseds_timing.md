@@ -18,28 +18,31 @@ Four things in the 102,800 dated records of the six species show it (`20261124_n
 - **The dates are rounded.** Before 1990 a start is a single date on the five-day grid (the 1st, 5th, 10th, 15th,
   20th, 25th, 30th or 31st) on 89 to 92 % of records; the 15th alone holds 42,489 single starts. From the 1990s the
   dates are ten-day bins (1 to 10, 11 to 20, 21 to the month's end): 3,009 of 12,542 starts in the 1990s, 7,157 of
-  8,173 from 2010. Of 15,678 start bins, 15,004 are 10 or 11 days long; 664 are longer, and 3 run backwards.
-- **The start is often recorded before the survey began.** Where a record gives survey dates, its start precedes
-  the first survey day on 10,261 records before 1970 and 1,340 from 2010. Visits were seldom recorded before the
+  8,173 from 2010. Of 15,678 start bins, 15,005 are 10 or 11 days long; 664 are longer, and 2 run backwards.
+- **The start is often recorded before the survey began.** Where a record gives the survey's first day, its start
+  precedes it on 10,249 of 21,773 records before 1970 and 1,341 of 7,115 from 2010. Visits were seldom recorded before the
   1980s (21 records before 1980 give a number).
-- **Dates are written where no spawner was seen.** 3,725 dated records say NONE OBSERVED. Of the 2,478 that give
-  survey dates, 1,908 were surveyed inside the very window they give; none gives a spawner count above 0. Their
+- **Dates are written where no spawner was seen.** 3,725 dated records say NONE OBSERVED. Of the 2,479 that give
+  both survey dates, 1,910 had a survey overlapping the very window they give; none gives a spawner count above 0. Their
   dates are the stream's expected timing. 332 dated records say NOT INSPECTED. The windows #240 built count both.
 - **How a date was made is mostly unrecorded.** `estimate_method` is "Unknown Estimate Method" on 82,437 dated
   records, and `precision` and `reliability` are unknown or blank on nearly every one.
 
 **The upper Bulkley chinook,** the worked example (#241; the upper mainstem, `pop_id` 47859, and Buck Creek, 49223;
 40 dated records). From 1953 to 1991 (27 records) the dates are round, mostly 15 August and 15 September, with no
-count of visits, mostly no survey dates and "Unknown Estimate Method". Buck Creek's 1970, 1977 and 1982 records say
+count of visits, mostly no survey dates and "Unknown Estimate Method". Buck Creek's 1977, 1978 and 1983 records say
 NONE OBSERVED and still carry a full window. From 2008 to 2020 (13 records) the dates are ten-day bins, from 1 to 4
-visits a year, mostly "Peak Live + Dead". The recorded start precedes the survey in 2009 (one visit, on 10
-September), 2016 (survey from 28 August) and 2017 (survey from 30 September), each giving a start of 11 to 20 August.
+visits a year, mostly "Peak Live + Dead". The recorded start precedes the survey on five of them: 2009 (one
+visit, on 10 September), 2016 (survey from 28 August) and 2017 (survey from 30 September), each giving a start of 11
+to 20 August, and 2018 and 2019. It does so on the mainstem's 1986 to 1988 records too, and on Buck Creek's 1982 and
+1988.
 No record shows a visit that found no spawners before the start or after the end. The 2020 record's survey runs 20 October 2008 to
-20 September 2030, a typing slip; 463 dated records carry one like it, and are not compared.
+20 September 2030, a typing slip. 371 dated records' surveys are not compared: 62 give a survey year over a year
+from the record's own, and 309 a survey that ends before it starts even on the season year (below).
 
 **The Morice and Nanika** (#241 asked for them before any MORR row is revised). To 1991 they read as the upper
 Bulkley does: 34 of 39 Morice and 19 of 21 Nanika starts on the grid, a median of 2 visits where any is given, and
-the start before the survey on 15 of 20 Morice and 9 of 12 Nanika records with survey dates. From 1995 they are
+the start before the survey on 15 of 24 Morice and 9 of 15 Nanika records that give the survey's first day. From 1995 they are
 better surveyed: 24 of 25 starts in each are bins, a median of 4 visits, mostly "Area Under the Curve", and 5 Morice
 and 2 Nanika records have a survey of 3 or more visits that began before the recorded start. Even so, the start
 precedes the survey on 8 of 20 Morice and 10 of 19 Nanika records.
@@ -50,12 +53,12 @@ Six candidate rules were measured, each over records whose adults were present a
 
 | rule | records | chinook groups with 5 or more |
 |---|---:|---:|
-| a3: the survey brackets both edges, 3 or more visits | 2,078 | 12 |
-| a3s: the survey began before the recorded start, 3 or more visits | 5,672 | 18 |
+| a3: the survey brackets both edges, 3 or more visits | 2,076 | 12 |
+| a3s: the survey began before the recorded start, 3 or more visits | 5,678 | 18 |
 | a3e: the survey ended after the recorded end, 3 or more visits | 3,211 | 19 |
 | b: a fence or fixed-site census | 560 | 1 |
-| c: start and end single dates off the five-day grid | 1,604 | 15 |
-| d: estimated by area under the curve | 3,668 | 13 |
+| c: start and end single dates off the five-day grid | 1,605 | 15 |
+| d: estimated by area under the curve | 3,679 | 13 |
 
 Each rule had to pass a test set before it was run: dated NONE OBSERVED records must meet its conditions at under
 half the rate present records do (else the rule admits dates written whatever was seen), and no more than half the
@@ -80,11 +83,14 @@ An edge is given for a group and species only where 5 or more records qualify, a
   `end_spawn_dt_from`) over every dated record. Kept so the windows the UFRA and COTR rows rest on stay
   reproducible; every one of its 6,112 rows equals #240's.
 - **The bulk of spawning** (`bulk_`): the median start to the median end, a bin entering as its midpoint, over
-  records whose adults were present and whose window does not end before it starts. Reading a start bin's first day
-  and an end bin's last day, as the as-recorded window does, widens it by up to nine days at each edge.
-- **The peak** (`peak_`): the median peak, read the same way.
+  records whose adults were present and whose window does not end before it starts on the season year. Reading a
+  start bin's first day and an end bin's last day, as the as-recorded window does, moves each edge outward by half
+  the bin: four or five days for a ten-day bin, more for the 664 wider ones.
+- **The peak** (`peak_`): the median peak, read the same way over present records that give a peak, some of which
+  give no start or end, so it carries its own years (`peak_first_year`, `peak_last_year`): UFRA's chinook peaks run to
+  2014, its starts and ends to 2000.
 - **An edge** (`edge_`): the median start over a3s records and the median end over a3e records, given where 5 or
-  more qualify. 162 of 357 group windows have a start edge and 124 an end edge; chinook 24 of 81 either.
+  more qualify. 162 of 357 group windows have a start edge and 123 an end edge; chinook 24 of 81 either.
 
 ## What a NuSEDS window may claim beside a cited row
 
@@ -93,7 +99,8 @@ It is no reason to move a row's start or end, except where an edge is given, and
 seen edge, never proof. A row's note says so in these words, filled from the windows table:
 
 > NuSEDS (release 20260601; `data-raw/timing_nuseds.R`, `scripts/logs/timing/<date>_timing_nuseds.txt`): the bulk of
-> spawning runs <bulk start> to <bulk end>, peaking about <peak> (<n> population-years, <years>). NuSEDS's start and
+> spawning runs <bulk start> to <bulk end> (<n> population-years, <years>), peaking about <peak> (<peak n>, <peak
+> years>). NuSEDS's start and
 > end dates are estimates, not the first and last spawners seen, so they support the middle of this window and cannot
 > test its edges[; its <start/end> of <date> rests on <n> records whose survey of three or more visits began before
 > it (ran past it)].
@@ -124,7 +131,11 @@ Lake), the North Thompson's in LNTH and the Skeena's in LSKE. They were tried an
 About 3,000 coho and chum spawning ends fall in January to March (coho 2,512, chum 540). On a calendar year their
 day numbers sit before August, so a median over a group mixes them with October ends. The windows count days on a
 season year that starts on 1 April (1 September for steelhead, which spawn in spring), and the comparison with the
-table's rows uses the same year. A bin is halved after both its ends are on the season year.
+table's rows uses the same year. Every date is read by its month and day alone: DFO often writes a January-to-March
+end, or a survey's last day, with the record's own year (start 25-SEP-93, end 25-FEB-93), which would put it before
+the start; 98 present records read that way would run backwards. A survey that opens before the season start (a
+whole-year survey from 2 January) stays in the season it opened. A bin is halved after both its ends are on the
+season year.
 
 ## The four groups' rows beside NuSEDS, estimate against estimate
 
@@ -157,9 +168,9 @@ by 37 days. BULK's chinook window pools seven tributary populations; the Bulkley
 apart.
 
 **UFRA and COTR** (#96, read by NewGraphEnvironment/wet#182). Their spawning rows are NuSEDS's as-recorded windows,
-which the script still reproduces. Under the method they barely move: UFRA's records run 1967 to 2000, before bins
-were used, and neither group holds a NONE OBSERVED record. UFRA's bulk is 08-12 to 09-05, peaking 08-24, and its start
-has an edge, 08-15 on 11 records; COTR's bulk is 08-10 to 09-05, peaking 08-24, with no edge. Their start dates are
-estimates like any other: 82 of UFRA's 123 starts and 18 of COTR's 35 fall on the five-day grid, and 28 of UFRA's 75
-and 12 of COTR's 32 starts with a survey date precede that survey. The rows keep their dates, and their notes say
+which the script still reproduces. Under the method they barely move: UFRA's starts and ends run 1967 to 2000, before
+bins were used, and neither group holds a NONE OBSERVED record. UFRA's bulk is 08-12 to 09-05, peaking 08-24 (over 172 peaks,
+1967 to 2014; after 2000 only peaks are given), and its start has an edge, 08-15 on 11 records; COTR's bulk is 08-10 to 09-05, peaking 08-24, with no edge. Their start dates are
+estimates like any other: 82 of UFRA's 123 starts and 19 of COTR's 35 fall on the five-day grid, and 28 of UFRA's 75
+and 12 of COTR's 32 starts with a survey's first day precede it. The rows keep their dates, and their notes say
 what NuSEDS shows (owner, 2026-11-24); any change to the dates is #242's.

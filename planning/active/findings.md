@@ -84,3 +84,21 @@ Published `knowledge/nuseds/v1` (release 20260601), 102,800 dated records of the
 |-------|------------|
 | `arrow::read_parquet(col_select = if (is.null(cols)) NULL else ...)` returned 0 columns | `col_select` is tidy-evaluated; branch the call. `nuseds_read()` refuses a read with no columns |
 | The separation test passed a rule on low NONE OBSERVED rates that might be era, not separation | The same rates printed within each era; the separation holds in the 1990s, where both samples are large |
+
+## Code-check round 1 corrections (2026-11-24, `review-round1.md`)
+
+Eight findings, all real; the logs were rerun after the fixes and supersede the Phase 1 figures above where they differ.
+
+- **Season year for every date.** DFO writes a January-to-March end, or a survey's last day, with the record's own
+  year (start 25-SEP-93, end 25-FEB-93), so full dates read 98 present records as backwards and dropped them (76 coho).
+  `nuseds_survey()` now places every date by month and day on the season year, as the windows always did; a survey
+  opening before the season start (whole-year surveys from 2 January, steelhead surveys from August) stays in the
+  season it opened. Survey slips fell from 463 to 371 (62 off-year, 309 reversed on the season year).
+- **Denominators.** A start before the survey is now counted over records giving the survey's first day, an end after
+  it over those giving its last. Morice to 1991: 15 of 24; Nanika 9 of 15.
+- **Facts misread from the log:** Buck Creek's NONE OBSERVED years are 1977, 1978 and 1983 (not 1970, 1977, 1982);
+  the upper Bulkley's starts precede the survey in 1986-1988, 2009, 2016-2019 and Buck Creek's 1982 and 1988; COTR
+  has 19 grid starts of 35, not 18. The script now prints both lists.
+- **The peak** is read over present records that give one, some with no start or end, and carries its own years
+  (UFRA's run to 2014). The as-recorded reading moves each edge outward by half a bin, not nine days. NONE OBSERVED
+  surveys overlap the window they give (1,910), not lie inside it.

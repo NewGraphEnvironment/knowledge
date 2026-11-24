@@ -28,7 +28,8 @@
 #       bulk_*  THE BULK OF SPAWNING: the median start to the median end, a bin entering as its midpoint (a bin over 31
 #               days, or one running backwards, gives none), over records whose adults were present (adult presence
 #               neither NONE OBSERVED nor NOT INSPECTED) and whose window does not end before it starts.
-#       peak_*  THE PEAK, read the same way over the same records.
+#       peak_*  THE PEAK, read the same way over present records that give a peak, some of which give no start or
+#               end (UFRA's chinook peaks run to 2014, its starts to 2000), so it carries its own years.
 #       edge_*  AN EDGE CONSISTENT WITH ONE SOMEONE SAW: the median start over records whose survey began before the
 #               recorded start with at least 3 visits, and the median end over records whose survey ended after the
 #               recorded end with at least 3 visits, each given only where 5 or more records qualify (its n is
@@ -144,7 +145,10 @@ summ <- function(d) data.frame(
   bulk_start_median = ds(d$start_mid, 0.5), bulk_start_q10 = ds(d$start_mid, 0.1),
   bulk_start_q90 = ds(d$start_mid, 0.9), bulk_end_median = ds(d$end_mid, 0.5), bulk_end_q10 = ds(d$end_mid, 0.1),
   bulk_end_q90 = ds(d$end_mid, 0.9),
-  peak_n = sum(!is.na(d$peak_mid)), peak_median = ds(d$peak_mid, 0.5), peak_q10 = ds(d$peak_mid, 0.1),
+  peak_n = sum(!is.na(d$peak_mid)),
+  peak_first_year = if (any(!is.na(d$peak_mid))) min(as.integer(d$analysis_yr[!is.na(d$peak_mid)])) else NA_integer_,
+  peak_last_year = if (any(!is.na(d$peak_mid))) max(as.integer(d$analysis_yr[!is.na(d$peak_mid)])) else NA_integer_,
+  peak_median = ds(d$peak_mid, 0.5), peak_q10 = ds(d$peak_mid, 0.1),
   peak_q90 = ds(d$peak_mid, 0.9),
   edge_n_start = sum(!is.na(d$edge_start_day)), edge_start_median = edge(d$edge_start_day),
   edge_n_end = sum(!is.na(d$edge_end_day)), edge_end_median = edge(d$edge_end_day),
@@ -215,7 +219,7 @@ cols_csv <- c("scope", "run_type", "pop_id", "waterbody", "groups", "records", "
               "rec_n_start", "rec_n_end", "rec_start_median", "rec_start_q10", "rec_start_q90", "rec_end_median",
               "rec_end_q10", "rec_end_q90", "bulk_n_start", "bulk_n_end", "bulk_start_median", "bulk_start_q10",
               "bulk_start_q90", "bulk_end_median", "bulk_end_q10", "bulk_end_q90", "peak_n", "peak_median",
-              "peak_q10", "peak_q90", "edge_n_start", "edge_start_median", "edge_n_end", "edge_end_median",
+              "peak_q10", "peak_q90", "peak_first_year", "peak_last_year", "edge_n_start", "edge_start_median", "edge_n_end", "edge_end_median",
               "arrival_median", "n_arrival")
 show <- c("scope", "run_type", "pop_id", "waterbody", "groups", "records", "first_year", "last_year", "rec_n_start",
           "rec_start_median", "rec_end_median", "bulk_n_start", "bulk_start_median", "bulk_end_median", "peak_n",
