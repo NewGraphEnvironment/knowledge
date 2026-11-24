@@ -46,11 +46,11 @@ Published `knowledge/nuseds/v1` (release 20260601), 102,800 dated records of the
   1,345 from 2010.
 - **NONE OBSERVED.** 3,725 dated records say NONE OBSERVED; 2,478 give survey dates and 1,908 of those were surveyed
   inside the very window they give; 3,625 give a peak; none gives a spawner count above 0. NOT INSPECTED: 332 dated,
-  72 surveyed inside their window, 304 with a peak. Their dates are the stream's expected timing, written whatever
+  72 surveyed inside their window, 305 with a peak. Their dates are the stream's expected timing, written whatever
   was seen, so the method drops both presences from its windows (the `as_recorded` window keeps them).
-- **Candidate rules** (present records with a start and an end): a3 (survey brackets both edges, 3+ visits) 2,077;
-  a3s (the start, 3+) 5,671; a3e (the end, 3+) 3,209; b (fence or fixed-site) 560; c (off the grid) 1,603; d (area
-  under the curve) 3,667. Chinook pooled groups with 5+: a3 12, a3s 18, a3e 19, b 1, c 15, d 13.
+- **Candidate rules** (present records with a start and an end): a3 (survey brackets both edges, 3+ visits) 2,078;
+  a3s (the start, 3+) 5,672; a3e (the end, 3+) 3,211; b (fence or fixed-site) 560; c (off the grid) 1,604; d (area
+  under the curve) 3,668. Chinook pooled groups with 5+: a3 12, a3s 18, a3e 19, b 1, c 15, d 13.
 - **The test set before it ran.** Every rule but b passes: NONE OBSERVED records meet its conditions at 0.01 to
   0.14 of the present rate, and under half its records put an edge on the grid. b fails on the grid (0.63 of its
   records), and its records' recorded start falls a median 20 days after their arrival (quartiles 10 and 37). Within

@@ -1,13 +1,13 @@
 # data-raw/timing_nuseds.R
 # ---------------------------------------------------------------------------
-# NuSEDS spawning windows for every watershed group and species with dated spawner records (#96, #240), each set
-# beside the rows of the timing table (data/life_history_timing.csv). The table's rows are entered by hand, as its
-# other rows are; this script writes no row.
+# NuSEDS spawning windows for every watershed group and species with dated spawner records (#96, #240, #256), each
+# set beside the rows of the timing table (data/life_history_timing.csv). The table's rows are entered by hand, as
+# its other rows are; this script writes no row.
 #
 # WHY / DESIGN NOTES:
-#   - THE PUBLISHED RECORDS. It reads knowledge/nuseds/<VERSION> over HTTPS (the objects are public) and refuses a
-#     Parquet whose sha256 is not the manifest's, so a run names the set it read: the release, the sha256 and the
-#     commit that published it are printed first.
+#   - THE PUBLISHED RECORDS. It reads knowledge/nuseds/<VERSION> over HTTPS (the objects are public) through
+#     data-raw/nuseds_dates_read.R, which refuses a Parquet whose sha256 is not the manifest's, so a run names the set
+#     it read: the release, the sha256 and the commit that published it are printed first.
 #   - POPULATIONS BY WATERSHED CODE. A record's FWA_WATERSHED_CDE is matched to the Freshwater Atlas. A population
 #     whose code lies in one group pools into that group's window. A code that runs through several groups (a
 #     mainstem: the Bulkley, the Morice, the Skeena) says nothing about where on it the fish spawn, so such a
@@ -18,31 +18,45 @@
 #     the other groups its code crosses. The table is keyed by reach, not code: the Fraser's one code runs through
 #     every Fraser group. DFO's census-site points cannot place a reach: Morice River's lies in BULK (#244's
 #     exploration).
-#   - THE WINDOW. For each population and year: spawning starts at START_SPAWN_DT_FROM and ends at END_SPAWN_DT_TO,
-#     or END_SPAWN_DT_FROM where DFO gives no END_SPAWN_DT_TO. Dates are DD-MON-YY; only the month and day are read.
-#     A group's window runs from the median start to the median end over its dated records (n_start, n_end), with the
-#     10th and 90th percentiles. A record is one population, stream (gfe_id) and year, so n counts population-years
-#     except where a population was counted on two streams in one year (16 dated records with a watershed code, of
-#     two populations, in the 2026-06-01 release). Days are counted on a season year that starts on 1 April
-#     (1 September for steelhead, which spawn in spring), so a coho or chum spawning end in January counts after
-#     December, not before August. Each
-#     population's own window and run type are printed beside the group's, and a window per run type where a group
-#     holds more than one, so a reader sees where one stream sets the window and where runs differ. Stream arrival is
-#     printed for the migration rows.
-#   - THE COMPARISON. Every row of the timing table is set beside its group's window: a spawning row's start and end,
-#     and a migration row's end against the day before NuSEDS's median start (the table's convention that migration
-#     ends where spawning starts), each as a difference in days (NuSEDS minus the row). Other stages have no NuSEDS
-#     measure. The group's apart populations are listed under each compared row. No threshold: every difference is
-#     printed, largest first.
+#   - WHAT A NUSEDS DATE IS (#256, research/nuseds_timing.md, data-raw/nuseds_dates_check.R). A start, peak or end
+#     of spawning is an estimate: a date on the five-day grid before the 1990s, a ten-day bin after, often recorded
+#     before the survey began, and written on records whose survey saw no spawner at all. So the window is read for
+#     its middle, and an edge only where a survey stands behind it. Each window carries four readings:
+#       rec_*   AS RECORDED, #240's window: spawning starts at START_SPAWN_DT_FROM and ends at END_SPAWN_DT_TO, or
+#               END_SPAWN_DT_FROM where DFO gives no END_SPAWN_DT_TO, over every dated record. Kept so the windows
+#               the published rows rest on (#96's UFRA and COTR) stay reproducible.
+#       bulk_*  THE BULK OF SPAWNING: the median start to the median end, a bin entering as its midpoint (a bin over 31
+#               days, or one running backwards, gives none), over records whose adults were present (adult presence
+#               neither NONE OBSERVED nor NOT INSPECTED) and whose window does not end before it starts.
+#       peak_*  THE PEAK, read the same way over the same records.
+#       edge_*  AN EDGE CONSISTENT WITH ONE SOMEONE SAW: the median start over records whose survey began before the
+#               recorded start with at least 3 visits, and the median end over records whose survey ended after the
+#               recorded end with at least 3 visits, each given only where 5 or more records qualify (its n is
+#               always given). NuSEDS keeps no count per visit, so this is never proof of an edge.
+#     Dates are DD-MON-YY; only the month and day are read for a day. Medians come with the 10th and 90th
+#     percentiles. A record is one population, stream (gfe_id) and year, so n counts population-years except where a
+#     population was counted on two streams in one year (16 dated records with a watershed code, of two populations,
+#     in the 2026-06-01 release). Days are counted on a season year that starts on 1 April (1 September for
+#     steelhead, which spawn in spring), so a coho or chum spawning end in January counts after December, not before
+#     August. Each population's own window and run type are printed beside the group's, and a window per run type
+#     where a group holds more than one, so a reader sees where one stream sets the window and where runs differ.
+#     Stream arrival (as recorded, every dated record) is printed for the migration rows.
+#   - THE COMPARISON. Every row of the timing table is set beside its group's window, estimate against estimate: a
+#     spawning row's start and end beside NuSEDS's bulk, its middle beside NuSEDS's peak, and its start and end beside
+#     an edge where one is given; a migration row's end beside the day before the bulk's median start (the table's
+#     convention that migration ends where spawning starts). Each is a difference in days (NuSEDS minus the row).
+#     Other stages have no NuSEDS measure. The group's apart populations are listed under each compared row. No
+#     threshold: every difference is printed, largest first.
 #   - A CHECK. The UFRA and COTR chinook rows rest on #96's windows (scripts/logs/timing/20261118_timing_nuseds.txt):
-#     the script stops unless it reproduces them, and BULK chinook's pooled window as #240 measured it.
+#     the script stops unless the as-recorded reading reproduces them, and BULK chinook's pooled window as #240
+#     measured it.
 #
 # INPUT:  https://fresh-bc.s3.us-west-2.amazonaws.com/knowledge/nuseds/<VERSION>/ (manifest.json,
 #         nuseds_records.parquet), data/nuseds_reach_groups.csv, data/life_history_timing.csv, a database holding
 #         whse_basemapping (PG*)
 # OUTPUT: the windows and the comparison, printed; with OUT= the windows as a CSV, one row per window: per group and
 #         species with pooled records its window (scope group), one per run type where it holds several (run_type),
-#         and one per population pooled (population) or listed apart (apart)
+#         and one per population pooled (population) or listed apart (apart); its columns are the four readings above
 # RUN:    d=$(date -u +%Y%m%d); t=${TMPDIR:-/tmp}/${d}_timing_nuseds
 #         (set -o pipefail; OUT=${t}_windows.csv Rscript data-raw/timing_nuseds.R 2>&1 | tee ${t}.txt) &&
 #           cp ${t}.txt ${t}_windows.csv scripts/logs/timing/   (repo root)
@@ -55,6 +69,7 @@
 # ---------------------------------------------------------------------------
 pkgload::load_all(quiet = TRUE)
 options(warn = 1, width = 200)
+source("data-raw/nuseds_dates_read.R")
 
 env_list <- function(v) {
   v <- toupper(trimws(strsplit(Sys.getenv(v), ",")[[1]]))
@@ -64,7 +79,7 @@ want_groups <- env_list("WSG")
 want_species <- env_list("SPECIES")
 version <- Sys.getenv("VERSION", "v1")
 out <- Sys.getenv("OUT")
-species_codes <- c(Chinook = "CH", Coho = "CO", Sockeye = "SK", Pink = "PK", Chum = "CM", Steelhead = "ST")
+species_codes <- nuseds_species
 if (length(bad <- setdiff(want_species, species_codes))) {
   stop("SPECIES outside ", paste(species_codes, collapse = ", "), ": ", paste(bad, collapse = ", "), call. = FALSE)
 }
@@ -72,29 +87,14 @@ filtered <- length(want_groups) > 0L || length(want_species) > 0L
 if (filtered && nzchar(out)) {
   stop("OUT is the full run's table: a run with WSG or SPECIES prints only, so it never replaces it", call. = FALSE)
 }
-season_start <- c(CH = "04-01", CO = "04-01", SK = "04-01", PK = "04-01", CM = "04-01", ST = "09-01")
+edge_min <- 5L
 
 # ---- the published records ----
-base <- paste0("https://fresh-bc.s3.us-west-2.amazonaws.com/knowledge/nuseds/", version, "/")
-fetch <- function(name) {
-  dest <- tempfile(fileext = paste0(".", tools::file_ext(name)))
-  r <- curl::curl_fetch_disk(paste0(base, name), dest)
-  if (r$status_code != 200L) stop("GET ", base, name, " returned HTTP ", r$status_code, call. = FALSE)
-  dest
-}
-man <- jsonlite::read_json(fetch("manifest.json"))
-mf <- Filter(function(f) identical(f$table, "nuseds_records"), man$files)
-if (length(mf) != 1L) stop(base, "manifest.json lists nuseds_records ", length(mf), " times", call. = FALSE)
-mf <- mf[[1]]
-pq <- fetch(mf$path)
-sha <- .knw_sha256(pq)
-if (!identical(sha, mf$sha256)) stop(mf$path, " sha256 ", sha, " is not the manifest's ", mf$sha256, call. = FALSE)
 cols <- c("pop_id", "gfe_id", "waterbody", "species", "run_type", "analysis_yr", "fwa_watershed_cde",
-          "stream_arrival_dt_from", "start_spawn_dt_from", "end_spawn_dt_from", "end_spawn_dt_to")
-x <- as.data.frame(arrow::read_parquet(pq, col_select = dplyr::all_of(cols)))
-cat("NuSEDS", man$id, "release", man$provenance$nuseds_release, "published from knowledge",
-    man$provenance$published_from_commit, "\n", mf$path, "sha256", sha, "(the manifest's),", nrow(x), "rows\n")
-
+          "stream_arrival_dt_from", "start_spawn_dt_from", "start_spawn_dt_to", "peak_spawn_dt_from",
+          "peak_spawn_dt_to", "end_spawn_dt_from", "end_spawn_dt_to", "start_dtt", "end_dtt", "no_inspections_used",
+          "adult_presence")
+x <- nuseds_read(version, cols)
 x$species_code <- unname(species_codes[x$species])
 x <- x[!is.na(x$species_code), , drop = FALSE]
 x$end_dt <- ifelse(is.na(x$end_spawn_dt_to), x$end_spawn_dt_from, x$end_spawn_dt_to)
@@ -104,75 +104,56 @@ cat(sum(dated), "dated records of", length(unique(x$pop_id[dated])), "population
 x <- x[!is.na(x$fwa_watershed_cde), , drop = FALSE]
 
 # ---- days on the season year ----
-# day of a leap year (2000) for "DD-MON-YY" or "MM-DD"; a day before the species' season start counts in the next year
-doy <- function(d, format) {
-  out <- rep(NA_integer_, length(d))
-  i <- !is.na(d)
-  if (!any(i)) return(out)
-  md <- withr::with_locale(c(LC_TIME = "C"), as.Date(paste0(if (format == "nuseds") substr(d[i], 1, 6) else d[i],
-                                                            if (format == "nuseds") "-2000" else "-2000"),
-                                                     format = if (format == "nuseds") "%d-%b-%Y" else "%m-%d-%Y"))
-  if (anyNA(md)) stop("dates not ", format, ": ", paste(unique(d[i][is.na(md)]), collapse = ", "), call. = FALSE)
-  out[i] <- as.integer(format(md, "%j"))
-  out
-}
-season <- function(day, sp) {
-  s0 <- doy(season_start[sp], "mmdd")
-  ifelse(!is.na(day) & day < s0, day + 366L, day)
-}
-day_str <- function(v) ifelse(is.na(v), NA_character_,
-                              format(as.Date((round(v) - 1) %% 366, origin = "2000-01-01"), "%m-%d"))
-x$start_day <- season(doy(x$start_spawn_dt_from, "nuseds"), x$species_code)
-x$end_day <- season(doy(x$end_dt, "nuseds"), x$species_code)
-x$arrival_day <- season(doy(x$stream_arrival_dt_from, "nuseds"), x$species_code)
+x$start_day <- nuseds_season(nuseds_doy(x$start_spawn_dt_from, "nuseds"), x$species_code)
+x$end_day <- nuseds_season(nuseds_doy(x$end_dt, "nuseds"), x$species_code)
+x$arrival_day <- nuseds_season(nuseds_doy(x$stream_arrival_dt_from, "nuseds"), x$species_code)
+x <- nuseds_survey(x)
+x$method <- x$present & !x$backwards
+mid <- function(from, to) ifelse(x$method, nuseds_mid(from, to, x$species_code), NA_integer_)
+x$start_mid <- mid(x$start_spawn_dt_from, x$start_spawn_dt_to)
+x$end_mid <- mid(x$end_spawn_dt_from, x$end_spawn_dt_to)
+x$peak_mid <- mid(x$peak_spawn_dt_from, x$peak_spawn_dt_to)
+x$edge_start_day <- ifelse(x$edge_start, x$start_mid, NA_integer_)
+x$edge_end_day <- ifelse(x$edge_end, x$end_mid, NA_integer_)
+has_start <- !is.na(x$start_spawn_dt_from) | !is.na(x$start_spawn_dt_to)
+has_end <- !is.na(x$end_spawn_dt_from) | !is.na(x$end_spawn_dt_to)
+cat("the bulk and peak leave out", sum(!x$present & (has_start | has_end)), "dated records whose adults were NONE",
+    "OBSERVED or NOT INSPECTED and", sum(x$present & x$backwards), "that end before they start;",
+    sum(x$method & has_start & is.na(x$start_mid)), "starts and", sum(x$method & has_end & is.na(x$end_mid)),
+    "ends are bins over 31 days or running backwards (no midpoint);", sum(x$survey_slip & (has_start | has_end)),
+    "dated records' surveys, with a date over a year from the record's or ending before they start, are not compared\n")
 
 # ---- watershed groups ----
-con <- DBI::dbConnect(RPostgres::Postgres())
-g <- DBI::dbGetQuery(con, "
-  SELECT fwa_watershed_code, array_to_string(array_agg(DISTINCT watershed_group_code ORDER BY watershed_group_code), ',')
-    AS groups
-  FROM whse_basemapping.fwa_stream_networks_sp WHERE fwa_watershed_code = ANY($1::text[]) GROUP BY 1",
-  params = list(paste0("{", paste(unique(x$fwa_watershed_cde), collapse = ","), "}")))
-DBI::dbDisconnect(con)
-x$groups <- g$groups[match(x$fwa_watershed_cde, g$fwa_watershed_code)]
-cat(sum(is.na(x$groups) & (!is.na(x$start_day) | !is.na(x$end_day))),
-    "dated records carry a watershed code the Atlas does not hold\n")
-x <- x[!is.na(x$groups), , drop = FALSE]
-x$wsg <- ifelse(grepl(",", x$groups), NA_character_, x$groups)
-
-reach <- utils::read.csv("data/nuseds_reach_groups.csv", colClasses = "character")
-for (i in seq_len(nrow(reach))) {
-  hit <- x$gfe_id == as.numeric(reach$gfe_id[i])
-  if (!any(hit)) stop("data/nuseds_reach_groups.csv: gfe_id ", reach$gfe_id[i], " is in no record", call. = FALSE)
-  if (!all(x$waterbody[hit] == reach$waterbody[i])) {
-    stop("data/nuseds_reach_groups.csv: gfe_id ", reach$gfe_id[i], " is ", paste(unique(x$waterbody[hit]),
-         collapse = ", "), ", not ", reach$waterbody[i], call. = FALSE)
-  }
-  crossed <- unique(unlist(strsplit(x$groups[hit], ",")))
-  if (!reach$wsg_code[i] %in% crossed) {
-    stop("data/nuseds_reach_groups.csv: ", reach$waterbody[i], "'s code does not cross ", reach$wsg_code[i],
-         " (it crosses ", paste(crossed, collapse = ", "), ")", call. = FALSE)
-  }
-  x$wsg[hit] <- reach$wsg_code[i]
-}
+x <- nuseds_place(x, dated = !is.na(x$start_day) | !is.na(x$end_day))
 if (length(want_species)) x <- x[x$species_code %in% want_species, , drop = FALSE]
-cat("named reaches (data/nuseds_reach_groups.csv):", paste(reach$waterbody, "->", reach$wsg_code, collapse = "; "),
-    "\n")
 
 # ---- windows ----
 qd <- function(v, p) if (all(is.na(v))) NA_real_ else stats::quantile(v, p, na.rm = TRUE, names = FALSE, type = 7)
+ds <- function(v, p) nuseds_day_str(qd(v, p))
 yr <- function(d, f) {
   y <- as.integer(d$analysis_yr[!is.na(d$start_day) | !is.na(d$end_day)])
   if (length(y)) f(y) else NA_integer_
 }
+edge <- function(v) if (sum(!is.na(v)) >= edge_min) ds(v, 0.5) else NA_character_
 summ <- function(d) data.frame(
-  records = nrow(d), n_start = sum(!is.na(d$start_day)), n_end = sum(!is.na(d$end_day)),
-  first_year = yr(d, min), last_year = yr(d, max),
-  start_median = day_str(qd(d$start_day, 0.5)), start_q10 = day_str(qd(d$start_day, 0.1)),
-  start_q90 = day_str(qd(d$start_day, 0.9)), end_median = day_str(qd(d$end_day, 0.5)),
-  end_q10 = day_str(qd(d$end_day, 0.1)), end_q90 = day_str(qd(d$end_day, 0.9)),
-  arrival_median = day_str(qd(d$arrival_day, 0.5)), n_arrival = sum(!is.na(d$arrival_day)),
-  start_day = round(qd(d$start_day, 0.5)), end_day = round(qd(d$end_day, 0.5)),
+  records = nrow(d), first_year = yr(d, min), last_year = yr(d, max),
+  rec_n_start = sum(!is.na(d$start_day)), rec_n_end = sum(!is.na(d$end_day)),
+  rec_start_median = ds(d$start_day, 0.5), rec_start_q10 = ds(d$start_day, 0.1), rec_start_q90 = ds(d$start_day, 0.9),
+  rec_end_median = ds(d$end_day, 0.5), rec_end_q10 = ds(d$end_day, 0.1), rec_end_q90 = ds(d$end_day, 0.9),
+  bulk_n_start = sum(!is.na(d$start_mid)), bulk_n_end = sum(!is.na(d$end_mid)),
+  bulk_start_median = ds(d$start_mid, 0.5), bulk_start_q10 = ds(d$start_mid, 0.1),
+  bulk_start_q90 = ds(d$start_mid, 0.9), bulk_end_median = ds(d$end_mid, 0.5), bulk_end_q10 = ds(d$end_mid, 0.1),
+  bulk_end_q90 = ds(d$end_mid, 0.9),
+  peak_n = sum(!is.na(d$peak_mid)), peak_median = ds(d$peak_mid, 0.5), peak_q10 = ds(d$peak_mid, 0.1),
+  peak_q90 = ds(d$peak_mid, 0.9),
+  edge_n_start = sum(!is.na(d$edge_start_day)), edge_start_median = edge(d$edge_start_day),
+  edge_n_end = sum(!is.na(d$edge_end_day)), edge_end_median = edge(d$edge_end_day),
+  arrival_median = ds(d$arrival_day, 0.5), n_arrival = sum(!is.na(d$arrival_day)),
+  rec_start_day = round(qd(d$start_day, 0.5)), rec_end_day = round(qd(d$end_day, 0.5)),
+  bulk_start_day = round(qd(d$start_mid, 0.5)), bulk_end_day = round(qd(d$end_mid, 0.5)),
+  peak_day = round(qd(d$peak_mid, 0.5)),
+  edge_start_day = if (sum(!is.na(d$edge_start_day)) >= edge_min) round(qd(d$edge_start_day, 0.5)) else NA_real_,
+  edge_end_day = if (sum(!is.na(d$edge_end_day)) >= edge_min) round(qd(d$edge_end_day, 0.5)) else NA_real_,
   arrival_day = round(qd(d$arrival_day, 0.5)))
 x$run <- ifelse(is.na(x$run_type), "none", x$run_type)
 pop_rows <- function(d, scope, w, sp) {
@@ -230,36 +211,44 @@ for (k in seq_len(nrow(keys))) {
 }
 win <- do.call(rbind, win)
 rownames(win) <- NULL
-show <- c("scope", "run_type", "pop_id", "waterbody", "groups", "records", "n_start", "n_end", "first_year",
-          "last_year", "start_median", "start_q10", "start_q90", "end_median", "end_q10", "end_q90", "arrival_median",
-          "n_arrival")
+cols_csv <- c("scope", "run_type", "pop_id", "waterbody", "groups", "records", "first_year", "last_year",
+              "rec_n_start", "rec_n_end", "rec_start_median", "rec_start_q10", "rec_start_q90", "rec_end_median",
+              "rec_end_q10", "rec_end_q90", "bulk_n_start", "bulk_n_end", "bulk_start_median", "bulk_start_q10",
+              "bulk_start_q90", "bulk_end_median", "bulk_end_q10", "bulk_end_q90", "peak_n", "peak_median",
+              "peak_q10", "peak_q90", "edge_n_start", "edge_start_median", "edge_n_end", "edge_end_median",
+              "arrival_median", "n_arrival")
+show <- c("scope", "run_type", "pop_id", "waterbody", "groups", "records", "first_year", "last_year", "rec_n_start",
+          "rec_start_median", "rec_end_median", "bulk_n_start", "bulk_start_median", "bulk_end_median", "peak_n",
+          "peak_median", "edge_n_start", "edge_start_median", "edge_n_end", "edge_end_median", "arrival_median")
+cat("\nreadings: rec_ as recorded (#240), bulk_ the bulk of spawning (bins as midpoints, present records), peak_ the",
+    "peak, edge_ an edge a survey of 3+ visits stood beyond (given with", edge_min, "or more records)\n")
 for (k in seq_len(nrow(keys))) {
   w <- keys$wsg[k]
   sp <- keys$species_code[k]
   d <- win[win$wsg_code == w & win$species_code == sp, , drop = FALSE]
-  d <- d[order(match(d$scope, c("group", "run_type", "population", "apart")), -d$n_start), , drop = FALSE]
+  d <- d[order(match(d$scope, c("group", "run_type", "population", "apart")), -d$rec_n_start), , drop = FALSE]
   cat("\n====", w, sp, ":", sum(d$scope == "population"), "populations pooled,", sum(d$scope == "apart"),
       "apart (on a stream crossing several groups)\n")
   print(d[, show], row.names = FALSE)
 }
 
-# ---- the windows the published rows rest on ----
+# ---- the windows the published rows rest on (as recorded) ----
 check <- function(w, sp, start, end, ys = NULL, ye = NULL) {
   r <- win[win$wsg_code == w & win$species_code == sp & win$scope == "group", , drop = FALSE]
   if (!nrow(r) && filtered) return(invisible(cat("check skipped:", w, sp, "not in this run\n")))
   if (!nrow(r)) stop("a full run has no ", w, " ", sp, " group window", call. = FALSE)
-  got <- c(r$start_median, r$end_median, r$n_start, r$n_end)
+  got <- c(r$rec_start_median, r$rec_end_median, r$rec_n_start, r$rec_n_end)
   ok <- identical(got[1:2], c(start, end)) && (is.null(ys) || identical(as.integer(got[3:4]), c(ys, ye)))
   if (!ok) stop(w, " ", sp, " window is ", paste(got, collapse = " "), ", not ", start, " ", end, " ", ys, " ", ye,
                 call. = FALSE)
-  cat("check:", w, sp, start, "to", end, "as published\n")
+  cat("check:", w, sp, start, "to", end, "as published (as recorded)\n")
 }
 check("UFRA", "CH", "08-11", "09-05", 123L, 126L)
 check("COTR", "CH", "08-10", "09-06", 35L, 36L)
 check("BULK", "CH", "08-15", "09-10", 28L, 27L)
 
 if (nzchar(out)) {
-  utils::write.csv(win[, c("wsg_code", "species_code", show)], out, row.names = FALSE, na = "")
+  utils::write.csv(win[, c("wsg_code", "species_code", cols_csv)], out, row.names = FALSE, na = "")
   cat("\nwrote", nrow(win), "windows to", basename(out), "\n")
 }
 
@@ -274,26 +263,31 @@ if (!nrow(tt)) {
 cmp <- do.call(rbind, lapply(seq_len(nrow(tt)), function(i) {
   r <- tt[i, ]
   g1 <- win[win$wsg_code == r$wsg_code & win$species_code == r$species_code & win$scope == "group", , drop = FALSE]
-  na <- data.frame(start_nuseds = NA_character_, end_nuseds = NA_character_, d_start = NA_real_, d_end = NA_real_)
+  v <- data.frame(bulk = NA_character_, peak = NA_character_, edges = NA_character_, d_start = NA_real_,
+                  d_end = NA_real_, d_mid = NA_real_, d_edge_start = NA_real_, d_edge_end = NA_real_)
   verdict <- if (!r$species_code %in% species_codes) "no NuSEDS species"
              else if (!nrow(g1)) "no NuSEDS window for the group"
              else if (r$life_stage == "spawning") "spawning window"
              else if (r$life_stage == "migration" && is.na(r$end)) "migration row has no end"
-             else if (r$life_stage == "migration") "migration end vs the day before spawning starts"
+             else if (r$life_stage == "migration") "migration end vs the day before the bulk starts"
              else "no NuSEDS measure"
-  v <- na
   if (verdict == "spawning window") {
-    v <- data.frame(start_nuseds = g1$start_median, end_nuseds = g1$end_median,
-                    d_start = g1$start_day - season(doy(r$start, "mmdd"), r$species_code),
-                    d_end = g1$end_day - season(doy(r$end, "mmdd"), r$species_code))
+    rs <- nuseds_season(nuseds_doy(r$start, "mmdd"), r$species_code)
+    re <- nuseds_season(nuseds_doy(r$end, "mmdd"), r$species_code)
+    v <- data.frame(bulk = paste(g1$bulk_start_median, "to", g1$bulk_end_median), peak = g1$peak_median,
+                    edges = paste(ifelse(is.na(g1$edge_start_median), "-", g1$edge_start_median), "to",
+                                  ifelse(is.na(g1$edge_end_median), "-", g1$edge_end_median)),
+                    d_start = g1$bulk_start_day - rs, d_end = g1$bulk_end_day - re, d_mid = g1$peak_day - (rs + re) / 2,
+                    d_edge_start = g1$edge_start_day - rs, d_edge_end = g1$edge_end_day - re)
   } else if (startsWith(verdict, "migration")) {
-    v <- data.frame(start_nuseds = paste("arrival", g1$arrival_median), end_nuseds = day_str(g1$start_day - 1),
-                    d_start = NA_real_, d_end = (g1$start_day - 1) - season(doy(r$end, "mmdd"), r$species_code))
+    v$bulk <- paste("arrival", g1$arrival_median, "; bulk starts", g1$bulk_start_median)
+    v$d_end <- (g1$bulk_start_day - 1) - nuseds_season(nuseds_doy(r$end, "mmdd"), r$species_code)
   }
   cbind(r[, c("wsg_code", "species_code", "life_stage", "start", "end", "source")], v, compared = verdict)
 }))
-cmp$largest <- pmax(abs(cmp$d_start), abs(cmp$d_end), na.rm = TRUE)
-cat("\n==== the timing table beside NuSEDS (days: NuSEDS minus the row; pooled group windows)\n")
+cmp$largest <- pmax(abs(cmp$d_start), abs(cmp$d_end), abs(cmp$d_mid), na.rm = TRUE)
+cat("\n==== the timing table beside NuSEDS, estimate against estimate (days: NuSEDS minus the row; pooled group",
+    "windows; d_start and d_end against the bulk, d_mid the peak against the row's middle, d_edge_ against an edge)\n")
 done <- cmp[!is.na(cmp$largest), , drop = FALSE]
 print(done[order(-done$largest), setdiff(names(done), "largest")], row.names = FALSE)
 for (i in which(!is.na(cmp$largest))) {
@@ -301,9 +295,9 @@ for (i in which(!is.na(cmp$largest))) {
            drop = FALSE]
   if (!nrow(a)) next
   cat("\n", cmp$wsg_code[i], cmp$species_code[i], cmp$life_stage[i], "row: apart populations in", cmp$wsg_code[i], "\n")
-  print(a[order(-a$n_start), c("pop_id", "waterbody", "groups", "n_start", "first_year", "last_year",
-                                   "start_median", "end_median", "arrival_median")], row.names = FALSE)
+  print(a[order(-a$rec_n_start), c("pop_id", "waterbody", "groups", "rec_n_start", "first_year", "last_year",
+                                   "bulk_start_median", "bulk_end_median", "peak_median", "edge_start_median",
+                                   "edge_end_median", "arrival_median")], row.names = FALSE)
 }
 cat("\nrows not compared:\n")
 print(as.data.frame(table(compared = cmp$compared[is.na(cmp$largest)])), row.names = FALSE)
-

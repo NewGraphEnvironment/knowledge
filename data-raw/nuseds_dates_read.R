@@ -74,6 +74,53 @@ nuseds_date <- function(d, yr) {
   out
 }
 
+# Each record's window and survey as dates, and what the survey can say about each edge (#256). Adds start_lo and
+# start_hi (a start bin's ends, or the single date twice), end_lo and end_hi, peak_lo and peak_hi, s0 and s1 (the
+# survey's first and last days; cleared where a date lies over a year from the record's year or the survey ends
+# before it starts, a typing slip, flagged in survey_slip), visits0 (no_inspections_used, 0 where blank),
+# backwards (the window ends before it starts), present (adult presence neither NONE OBSERVED nor NOT INSPECTED, whose
+# dates are a stream's expected timing), and edge_start and edge_end: a present record whose survey began before the
+# recorded start (ended after the recorded end) with at least nuseds_edge_visits visits. That is consistent with an
+# edge someone saw, never proof of one: NuSEDS keeps no count per visit.
+nuseds_edge_visits <- 3L
+nuseds_survey <- function(x) {
+  yr <- as.integer(x$analysis_yr)
+  dt <- function(v) nuseds_date(v, yr)
+  or <- function(a, b) ifelse(is.na(a), b, a)
+  x$start_lo <- dt(or(x$start_spawn_dt_from, x$start_spawn_dt_to))
+  x$start_hi <- dt(or(x$start_spawn_dt_to, x$start_spawn_dt_from))
+  x$end_lo <- dt(or(x$end_spawn_dt_from, x$end_spawn_dt_to))
+  x$end_hi <- dt(or(x$end_spawn_dt_to, x$end_spawn_dt_from))
+  x$peak_lo <- dt(or(x$peak_spawn_dt_from, x$peak_spawn_dt_to))
+  x$peak_hi <- dt(or(x$peak_spawn_dt_to, x$peak_spawn_dt_from))
+  x$s0 <- dt(x$start_dtt)
+  x$s1 <- dt(x$end_dtt)
+  off <- function(d) !is.na(d) & abs(as.integer(format(d, "%Y")) - yr) > 1L
+  slip <- off(x$s0) | off(x$s1) | (!is.na(x$s0) & !is.na(x$s1) & x$s1 < x$s0)
+  x$s0[slip] <- NA
+  x$s1[slip] <- NA
+  x$visits <- suppressWarnings(as.integer(x$no_inspections_used))
+  x$visits0 <- ifelse(is.na(x$visits), 0L, x$visits)
+  x$backwards <- !is.na(x$start_lo) & !is.na(x$end_hi) & x$end_hi < x$start_lo
+  x$present <- !x$adult_presence %in% c("NONE OBSERVED", "NOT INSPECTED")
+  x$brackets_start <- !is.na(x$start_lo) & !is.na(x$s0) & x$s0 < x$start_lo
+  x$brackets_end <- !is.na(x$end_hi) & !is.na(x$s1) & x$s1 > x$end_hi
+  x$edge_start <- x$present & !x$backwards & x$brackets_start & x$visits0 >= nuseds_edge_visits
+  x$edge_end <- x$present & !x$backwards & x$brackets_end & x$visits0 >= nuseds_edge_visits
+  x$survey_slip <- slip
+  x
+}
+
+# A date pair's midpoint as a season day (#256): a bin's two ends converted to the season year, then halved by
+# integer division (11-20 August, days 224 and 233, gives 228, 15 August); a single date is itself. A bin that runs
+# backwards on the season year (one straddling its start included) or spans over 31 days gives NA.
+nuseds_mid <- function(from, to, sp) {
+  f <- nuseds_season(nuseds_doy(ifelse(is.na(from), to, from), "nuseds"), sp)
+  t <- nuseds_season(nuseds_doy(ifelse(is.na(to), from, to), "nuseds"), sp)
+  w <- t - f + 1L
+  ifelse(is.na(w) | w < 1L | w > 31L, NA_integer_, f + (t - f) %/% 2L)
+}
+
 nuseds_place <- function(x, reach_path = "data/nuseds_reach_groups.csv", dated = rep(TRUE, nrow(x))) {
   con <- DBI::dbConnect(RPostgres::Postgres())
   on.exit(DBI::dbDisconnect(con))

@@ -102,32 +102,14 @@ cat("day of month of single start dates (the ten most common):\n")
 print(utils::head(sort(table(as.integer(substr(x$start_spawn_dt_from[!b & !is.na(x$start_spawn_dt_from)], 1, 2))),
                        decreasing = TRUE), 10))
 
-# ---- full dates: the window's earliest and latest, and the survey ----
+# ---- full dates: the window's earliest and latest, and the survey (nuseds_survey(), shared with timing_nuseds.R) ----
+x <- nuseds_survey(x)
 dt <- function(v) nuseds_date(v, x$yr)
-x$start_lo <- dt(x$start_spawn_dt_from)
-x$start_hi <- dt(ifelse(is.na(x$start_spawn_dt_to), x$start_spawn_dt_from, x$start_spawn_dt_to))
-x$end_lo <- dt(ifelse(is.na(x$end_spawn_dt_from), x$end_spawn_dt_to, x$end_spawn_dt_from))
-x$end_hi <- dt(x$end_one)
-x$peak_lo <- dt(x$peak_spawn_dt_from)
-x$peak_hi <- dt(ifelse(is.na(x$peak_spawn_dt_to), x$peak_spawn_dt_from, x$peak_spawn_dt_to))
-x$s0 <- dt(x$start_dtt)
-x$s1 <- dt(x$end_dtt)
-# a survey date more than a year from the record's year, or a survey that ends before it starts, is a typing slip
-# (the upper Bulkley's 2020 record gives 20-OCT-08 to 20-SEP-30); such a survey is not compared
-off <- function(d) !is.na(d) & abs(as.integer(format(d, "%Y")) - x$yr) > 1L
-slip <- off(x$s0) | off(x$s1) | (!is.na(x$s0) & !is.na(x$s1) & x$s1 < x$s0)
-cat("\n", sum(slip), "records give survey dates more than a year from their own year, or ending before they start:",
-    "not compared\n")
-x$s0[slip] <- NA
-x$s1[slip] <- NA
-x$visits <- suppressWarnings(as.integer(x$no_inspections_used))
-x$visits0 <- ifelse(is.na(x$visits), 0L, x$visits)
-x$backwards <- !is.na(x$start_lo) & !is.na(x$end_hi) & x$end_hi < x$start_lo
+cat("\n", sum(x$survey_slip), "records give survey dates more than a year from their own year, or ending before",
+    "they start (the upper Bulkley's 2020 record: 20-OCT-08 to 20-SEP-30): not compared\n")
 cat(sum(x$backwards), "records end before they start on these dates: kept out of every rule\n")
 x$start_before_survey <- !is.na(x$start_hi) & !is.na(x$s0) & x$start_hi < x$s0
 x$end_after_survey <- !is.na(x$end_lo) & !is.na(x$s1) & x$end_lo > x$s1
-x$brackets_start <- !is.na(x$start_lo) & !is.na(x$s0) & x$s0 < x$start_lo
-x$brackets_end <- !is.na(x$end_hi) & !is.na(x$s1) & x$s1 > x$end_hi
 x$survey_dated <- !is.na(x$s0) & !is.na(x$s1)
 
 cat("\n==== the survey beside the window, by era (records)\n")
@@ -158,7 +140,6 @@ x$fence <- x$estimate_method %in% "Fixed Site Census" | grepl("Fence", x$enumera
 x$exact <- x$start_form %in% "other day" & x$end_form %in% "other day"
 x$auc <- x$estimate_method %in% "Area Under the Curve"
 x$bracket <- x$brackets_start & x$brackets_end
-x$present <- !x$adult_presence %in% c("NONE OBSERVED", "NOT INSPECTED")
 x$whole <- !is.na(x$start_lo) & !is.na(x$end_hi) & !x$backwards
 conds <- function(x) list(
   "a2: survey brackets both edges, 2+ visits" = x$bracket & x$visits0 >= 2L,
