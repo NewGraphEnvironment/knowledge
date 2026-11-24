@@ -1,6 +1,7 @@
 NuSEDS knowledge/nuseds/v1 release 20260601 published from knowledge 3e4e83f 
  nuseds_records.parquet sha256 ecc4716f46d85e7625a2e98e0bfbc677962fba83fdb52c5e0419a2fc0dfeaee4 (the manifest's), 421001 rows
-102800 dated records (a spawning start or end) of the six species
+7 records give a start only as start_spawn_dt_to and no end; 9464 give only a peak; outside the dated records, 0 qualify as an edge
+102807 dated records (a spawning start or end) of the six species
 
 ==== the start of spawning, by era and form (counts)
          start
@@ -9,9 +10,9 @@ era       grid day other day    bin   <NA>    Sum
   1970s      17684      1734      0    336  19754
   1980s      19375      1219      1    544  21139
   1990s       8308       769   3009    456  12542
-  2000s        386       315   5511    917   7129
-  2010 on      125       171   7157    720   8173
-  Sum        77149      6887  15678   3086 102800
+  2000s        387       319   5511    917   7134
+  2010 on      126       172   7157    720   8175
+  Sum        77151      6892  15678   3086 102807
 
 ==== the end of spawning, by era and form
          end
@@ -20,9 +21,9 @@ era       grid day other day    bin   <NA>    Sum
   1970s      18213       840      1    700  19754
   1980s      19816       562      1    760  21139
   1990s       8266       421   2734   1121  12542
-  2000s        463       345   4955   1366   7129
-  2010 on      173       175   6179   1646   8173
-  Sum        78830      3600  13870   6500 102800
+  2000s        463       345   4955   1371   7134
+  2010 on      173       175   6179   1648   8175
+  Sum        78830      3600  13870   6507 102807
 
 ==== the peak, by era and form (NA: no peak given)
          peak
@@ -31,9 +32,9 @@ era       grid day other day    bin   <NA>    Sum
   1970s      17775      1521      0    458  19754
   1980s      18972      1242      3    922  21139
   1990s       8141       610   2905    886  12542
-  2000s        366       244   5262   1257   7129
-  2010 on      116       138   6770   1149   8173
-  Sum        73255      5682  14940   8923 102800
+  2000s        367       245   5262   1260   7134
+  2010 on      116       138   6770   1151   8175
+  Sum        73256      5683  14940   8928 102807
 
 ==== bins by width (from and to both given and different)
              start  peak   end
@@ -55,7 +56,7 @@ day of month of single start dates (the ten most common):
 adult presence of dated records (present means any but NONE OBSERVED and NOT INSPECTED):
 adult_presence
 NONE OBSERVED NOT INSPECTED       PRESENT       UNKNOWN          <NA> 
-         3725           332         98698            43             2 
+         3725           332         98705            43             2 
 
 ==== the survey beside the window, by era (records)
         records survey_started survey_ended visits_given visits_median start_before_survey end_after_survey brackets_start brackets_end brackets_both
@@ -63,15 +64,15 @@ to 1969   34063          21773        16224           16           3.5          
 1970s     19754           8252         6774            5           3.0                2108             3836           5694         2294          1430
 1980s     21139          16318        14990         1553           3.0                4533             8935          11077         5168          3207
 1990s     12542          10189         9624         5468           3.0                2551             5320           6999         3457          2093
-2000s      7129           4377         3976         6656           3.0                 694             1425           2697         1474           635
-2010 on    8173           7115         6191         7868           3.0                1341             2116           4234         2326          1086
+2000s      7134           4382         3976         6661           3.0                 694             1425           2699         1474           635
+2010 on    8175           7117         6191         7870           3.0                1341             2116           4236         2326          1086
 
 estimate_method on dated records:
 
      Unknown Estimate Method         Area Under the Curve               Expert Opinion               Not Applicable        Other Estimate Method             Peak Live + Dead 
                        82437                         5558                         4950                         3993                         2655                         1713 
  Peak Live + Cumulative Dead            Fixed Site Census        Peak Live * Expansion         Addition/Subtraction   Mark & Recapture: Petersen                   Redd Count 
-                         518                          290                          267                          144                          115                           63 
+                         518                          290                          272                          144                          117                           63 
     Insufficient Information       Calibrated Time Series               Cumulative New   Mark & Recapture: Bayesian Mark & Recapture: Open Model             Combined Methods 
                           32                           28                           17                            6                            5                            3 
                      Unknown          Resistivity Counter                 Sonar-DIDSON                Video Counter 
@@ -106,7 +107,7 @@ species to 1969 1970s 1980s 1990s 2000s 2010 on Sum
                   a3: survey brackets both edges, 3+ visits 218  186 265  627  778  2 2076
                   a4: survey brackets both edges, 4+ visits 169  149 205  482  551  2 1558
                   a5: survey brackets both edges, 5+ visits 133  105 134  340  364  2 1078
- a3s: survey brackets the start, 3+ visits (the start edge) 389 1794 687 2040 2104  8 7022
+ a3s: survey brackets the start, 3+ visits (the start edge) 390 1794 687 2040 2104  8 7023
      a3e: survey brackets the end, 3+ visits (the end edge) 389  373 458  967 1660  2 3849
                               b: fence or fixed-site census  68  232  68   70  120  2  560
                      c: start and end off the five-day grid 245  358  91  264  647  0 1605
@@ -119,7 +120,7 @@ species to 1969 1970s 1980s 1990s 2000s 2010 on Sum
                   a3: survey brackets both edges, 3+ visits       0.0233             0.0019              0.08     2076       0.29      0.69   TRUE
                   a4: survey brackets both edges, 4+ visits       0.0175             0.0011              0.06     1558       0.28      0.70   TRUE
                   a5: survey brackets both edges, 5+ visits       0.0121             0.0005              0.05     1078       0.29      0.68   TRUE
- a3s: survey brackets the start, 3+ visits (the start edge)       0.0735             0.0076              0.10     7022       0.27      0.70   TRUE
+ a3s: survey brackets the start, 3+ visits (the start edge)       0.0735             0.0076              0.10     7023       0.27      0.70   TRUE
      a3e: survey brackets the end, 3+ visits (the end edge)       0.0418             0.0035              0.08     3849       0.24      0.70   TRUE
                               b: fence or fixed-site census       0.0063             0.0005              0.09      560       0.63      0.37  FALSE
                      c: start and end off the five-day grid       0.0180             0.0022              0.12     1605       0.00      0.00   TRUE
@@ -157,8 +158,8 @@ named reaches (data/nuseds_reach_groups.csv): FRASER RIVER - ABOVE TETE JAUNE ->
 
 ==== pooled groups (a population on a code in one group, or a named reach) with records each rule admits
  rule species groups_1 groups_5 records
- all:      CH       81       73    7093
- all:      CO       77       73   26713
+ all:      CH       81       73    7095
+ all:      CO       77       73   26714
  all:      SK       75       61    7657
  all:      PK       62       58   20211
  all:      CM       55       51   32087
@@ -226,7 +227,6 @@ named reaches (data/nuseds_reach_groups.csv): FRASER RIVER - ABOVE TETE JAUNE ->
 
 ==== chinook windows (medians, bins as midpoints) on each rule's records, pooled groups
   wsg rule records start  peak   end
- BULK all:      23 08-15 08-25 09-05
  BULK a2:        0  <NA>  <NA>  <NA>
  BULK a3:        0  <NA>  <NA>  <NA>
  BULK a4:        0  <NA>  <NA>  <NA>
@@ -237,7 +237,6 @@ named reaches (data/nuseds_reach_groups.csv): FRASER RIVER - ABOVE TETE JAUNE ->
  BULK c: s       0  <NA>  <NA>  <NA>
  BULK d: a       0  <NA>  <NA>  <NA>
  BULK a3 a       0  <NA>  <NA>  <NA>
- MORR all:      46 08-25 09-15 09-25
  MORR a2:        2 08-31 09-15 09-25
  MORR a3:        2 08-31 09-15 09-25
  MORR a4:        2 08-31 09-15 09-25
@@ -248,7 +247,6 @@ named reaches (data/nuseds_reach_groups.csv): FRASER RIVER - ABOVE TETE JAUNE ->
  MORR c: s       0  <NA>  <NA>  <NA>
  MORR d: a      12 08-25 09-05 09-25
  MORR a3 a       0  <NA>  <NA>  <NA>
- KISP all:     200 08-15 08-30 09-15
  KISP a2:        1 08-15 09-05 09-15
  KISP a3:        1 08-15 09-05 09-15
  KISP a4:        1 08-15 09-05 09-15
@@ -259,7 +257,6 @@ named reaches (data/nuseds_reach_groups.csv): FRASER RIVER - ABOVE TETE JAUNE ->
  KISP c: s       0  <NA>  <NA>  <NA>
  KISP d: a       5 08-05 08-15 09-05
  KISP a3 a       0  <NA>  <NA>  <NA>
- UFRA all:     128 08-12 08-25 09-05
  UFRA a2:        1 08-15 09-05 08-15
  UFRA a3:        1 08-15 09-05 08-15
  UFRA a4:        1 08-15 09-05 08-15
@@ -270,7 +267,6 @@ named reaches (data/nuseds_reach_groups.csv): FRASER RIVER - ABOVE TETE JAUNE ->
  UFRA c: s       5 08-16 08-26 09-08
  UFRA d: a       0  <NA>  <NA>  <NA>
  UFRA a3 a       0  <NA>  <NA>  <NA>
- COTR all:      37 08-10 08-22 09-05
  COTR a2:        0  <NA>  <NA>  <NA>
  COTR a3:        0  <NA>  <NA>  <NA>
  COTR a4:        0  <NA>  <NA>  <NA>
@@ -313,7 +309,7 @@ named reaches (data/nuseds_reach_groups.csv): FRASER RIVER - ABOVE TETE JAUNE ->
   49248                                HEVENOR CREEK                                                                         KISP       2 1986-1987          2           0         0            0
   49263                                 CULLON CREEK                                                                         KISP       1 1979-1979          1           0         0            0
   49213                                 NANIKA RIVER                                                                         MORR      46 1959-2025         20           1        24           24
-  46931                                 HOLMES RIVER                                                                         UFRA      32 1967-2000         20           6         4            6
+  46931                                 HOLMES RIVER                                                                         UFRA      33 1967-2008         21           6         4            7
   46961                                  SWIFT CREEK                                                                         UFRA      28 1970-2000         16           8         3            6
   46941                                  NEVIN CREEK                                                                         UFRA      24 1971-2000         17           4         3            6
   46951                                 HORSEY CREEK                                                                         UFRA      24 1971-2000         17           3         3            6
@@ -350,7 +346,7 @@ named reaches (data/nuseds_reach_groups.csv): FRASER RIVER - ABOVE TETE JAUNE ->
             NA              1                   1            1                0             0   0   0     0   0 Unknown Estimate Method
             NA              1                   1            1                0             0   0   0     0   0          Not Applicable
            3.5             34                  19           28                5             3   4   9     0  12 Unknown Estimate Method
-           4.5             21                   8           22               16             5   2   0     0   0 Unknown Estimate Method
+           4.0             22                   8           22               16             5   2   0     0   0 Unknown Estimate Method
            4.5             16                   6           17                7             5   3   2     0   0 Unknown Estimate Method
            2.0             17                   6           16               12             2   1   1     0   0 Unknown Estimate Method
            3.0             16                   7           16               12             1   3   1     0   0 Unknown Estimate Method

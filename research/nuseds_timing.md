@@ -13,14 +13,15 @@ last spawner. So a NuSEDS window speaks to the middle of a season: where its bul
 to an edge only where a survey of several visits began before that edge (or ran past it), and even then it is
 consistent with an edge someone saw, not proof of one, because NuSEDS keeps no count per visit.
 
-Four things in the 102,800 dated records of the six species show it (`20261124_nuseds_dates_check.txt`):
+Four things in the 102,807 dated records of the six species (a start or an end; #240's 102,800 count a start only
+where `start_spawn_dt_from` gives it) show it (`20261124_nuseds_dates_check.txt`):
 
 - **The dates are rounded.** Before 1990 a start is a single date on the five-day grid (the 1st, 5th, 10th, 15th,
-  20th, 25th, 30th or 31st) on 89 to 92 % of records; the 15th alone holds 42,489 single starts. From the 1990s the
-  dates are ten-day bins (1 to 10, 11 to 20, 21 to the month's end): 3,009 of 12,542 starts in the 1990s, 7,157 of
-  8,173 from 2010. Of 15,678 start bins, 15,005 are 10 or 11 days long; 664 are longer, and 2 run backwards.
+  20th, 25th, 30th or 31st) on 91 to 94 % of starts; the 15th alone holds 42,489 single starts. From the 1990s the
+  dates are ten-day bins (1 to 10, 11 to 20, 21 to the month's end): 3,009 of 12,086 starts in the 1990s, 7,157 of
+  7,455 from 2010. Of 15,678 start bins, 15,005 are 10 or 11 days long; 664 are longer, and 2 run backwards.
 - **The start is often recorded before the survey began.** Where a record's survey is compared (372 are set aside,
-  below) and gives its first day, the start precedes it on 10,249 of 21,773 records before 1970 and 1,341 of 7,115
+  below) and gives its first day, the start precedes it on 10,249 of 21,773 records before 1970 and 1,341 of 7,117
   from 2010. Visits were seldom recorded before the
   1980s (21 records before 1980 give a number).
 - **Dates are written where no spawner was seen.** 3,725 dated records say NONE OBSERVED. Of the 2,479 whose survey
@@ -42,7 +43,7 @@ No record shows a visit that found no spawners before the start or after the end
 from the record's own, 309 a survey that ends before it starts even on the season year (below), and 35 both.
 
 **The Morice and Nanika** (#241 asked for them before any MORR row is revised). To 1991 they read as the upper
-Bulkley does: 34 of 39 Morice and 19 of 21 Nanika starts on the grid, a median of 2 visits where any is given, and
+Bulkley does: 34 of 39 Morice and 19 of 21 Nanika records give a start on the grid, a median of 2 visits where any is given, and
 the start before the survey on 15 of 24 Morice and 9 of 15 Nanika records that give the survey's first day. From 1995 they are
 better surveyed: 24 of 25 starts in each are bins, a median of 4 visits, 16 Morice and 12 Nanika records estimated by
 "Area Under the Curve", and 5 Morice and 4 Nanika records have a survey of 3 or more visits that began before the
@@ -51,13 +52,14 @@ precedes the survey on 8 of 20 Morice and 10 of 19 Nanika records.
 
 ## Which records can bound an edge
 
-Six candidate rules were measured over records whose adults were present: a3s over those giving a start, a3e over
-those giving an end, the others over those giving both:
+Ten candidate rules were measured over records whose adults were present: a3s over those giving a start, a3e over
+those giving an end, the others over those giving both. The table shows the six that differ in kind (a2, a4 and a5
+vary a3's visits, and a fourth joins a3 and c):
 
 | rule | records | chinook groups with 5 or more |
 |---|---:|---:|
 | a3: the survey brackets both edges, 3 or more visits | 2,076 | 12 |
-| a3s: the survey began before the recorded start, 3 or more visits | 7,022 | 19 |
+| a3s: the survey began before the recorded start, 3 or more visits | 7,023 | 19 |
 | a3e: the survey ended after the recorded end, 3 or more visits | 3,849 | 19 |
 | b: a fence or fixed-site census | 560 | 1 |
 | c: start and end single dates off the five-day grid | 1,605 | 15 |
@@ -178,9 +180,8 @@ apart.
 
 **UFRA and COTR** (#96, read by NewGraphEnvironment/wet#182). Their spawning rows are NuSEDS's as-recorded windows,
 which the script still reproduces. Under the method they barely move: UFRA's as-recorded starts and ends run 1967 to
-2000 (its bulk to 2008), only 20 of its 123 starts are bins (6 of COTR's 35), and neither group holds a dated NONE
-OBSERVED record. UFRA's bulk is 08-12 to 09-05, peaking 08-24 (over 172 peaks,
+2000 (its bulk to 2008), only 20 of its 124 starts are bins (6 of COTR's 35). UFRA's bulk is 08-12 to 09-05, peaking 08-24 (over 172 peaks,
 1967 to 2014), and its start has an edge, 08-15 on 11 records; COTR's bulk is 08-10 to 09-05, peaking 08-24, with no edge. Their start dates are
-estimates like any other: 82 of UFRA's 123 starts and 19 of COTR's 35 fall on the five-day grid, and 28 of UFRA's 75
+estimates like any other: 83 of UFRA's 124 starts and 19 of COTR's 35 fall on the five-day grid, and 28 of UFRA's 76
 and 12 of COTR's 32 starts with a survey's first day precede it. The rows keep their dates, and their notes say
 what NuSEDS shows (owner, 2026-11-24); any change to the dates is #242's.

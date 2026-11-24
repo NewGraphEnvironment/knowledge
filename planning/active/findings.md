@@ -125,3 +125,13 @@ peak and edge sets once (`method`, `start_mid`, `end_mid`, `peak_mid`, `start_br
 matching the windows), each rule's test runs over the records it can be asked of, and the check prints the presence
 counts and the written-year backwards records (165, 98 rescued). The bulk carries its own years (UFRA's runs to 2008);
 the Nanika's 1992-on a3s is 4; AUC counts replace "mostly"; denominators say they exclude the 372 set aside.
+
+## Code-check round 4 corrections (2026-11-24, `review-round4.md`)
+
+- The check ran `nuseds_survey()` over #240's dated records while the windows read every record. Its population now
+  takes any start or end (7 records give a start only as `start_spawn_dt_to`; 102,807 dated), and it stops if any
+  record outside it qualifies as an edge. On the first run that guard fired: one of the 7 is an edge, which round 4
+  had read as none. The check no longer prints a bulk or peak row; those are the windows script's alone.
+- Denominators that were records, not starts: the grid share before 1990 is 91 to 94 % of starts; bins are 3,009 of
+  12,086 starts in the 1990s and 7,157 of 7,455 from 2010; UFRA 83 of 124 grid starts and 28 of 76 before the survey.
+- "Six candidate rules" is ten (the table shows six); a hand-probe clause about NONE OBSERVED in UFRA and COTR removed.

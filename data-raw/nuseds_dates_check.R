@@ -1,7 +1,7 @@
 # data-raw/nuseds_dates_check.R
 # ---------------------------------------------------------------------------
 # What a NuSEDS spawning date is made of (#256): every dated record of the published set classified by how its dates
-# were written and what survey stands behind them, and three candidate rules for a record that could bound the start
+# were written and what survey stands behind them, and ten candidate rules for a record that could bound the start
 # or end of a spawning window, each measured as the records and groups it admits. data-raw/timing_nuseds.R builds the
 # windows; this script says what those windows can claim.
 #
@@ -58,7 +58,16 @@ x <- nuseds_read(Sys.getenv("VERSION", "v1"))
 x$species_code <- unname(nuseds_species[x$species])
 x <- x[!is.na(x$species_code), , drop = FALSE]
 x$end_one <- ifelse(is.na(x$end_spawn_dt_to), x$end_spawn_dt_from, x$end_spawn_dt_to)
-x <- x[!is.na(x$start_spawn_dt_from) | !is.na(x$end_one), , drop = FALSE]
+# the dated records give a start or an end, a start given only as start_spawn_dt_to included (#240 counted only
+# start_spawn_dt_from); the windows read every record, so a record outside them that would qualify as an edge would make
+# the edge counts below differ from the windows': stop on one
+dated <- !is.na(x$start_spawn_dt_from) | !is.na(x$start_spawn_dt_to) | !is.na(x$end_one)
+out_edge <- with(nuseds_survey(x[!dated, , drop = FALSE]), edge_start | edge_end)
+cat(sum(dated & is.na(x$start_spawn_dt_from) & is.na(x$end_one)), "records give a start only as start_spawn_dt_to and",
+    "no end;", sum(!dated & !is.na(x$peak_spawn_dt_from)), "give only a peak; outside the dated records,", sum(out_edge),
+    "qualify as an edge\n")
+if (any(out_edge)) stop("records outside the dated set qualify as an edge: count them here", call. = FALSE)
+x <- x[dated, , drop = FALSE]
 x$yr <- as.integer(x$analysis_yr)
 x$era <- as.character(cut(x$yr, c(0, 1970, 1980, 1990, 2000, 2010, 3000), right = FALSE,
                           labels = c("to 1969", "1970s", "1980s", "1990s", "2000s", "2010 on")))
@@ -215,7 +224,7 @@ cat("\nfence and fixed-site records with an arrival date:", nrow(fz), "; days fr
 # ---- placed in watershed groups ----
 cat("\n", sum(is.na(x$fwa_watershed_cde)), "dated records carry no FWA watershed code\n")
 x <- nuseds_place(x[!is.na(x$fwa_watershed_cde), , drop = FALSE])
-rules <- c(list("all: the bulk's records" = x$method), lapply(rules_of(x), function(r) r$admit))
+rules <- c(list("all: dated records (a start or an end), present" = x$method), lapply(rules_of(x), function(r) r$admit))
 cat("\n==== pooled groups (a population on a code in one group, or a named reach) with records each rule admits\n")
 pg <- !is.na(x$wsg)
 print(do.call(rbind, lapply(names(rules), function(r) {
@@ -226,11 +235,12 @@ print(do.call(rbind, lapply(names(rules), function(r) {
   }))
 })), row.names = FALSE)
 
-# ---- chinook windows on each rule's records, five groups (nuseds_survey()'s midpoints, as timing_nuseds.R reads) ----
+# ---- chinook windows on each rule's records, five groups (nuseds_survey()'s midpoints) ----
+# the bulk and peak of all records are timing_nuseds.R's (it reads every record, peak-only ones included), not here
 focus <- c("BULK", "MORR", "KISP", "UFRA", "COTR")
 med <- function(v) if (all(is.na(v))) NA_character_ else nuseds_day_str(stats::median(v, na.rm = TRUE))
 cat("\n==== chinook windows (medians, bins as midpoints) on each rule's records, pooled groups\n")
-print(do.call(rbind, lapply(focus, function(w) do.call(rbind, lapply(names(rules), function(r) {
+print(do.call(rbind, lapply(focus, function(w) do.call(rbind, lapply(names(rules)[-1], function(r) {
   d <- x[rules[[r]] & pg & x$wsg %in% w & x$species_code == "CH", , drop = FALSE]
   data.frame(wsg = w, rule = substr(r, 1, 4), records = nrow(d), start = med(d$start_mid), peak = med(d$peak_mid),
              end = med(d$end_mid))

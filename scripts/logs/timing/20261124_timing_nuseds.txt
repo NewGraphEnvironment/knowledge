@@ -1,7 +1,7 @@
 NuSEDS knowledge/nuseds/v1 release 20260601 published from knowledge 3e4e83f 
  nuseds_records.parquet sha256 ecc4716f46d85e7625a2e98e0bfbc677962fba83fdb52c5e0419a2fc0dfeaee4 (the manifest's), 421001 rows
 102800 dated records of 5221 populations; 554 dated records carry no FWA watershed code
-the bulk and peak leave out 4047 dated records whose adults were NONE OBSERVED or NOT INSPECTED and 98 that end before they start; 12 starts and 11 ends are bins over 31 days or running backwards (no midpoint); 372 dated records' surveys, with a date over a year from the record's or ending before they start, are not compared
+the bulk and peak leave out 4047 records giving a start or end whose adults were NONE OBSERVED or NOT INSPECTED and 98 that end before they start; 12 starts and 11 ends are bins over 31 days or running backwards (no midpoint); 372 such records' surveys, with a date over a year from the record's or ending before they start, are not compared
 1017 dated records carry a watershed code the Atlas does not hold
 named reaches (data/nuseds_reach_groups.csv): FRASER RIVER - ABOVE TETE JAUNE -> UFRA
 480 group x species keys in 126 groups

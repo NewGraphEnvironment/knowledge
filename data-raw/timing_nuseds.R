@@ -116,11 +116,11 @@ x$edge_start_day <- ifelse(x$edge_start, x$start_mid, NA_integer_)
 x$edge_end_day <- ifelse(x$edge_end, x$end_mid, NA_integer_)
 has_start <- !is.na(x$start_spawn_dt_from) | !is.na(x$start_spawn_dt_to)
 has_end <- !is.na(x$end_spawn_dt_from) | !is.na(x$end_spawn_dt_to)
-cat("the bulk and peak leave out", sum(!x$present & (has_start | has_end)), "dated records whose adults were NONE",
+cat("the bulk and peak leave out", sum(!x$present & (has_start | has_end)), "records giving a start or end whose adults were NONE",
     "OBSERVED or NOT INSPECTED and", sum(x$present & x$backwards), "that end before they start;",
     sum(x$method & has_start & is.na(x$start_mid)), "starts and", sum(x$method & has_end & is.na(x$end_mid)),
     "ends are bins over 31 days or running backwards (no midpoint);", sum(x$survey_slip & (has_start | has_end)),
-    "dated records' surveys, with a date over a year from the record's or ending before they start, are not compared\n")
+    "such records' surveys, with a date over a year from the record's or ending before they start, are not compared\n")
 
 # ---- watershed groups ----
 x <- nuseds_place(x, dated = !is.na(x$start_day) | !is.na(x$end_day))
