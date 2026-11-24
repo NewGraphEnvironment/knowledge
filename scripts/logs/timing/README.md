@@ -10,5 +10,8 @@ Filename: `yyyymmdd_timing_seed.log`. Several runs on one day take a sequence se
 `data-raw/timing_nuseds.R`'s runs (#96, #240) are here too: `yyyymmdd_timing_nuseds.txt`, its console output (NuSEDS
 windows per group, species and population, and the timing table beside them), and from 2026-11-21
 `yyyymmdd_timing_nuseds_windows.csv`, the same windows as a table, one row per window (a group's pooled window, a run type's, or a population's).
+From 2026-11-24 (#256) its columns carry four readings, prefixed `rec_` (as recorded, #240's), `bulk_`, `peak_` and
+`edge_`; `data-raw/nuseds_dates_check.R`'s runs are `yyyymmdd_nuseds_dates_check.txt`, what each NuSEDS date is made
+of and the candidate edge rules tested.
 
 Naming: `yyyymmdd_noun_verb-detail_target.ext` from 2026-09-28, the directory's first day.

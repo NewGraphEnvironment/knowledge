@@ -35,7 +35,7 @@ Part of #243 (umbrella). Relates to #240, #244, #96.
 
 Published `knowledge/nuseds/v1` (release 20260601), 102,800 dated records of the six species.
 
-- **Form.** Before 1990 the start is a single date on the five-day grid on 87 to 92 % of records (15th alone: 42,489 of
+- **Form.** Before 1990 the start is a single date on the five-day grid on 89 to 92 % of records (15th alone: 42,489 of
   all single starts). Bins arrive in the 1990s (3,009 of 12,542 starts) and are nearly every start from 2000 (5,511
   of 7,129; 7,157 of 8,173). Of 15,678 start bins, 15,004 are 10 or 11 days, 654 span 12 to 31, 10 exceed 31 and 3
   run backwards; 15,652 open on the 1st, 11th or 21st. End bins: 12,004 of 10-11 days, 1,562 of 12-31, 30 backwards.

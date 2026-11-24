@@ -40,21 +40,21 @@ Decided in the plan (mechanism, one line of why each):
 
 ## Phase 2: Set the method from the measurement
 
-- [ ] Write the method into `research/nuseds_timing.md` as a new opening section, "What a NuSEDS spawning date is", with the upper Bulkley as the worked example (#241's records, read again through Phase 1's script) and the Morice and Nanika beside it.
-- [ ] Which records can bound an edge, if any: the rule chosen among Phase 1's candidates and why, with the records and groups it admits. Wording: a bracketing survey is consistent with an edge, never proof of one, because NuSEDS keeps no per-visit counts (finding 1). Under the threshold decided above, if no rule passes, say so: NuSEDS bounds no edge, and a window speaks to the middle of the season only.
-- [ ] What the window is built from: the bulk of spawning (median start to median end, bins as midpoints), the peak (median peak, with its spread), or both, and which one a cited row's start and end are set beside.
-- [ ] What a NuSEDS window may claim beside a cited row, and the sentence a row's `note` uses for it (BULK chinook's annotation in #241's Decisions is the model: NuSEDS supports the middle, its start and end are estimates, not first and last fish seen).
+- [x] Write the method into `research/nuseds_timing.md` as a new opening section, "What a NuSEDS spawning date is", with the upper Bulkley as the worked example (#241's records, read again through Phase 1's script) and the Morice and Nanika beside it.
+- [x] Which records can bound an edge, if any: the rule chosen among Phase 1's candidates and why, with the records and groups it admits. Wording: a bracketing survey is consistent with an edge, never proof of one, because NuSEDS keeps no per-visit counts (finding 1). Under the threshold decided above, if no rule passes, say so: NuSEDS bounds no edge, and a window speaks to the middle of the season only.
+- [x] What the window is built from: the bulk of spawning (median start to median end, bins as midpoints), the peak (median peak, with its spread), or both, and which one a cited row's start and end are set beside.
+- [x] What a NuSEDS window may claim beside a cited row, and the sentence a row's `note` uses for it (BULK chinook's annotation in #241's Decisions is the model: NuSEDS supports the middle, its start and end are estimates, not first and last fish seen).
 
 ## Phase 3: Rerun the windows under the method
 
 - [x] `data-raw/timing_nuseds.R`: read the bins' second dates, the peak dates and the fields the edge rule needs; compute per window the bulk (bins as midpoints) and the peak (median, 10th and 90th percentiles, n), and the edge-qualified window with its record count where the rule admits any; keep the `as_recorded` columns (from `start_day` and `end_day` as today, over the same records) and point the three reproduction checks at them. A bin's midpoint is taken after `season()` converts both ends, by integer halving; a reversed bin, a bin over 31 days or one straddling the season start gives no midpoint and is counted (findings 2, 9, 10). Whether the method's columns drop NONE OBSERVED and NOT INSPECTED records is Phase 2's; `x` keeps them for `as_recorded`. Move the script onto `data-raw/nuseds_dates_read.R`. Header's WHY and OUTPUT rewritten to say what each column claims.
 - [x] The comparison labels each difference as estimate against estimate: a row's start and end beside NuSEDS's bulk, and the row's middle beside NuSEDS's peak; a migration row's end is set beside the day before the bulk's median start, named in the header (finding 7).
 - [x] Full run, log and windows CSV copied into `scripts/logs/timing/` under the run's date (`<date>_timing_nuseds.txt`, `<date>_timing_nuseds_windows.csv`).
-- [ ] `research/nuseds_timing.md`: the four groups' comparison table relabelled and refilled from the rerun; the `**Verified:**` line names the new logs and #256. `research/README.md`'s row, `scripts/README.md`'s entry and `scripts/logs/timing/README.md` say what the new script and columns are.
+- [x] `research/nuseds_timing.md`: the four groups' comparison table relabelled and refilled from the rerun; the `**Verified:**` line names the new logs and #256. `research/README.md`'s row, `scripts/README.md`'s entry and `scripts/logs/timing/README.md` say what the new script and columns are.
 
 ## Phase 4: Recheck UFRA and COTR, and hand the method to the reviews
 
-- [ ] UFRA and COTR chinook (#96, which wet's run of Swift and Naver creeks reads, NewGraphEnvironment/wet#182): their spawning windows under the method beside the published rows, with what moved, in `research/nuseds_timing.md` (UFRA's records run 1967-2000, before bins, so the bin rule should move it little; finding 11).
+- [x] UFRA and COTR chinook (#96, which wet's run of Swift and Naver creeks reads, NewGraphEnvironment/wet#182): their spawning windows under the method beside the published rows, with what moved, in `research/nuseds_timing.md` (UFRA's records run 1967-2000, before bins, so the bin rule should move it little; finding 11).
 - [ ] Rewrite the UFRA and COTR chinook spawning and migration notes in `data/life_history_timing.csv` in the method's wording, citing the new log beside `20261118_timing_nuseds.txt` (finding 15); dates unchanged. `knw_timing_read()` reads the table cleanly after the edit.
 - [ ] Edit #241's and #242's "Waits on #256" lines to say the method is in this PR (linked) and that the Morice and Nanika are read here; the final wording follows the merge (finding 14).
 

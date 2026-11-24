@@ -18,3 +18,8 @@
 - `data-raw/timing_nuseds.R` on the shared reader with four readings (rec_, bulk_, peak_, edge_); its three checks pass on rec_, and every rec_ value of all 6,112 windows equals 20261121's.
 - Logs `scripts/logs/timing/20261124_timing_nuseds{.txt,_windows.csv}`.
 - Next: Phase 2 and Phase 3's research write-up.
+
+## Phase 2 and Phase 3 (write-up), 2026-11-24
+- `research/nuseds_timing.md` opens with what a NuSEDS date is (upper Bulkley worked, Morice and Nanika beside it), the rule test and choice, the four readings, the note wording, and the four groups' rows refilled estimate against estimate, with UFRA and COTR under the method.
+- Every number checked against `20261124_nuseds_dates_check.txt` and `20261124_timing_nuseds*`; three statements corrected in that pass (the grid share, the accuracy wording, the MORR coho direction).
+- Next: Phase 4, the UFRA and COTR notes and the issue bodies.
