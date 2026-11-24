@@ -21,6 +21,16 @@ waited on, closed 2026-11-17; link#460, the minimal-run track's last wait, close
 filed during move 6 (#175, merged in PR #247) · the age-class and workbook-source issue split from move 6's #23 joins move 7 as batch 27 (left unplaced at move 7's gate); #246 joins the
 provenance track; no closures, no new move
 
+**Verified:** 2026-11-24 against 59 open issues · **Produced by:** a read of the 11 open issues the file did not name
+(#1, #2, #14, #16, #17, #245, #248, #251, #255, #260, #261) and their comments; each premise checked against
+`origin/main` f8d4b6e9 (`knw_link_flow()` writes its temporary table with no `ANALYZE`; the score cache's `spec` holds
+neither the stream-size column nor the walk source; `data-raw/chinook_window_tune.R` anchors on `^## Phase 2:`; `pkg/`
+no longer exists); cred's open work on store identity (#14 waits on it) and cred's `crd_store_build()`, which builds
+only from Zotero keys (#16); soul's research-file check, which flagged eleven files for length: seven new issues,
+#263 to #269, three files covered by #211 and its generated pages, one by #261 · batches 12 and 27, named at move 7's
+gate, get sections; moves 17 to 21; #248 becomes move 17's umbrella; #17's title and body, and #2's body, rewritten
+to name no private repo or project; no closures
+
 How to use this file: `/backlog-sweep` writes it. Take the first move in **Moves** that is not
 ticked and not **waiting**; `/planning-init <umbrella>` plans it, one phase per batch, one PR.
 When the plan finds that a batch, or one of its members, is more than one PR's work, it carries the first piece and
@@ -45,15 +55,20 @@ split piece, or one filed since the last pass): run `/backlog-sweep` to place it
 | - [x] 5 | #174 | 8, 9: timing table and NuSEDS, flow in windows (5 issues) | done: https://github.com/NewGraphEnvironment/knowledge/pull/229 | — | — | — |
 | - [x] 6 | #175 | 10, 18: location error against flow resolution, the FDIS load's outputs (4 issues) | done: https://github.com/NewGraphEnvironment/knowledge/pull/247 | A | — | opus |
 | - [x] 7 | #176 | 11: FISS parser, gradient and PINE (3 issues; batches 12 and 27 left unplaced at the gate, recorded in #176's body) | done: https://github.com/NewGraphEnvironment/knowledge/pull/249 | B | — | opus |
-| - [ ] 8 | #177 | 13, 23: promotion cargo, tuning-code fixes (4 issues) | **waiting** on Al's word for the next full retune | E | 12 | opus |
+| - [ ] 8 | #177 | 13, 23: promotion cargo, tuning-code fixes (4 issues) | **waiting** on Al's word for the next full retune | E | 12, 19 | opus |
 | - [x] 9 | #178 | 14: fish-passage literature, the access track's first piece (1 issue) | done: https://github.com/NewGraphEnvironment/knowledge/pull/237 | C | — | fable then opus |
 | - [x] 10 | #179 | 16, 22: library, keys and our own prose; OCR of the scanned PDFs (2 issues; two of batch 16's members and the rest of #13 left unplaced at the gate, recorded in #179's body) | done: https://github.com/NewGraphEnvironment/knowledge/pull/252 | C | 9 | opus |
 | - [ ] 11 | #180 | 17: report-priority pipeline for any group (3 issues) | **waiting** on Al's word to resume the report-priority work, parked 2026-09-04 | C | 10 | opus |
 | - [ ] 12 | #231 | 19: article wording and one method-bundle rebuild (3 issues) | open | E | — | opus |
-| - [ ] 13 | #232 | 20: one research page per key (3 issues) | open | E | 10, 12 | fable then opus |
+| - [ ] 13 | #232 | 20: one research page per key (3 issues) | open | E | 10, 12, 20 | fable then opus |
 | - [x] 14 | #233 | 21: window flow follow-ups (2 issues) | done: https://github.com/NewGraphEnvironment/knowledge/pull/257 | G | — | fable then opus |
 | - [ ] 15 | #236 | 24: PSCIS stream slope against link's gradient, the gradient track's first piece (1 issue) | open | F | — | opus |
 | - [x] 16 | #244 | 25, 26: NuSEDS windows for every group, the timing track's first piece; a publish that runs as documented (2 issues) | done: https://github.com/NewGraphEnvironment/knowledge/pull/250 | H | — | opus |
+| - [ ] 17 | #248 | 12: layers for report repos (3 issues) | open | I | — | opus |
+| - [ ] 18 | #270 | 27: FDIS counts by age class, the workbook second source (1 issue) | open | I | 17, 20 | opus |
+| - [ ] 19 | #271 | 28: link-helper temp tables, the score cache's reading (2 issues) | open | E | — | sonnet |
+| - [ ] 20 | #272 | 29: research files folded into topic statements (8 issues) | open | K | — | sonnet |
+| - [ ] 21 | #273 | 30: dormant Zotero libraries merged, personal library triaged (1 issue) | open: needs Al present for the Web API writes | L | — | opus |
 Tracks are separate efforts, not moves: baselines (#139, `track:baselines`: #140 next), speed (`track:speed`: #85,
 #101; its umbrella is in the skills repository), provenance (`track:provenance`: #162, then #246, the placement ties a rerun of `0230` meets on another database; #165 done in PR #206, #197 in PR #207; umbrella likewise) and
 minimal-run (#120, `track:minimal-run`: closed 2026-11-18, its waiting setups owed in #132 and #70) and publish (#220,
@@ -88,6 +103,7 @@ link's own pass: link#468, a backlog pass for link that carries the link issues 
 | 9 | #174 | flow in windows: #42, #105 | 2 | #105's stop rule, set before Phase 1 | #105's Phase 1 needs #42's window means |
 | 10 | #175 | location error against flow resolution: #23, #137 | 2 | cut #23 to what #137 needs (its link consumer closed) | #23's downstream-end check is #137's oracle |
 | 11 | #176 | FISS parser, gradient and PINE: #7, #34, #10 | 3 | fixtures from the provincial template | one regeneration of the FISS outputs |
+| 12 | #248 | layers for report repos: #17, #2, #1 | 3 | does #17's commit stamp make #2's helper unnecessary; is #1 still wanted; convert `average_gradient_percent` or rename it | one cross-group layer and its coverage, read through one manifest |
 | 13 | #177 | promotion cargo: #63, #148, #72 | 3 | #63's tie-break; #85 and #162 ride the same retune or not | each changes what only a promotion may |
 | 14 | #178 | fish-passage literature: #234 (from #132) | 1 | its own store; gradient rows with their leap and speed basis (both decided 2026-11-18) | the access track's first piece; the records review needs its literature |
 | 15 | #178 | gradient on the ground: #70, #71 | 2 | split 2026-11-18: the gradient track, first piece batch 24 | — |
@@ -102,6 +118,10 @@ link's own pass: link#468, a backlog pass for link that carries the link issues 
 | 24 | #236 | PSCIS stream slope against link's gradient: #235 (from #70) | 1 | what `STREAM_SLOPE` measures | the gradient track's first piece, beside #121's FDIS check |
 | 25 | #244 | NuSEDS windows for every group: #240 (from #243) | 1 | the mainstem rule; whether a NuSEDS window alone may become a row | the timing track's first piece; #241 and #242 start from its windows |
 | 26 | #244 | a publish that runs as documented: #230 | 1 | log outside the repo then copied in, or the log directory exempt | #240 reads the published parquet; one sitting on the NuSEDS source |
+| 27 | #270 | FDIS counts by age class, the workbook second source: #245 | 1 | one PR or two; age tables through `PLACE=FALSE 0230` only | follows move 7's tested FISS parser (PR #249) |
+| 28 | #271 | link-helper temp tables, the score cache's reading: #255, #260 | 2 | what a cache without the new fields does | both found in #226; one live-database test run checks both |
+| 29 | #272 | research files folded into topic statements: #261, #263, #264, #265, #266, #267, #268, #269 | 8 | #261's anchor; how many files per PR | one review of each file's citations and quote checks |
+| 30 | #273 | dormant Zotero libraries merged, personal library triaged: #251 | 1 | the personal library's disposition; Al reviews the discards and deletes the groups | one sitting with Zotero and the Web API key |
 
 ### 1. Evidence-build and test fixes
 
@@ -199,6 +219,21 @@ file on discharge resolution
 
 **Touches:** `R/fiss_visits.R`, `scripts/0220-fiss-xls-parse-nfc.R`, `scripts/0250-fiss-evidence.R`, `data/pine/`,
 `data/fiss_evidence.csv`, and new knw_fiss files with their tests and fixtures
+
+### 12. Layers for report repos
+
+- [ ] Carried by move 17, #248
+
+#17 (a cross-group roll-up of the no-fish-captured sites and a coverage layer of the groups processed, stamped with
+the knowledge commit and synced to the bucket), #2 (a helper that pulls a layer at a recorded commit into a report
+repo) and #1 (a planning-method vignette for reports to port as an appendix). Named at move 7's gate (#176) and
+deferred there; its parent PR has merged. Owed from #176: the per-group tables carry Step 4's
+`average_gradient_percent` as a fraction. #2 and #1 were written when the package lived in `pkg/` and this repo was
+private. Gate: does #17's commit stamp make #2's helper unnecessary; is #1 still wanted.
+
+**Touches:** `scripts/0220-fiss-xls-parse-nfc.R`, `data/nfc.gpkg`, `data/nfc_coverage.gpkg`, `_pkgdown.yml`, and
+the per-group no-fish tables in each group's data folder, a snapshot helper in the package if #2 is kept, a
+planning-method vignette if #1 is kept
 
 ### 13. Promotion cargo
 
@@ -371,6 +406,57 @@ goes outside the repo and is copied in after the run (keeps the check whole), or
 
 **Touches:** `scripts/0340-nuseds-build.R`, `scripts/README.md`
 
+### 27. FDIS counts by age class, the workbook second source
+
+- [ ] Carried by move 18, #270
+
+#245 (split from #23 at move 6's gate, and from move 7 at its gate): keep the export's age split in the visit and pass
+counts, and class each Fish Data Submission workbook site against bcfishobs (in the export, in bcfishobs only, or
+new). Gate: one PR or two; the age tables are rebuilt through `PLACE=FALSE 0230`, never a full rerun, whose placement
+does not reproduce (#246); whether they join `knowledge/fdis/v3` before its first upload (#219).
+
+**Touches:** `scripts/0230-fdis-load.R`, `R/fdis_passes.R`, `scripts/0220-fiss-xls-parse-nfc.R`,
+`scripts/0250-fiss-evidence.R`, `research/fdis_export.md`
+
+### 28. Link-helper temp tables, the score cache's reading
+
+- [ ] Carried by move 19, #271
+
+#255 (`ANALYZE` the temporary table `knw_link_flow()` joins to, and time the sibling helpers on two ids; results must
+not move) and #260 (the score cache's `spec` gains the stream-size column and the walk source, so two readings cannot
+share scores). Both found while building #226. Gate: what a cache written without the new fields does.
+
+**Touches:** `R/link_flow.R`, `R/link_width.R`, `R/link_regulated.R`, `R/link_barrier_dnstr.R`, `R/tune_run.R`,
+`R/tune_score.R`, `tests/testthat/test-link_flow.R`, `tests/testthat/test-tune_run.R`
+
+### 29. Research files folded into topic statements
+
+- [ ] Carried by move 20, #272
+
+#261 (`chinook_window_flow.md`, whose verdict-rule guard in `data-raw/chinook_window_tune.R` moves with it) and the
+seven files the research-file check flagged on 2026-11-24: #263 (`bayesian_alignment.md`), #264
+(`bull_trout_life_history.md`), #265 (`database_builds.md`), #266 (`fdis_export.md`), #267
+(`habitat_thresholds_tuned.md`), #268 (`minimal_network_tuning.md`), #269 (`rainbow_rearing_tuned.md`). Every citation
+of each file is kept or updated; quotes stay verbatim and their checks are rerun. Gate: #261's anchor, and how many
+files one PR takes.
+
+**Touches:** `research/chinook_window_flow.md`, `data-raw/chinook_window_tune.R`, `research/bayesian_alignment.md`,
+`research/bull_trout_life_history.md`, `research/database_builds.md`, `research/fdis_export.md`,
+`research/habitat_thresholds_tuned.md`, `research/minimal_network_tuning.md`, `research/rainbow_rearing_tuned.md`,
+`research/README.md`, `CLAUDE.md`
+
+### 30. Dormant Zotero libraries merged, personal library triaged
+
+- [ ] Carried by move 21, #273
+
+#251, the rest of #13: carry out the 51 `merge` verdicts and attach the files the central library lacks, Al reviews
+the four `discard` verdicts, triage the personal library (its several-PDF items from #126 among them), then Al deletes
+the five satellite groups. Gate: whether a personal item that is only reading is discarded or kept where it is. The
+Web API writes need Al present.
+
+**Touches:** `data/zotero_library_triage.csv`, `data-raw/zotero_library_triage.py`, `research/zotero_libraries.md`,
+`scripts/0270-habitat-collection-build.py`
+
 ## Singles
 
 - #51: age-0 length against degree-days, its own analysis of FDIS lengths and station temperatures
@@ -388,6 +474,10 @@ goes outside the repo and is copied in after the run (keeps the check whole), or
 - #223: the `statistics` store rebuilt under ragnar 0.4.0; blocked on cred#43 (which ragnar cred supports)
 - #239: `knw_discharge_load()` reads wet's `discharge.wet_load`; waits until a database holding a build is reloaded by
   wet 0.4.36 or later, so the table exists there (the published build's database had none on 2026-11-16)
+- #14: re-key the stores on parent item, library and version; waits on cred's open issue on document identity, then
+  every store rebuilt on it (`peace` among them)
+- #16: a separate store of our own prose (decided at move 10's gate, 2026-11-21); cred builds stores only from Zotero
+  keys, so its gate opens a cred issue for plain files or builds the store with ragnar directly
 
 ## Closed and transferred
 
