@@ -58,12 +58,14 @@ Sources:
 | Taylor 2008 | PDF | White Rose eprint 3793, by script (OpenAlex's only OA location) | accepted manuscript, 16 pp. | 0.20 |
 | Morris et al. 2019 | PDF | Wiley `pdfdirect` in Chrome, viewer's download button (CC BY) | version of record, 29 pp. | 1.84 |
 | Best & Fisher 1979 | none yet | OpenAlex and Semantic Scholar: closed; web search: RePEc, JSTOR listings only | | |
-| O'Brien et al. 2003 | none yet | OpenAlex and Semantic Scholar: closed; web search: Cambridge, WCS library record; a Wisconsin faculty PDF is another paper (Johnson et al. on Lao tigers); a Scribd upload is not used | | |
+| O'Brien et al. 2003 | PDF | ResearchGate (publication 227543071) in Chrome, after OpenAlex and Semantic Scholar: closed; web search: a Wisconsin faculty PDF is another paper (Johnson et al. on Lao tigers), a Scribd upload not used | version of record, 9 pp. (pp. 131-139, the journal's own typesetting) | 0.13 |
 | Albert & Anderson 1984 | none yet | OpenAlex lists ORBi (Liège) 2268/139899, whose file is behind a request-a-copy form; CORE 61320564 is another paper (McCarthy 2007, COBRA) | | |
 | Seber 1982 | none | web search: catalogue records and the Blackburn Press reprint (in print); no lawful free copy | | |
 
 A scripted fetch of Morris with a browser user-agent was refused by the auto-mode classifier; the browser route
-the issue named worked. Chrome saved the file to the folder last used for a save, not `~/Downloads`.
+the issue named worked. Chrome saved the file to the folder last used for a save, not `~/Downloads`; ResearchGate's
+download went to `~/Downloads`. ResearchGate's next search, for Albert & Anderson, met a "verify you are human"
+check, which the agent does not complete: those searches go to Al.
 
 ## Errors Encountered
 

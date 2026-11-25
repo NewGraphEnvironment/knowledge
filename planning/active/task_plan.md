@@ -51,9 +51,10 @@ Plan approved by Al, 2026-11-24. The four below are mechanism, decided in the pl
 
 ## Open decisions
 
-- **A no-PDF work with a CrossRef abstract** (O'Brien et al. 2003 is the one): file it abstract-only, which puts
-  its record and abstract in the group library but not in the store (0150 leaves out items with no PDF), or list
-  it as the gap with the rest, as #216 did. Put to Al once the search is done.
+- ~~**A no-PDF work with a CrossRef abstract**: file it abstract-only, or list it as the gap.~~ Moot (2026-11-24):
+  O'Brien et al. 2003, the only closed work with a CrossRef abstract, was found on ResearchGate as the version of
+  record. The works still without a PDF (Best & Fisher 1979, Albert & Anderson 1984, Seber 1982) have no CrossRef
+  abstract, so by decision 4 each is a PDF or a gap.
 
 ## Phase 1: inventory, sources and the CSV rows (no Zotero writes)
 - [ ] Resolve each of the six DOIs against CrossRef: title, creators, year, and whether it carries an abstract.
@@ -74,7 +75,7 @@ Plan approved by Al, 2026-11-24. The four below are mechanism, decided in the pl
 - [ ] Check every copy against the published version (title page, pagination, abstract wording); a manuscript's
       `why` says it is one
 - [ ] OCR any scan whose pages have no text layer (`ocrmypdf` into `data/rag/ocr/detection/`)
-- [ ] Put the Open decision to Al with the search's result
+- [x] Put the Open decision to Al with the search's result (moot: see Open decisions)
 - [ ] Append the rows (append only; each `why` opens `#274` and names what it is cited for), with `override` where
       CrossRef disagrees with the title page (Albert & Anderson's creators are in capitals). Abstract-only rows only
       as Al decides, and only where CrossRef has the abstract. If Seber is filed, extend the header with
