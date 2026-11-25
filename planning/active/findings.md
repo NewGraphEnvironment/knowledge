@@ -72,6 +72,7 @@ check, which the agent does not complete: those searches go to Al.
 | Error | Resolution |
 |-------|------------|
 | 0270 files CrossRef's journal name undecoded: Taylor 2008's would read "Computational Statistics &amp; Data Analysis" (`crossref_item()` runs only the title through `plain()`, 0270:402); one group item already reads "Trends in Ecology &amp; Evolution" | Taylor's row overrides `publicationTitle`; the code fix and the held item are #278 |
+| Test suite, 2026-11-25: 466 tests, 0 failed, 1 error, in `test-link_flow.R:67` (a database test): raised by the database server, not by R code; re-run once, same error. No R code changed on this branch | Reported to Al, not fixed here |
 
 ## Phase 1 outcome (2026-11-25)
 
@@ -99,7 +100,7 @@ The Better BibTeX keys: `morris_etal2019Usingsimulation`, `kellner_etal2023unmar
 `albert_anderson1984existencemaximum`. Membership of the other three collections is unchanged, so the build should
 hold #223's documents plus six.
 
-## Build (2026-11-25, store-build machine, worktree of this branch)
+## Build (2026-11-25, a worktree of this branch)
 
 - Before (verified pull): 32 documents, 11,182 chunks, as #223 pushed it.
 - Build: 53 members, the same 15 left out with no live PDF, 38 keys; "32 documents before, 38 after: 6 added, 0

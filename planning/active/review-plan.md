@@ -27,7 +27,7 @@ Each finding is followed by its verdict after a probe.
 - **A1.** The plan's decision 4 cited #216's decision 4 for "abstract-only when CrossRef holds it", but that
   decision made every no-PDF work a gap and filed none abstract-only. **Confirmed.** Decision 4 is withdrawn; whether
   a no-PDF work is filed abstract-only or listed as a gap goes to Al after the search (Open decisions).
-- **A2.** This machine has `data/rag/pdf/` though no stores. **Accepted**, reworded.
+- **A2.** The plan's note on where 0270 runs needed rewording. **Accepted**, reworded.
 
 ## Scope
 - **S1.** An abstract-only work never reaches the store (0150 leaves out items with no PDF). **Accepted**: it goes

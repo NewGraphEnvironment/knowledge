@@ -29,12 +29,22 @@
   detection 24 -> 30 items, all keyed with PDFs; the other three unchanged
 - 0270 dry run (6 would create), live run (6 created, each PDF's md5 confirmed through the Web API), second dry
   run a no-op
-- Next: Phase 3 on the store-build machine
+- Next: Phase 3
 
 ## Phase 3, 2026-11-25
 
-- On the store-build machine, a worktree of this branch with a real `data/rag/`: before-queries on the verified pull
+- In a worktree of this branch with a real `data/rag/`: before-queries on the verified pull
   (32 documents), the rebuild (38 documents, 6 added, 0 dropped, held to the expected file), after-queries (all three
   expected works hit), every origin a live group attachment
 - Pushed at 17:22 UTC from head `1e89da92`; the bucket's ETag matches the file at 8 MiB parts
 - Next: Phase 4, the README line and #274's body
+
+## Phase 4 and validation, 2026-11-25
+
+- `scripts/README.md`'s statistics line names the works the detection documentation cites and Seber 1982's gap;
+  #274's body carries the outcome per work and #278
+- Build worktree removed. Tests: 466, 0 failed, 1 error raised by the database server, not by R code (findings)
+- `/code-check branch`: round 1 clean; rounds 2, 3 and 4 found facts learned about a machine in the planning files and
+  the review files' quotes of them; restated as requirements or references, and the unpushed commits that carried
+  them folded into one before the push
+- Public sweep: no hits in this branch's files or commit messages

@@ -26,10 +26,8 @@ What exploration settled (read-only, 2026-11-24):
   no abstract.
 - #216's precedent: a work with neither a PDF nor an abstract is a gap, listed in the issue body and not filed (Al,
   #216 decision 4). A search for free identical copies comes before anything counts as paywalled.
-- Machines: the browser runs on one machine, so its downloads land there; store builds and pushes run on the machine
-  that holds the stores with cred 0.8.0 and ragnar 0.4.0, from a worktree of this branch. The machine this plan was
-  made on has cred 0.7.0 and no stores (only `data/rag/pdf/`), so 0270 runs here, beside the PDFs, against its
-  synced Zotero.
+- Requirements: 0270 runs beside the PDFs and a synced Zotero; the build and push need cred 0.8.0, ragnar 0.4.0
+  and a real `data/rag/`, and run from a worktree of this branch.
 - #223 (Hedger 2013 under ragnar 0.4.0) is closed, so the current bucket `statistics` is the before state.
 - cred's open issue on space an update leaves in the file: after a library change the store is rebuilt
   (`ACTION=build OVERWRITE=TRUE`), not updated, before the push. cred reads Zotero immutable: build with Zotero quit
@@ -42,8 +40,8 @@ Plan approved by Al, 2026-11-24. The four below are mechanism, decided in the pl
    collection, so the `0150 STORE=statistics` build list (`LP4R4VYR,73PNRGJF,Z7JP8UN2,K2P7XGFG`) is unchanged.
 2. **Version rule as #216:** a version of record wherever one can be had; an accepted manuscript only where none
    can, with `why` saying so (Taylor 2008 would be the collection's third).
-3. **Machines:** sourcing and 0270 where the browser runs; build and push on the store-build machine from a
-   worktree of this branch. Upgrading cred on the browser machine is #217's, not this issue's.
+3. **Where each step runs:** sourcing and 0270 beside the browser's downloads; build and push wherever the
+   requirements above hold, from a worktree of this branch.
 4. **No abstract fallback outside CrossRef** (#216's plan): an abstract comes only from CrossRef, so a work with
    neither a PDF nor a CrossRef abstract is a gap, and Seber 1982 (a book) is a PDF or a gap. Withdrawn from the
    approved plan after the Plan review (A1): it also said a closed work with a CrossRef abstract is filed
@@ -97,8 +95,8 @@ Plan approved by Al, 2026-11-24. The four below are mechanism, decided in the pl
       `scripts/logs/rag/<date>_0270_detection*.log`, home paths written as `~/` (review P1)
 - [x] Re-measure the four collections: the after state
 
-## Phase 3: rebuild and push `statistics` (store-build machine, worktree of this branch)
-- [x] Push the branch; on the store-build machine make a worktree of it with a real `data/rag/` (not a symlink:
+## Phase 3: rebuild and push `statistics` (a worktree of this branch)
+- [x] Push the branch; make a worktree of it with a real `data/rag/` (not a symlink:
       `git -C <wt>/data/rag rev-parse --abbrev-ref HEAD` names this branch, review X4); pull the bucket `statistics`
       (verified connect) and measure documents and chunks with duckdb: the before state
 - [x] Three `ACTION=query` checks, expected hits written first as author and year (keys exist only after the sync),
