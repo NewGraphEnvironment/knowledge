@@ -19,3 +19,6 @@
 - Four rows appended (Morris, Kellner, Taylor, O'Brien), enumerated from 0270's own `addition_item()` against the
   title pages; filed #278 for 0270's undecoded journal names, worked around here with Taylor's `override`
 - Waiting on Al's ResearchGate search for Albert & Anderson 1984 and Best & Fisher 1979
+- 2026-11-25: Al found Best & Fisher 1979 and Albert & Anderson 1984 on ResearchGate (versions of record); their
+  rows appended with `override` for pages and creators. Phase 1 done: six of seven filed with PDFs, Seber 1982 the gap
+- Next: Phase 2, measure the four collections, then 0270's dry run

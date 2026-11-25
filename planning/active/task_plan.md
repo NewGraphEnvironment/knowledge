@@ -57,8 +57,8 @@ Plan approved by Al, 2026-11-24. The four below are mechanism, decided in the pl
   abstract, so by decision 4 each is a PDF or a gap.
 
 ## Phase 1: inventory, sources and the CSV rows (no Zotero writes)
-- [ ] Resolve each of the six DOIs against CrossRef: title, creators, year, and whether it carries an abstract.
-      Seber 1982's metadata (publisher, place, edition, ISBN) from a catalogue record
+- [x] Resolve each of the six DOIs against CrossRef: title, creators, year, and whether it carries an abstract.
+      Seber 1982's metadata (publisher, place, edition, ISBN) from a catalogue record (not needed: Seber is the gap)
 - [x] Dedupe all seven by DOI and title against every library, trash included, from 0270's guarded WAL-inclusive
       copy. A live group copy becomes a member row; a personal-only copy a member row; a trashed group copy is
       restored (Web API PATCH, Al present) and filed as a member
@@ -66,24 +66,24 @@ Plan approved by Al, 2026-11-24. The four below are mechanism, decided in the pl
       Rose eprint 3793. Each must start `%PDF`
 - [x] Morris 2019 (PMC6492164) and any copy a script cannot fetch: load the Claude in Chrome skill and download in a
       new tab; hand Al the URLs where a click or check is needed
-- [ ] Search open copies for Best & Fisher 1979, O'Brien et al. 2003, Albert & Anderson 1984 and Seber 1982:
+- [x] Search open copies for Best & Fisher 1979, O'Brien et al. 2003, Albert & Anderson 1984 and Seber 1982:
       "<title> pdf", "<title> researchgate", the authors' and institutions' pages, OpenAlex and Semantic Scholar OA
       locations. Record the routes tried per work. Lawful copies only: no unlicensed full-text site is used or
       recorded in a tracked file (review S2; Seber's book is in print)
 - [x] Move each browser download into `data/rag/pdf/detection/` (Chrome saves to the folder last used for a save,
       not `~/Downloads`), named `<key-stem>.pdf`, or `<key-stem>_accepted.pdf` for a manuscript (review G3, O2)
-- [ ] Check every copy against the published version (title page, pagination, abstract wording); a manuscript's
+- [x] Check every copy against the published version (title page, pagination, abstract wording); a manuscript's
       `why` says it is one
-- [ ] OCR any scan whose pages have no text layer (`ocrmypdf` into `data/rag/ocr/detection/`)
+- [x] OCR any scan whose pages have no text layer (`ocrmypdf` into `data/rag/ocr/detection/`) (none needed)
 - [x] Put the Open decision to Al with the search's result (moot: see Open decisions)
-- [ ] Append the rows (append only; each `why` opens `#274` and names what it is cited for), with `override` where
+- [x] Append the rows (append only; each `why` opens `#274` and names what it is cited for), with `override` where
       CrossRef disagrees with the title page (Albert & Anderson's creators are in capitals). Abstract-only rows only
       as Al decides, and only where CrossRef has the abstract. If Seber is filed, extend the header with
       `publisher,edition,ISBN` as `statistics_additions.csv` has them, existing rows unchanged (review B1).
       Enumerate every new row in `planning/active/enumeration_round0.tsv` against its title page, comparing what
       0270 files (CrossRef's title after `plain()`, review G5). No other library's name or key in any tracked file
       (review P1)
-- [ ] Record in findings: per work, the route that gave it, version, MB, or abstract-only or gap
+- [x] Record in findings: per work, the route that gave it, version, MB, or abstract-only or gap
 
 ## Phase 2: file under `statistics/detection` through 0270 (Al present for the live run)
 - [ ] Every PDF opens as `%PDF` in `data/rag/pdf/detection/` before the first dry run. This and the CrossRef abstract

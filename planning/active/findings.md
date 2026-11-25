@@ -57,10 +57,10 @@ Sources:
 | Kellner et al. 2023 | PDF | Zenodo record 11371966 (authors' deposit, `isIdenticalTo` the DOI), by script | version of record, 8 pp. | 1.08 |
 | Taylor 2008 | PDF | White Rose eprint 3793, by script (OpenAlex's only OA location) | accepted manuscript, 16 pp. | 0.20 |
 | Morris et al. 2019 | PDF | Wiley `pdfdirect` in Chrome, viewer's download button (CC BY) | version of record, 29 pp. | 1.84 |
-| Best & Fisher 1979 | none yet | OpenAlex and Semantic Scholar: closed; web search: RePEc, JSTOR listings only | | |
+| Best & Fisher 1979 | PDF | Al, from ResearchGate, after OpenAlex and Semantic Scholar: closed and a web search found RePEc and JSTOR listings only | version of record, a scan with an OCR text layer, 6 pp. (pp. 152-157) | 0.38 |
 | O'Brien et al. 2003 | PDF | ResearchGate (publication 227543071) in Chrome, after OpenAlex and Semantic Scholar: closed; web search: a Wisconsin faculty PDF is another paper (Johnson et al. on Lao tigers), a Scribd upload not used | version of record, 9 pp. (pp. 131-139, the journal's own typesetting) | 0.13 |
-| Albert & Anderson 1984 | none yet | OpenAlex lists ORBi (Liège) 2268/139899, whose file is behind a request-a-copy form; CORE 61320564 is another paper (McCarthy 2007, COBRA) | | |
-| Seber 1982 | none | web search: catalogue records and the Blackburn Press reprint (in print); no lawful free copy | | |
+| Albert & Anderson 1984 | PDF | Al, from ResearchGate, after ORBi (Liège) 2268/139899 held its file behind a request-a-copy form and CORE 61320564 proved another paper (McCarthy 2007, COBRA) | version of record, a JSTOR copy, 11 pp. (pp. 1-10 and JSTOR's cover) | 1.29 |
+| Seber 1982 | **gap** | web search: catalogue records and the Blackburn Press reprint (in print); no lawful free copy; a book has no CrossRef abstract | | |
 
 A scripted fetch of Morris with a browser user-agent was refused by the auto-mode classifier; the browser route
 the issue named worked. Chrome saved the file to the folder last used for a save, not `~/Downloads`; ResearchGate's
@@ -72,3 +72,9 @@ check, which the agent does not complete: those searches go to Al.
 | Error | Resolution |
 |-------|------------|
 | 0270 files CrossRef's journal name undecoded: Taylor 2008's would read "Computational Statistics &amp; Data Analysis" (`crossref_item()` runs only the title through `plain()`, 0270:402); one group item already reads "Trends in Ecology &amp; Evolution" | Taylor's row overrides `publicationTitle`; the code fix and the held item are #278 |
+
+## Phase 1 outcome (2026-11-25)
+
+Six of seven with PDFs, all six versions of record but Taylor 2008 (accepted manuscript): 4.93 MB. One gap: Seber
+1982, a book in print with no lawful free copy. No abstract-only rows. No scan needed OCR (Best & Fisher's carries
+Acrobat Paper Capture's text layer: 2,829 to 3,062 characters a page).
