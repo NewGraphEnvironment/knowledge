@@ -119,9 +119,9 @@ Plan approved by Al, 2026-11-24. The four below are mechanism, decided in the pl
       the multipart ETag against the file. Commit the trimmed push log
 
 ## Phase 4: docs and issue
-- [ ] `scripts/README.md`'s statistics line: revise only if what it says the collection holds changes (Seber's book
+- [x] `scripts/README.md`'s statistics line: revise only if what it says the collection holds changes (Seber's book
       joining, say)
-- [ ] #274's body: the outcome per work (filed with PDF and from where, abstract-only, gap), and that an
+- [x] #274's body: the outcome per work (filed with PDF and from where, abstract-only, gap), and that an
       abstract-only work is in the library but not in the store (review S1)
 
 A PDF Al later supplies for a gap or abstract-only work joins at a future rebuild, noted in the body rather than
