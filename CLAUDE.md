@@ -197,7 +197,7 @@ The watershed group is an argument, never a project or a client. Nothing tracked
 issue, PR or commit message, carries client or project identifiers, host or machine names,
 database hosts, ports or logins, credential file paths, password-manager references, or links to
 private repositories. This file is held to all of it. `planning/` is a record of the work and may
-name what was removed, hosts and our other repositories included, but from 2026-10-16 it carries no
+name what was removed, hosts included, but from 2026-10-16 it carries no
 client or project identifiers and no home paths; the `planning/archive/` and `scripts/logs/` written
 before then are left as they were. Context that needs any of them belongs in a private coordination
 repo, not here. Credentials come from the environment (`PG*`, `ZOTERO_API_KEY` or the file `ZOTERO_API_KEY_FILE` names,
