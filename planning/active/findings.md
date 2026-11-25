@@ -78,3 +78,11 @@ check, which the agent does not complete: those searches go to Al.
 Six of seven with PDFs, all six versions of record but Taylor 2008 (accepted manuscript): 4.92 MB. One gap: Seber
 1982, a book in print with no lawful free copy. No abstract-only rows. No scan needed OCR (Best & Fisher's carries
 Acrobat Paper Capture's text layer: 2,829 to 3,062 characters a page).
+
+## Filing (2026-11-25)
+
+0270 live: 6 created (`FHDQDU42` Morris, `4AM7FX43` Kellner, `I73CU8MR` Taylor, `2N6GFPDK` O'Brien, `E7D64J6T` Best &
+Fisher, `PQUK2TFD` Albert & Anderson), each a member with one PDF. Morris's upload sent the bytes; for the other
+five the file server answered `exists` (it already held those bytes by md5), so the attachment was registered without
+a second upload. Each new item's attachment md5 was read from the Web API and matches the local file. The second dry
+run: 0 `would` lines, exit 0, `exists 28 | member 30 | pdf 30`.

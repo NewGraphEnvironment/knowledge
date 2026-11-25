@@ -93,7 +93,7 @@ Plan approved by Al, 2026-11-24. The four below are mechanism, decided in the pl
       keyed, PDF on disk. The before state (review G4)
 - [x] `0270 --collection detection --parent LP4R4VYR --dry-run`: check each `exists` / `copy exists` hit; only the
       new rows produce `would` lines
-- [ ] Live run; wait for the sync; a second dry run with 0 `would` lines and exit 0. Logs to
+- [x] Live run; wait for the sync; a second dry run with 0 `would` lines and exit 0. Logs to
       `scripts/logs/rag/<date>_0270_detection*.log`, home paths written as `~/` (review P1)
 - [ ] Re-measure the four collections: the after state
 
