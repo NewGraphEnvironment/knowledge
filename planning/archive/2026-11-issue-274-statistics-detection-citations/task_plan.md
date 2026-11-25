@@ -47,9 +47,9 @@ Plan approved by Al, 2026-11-24. The four below are mechanism, decided in the pl
    approved plan after the Plan review (A1): it also said a closed work with a CrossRef abstract is filed
    abstract-only, but #216's decision 4 made every no-PDF work a gap. That choice is Al's, under Open decisions.
 
-## Open decisions
+## Settled after the search
 
-- ~~**A no-PDF work with a CrossRef abstract**: file it abstract-only, or list it as the gap.~~ Moot (2026-11-24):
+- **A no-PDF work with a CrossRef abstract** (file it abstract-only, or list it as the gap): moot (2026-11-24):
   O'Brien et al. 2003, the only closed work with a CrossRef abstract, was found on ResearchGate as the version of
   record. The works still without a PDF (Best & Fisher 1979, Albert & Anderson 1984, Seber 1982) have no CrossRef
   abstract, so by decision 4 each is a PDF or a gap.
