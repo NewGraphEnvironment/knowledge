@@ -107,7 +107,7 @@ Plan approved by Al, 2026-11-24. The four below are mechanism, decided in the pl
       data (Taylor 2008; Ridout & Linkie 2009 and Rowcliffe et al. 2014, which apply it, count as acceptable hits);
       fitting occupancy and abundance models in the unmarked package (Kellner et al. 2023). Report the top 5; a
       miss is reported, not tuned away
-- [ ] Write the expected outcome in the log before the build: documents expected (before + new PDFs, given the
+- [x] Write the expected outcome in the log before the build: documents expected (before + new PDFs, given the
       other three collections' membership measured in Phase 2), the left-out list (no-PDF items of the four
       collections, any abstract-only rows)
 - [ ] Gate: Zotero synced, every PDF of the four collections on disk, Zotero quit, a 0-byte `-wal` (review G1).
