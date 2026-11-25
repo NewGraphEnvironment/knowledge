@@ -86,12 +86,12 @@ Plan approved by Al, 2026-11-24. The four below are mechanism, decided in the pl
 - [x] Record in findings: per work, the route that gave it, version, MB, or abstract-only or gap
 
 ## Phase 2: file under `statistics/detection` through 0270 (Al present for the live run)
-- [ ] Every PDF opens as `%PDF` in `data/rag/pdf/detection/` before the first dry run. This and the CrossRef abstract
+- [x] Every PDF opens as `%PDF` in `data/rag/pdf/detection/` before the first dry run. This and the CrossRef abstract
       check are the only gates on a new row: the dry run returns before 0270's PDF and abstract steps for a new item
       (review G2)
-- [ ] Measure the four collections (`LP4R4VYR`, `73PNRGJF`, `Z7JP8UN2`, `K2P7XGFG`) from a guarded copy: items,
+- [x] Measure the four collections (`LP4R4VYR`, `73PNRGJF`, `Z7JP8UN2`, `K2P7XGFG`) from a guarded copy: items,
       keyed, PDF on disk. The before state (review G4)
-- [ ] `0270 --collection detection --parent LP4R4VYR --dry-run`: check each `exists` / `copy exists` hit; only the
+- [x] `0270 --collection detection --parent LP4R4VYR --dry-run`: check each `exists` / `copy exists` hit; only the
       new rows produce `would` lines
 - [ ] Live run; wait for the sync; a second dry run with 0 `would` lines and exit 0. Logs to
       `scripts/logs/rag/<date>_0270_detection*.log`, home paths written as `~/` (review P1)

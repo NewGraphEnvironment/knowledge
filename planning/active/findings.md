@@ -75,6 +75,6 @@ check, which the agent does not complete: those searches go to Al.
 
 ## Phase 1 outcome (2026-11-25)
 
-Six of seven with PDFs, all six versions of record but Taylor 2008 (accepted manuscript): 4.93 MB. One gap: Seber
+Six of seven with PDFs, all six versions of record but Taylor 2008 (accepted manuscript): 4.92 MB. One gap: Seber
 1982, a book in print with no lawful free copy. No abstract-only rows. No scan needed OCR (Best & Fisher's carries
 Acrobat Paper Capture's text layer: 2,829 to 3,062 characters a page).
