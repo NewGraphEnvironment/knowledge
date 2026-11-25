@@ -1,0 +1,26 @@
+# push statistics after the #274 rebuild, 2026-11-25T17:22:27Z, from a worktree of the #274 branch so the manifest names it
+[dry run] would upload data/rag/statistics.duckdb -> s3://fresh-bc/rag/statistics.duckdb
+[dry run] merged manifest would hold: fraser, vca_refs, peace, pine, habitat_modelling, temperature, flow, bull_trout_grayling, sturgeon, statistics, westslope_cutthroat, bull_trout, fish_passage
+# the manifest entry for statistics (the manifest's other entries are left out)
+{
+  "statistics": {
+    "documents": 38,
+    "chunks": 11554,
+    "embedding_size": 768,
+    "embedding_model": "nomic-embed-text",
+    "ragnar_version": "0.4.0",
+    "store_schema": "0.4.0",
+    "store_name": "store_001",
+    "bytes": 159133696,
+    "md5": "353cc176584dd004dc43d584e8efafbc",
+    "repo": "NewGraphEnvironment/knowledge",
+    "branch": "274-statistics-store-seven-cited-works-of-th",
+    "head_sha": "1e89da927e6be81bdac94d2f6e271afdb61bc103",
+    "built_by": "cred::crd_store_push()",
+    "date_completed": "2026-11-25T17:22:30Z"
+  }
+}
+Uploading statistics.duckdb (152 MB)
+Manifest updated — now holds: fraser, vca_refs, peace, pine, habitat_modelling, temperature, flow, bull_trout_grayling, sturgeon, statistics, westslope_cutthroat, bull_trout, fish_passage
+# bucket ETag b9db7bc2b2f65d7de4838dbce9f91b87-19 matches the file at 8 MiB parts (159133696 bytes)
+# exit 0 at 2026-11-25T17:22:53Z

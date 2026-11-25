@@ -114,8 +114,8 @@ Plan approved by Al, 2026-11-24. The four below are mechanism, decided in the pl
       `0150 ACTION=build OVERWRITE=TRUE STORE=statistics COLLECTIONS="LP4R4VYR,73PNRGJF,Z7JP8UN2,K2P7XGFG"`,
       logged with home paths as `~/`. Check left-out = expected, documents = keys minus no-text PDFs, the dropped
       list read and explained, every origin a live group attachment
-- [ ] Commit CSV and logs and push the branch before the store push (manifest records the head sha)
-- [ ] `ACTION=push` dry run, then `CONFIRM=TRUE` (Al present). Read the result before any verified connect; check
+- [x] Commit CSV and logs and push the branch before the store push (manifest records the head sha)
+- [x] `ACTION=push` dry run, then `CONFIRM=TRUE` (Al present). Read the result before any verified connect; check
       the multipart ETag against the file. Commit the trimmed push log
 
 ## Phase 4: docs and issue

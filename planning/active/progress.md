@@ -30,3 +30,11 @@
 - 0270 dry run (6 would create), live run (6 created, each PDF's md5 confirmed through the Web API), second dry
   run a no-op
 - Next: Phase 3 on the store-build machine
+
+## Phase 3, 2026-11-25
+
+- On the store-build machine, a worktree of this branch with a real `data/rag/`: before-queries on the verified pull
+  (32 documents), the rebuild (38 documents, 6 added, 0 dropped, held to the expected file), after-queries (all three
+  expected works hit), every origin a live group attachment
+- Pushed at 17:22 UTC from head `1e89da92`; the bucket's ETag matches the file at 8 MiB parts
+- Next: Phase 4, the README line and #274's body
