@@ -15,3 +15,7 @@
 - PDFs in hand: Kellner 2023 and Morris 2019 (versions of record), Taylor 2008 (accepted manuscript)
 - Next: open-copy routes for Best & Fisher 1979, O'Brien 2003, Albert & Anderson 1984 that need Al's clicks
   (ResearchGate, ORBi's request form), then the Open decision
+- O'Brien 2003 found on ResearchGate (version of record); the abstract-only question became moot
+- Four rows appended (Morris, Kellner, Taylor, O'Brien), enumerated from 0270's own `addition_item()` against the
+  title pages; filed #278 for 0270's undecoded journal names, worked around here with Taylor's `override`
+- Waiting on Al's ResearchGate search for Albert & Anderson 1984 and Best & Fisher 1979

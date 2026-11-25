@@ -71,3 +71,4 @@ check, which the agent does not complete: those searches go to Al.
 
 | Error | Resolution |
 |-------|------------|
+| 0270 files CrossRef's journal name undecoded: Taylor 2008's would read "Computational Statistics &amp; Data Analysis" (`crossref_item()` runs only the title through `plain()`, 0270:402); one group item already reads "Trends in Ecology &amp; Evolution" | Taylor's row overrides `publicationTitle`; the code fix and the held item are #278 |
