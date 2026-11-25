@@ -95,7 +95,7 @@ Plan approved by Al, 2026-11-24. The four below are mechanism, decided in the pl
       new rows produce `would` lines
 - [x] Live run; wait for the sync; a second dry run with 0 `would` lines and exit 0. Logs to
       `scripts/logs/rag/<date>_0270_detection*.log`, home paths written as `~/` (review P1)
-- [ ] Re-measure the four collections: the after state
+- [x] Re-measure the four collections: the after state
 
 ## Phase 3: rebuild and push `statistics` (store-build machine, worktree of this branch)
 - [ ] Push the branch; on the store-build machine make a worktree of it with a real `data/rag/` (not a symlink:

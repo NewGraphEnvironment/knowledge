@@ -86,3 +86,15 @@ Fisher, `PQUK2TFD` Albert & Anderson), each a member with one PDF. Morris's uplo
 five the file server answered `exists` (it already held those bytes by md5), so the attachment was registered without
 a second upload. Each new item's attachment md5 was read from the Web API and matches the local file. The second dry
 run: 0 `would` lines, exit 0, `exists 28 | member 30 | pdf 30`.
+
+| collection | items before | after | PDF on disk before | after | MB before | after |
+|---|---|---|---|---|---|---|
+| `LP4R4VYR` statistics | 9 | 9 | 4 | 4 | 99.9 | 99.9 |
+| `73PNRGJF` detection | 24 | 30 | 24 | 30 | 19.9 | 24.9 |
+| `Z7JP8UN2` survey_design | 11 | 11 | 2 | 2 | 2.9 | 2.9 |
+| `K2P7XGFG` model_selection | 5 | 5 | 4 | 4 | 17.3 | 17.3 |
+
+The Better BibTeX keys: `morris_etal2019Usingsimulation`, `kellner_etal2023unmarkedpackage`,
+`taylor2008Automaticbandwidth`, `obrien_etal2003Crouchingtigers`, `best_fisher1979EfficientSimulation`,
+`albert_anderson1984existencemaximum`. Membership of the other three collections is unchanged, so the build should
+hold #223's documents plus six.

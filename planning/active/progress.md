@@ -22,3 +22,11 @@
 - 2026-11-25: Al found Best & Fisher 1979 and Albert & Anderson 1984 on ResearchGate (versions of record); their
   rows appended with `override` for pages and creators. Phase 1 done: six of seven filed with PDFs, Seber 1982 the gap
 - Next: Phase 2, measure the four collections, then 0270's dry run
+
+## Phase 2, 2026-11-25
+
+- Measured the four collections before and after (`scripts/logs/rag/20261125_0270_detection_measure_*.log`):
+  detection 24 -> 30 items, all keyed with PDFs; the other three unchanged
+- 0270 dry run (6 would create), live run (6 created, each PDF's md5 confirmed through the Web API), second dry
+  run a no-op
+- Next: Phase 3 on the store-build machine
