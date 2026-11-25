@@ -27,8 +27,9 @@ What exploration settled (read-only, 2026-11-24):
 - #216's precedent: a work with neither a PDF nor an abstract is a gap, listed in the issue body and not filed (Al,
   #216 decision 4). A search for free identical copies comes before anything counts as paywalled.
 - Machines: the browser runs on one machine, so its downloads land there; store builds and pushes run on the machine
-  that holds `data/rag/` with cred 0.8.0 and ragnar 0.4.0, from a worktree of this branch. The machine this plan was
-  made on has cred 0.7.0 and no `data/rag/`, so 0270 runs here, beside the PDFs, against its synced Zotero.
+  that holds the stores with cred 0.8.0 and ragnar 0.4.0, from a worktree of this branch. The machine this plan was
+  made on has cred 0.7.0 and no stores (only `data/rag/pdf/`), so 0270 runs here, beside the PDFs, against its
+  synced Zotero.
 - #223 (Hedger 2013 under ragnar 0.4.0) is closed, so the current bucket `statistics` is the before state.
 - cred's open issue on space an update leaves in the file: after a library change the store is rebuilt
   (`ACTION=build OVERWRITE=TRUE`), not updated, before the push. cred reads Zotero immutable: build with Zotero quit
@@ -43,49 +44,75 @@ Plan approved by Al, 2026-11-24. The four below are mechanism, decided in the pl
    can, with `why` saying so (Taylor 2008 would be the collection's third).
 3. **Machines:** sourcing and 0270 where the browser runs; build and push on the store-build machine from a
    worktree of this branch. Upgrading cred on the browser machine is #217's, not this issue's.
-4. **No abstract fallback outside CrossRef** (#216 decision 4): a closed article with no free copy is filed
-   abstract-only when CrossRef holds its abstract, otherwise listed as the gap. Seber 1982 is a PDF or a gap.
+4. **No abstract fallback outside CrossRef** (#216's plan): an abstract comes only from CrossRef, so a work with
+   neither a PDF nor a CrossRef abstract is a gap, and Seber 1982 (a book) is a PDF or a gap. Withdrawn from the
+   approved plan after the Plan review (A1): it also said a closed work with a CrossRef abstract is filed
+   abstract-only, but #216's decision 4 made every no-PDF work a gap. That choice is Al's, under Open decisions.
+
+## Open decisions
+
+- **A no-PDF work with a CrossRef abstract** (O'Brien et al. 2003 is the one): file it abstract-only, which puts
+  its record and abstract in the group library but not in the store (0150 leaves out items with no PDF), or list
+  it as the gap with the rest, as #216 did. Put to Al once the search is done.
 
 ## Phase 1: inventory, sources and the CSV rows (no Zotero writes)
 - [ ] Resolve each of the six DOIs against CrossRef: title, creators, year, and whether it carries an abstract.
       Seber 1982's metadata (publisher, place, edition, ISBN) from a catalogue record
-- [ ] Dedupe all seven by DOI and title against every library, trash included, from 0270's guarded WAL-inclusive
+- [x] Dedupe all seven by DOI and title against every library, trash included, from 0270's guarded WAL-inclusive
       copy. A live group copy becomes a member row; a personal-only copy a member row; a trashed group copy is
       restored (Web API PATCH, Al present) and filed as a member
-- [ ] Fetch the scriptable copies: Kellner 2023 from Zenodo 11371966; Taylor 2008's accepted manuscript from White
+- [x] Fetch the scriptable copies: Kellner 2023 from Zenodo 11371966; Taylor 2008's accepted manuscript from White
       Rose eprint 3793. Each must start `%PDF`
-- [ ] Morris 2019 (PMC6492164) and any copy a script cannot fetch: load the Claude in Chrome skill and download in a
+- [x] Morris 2019 (PMC6492164) and any copy a script cannot fetch: load the Claude in Chrome skill and download in a
       new tab; hand Al the URLs where a click or check is needed
 - [ ] Search open copies for Best & Fisher 1979, O'Brien et al. 2003, Albert & Anderson 1984 and Seber 1982:
       "<title> pdf", "<title> researchgate", the authors' and institutions' pages, OpenAlex and Semantic Scholar OA
-      locations. Record the routes tried per work
+      locations. Record the routes tried per work. Lawful copies only: no unlicensed full-text site is used or
+      recorded in a tracked file (review S2; Seber's book is in print)
+- [x] Move each browser download into `data/rag/pdf/detection/` (Chrome saves to the folder last used for a save,
+      not `~/Downloads`), named `<key-stem>.pdf`, or `<key-stem>_accepted.pdf` for a manuscript (review G3, O2)
 - [ ] Check every copy against the published version (title page, pagination, abstract wording); a manuscript's
       `why` says it is one
 - [ ] OCR any scan whose pages have no text layer (`ocrmypdf` into `data/rag/ocr/detection/`)
+- [ ] Put the Open decision to Al with the search's result
 - [ ] Append the rows (append only; each `why` opens `#274` and names what it is cited for), with `override` where
-      CrossRef disagrees with the title page. Abstract-only rows only where CrossRef has the abstract. Enumerate
-      every new row against its record or title page in `planning/active/enumeration_round0.tsv`
+      CrossRef disagrees with the title page (Albert & Anderson's creators are in capitals). Abstract-only rows only
+      as Al decides, and only where CrossRef has the abstract. If Seber is filed, extend the header with
+      `publisher,edition,ISBN` as `statistics_additions.csv` has them, existing rows unchanged (review B1).
+      Enumerate every new row in `planning/active/enumeration_round0.tsv` against its title page, comparing what
+      0270 files (CrossRef's title after `plain()`, review G5). No other library's name or key in any tracked file
+      (review P1)
 - [ ] Record in findings: per work, the route that gave it, version, MB, or abstract-only or gap
 
 ## Phase 2: file under `statistics/detection` through 0270 (Al present for the live run)
-- [ ] Every PDF opens as `%PDF` in `data/rag/pdf/detection/` before the first dry run
+- [ ] Every PDF opens as `%PDF` in `data/rag/pdf/detection/` before the first dry run. This and the CrossRef abstract
+      check are the only gates on a new row: the dry run returns before 0270's PDF and abstract steps for a new item
+      (review G2)
+- [ ] Measure the four collections (`LP4R4VYR`, `73PNRGJF`, `Z7JP8UN2`, `K2P7XGFG`) from a guarded copy: items,
+      keyed, PDF on disk. The before state (review G4)
 - [ ] `0270 --collection detection --parent LP4R4VYR --dry-run`: check each `exists` / `copy exists` hit; only the
       new rows produce `would` lines
 - [ ] Live run; wait for the sync; a second dry run with 0 `would` lines and exit 0. Logs to
-      `scripts/logs/rag/<date>_0270_detection*.log`
-- [ ] Re-measure from a guarded copy: detection items, keyed, PDF on disk, before and after
+      `scripts/logs/rag/<date>_0270_detection*.log`, home paths written as `~/` (review P1)
+- [ ] Re-measure the four collections: the after state
 
 ## Phase 3: rebuild and push `statistics` (store-build machine, worktree of this branch)
-- [ ] Push the branch; on the store-build machine make a worktree of it with a real `data/rag/`; pull the bucket
-      `statistics` (verified connect) and measure documents and chunks with duckdb: the before state
-- [ ] Write the expected outcome in the log before the build: documents expected (before + new PDFs), the left-out
-      list (no-PDF items of the four collections, any abstract-only rows)
-- [ ] Gate: Zotero synced, then quit, with a 0-byte `-wal`. `0150 ACTION=build OVERWRITE=TRUE STORE=statistics
-      COLLECTIONS="LP4R4VYR,73PNRGJF,Z7JP8UN2,K2P7XGFG"`. Check left-out = expected, documents = keys minus no-text
-      PDFs, the dropped list read and explained, every origin a live group attachment
-- [ ] Two `ACTION=query` checks with their expected keys written first: simulation-study bias and coverage (Morris
-      2019); circular kernel bandwidth for activity patterns (Taylor 2008). Report the top 5; a miss is reported,
-      not tuned away
+- [ ] Push the branch; on the store-build machine make a worktree of it with a real `data/rag/` (not a symlink:
+      `git -C <wt>/data/rag rev-parse --abbrev-ref HEAD` names this branch, review X4); pull the bucket `statistics`
+      (verified connect) and measure documents and chunks with duckdb: the before state
+- [ ] Three `ACTION=query` checks, expected hits written first as author and year (keys exist only after the sync),
+      run on the pulled store before the build and again after it (review X1, X2): simulation-study bias, coverage
+      and Monte Carlo error (Morris et al. 2019); a von Mises kernel density with a plug-in bandwidth for circular
+      data (Taylor 2008; Ridout & Linkie 2009 and Rowcliffe et al. 2014, which apply it, count as acceptable hits);
+      fitting occupancy and abundance models in the unmarked package (Kellner et al. 2023). Report the top 5; a
+      miss is reported, not tuned away
+- [ ] Write the expected outcome in the log before the build: documents expected (before + new PDFs, given the
+      other three collections' membership measured in Phase 2), the left-out list (no-PDF items of the four
+      collections, any abstract-only rows)
+- [ ] Gate: Zotero synced, every PDF of the four collections on disk, Zotero quit, a 0-byte `-wal` (review G1).
+      `0150 ACTION=build OVERWRITE=TRUE STORE=statistics COLLECTIONS="LP4R4VYR,73PNRGJF,Z7JP8UN2,K2P7XGFG"`,
+      logged with home paths as `~/`. Check left-out = expected, documents = keys minus no-text PDFs, the dropped
+      list read and explained, every origin a live group attachment
 - [ ] Commit CSV and logs and push the branch before the store push (manifest records the head sha)
 - [ ] `ACTION=push` dry run, then `CONFIRM=TRUE` (Al present). Read the result before any verified connect; check
       the multipart ETag against the file. Commit the trimmed push log
@@ -93,7 +120,8 @@ Plan approved by Al, 2026-11-24. The four below are mechanism, decided in the pl
 ## Phase 4: docs and issue
 - [ ] `scripts/README.md`'s statistics line: revise only if what it says the collection holds changes (Seber's book
       joining, say)
-- [ ] #274's body: the outcome per work (filed with PDF and from where, abstract-only, gap)
+- [ ] #274's body: the outcome per work (filed with PDF and from where, abstract-only, gap), and that an
+      abstract-only work is in the library but not in the store (review S1)
 
 A PDF Al later supplies for a gap or abstract-only work joins at a future rebuild, noted in the body rather than
 owed.
@@ -101,7 +129,8 @@ owed.
 ## Validation
 
 - [ ] Tests pass (`devtools::test()`; no `R/` change; `test-data-dir.R` covers `data/`)
-- [ ] `/code-check branch` (three-round floor) and the #56 `public_sweep.py` over the branch
+- [ ] `/code-check branch` (three-round floor, ending on a re-check of `enumeration_round0.tsv` against the filed
+      items, review X3) and the #56 `public_sweep.py` over the branch
 - [ ] PWF checkboxes match landed work
 - [ ] `/planning-archive` on completion
 

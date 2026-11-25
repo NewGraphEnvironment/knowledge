@@ -6,3 +6,12 @@
 - Created branch `274-statistics-store-seven-cited-works-of-th` off origin/main
 - Scaffolded PWF baseline from issue #274 with approved phases
 - Next: start Phase 1
+
+## Phase 1 (in progress), 2026-11-24
+
+- Plan review ran beside Phase 1 (`review-plan.md`); its findings are folded into `task_plan.md`, and the plan's
+  decision 4 is withdrawn into an Open decision for Al (review A1)
+- CrossRef resolved for all six DOIs; none of the seven is in any local library
+- PDFs in hand: Kellner 2023 and Morris 2019 (versions of record), Taylor 2008 (accepted manuscript)
+- Next: open-copy routes for Best & Fisher 1979, O'Brien 2003, Albert & Anderson 1984 that need Al's clicks
+  (ResearchGate, ORBi's request form), then the Open decision
