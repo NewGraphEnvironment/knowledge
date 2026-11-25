@@ -128,9 +128,11 @@ owed.
 ## Validation
 
 - [ ] Tests pass (`devtools::test()`; no `R/` change; `test-data-dir.R` covers `data/`)
-- [ ] `/code-check branch` (three-round floor, ending on a re-check of `enumeration_round0.tsv` against the filed
+      (2026-11-25: 466 tests, 0 failed, 1 error, `test-link_flow.R:67`, raised by the database server, not by R
+      code; reported to Al; left unticked)
+- [x] `/code-check branch` (three-round floor, ending on a re-check of `enumeration_round0.tsv` against the filed
       items, review X3) and the #56 `public_sweep.py` over the branch
-- [ ] PWF checkboxes match landed work
+- [x] PWF checkboxes match landed work
 - [ ] `/planning-archive` on completion
 
 How each change is proved:
