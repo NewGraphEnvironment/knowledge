@@ -1,0 +1,61 @@
+# rebuild statistics from LP4R4VYR,73PNRGJF,Z7JP8UN2,K2P7XGFG (OVERWRITE=TRUE), #274: the six works filed under statistics/detection join
+# expected: scripts/logs/rag/20261125_rebuild_statistics_expected.txt (38 documents, 6 added, 0 dropped), under cred 0.8.0 and ragnar 0.4.0
+# pull: ACTION=query VERIFY=TRUE, scripts/logs/rag/20261125_query_statistics_before.log; Zotero quit, zotero.sqlite-wal 0 bytes
+# start 2026-11-25T17:08:29Z
+duckdb keeps downloaded extensions and secrets in a temporary directory:
+ℹ /tmp/Rtmpy7k3ag/duckdb
+This is removed when the R session ends.
+• Extensions are re-downloaded each session.
+• Secrets are lost.
+ℹ Run duckdb(shared_home = TRUE) (or create ~/.duckdb) to keep them (suitable for most users).
+ℹ Run duckdb(shared_home = FALSE) to accept the temporary directory (and silence this message).
+ℹ See ?duckdb_storage for details and alternatives.
+15 of 53 members left out:
+  4DNKES53  lhoste_etal2025newunderwater  (no live PDF)
+  5X6VF6GJ  ficetola_etal2015Replicationlevels  (no live PDF)
+  BBA2Q7W2  breiman_etal1984ClassificationRegression  (no live PDF)
+  BGVWWBV6  BayesianBeliefNets  (no live PDF)
+  G8X6IU8M  atlas_etal2023Wildsalmon  (no live PDF)
+  KMCPFP3K  albertaremotecamerasteeringcommitteercsc_etal2024RemoteCamera  (no live PDF)
+  M2FQPT9W  schmelzle_kinziger2016Usingoccupancy  (no live PDF)
+  PS64VIQI  castaneda_etal2020DetectingNative  (no live PDF)
+  R283VZX9  kays_etal2020empiricalevaluation  (no live PDF)
+  TME3DX5P  moeller_etal2018Threenovel  (no live PDF)
+  TNK2RP5H  mann1945NonparametricTests  (no live PDF)
+  UTZ4K2QG  sen1968EstimatesRegression  (no live PDF)
+  VKB34D98  theil1950RankInvariantMethod  (no live PDF)
+  XBCBNKW6  kendall1975RankCorrelation  (no live PDF)
+  XJ3JX57M  wearn_glover-kapfer2017Cameratrappingconservation  (no live PDF)
+38 keys across 4 collections
+duckdb keeps downloaded extensions and secrets in a temporary directory:
+ℹ /tmp/Rtmpy7k3ag/duckdb
+This is removed when the R session ends.
+• Extensions are re-downloaded each session.
+• Secrets are lost.
+ℹ Run duckdb(shared_home = TRUE) (or create ~/.duckdb) to keep them (suitable for most users).
+ℹ Run duckdb(shared_home = FALSE) to accept the temporary directory (and silence this message).
+ℹ See ?duckdb_storage for details and alternatives.
+Ingesting 38 PDF(s) into data/rag/statistics.duckdb
+Installed 48 packages in 210ms
+Installed 48 packages in 273ms
+Installed 48 packages in 623ms
+Installed 48 packages in 593ms
+Installed 48 packages in 593ms
+Installed 48 packages in 559ms
+Installed 48 packages in 344ms
+Installed 48 packages in 747ms
+Read with pdftools, because markitdown could not:
+  bates_etal2024CrossValidationWhat (2104.00673v4.pdf): Embedded NUL in string.
+Split chunks the embedding model refused whole: hastie_etal2009ElementsStatistical (ESLII_print12_toc.pdf) (2)
+Store built: data/rag/statistics.duckdb | docs: 38 | chunks: 11554 | model: nomic-embed-text
+duckdb keeps downloaded extensions and secrets in a temporary directory:
+ℹ /tmp/Rtmpy7k3ag/duckdb
+This is removed when the R session ends.
+• Extensions are re-downloaded each session.
+• Secrets are lost.
+ℹ Run duckdb(shared_home = TRUE) (or create ~/.duckdb) to keep them (suitable for most users).
+ℹ Run duckdb(shared_home = FALSE) to accept the temporary directory (and silence this message).
+ℹ See ?duckdb_storage for details and alternatives.
+32 documents before, 38 after: 6 added, 0 dropped
+Built data/rag/statistics.duckdb. It is not in the bucket until ACTION=push.
+# exit 0 at 2026-11-25T17:20:04Z

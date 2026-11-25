@@ -98,3 +98,18 @@ The Better BibTeX keys: `morris_etal2019Usingsimulation`, `kellner_etal2023unmar
 `taylor2008Automaticbandwidth`, `obrien_etal2003Crouchingtigers`, `best_fisher1979EfficientSimulation`,
 `albert_anderson1984existencemaximum`. Membership of the other three collections is unchanged, so the build should
 hold #223's documents plus six.
+
+## Build (2026-11-25, store-build machine, worktree of this branch)
+
+- Before (verified pull): 32 documents, 11,182 chunks, as #223 pushed it.
+- Build: 53 members, the same 15 left out with no live PDF, 38 keys; "32 documents before, 38 after: 6 added, 0
+  dropped"; 11,554 chunks; no "Skipped" and no `-wal` warning; Bates 2024 read with pdftools again and two ESL chunks
+  split, both as in #216 and #223. Held to the expected file in every line. 11.6 min (17:08:29 to 17:20:04 UTC).
+- Every one of the 38 document origins is a live PDF attachment in the group library.
+- Queries, top 5 before and after (hits reported only):
+
+| query | expected | before | after |
+|---|---|---|---|
+| Q1 simulation study bias, coverage, Monte Carlo error | Morris et al. 2019 | absent (Ridout & Linkie, BDA3, McElreath, Bates) | all 5 Morris |
+| Q2 von Mises kernel, plug-in bandwidth | Taylor 2008 (Ridout & Linkie 2009 acceptable) | Hastie, Ridout & Linkie | Ridout & Linkie 2, Taylor 3 |
+| Q3 unmarked R package | Kellner et al. 2023 | Royle & Nichols, Burton, Dorazio & Erickson | all 5 Kellner |

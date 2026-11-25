@@ -98,10 +98,10 @@ Plan approved by Al, 2026-11-24. The four below are mechanism, decided in the pl
 - [x] Re-measure the four collections: the after state
 
 ## Phase 3: rebuild and push `statistics` (store-build machine, worktree of this branch)
-- [ ] Push the branch; on the store-build machine make a worktree of it with a real `data/rag/` (not a symlink:
+- [x] Push the branch; on the store-build machine make a worktree of it with a real `data/rag/` (not a symlink:
       `git -C <wt>/data/rag rev-parse --abbrev-ref HEAD` names this branch, review X4); pull the bucket `statistics`
       (verified connect) and measure documents and chunks with duckdb: the before state
-- [ ] Three `ACTION=query` checks, expected hits written first as author and year (keys exist only after the sync),
+- [x] Three `ACTION=query` checks, expected hits written first as author and year (keys exist only after the sync),
       run on the pulled store before the build and again after it (review X1, X2): simulation-study bias, coverage
       and Monte Carlo error (Morris et al. 2019); a von Mises kernel density with a plug-in bandwidth for circular
       data (Taylor 2008; Ridout & Linkie 2009 and Rowcliffe et al. 2014, which apply it, count as acceptable hits);
@@ -110,7 +110,7 @@ Plan approved by Al, 2026-11-24. The four below are mechanism, decided in the pl
 - [x] Write the expected outcome in the log before the build: documents expected (before + new PDFs, given the
       other three collections' membership measured in Phase 2), the left-out list (no-PDF items of the four
       collections, any abstract-only rows)
-- [ ] Gate: Zotero synced, every PDF of the four collections on disk, Zotero quit, a 0-byte `-wal` (review G1).
+- [x] Gate: Zotero synced, every PDF of the four collections on disk, Zotero quit, a 0-byte `-wal` (review G1).
       `0150 ACTION=build OVERWRITE=TRUE STORE=statistics COLLECTIONS="LP4R4VYR,73PNRGJF,Z7JP8UN2,K2P7XGFG"`,
       logged with home paths as `~/`. Check left-out = expected, documents = keys minus no-text PDFs, the dropped
       list read and explained, every origin a live group attachment
