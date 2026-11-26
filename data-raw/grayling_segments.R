@@ -53,7 +53,14 @@ seg <- seg |>
             stage = coalesce(LH_Stage, Life_Stage), critical = CRITICAL_H) |>
   st_zm()
 md5_shp <- unname(tools::md5sum(f_shp))
-head_sha <- substr(system2("git", c("rev-parse", "HEAD"), stdout = TRUE), 1, 7)
+git_out <- function(args) {
+  out <- suppressWarnings(system2("git", args, stdout = TRUE))
+  if (!is.null(attr(out, "status"))) stop("git ", paste(args, collapse = " "), " failed", call. = FALSE)
+  out
+}
+head_sha <- substr(git_out(c("rev-parse", "HEAD")), 1, 7)
+dirty <- git_out(c("status", "--porcelain", "--untracked-files=no", "--", "data-raw/grayling_segments.R", "R"))
+if (length(dirty)) head_sha <- paste0(head_sha, " with uncommitted changes to ", paste(trimws(dirty), collapse = ", "))
 say("Grayling critical-habitat segments (Hagen et al. 2026), knowledge#140, knowledge %s. Layer md5 %s: %d segments, %.0f km.",
     head_sha, substr(md5_shp, 1, 8), nrow(seg), sum(as.numeric(st_length(seg))) / 1000)
 block("Segments by stage as recorded", seg |> st_drop_geometry() |> count(layer, stage))
