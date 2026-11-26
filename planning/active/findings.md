@@ -56,6 +56,45 @@ Relates to #139 (the baseline review it belongs to, and the register's specifica
 - `0320` reads link's thresholds from `LINK_REPO` at the build's commit (`git show`), and `knw_tune_grid()` takes a thresholds row: the next member's retune from a proposed start needs a way to pass a proposed row to a DEV run.
 - `0291`'s spec (cloglog, `log(area)` covariate, data set, era, group) is the model for the capture tables; `knw_spawner_evidence()` is char-only.
 
+## Phase 5 analysis spec, fixed 2026-11-26 before any fit by class
+
+Written after counting the population (no outcome by class was looked at). Inputs: the published evidence
+(`data/fdis/derived/{visits_link,visits_species}.csv`, md5s `c746c58…`, `6a2e28f…` as `data/thresholds.csv`'s
+`evidence_md5`) and `data/fdis/build/fish.rds` (md5 `8cf2735…`, the run ledger's `md5_fish`); the script refuses
+others. Population counts at writing: 11,678 visits in GR's range in 71 groups, 1,231 with GR; `access_gr` 0 / 1 / 2
+on 3,919 / 3,727 / 4,032; 1,746 with no `cw_deploy`; 3,283 with no area.
+
+- **Population:** visits in GR's range (`in_range`), not `blocked`; `access_gr` 1 or 2 (code 2 is set by GR records
+  upstream, often these visits' own, so it is never a covariate or stratum; code 0 visits and the GR caught on them
+  are counted and dropped, as `0290`); stream and canal edges (`segment_edge_type` 1000, 1050, 1100, 1150, 2000,
+  2100, 2300, `0291`'s list); a fished area of 10-10,000 m² (`0291`'s trim). River-polygon edges (1250, 1350) are a
+  sensitivity, connectors and lake lines are counted and dropped.
+- **Columns:** the tuning's: `segment_gradient`, `cw_deploy`, `mad_pick` (`R/tune_run.R`).
+- **Classes, three separate tables:**
+  - gradient (%): 0-0.5, 0.5-1, 1-2, 2-2.49, 2.49-3.49, 3.49-5.49, 5.49-8, 8-12, > 12; reference 1-2;
+  - width (m, `cw_deploy`): < 1.5, 1.5-2, 2-4, 4-8, 8-15, 15-30, > 30, and `none` (blank, its own class); reference 4-8;
+  - MAD (m³/s, `mad_pick`): < 0.021, 0.021-0.05, 0.05-0.2, 0.2-0.5, 0.5-1, 1-5, 5-20, > 20; reference 0.2-0.5.
+  Width and MAD classes are [lower, upper), as link's `>=` floors admit a value equal to the floor; gradient classes
+  are (lower, upper], as link's `<=` limit admits a value equal to the limit.
+- **Responses:** U, GR caught (`present`); F, any fish caught (`catch_status == "fish"`); C, GR caught among
+  visits with any fish.
+- **Model:** per table and response, binomial with cloglog link: `y ~ class + log(area) + data_set + era + wsg`, era
+  from year (to 1994, 1995-2004, 2005 on), a nuisance term with one level dropped; groups where the response never
+  or always occurs are left out and counted. A rate ratio per class is exp(coefficient) against the reference.
+  A fit that does not converge in 100 iterations gives NA. Raw rates beside every model.
+- **Intervals:** 200 bootstrap resamples of streams (`blue_line_key`), seed 140, all resamples drawn in order before
+  socket-cluster fits, so the output does not depend on worker count.
+- **Power:** a class is `ok` with ≥ 30 visits and ≥ 10 detections of the response, else `underpowered`.
+- **Stop rule:** a response with fewer than 4 groups holding both outcomes is not modelled (raw rates only).
+- **Spawning:** the months the population's visits were fished in, and GR length (`fish.rds`) by month in 10 mm
+  bins. An age-0 table by class only if an audited literature row gives a first-summer length cut; otherwise none.
+  Spring spawning (May-June in the literature to be checked) is mostly unsampled by summer electrofishing, which
+  the write-up says.
+- **Sensitivity (log only):** river-polygon edges included; logit link.
+- **Output:** `data/gr_use.csv` (variable × response × class: visits, detections, raw rate, rate ratio and its
+  interval, boots that fit, power) and `scripts/logs/habitat/<date>_grayling_use.txt` (the population funnel, the
+  evidence md5s, the knowledge commit, groups modelled, sensitivity, spawning tables).
+
 ## Errors Encountered
 
 | Error | Resolution |
