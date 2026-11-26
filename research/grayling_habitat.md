@@ -20,15 +20,18 @@ and adults spend the summer, and where they winter, differs from study to study;
 What the evidence says about link's six numbers:
 - **Gradient.** No source gives a gradient value as a limit, though some tie steeper reaches to less use or less
   spawning. The gradients given are of rivers, reaches and map segments where grayling were found, mostly under 2 %,
-  with juvenile sites on segments up to 6.96 %. The catch rate in the capture records does not fall at 2.49 % or
-  3.49 %: grayling were caught as often up to 5.49 %, and rarely at 5.49–8 % (2 of 152 visits); too few steeper streams
-  were fished to say more.
-- **Channel width.** No source gives a minimum. Juveniles were found at sites from about 1 m wide, and in Alaska
-  appeared to select channels 1-8 m wide. Sources call spawning streams small, name large rivers, or both, and a 3 m
-  constructed channel drew spawners. The catch rate is lowest under 2 m, where few visits caught fish of any kind.
+  with sites scored as holding juveniles on segments up to 6.96 %. The catch rate in the capture records does not fall at 2.49 % or
+  3.49 %: up to 5.49 % no class was caught detectably less often than 1-2 % (though with river-polygon visits kept
+  the classes from 2 to 5.49 % read somewhat lower), and at 5.49–8 % grayling were caught on 2 of 152 visits; too few
+  steeper streams were fished to say more.
+- **Channel width.** No source gives a minimum. Grayling were found at sites from about 1 m wide (sites a Williston
+  study scored as holding juveniles, by one grayling of any size), and juveniles in Alaska appeared to select
+  channels 1-8 m wide. Sources call spawning streams small, name large rivers, or both, and a 3 m
+  constructed channel drew spawners. The catch rate is low under 2 m, and as low on streams with no modelled width, where few
+  visits caught fish of any kind.
 - **MAD.** No source gives a MAD limit. The flows given are of other kinds (on the day of spawning, a river's mean
   daily flow, the flow through a sampled pool), from below detection to about 400 m³/s. The catch rate is lowest under
-  0.021 m³/s.
+  0.021 m³/s, where few visits caught fish of any kind; among visits that caught some fish it is not lower.
 
 Most visits that caught grayling, and nearly all the length of Hagen et al.'s critical-habitat segments, are in large
 rivers that link's stream rules leave to its river branch. The small-stream thresholds are where the evidence is
@@ -111,9 +114,10 @@ any fish.
 | 5-20 | 2 | 0 | none caught |
 | >= 20 | 2 | 0 | none caught |
 
-Below link's rearing floor (0.021 m³/s) grayling were caught about a third as often as at 0.2–0.5 m³/s. Above it every
-class has an interval that holds 1; the scored population holds almost no stream over
-5 m³/s, because larger rivers are river polygons.
+Below link's rearing floor (0.021 m³/s) grayling were caught about a third as often as at 0.2–0.5 m³/s. Few visits
+there caught fish of any kind (any-fish ratio 0.143), and among visits that caught some fish, grayling were caught
+about as often as at 0.2–0.5 m³/s (0.939, 0.333–2.085). From 0.021 to 5 m³/s every class's interval holds 1; the four
+visits over 5 m³/s caught none, because larger rivers are river polygons, which the scored population leaves out.
 
 ### How firm these are
 
@@ -145,10 +149,11 @@ below by data row. Most say where grayling were found, not where they could not 
 
 ### Gradient (rearing 3.49 %, spawning 2.49 %)
 
-No source gives a number. The reviews describe grayling habitat as "medium" or "relatively low" gradient (1190,
-1193-1195, 1197), one sentence passed from Hagen et al. 2015 to Stamford et al. 2017 to Hagen et al. 2026 (1194, 1195,
+No source gives a gradient limit. The reviews describe grayling habitat as "medium", "low" or "relatively low"
+gradient (1190, 1193-1195, 1197), one sentence passed from Hagen et al. 2015 to Stamford et al. 2017 to Hagen et al. 2026 (1194, 1195,
 1197), and Stamford et al. relay a Williston study as placing fry rearing in low-gradient middle reaches (1196), though
-that study's report found gradient a poor predictor (1263, 1264).
+at the watershed scale that study's report found gradient a poor predictor (1264), and its sites with juveniles lay
+on segments up to 6.96 % (1263).
 
 Some sources tie steeper reaches to less use or less spawning. In Adsett Creek, habitat for yearlings and older became
 marginal upstream with rapidly increasing gradient and the loss of riparian cover after a fire (1266). Steeper boulder
@@ -156,17 +161,17 @@ and cobble reaches limit spawning in the Table and Anzac (Cowie and Blackman 200
 `research/grayling_life_history.md`). In the Atigun most spawning lay in lakes, side channels and tributaries where
 gradient and scour are less severe (1255). Hawkshaw and Shrimpton relay the suggestion that steep canyons are why
 grayling are absent from the watersheds east of the Williston Reservoir (Hawkshaw and Shrimpton 2014, p. 25). Others
-point the other way: in Adsett Creek yearlings and older were densest in the steep sections, the authors suggest
-(1267); Stamford et al. judge that pools in clear reaches of moderate gradient appear to be a key need of Williston adults, and Hagen and
+point the other way: in Adsett Creek yearlings and older were densest, per unit of habitat, in the steep sections, which the
+authors suggest grayling preferred (1267); Stamford et al. judge that pools in clear reaches of moderate gradient appear to be a key need of Williston adults, and Hagen and
 Stamford observe fewer adults in Parsnip streams with long low-gradient meanders (both in
 `research/grayling_life_history.md`).
 
 The values are of rivers and reaches where fry and juveniles were caught in the Williston watershed: 0.1 % on the
 Osilinka (1258), 0.2 % on the Omineca (1259), 0.3 % on the Parsnip (1262), under 0.5 % and 1-2 % on the Table (1260,
-1261). The one rearing set given site by site is Hawkshaw and Shrimpton's: the map segments holding 27 sites with
-juveniles run from 0 to 6.96 % (mean 1.22 %), against 0 to 12.55 % at the 30 without (1263). A watershed's gradient did
+1261). The one rearing set given site by site is Hawkshaw and Shrimpton's: the map segments holding the 27 sites they
+scored as holding juveniles (one grayling of any size) run from 0 to 6.96 % (mean 1.22 %), against 0 to 12.55 % at the 30 without (1263). A watershed's gradient did
 not predict whether juveniles were there, but most of the watersheds had maximum gradients under 2.6 %, which the
-authors say left little contrast to test (1264). For spawning, the only value is the Osilinka reach the authors call a
+authors offer as one possible reason the test found nothing (1264). For spawning, the only value is the Osilinka reach the authors call a
 spawning and rearing area, inferred from fry (1257). Overwintering fish in Alberta's Little Smoky held reaches of
 0.08-0.33 % (1201, 1268, 1269).
 
@@ -175,7 +180,8 @@ spawning and rearing area, inferred from fry (1257). Overwintering fish in Alber
 No source gives a minimum. In Alaska juveniles appeared to select channels 1-8 m wide and to select against channels
 wider than 14 m (1215, 1216), and adults in the same streams used channels averaging 10 m and selected against those
 under 6 m (1216's note): preferences, not limits. The Northwest Territories review's habitat class for spawning and
-rearing is about 10 m wide (1202, 1214). In the Williston watershed juveniles were at sites 0.96 to 43 m wetted (1272),
+rearing is about 10 m wide (1202, 1214). In the Williston watershed the sites scored as holding juveniles (one grayling of any size) were 0.96 to 43 m
+wetted (1272),
 fry and yearlings were seined in the 60-70 m Parsnip (1271), and yearlings favoured the larger, turbid Parsnip over its
 clear tributaries (1273); other sources place juveniles and fry in small tributaries, or possibly along mainstem
 margins, with no width (1217, 1218, 1274). For spawning, a constructed 3.0 m channel drew spawners (1203), and apart
@@ -198,7 +204,8 @@ at sampling (1229, 1230).
 
 At the watershed scale, Hawkshaw and Shrimpton found juveniles absent from study streams below fourth order and both
 present and absent at fourth order and above; order alone predicted presence poorly (1231). Stamford et al. relay the
-study as fry rearing areas that appear centred in "e.g. 4th order and larger" tributaries (1232) and, elsewhere, as
+study as placing the fry rearing areas, around which they say populations appear centred, in "e.g. 4th order and
+larger" tributaries (1232) and, elsewhere, as
 grayling that "appear more limited to cooler fifth order streams" (1233, citing Hawkshaw and Shrimpton 2014 and
 Ballard and Shrimpton 2009); neither original has a fifth-order statement. Outside the Williston, grayling apparently
 spawned in Adsett Creek, a second-order stream, and their fry reared there through the summer (1283, 1284).
