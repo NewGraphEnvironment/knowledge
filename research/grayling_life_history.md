@@ -30,7 +30,8 @@ were found.
   and May, feed through the summer, and move back to the mainstem from September to November.
 - **Spring spawners.** Spawning follows ice break-up, mostly mid-May to mid-June across the range. In BC no study has
   watched it: in the Sukunka it was estimated, from fry development, at mid-May to early June; in the Parsnip, from
-  telemetry and fry emergence, at late May to late June; in Adsett Creek (Liard) at mid to late May. The run starts as
+  water temperature and fry emergence, at late May to late June, an estimate the tagged fish suggest may run a week
+  late; in Adsett Creek (Liard) at mid to late May. The run starts as
   the ice goes and spawning as the water nears 4 °C. No redd is built: eggs go into small, loose gravel. Spawning
   sites in the Williston watershed are known only as suspected areas, inferred from tagged fish and fry.
 - **Eggs hatch in weeks.** Incubation takes from about a week in warm water to about a month in cold, and fry leave
@@ -70,10 +71,11 @@ The review says some grayling may spend part or all of their lives near their ov
 
 > "Some grayling may spend part or all of their lives near their overwintering areas." (stewart_etal2007Fishlife, p. 22)
 
-**River fish in the Williston watershed.** In the upper Peace, Hagen et al.'s 2026 synthesis, citing Pollard and
-Miller 2011 and Stamford et al. 2017, says grayling complete their lives in rivers, often below headwater lakes, that
-one lake-inlet spawning population is known, and that they do not live in the reservoir, though eDNA and occasional
-captures suggest some move through it:
+**River fish in the Williston watershed.** In the upper Peace, Hagen et al.'s 2026 synthesis says grayling complete
+their lives in rivers, often below headwater lakes (citing Pollard and Miller 2011 and Stamford et al. 2017), that one
+lake-inlet spawning population is known, and that they do not live in the reservoir (citing Clarke et al. 2005),
+though eDNA and occasional captures suggest some move through it (citing Golder 2013, Stamford et al. 2022 and
+Stamford and O'Connor 2022):
 
 > "Arctic Grayling in the Williston Reservoir watershed complete their life cycle in fluvial habitats and often downstream from headwater lakes" (hagen_etal2026futureArctic, p. 6)
 
@@ -117,9 +119,12 @@ watershed, and judge the clear-stream one uncertain:
 > "The ‘Clear Stream’ ecotype is therefore currently somewhat uncertain." (stamford_etal2017FWCPArctic, p. 5)
 
 **Residents and migrants in one basin.** Hagen et al. 2026 suggest that the surviving populations move locally within
-their home streams, and that the populations flooded by the reservoir were presumably adapted to large rivers:
+their home streams, and, citing Stamford et al. 2017, that the populations thought lost to flooding were presumably
+adapted to large rivers:
 
 > "Remnant Arctic Grayling populations in unflooded core areas (Parsnip, Nation, Omineca, Ingenika, Lower Finlay, Upper Finlay; Figure 1) appear to also move locally within their home streams and potentially also express locally adapted traits." (hagen_etal2026futureArctic, p. 5)
+
+> "In contrast, Arctic Grayling metapopulations thought to be extirpated by flooding in the Williston and" (hagen_etal2026futureArctic, p. 5)
 
 > "were demographically independent from surviving metapopulations and presumably adapted to the (now flooded) large river habitats" (hagen_etal2026futureArctic, p. 6)
 
@@ -223,8 +228,8 @@ spawning fell at 4 °C:
 
 > "The initiation of the estimated spawning period does coincide with 4oC water temperatures" (blackman2002RadioTelemetry, p. 16)
 
-In Adsett Creek (Liard, BC), the onset of flow probably cued the run into the creek, but no single factor governed
-it:
+In Adsett Creek (Liard, BC), the onset of flow probably cued the run into the creek, but no single factor appeared to
+govern it:
 
 > "While the onset of flow in Adsett Creek probably cued immigration, no single physical parameter appeared responsible for regulating ascent." (stewart_etal1982Ecologicalstudies, p. 31, OCR)
 
@@ -312,18 +317,19 @@ he estimated it at late May to mid or late June, and judged the estimate may run
 
 > "the spawning period was calculated to be between May 29 and June 25 based on the fry emergence dates and water temperatures. However, our estimates may have been a week late" (blackman2002RadioTelemetry, p. 16)
 
-Blackman's habitat report on the Table and Anzac puts most spawning just after the peak of the spring freshet:
+Blackman's habitat report on the Table and Anzac suggests most spawning occurs just after the peak of the spring
+freshet:
 
 > "In the Anzac and Table watersheds, most Arctic grayling spawning appears to occur just after the peak of spring freshet, when observing spawning fish is almost impossible." (blackman20041997Arctic, p. 13)
 
-The year matters. In the early, low-water spring of 1998, Table and Anzac fry emerged in early June, a month earlier
-than in 1997, and hatched from 10 to 25 June by their size:
+The year matters. In the early, low-water spring of 1998, Table and Anzac fry appeared about a month earlier than in
+1997 (the abstract says they emerged in early June; by their size the report puts hatching at 10 to 25 June):
 
 > "The unusually early spring, and low stream flows in 1998, resulted in the fry emerging in early June, one month earlier than in 1997." (blackman_hunter20011998Arctic, p. i)
 
 > "The size of the Arctic grayling fry sampled during the surveys indicates hatching occurred from June 10th to June 25th in 1998" (blackman_hunter20011998Arctic, p. 28)
 
-In the Cannings and Ptolemy account of the Williston grayling, after Northcote (1995):
+Across the range, Cannings and Ptolemy, citing Northcote (1995):
 
 > "Grayling are spring spawners often moving onto spawning areas shortly after ice-out at temperatures near 4°C (Northcote, 1995)." (cannings_ptolemy1998RareFreshwater, p. 49)
 
@@ -365,8 +371,8 @@ middle reaches):
 > "Seven tagged grayling (26, 29, 31, 37, 39, 41, 48) were found in the second area between km 12 and km 22. This area has multiple channels meandering through the valley flat, which is up to 2 km wide." (blackman2002RadioTelemetry, p. 13)
 
 The suspected Anzac spawning areas, from the telemetry and the fry, had shallow glides with much small gravel and
-several channels, and their upper end came where gravel gave way to cobble and boulder (the gravel size is the
-evidence table's grayling rows):
+several channels, and their upper end came where gravel gave way to cobble and boulder (the evidence table's grayling
+rows hold this passage as a statement, not the gravel size):
 
 > "The suspected spawning areas of the Anzac River (based on telemetry and fry distribution data) all had extensive shallow glide areas with large quantities of small (<3 cm) gravel and were located in areas of the river that were multi-channelled. The upper limits of spawning coincided with a decrease in the percentage of gravel and an increase in cobble and boulder percentage" (blackman2002RadioTelemetry, p. 18)
 
@@ -460,8 +466,8 @@ the evidence table's grayling rows):
 > "They do not build a redd" (stewart_etal2007Fishlife, p. 14)
 
 In Adsett Creek (Liard, BC), spawning was concentrated 4 to 5 km above the Prophet River, over stable coarse gravel
-toward the tails of long runs before steep gradients (the gravel size and depth are the evidence table's grayling
-rows, where the sites were, not limits; the quote skips two words the scan misreads):
+generally toward the tails of long runs, especially those above steep gradients (the gravel size and depth are the
+evidence table's grayling rows, where the sites were, not limits; the quote skips two words the scan misreads):
 
 > "Most spawning activity occurred in areas characterized by stable, coarse (20 - 40 mm) ... substrates, water depths of 0.1 - 0.4 m, and flows of ... m/sec. These areas generally occurred toward the tail of long runs, particularly those preceding steep gradients." (stewart_etal1982Ecologicalstudies, p. 31, OCR)
 
@@ -496,8 +502,8 @@ Cannings and Ptolemy, summarising Northcote's (1995) review of grayling in gener
 
 > "They show strong reproductive, trophic and refuge homing with offspring utilizing the same habitat areas as their parents." (cannings_ptolemy1998RareFreshwater, p. 48)
 
-In the Parsnip telemetry, Blackman set the literature's homing beside his own count of fish spawning away from their
-summer stream:
+In the Parsnip telemetry, Blackman set the literature's homing beside his own count of fish that appeared to spawn away
+from their summer stream:
 
 > "but they frequently utilise different streams for different life history stages (6 of 18 fish did not appear to spawn in the stream where they were tagged in this study)" (blackman2002RadioTelemetry, p. 16)
 
@@ -563,9 +569,10 @@ edge (the quote starts after a number the scan misreads):
 
 > "days after emergence, grayling young-of-the-year remained proximal to spawning areas, and occupied peripheral stream habitat (quiescent areas where fast currents and back waters merged)" (stewart_etal1982Ecologicalstudies, p. 44, OCR)
 
-**The Parsnip tributaries.** In the Table and Anzac, Blackman's 1997 electrofishing found fry in shallow, slow water,
-and their upstream limit where the bed turned from gravel to cobble (the depth and velocity are where fry were caught,
-not limits):
+**The Parsnip tributaries.** In the Table and Anzac, Blackman's 1997 electrofishing found grayling fry, like the bull
+trout and burbot fry caught with them, in shallow, slow water, and their upstream limit appeared to fall where the bed
+turned from gravel to cobble (the 12 cm and < 0.1 m/s are given for the three species together, where fry were caught,
+not limits; the grayling's own means are the evidence table's grayling rows):
 
 > "The grayling fry, bull trout and burbot showed a strong affinity for shallow (average 12 cm) low velocity (<0.1m-s) habitats" (blackman20041997Arctic, p. 7)
 
@@ -681,8 +688,9 @@ Across the range, Hagen et al. 2026, after Northcote (1993), describe fry moving
 
 > "By fall they drift or move downstream into larger streams to overwinter (Northcote 1993)." (hagen_etal2026futureArctic, p. 6)
 
-The Sukunka fry did not; the study infers, from fry in ice-covered cobble riffles in November, that they wintered in
-the tributary:
+The Sukunka fry did not; the study infers, from fry in ice-covered cobble riffles in November and a downstream
+movement of yearlings in June, that fry may winter in the cobbles of frozen side channels (its summary) or in the
+tributary (its discussion):
 
 > "there was no downstream movement of fry from the tributaries in" (stuart_chislett1979AspectsLife, p. 3)
 
@@ -693,13 +701,14 @@ the tributary:
 ## Where do juveniles and adults spend the summer?
 
 **Juveniles in the larger rivers.** Across the range, Hagen et al. 2026, citing Tack 1980, Butcher et al. 1981,
-Northcote 1993 and Stewart et al. 2007, describe juveniles of 100 to 200 mm using the larger streams through the year:
+Northcote 1993 and Stewart et al. 2007, describe juveniles of 100 to 200 mm often using the larger streams through the
+year:
 
 > "These larger streams are often utilized by juvenile grayling 100-200 mm (age-1+ to age-2+) throughout the year, and the summer rearing habitats and overwintering locations may be in relative proximity to each other" (hagen_etal2026futureArctic, p. 6)
 
 In the Parsnip, Blackman and Hunter found yearlings in the turbid Parsnip mainstem, in slow glides, and almost none
 in the clear Table and Anzac; they suggest the Parsnip may be the main rearing water for yearlings of all three
-rivers (the depth and velocity are where yearlings were caught, not limits):
+rivers (the depth and velocity are a preference from use, not a limit):
 
 > "This age class did not appear to rear in any significant numbers in the clear tributary streams but favoured the larger and more turbid Parsnip River." (blackman_hunter20011998Arctic, p. i)
 
@@ -707,12 +716,16 @@ rivers (the depth and velocity are where yearlings were caught, not limits):
 
 > "Age 1+ Arctic grayling preferred for low velocity (<0.20 ms-1) sites with a depth between 0.40 and 1.0 m. The shallow low velocity glides in the Parsnip River may be the primary rearing area for this age class of Arctic grayling, not only from the Parsnip River but for fish from the Table and Anzac rivers as well." (blackman_hunter20011998Arctic, p. 30)
 
-In the Sukunka (BC), Stuart and Chislett (reported by Cannings and Ptolemy) found juveniles and adults in pools:
+In the Sukunka (BC), Stuart and Chislett found juveniles almost only in pools, of the river and of the tributaries, and
+adults mainly in the deepest pools of the river, seldom in tributary pools (the scan splits the
+bracketed word across a line):
 
-> "Stuart and Chislett (1979) found grayling using four mainstem habitat types during the summer and fall period on the Sukunka: back-channels were heavily used by recently emerged fry; side-channel riffles by older fry and pools by juveniles and adults." (cannings_ptolemy1998RareFreshwater, p. 48)
+> "Juvenile grayling were found almost [exclusively] in the pools of the Sukunka River and the tributaries" (stuart_chislett1979AspectsLife, p. 3, OCR)
+
+> "Adult grayling to age eight were found mainly in the deepest pools of the Sukunka River and seldom found in the tributary pools." (stuart_chislett1979AspectsLife, p. 3, OCR)
 
 In Alaskan streams along the Trans Alaska Pipeline north of the Yukon River, Den Beste and McCart's juveniles (75 to
-220 mm) appeared to select narrow channels (widths where juveniles were, not limits):
+220 mm) appeared to select narrow channels (widths selected, not limits):
 
 > "fish populations along the Trans Alaska Pipeline System (TAPS) north of the Yukon River" (denbeste_mccart1984Overviewstudies, p. 1)
 
@@ -733,7 +746,7 @@ al. 2007, tie the adults' need for clear water to feeding by sight:
 > "Clear stream reaches appear to be critical for summer rearing of subadult and adult Arctic Grayling, likely because they are highly dependent on sight for feeding" (hagen_etal2026futureArctic, p. 7)
 
 **The Table and Anzac adults.** Blackman's habitat surveys found most adults in pools and almost none in riffles, in
-the deepest water near the thalweg where the river narrows:
+the deepest water near the thalweg, usually where the river narrows:
 
 > "When the Table River data (Mathias et al. 1998, and Langston 1998) were pooled with the Anzac data, 63% of the adult grayling were found in pools, 22% in glides, 15% in runs and less than 1% were found in riffles." (blackman20041997Arctic, p. 10)
 
@@ -776,15 +789,20 @@ not yet done), their observation that streams with long low-gradient meanders ho
 
 > "The process of compiling these data and designing an analysis has begun." (hagen_stamford2023ParsnipArctic, p. 51)
 
-In Adsett Creek (BC), the authors judge that summering grayling preferred the steep sections, and their diet was
-mostly terrestrial insects:
+In Adsett Creek (BC), grayling were densest, per unit of habitat, in the steep sections, which the authors read as a
+preference; large grayling were repeatedly found in the deeper pools there through the summer, and smaller fish used the
+area continuously (the first quote skips a word the scan splits across a line). Their diet was mostly terrestrial
+insects:
 
-> "These results suggest that grayling preferred areas of steep gradient, typified by Sections 3 and 4." (stewart_etal1982Ecologicalstudies, p. 46, OCR)
+> "these sections supported the most ... per unit area of habitat" (stewart_etal1982Ecologicalstudies, p. 46, OCR)
+
+> "These results suggest that grayling preferred areas of steep gradient, typified by Sections 3 and 4. Throughout the summer, large grayling (250 mm) were repeatedly found in the deeper pools of this area. Smaller fish utilized this area continuously" (stewart_etal1982Ecologicalstudies, p. 46, OCR)
 
 > "Most of their diet consisted of terrestrial insects" (stewart_etal1982Ecologicalstudies, p. 47, OCR)
 
 In Alaskan streams north of the Yukon River, Den Beste and McCart's adults used channels averaging 10 m wide and
-selected against those under 6 m (widths where adults were, not limits):
+selected against those under 6 m (the 10 m is the average width used and the 6 m a width selected against; neither is a
+limit):
 
 > "The average channel width used by adults was is 10m, but channels less than 6 m wide are selected against." (denbeste_mccart1984Overviewstudies, p. 35)
 
@@ -792,8 +810,8 @@ In the Little Nahanni (Northwest Territories), adults were found high and cold:
 
 > "Adults had a strong correlation to elevation and water temperature, using habitats with high elevation (>1200 m) and low temperature (7oC), and increased proportions of pool and boulder habitat." (mcpherson2020Habitatuse, p. iii)
 
-In the studies it cites (Vascotto 1970, Hughes and Reynolds 1994, Hughes 1998a), the Northwest Territories review
-reports the larger fish holding the upstream positions:
+Across the range, the Northwest Territories review, citing Vascotto 1970, Hughes and Reynolds 1994 and Hughes 1998a
+and 1999, reports the larger fish holding the upstream positions:
 
 > "As cohorts age their distribution in the river gradually increases as they move upstream, with the fastest growing fish in the upper reaches and slower growing fish in the lower reaches." (stewart_etal2007Fishlife, p. 21)
 
@@ -821,8 +839,8 @@ watersheds east of the reservoir:
 
 > "Arctic grayling are also absent from all the major watersheds on the eastern side of the Williston reservoir regardless of stream order." (hawkshaw_shrimpton2014Temperaturepreference, p. 25)
 
-Stamford et al. 2017 read this study and Ballard and Shrimpton 2009 as limiting grayling to cooler fifth-order
-streams; neither original says fifth order (Hawkshaw and Shrimpton, above, give fourth):
+Stamford et al. 2017 read this study and Ballard and Shrimpton 2009 as suggesting grayling are more limited to
+cooler fifth-order streams; neither original says fifth order (Hawkshaw and Shrimpton, above, give fourth):
 
 > "the Williston Reservoir watershed might present a somewhat unique picture, as grayling appear more limited to cooler fifth order streams" (stamford_etal2017FWCPArctic, p. 7)
 
@@ -869,17 +887,13 @@ Shrimpton say little is known of winter movement and habitat in the Omineca regi
 
 > "Under-ice sampling showed some two year olds remain in the deep tributary pools overwinter" (stuart_chislett1979AspectsLife, p. 3)
 
-In Adsett Creek (Liard, BC), wintering in the creek depended on the conditions before freeze-up and was not
-obligatory; winter sampling of similar small tributaries found only underyearlings and yearlings (EVS 1982d, reported
-by Stewart et al. 1982):
+In Adsett Creek (Liard, BC), the authors suggest wintering in the creek depends on the conditions before freeze-up and
+is not obligatory; winter sampling of similar small tributaries found only underyearlings and yearlings (EVS 1982d,
+reported by Stewart et al. 1982):
 
 > "suggest that the propensity to overwinter in small tributaries such as Adsett Creek is related to physical conditions which preceed freeze up, and that overwintering in such habitat is not obligatory." (stewart_etal1982Ecologicalstudies, p. 90, OCR)
 
 > "tributaries similar in size to (and including) Adsett Creek were utilized only by overwintering underyearling and yearling grayling" (stewart_etal1982Ecologicalstudies, p. 90, OCR)
-
-Cannings and Ptolemy, summarising Northcote's (1995) review of the literature:
-
-> "Large deep pools are required for overwintering and holding water." (cannings_ptolemy1998RareFreshwater, p. 48)
 
 **The Little Smoky River (Alberta).** Radio-tagged grayling had no fixed winter grounds; they moved into deep pools
 and glides with cover as the water cooled in October, then to the edges of the new ice, and most wintered where the
@@ -894,6 +908,10 @@ mean gradient was 0.17 to 0.18 % (where fish wintered, not a limit; the evidence
 > "most fish overwintered in water with a mean gradient in the 0.17-0.18% range" (stanislawski1997FallWinter, p. 42, OCR)
 
 > "In general, overwintering grounds were not restricted in the Little Smoky River as they are in Alaskan streams (Krueger 1981)." (stanislawski1997FallWinter, p. 42, OCR)
+
+**Deep pools, across the range.** Cannings and Ptolemy, summarising Northcote's (1995) review of the literature:
+
+> "Large deep pools are required for overwintering and holding water." (cannings_ptolemy1998RareFreshwater, p. 48)
 
 **Elsewhere, spring-fed water.** In the Northwest Territories and Alaska, grayling winter in deep lakes and large
 rivers, and the use of spring-fed reaches may be relatively common (McCart 1974, Jessop and Lilley 1975 and
@@ -942,7 +960,7 @@ Reynolds et al. 1989:
 
 > "Elevated sediment transport reduces water clarity and negatively affects Arctic Grayling populations, both through direct effects on the health and survival of individual fish, and also through degradation of habitat for feeding and reproduction" (hagen_etal2026futureArctic, p. 7)
 
-**Flow.** In the Sukunka (BC), a missing year class was put down to high flows and heavy sediment in July and August
+**Flow.** In the Sukunka (BC), a missing year class was put down to high flows and heavy sediment in the summer of
 1976:
 
 > "The grayling population in the Sukunka remained stable throughout the study period and was marked by the absence of the 1976 year class." (stuart_chislett1979AspectsLife, p. 2)
@@ -954,8 +972,8 @@ reported:
 
 > "The vulnerability of newly hatched grayling fry to floods is cited throughout the literature with numerous year class failures attributed to high stream flows" (blackman2002RadioTelemetry, p. 19)
 
-Stamford et al. 2017 see spring flows after emergence as a possible bottleneck, and report Tack (1974) and Clark
-(1992) on the Chena River (Alaska):
+Stamford et al. 2017 see spring flows after emergence as a possible bottleneck, and report Tack (1974) on the Chena
+River (Alaska) and Clark (1992):
 
 > "Immediately following emergence, however, high and variable flows related to spring freshet might limit the availability of low-velocity rearing space." (stamford_etal2017FWCPArctic, p. 12)
 
@@ -980,8 +998,9 @@ Across the range, Stamford et al. 2017 name poorly installed crossings:
 
 - **Spawning sites in the Williston watershed.** No spawning site there has been seen. The Parsnip telemetry gives
   suspected areas (two Anzac reaches, Parsnip side channels, a small Parsnip tributary), inferred from where tagged
-  fish held and where fry were later found; egg searches in the Anzac and the Sukunka found none; elsewhere (the
-  Osilinka, the Nation, the Ospika, the upper Finlay) spawning is inferred from fry. Hagen et al. 2026 call it a gap:
+  fish held and where fry were later found; an egg search in the Anzac found none (as did one in the Sukunka, below
+  the dam); elsewhere (the Osilinka, the Nation, the Ospika, the upper Finlay) spawning is inferred from fry. Hagen et
+  al. 2026 call it a gap:
 
   > "Imprecise knowledge of overwintering and spawning locations remains an important information gap limiting conservation and recovery actions for these life stages" (hagen_etal2026futureArctic, p. 26)
 
@@ -989,25 +1008,27 @@ Across the range, Stamford et al. 2017 name poorly installed crossings:
   stream described is Adsett Creek (Liard), where turbidity hid the spawning itself; spawning sites outside BC are the
   evidence table's grayling rows.
 - **Spawning dates seen, not inferred, in BC.** The Sukunka dates come from fry development, the Parsnip dates from
-  telemetry and fry emergence, and the Adsett Creek dates are given as apparent.
+  water temperature and fry emergence, and the Adsett Creek dates are given as apparent.
 - **Lacustrine grayling in BC.** The Toodoggone lake-inlet population and the lower Peace lake populations are named
   but not described in any source read, and the Mesilinka grayling above the lake are named only through Cowie and
   Blackman's citation.
 - **Winter habitat of fry and juveniles in BC.** The Sukunka study infers, from fry in ice-covered cobble riffles in
-  November, that fry winter in the cobbles of frozen side channels, and Adsett Creek's small tributaries held only
-  underyearlings and yearlings in winter; no BC study follows fry or juveniles through a winter. The Williston
-  syntheses assume, not show, that juvenile and winter habitats overlap. Adult winter habitat in the Williston
-  watershed rests on one winter of Parsnip radio telemetry and the later acoustic telemetry.
-- **Rearing in the Parsnip tributaries' own tributaries.** Fry were found in some small Parsnip tributaries in 2005
-  and none in the Table tributaries; what the small tributaries contribute is not measured.
+  November and yearlings moving downstream in June, that fry may winter in the cobbles of frozen side channels (its
+  summary) or in the tributary (its discussion), and winter sampling of tributaries the size of Adsett Creek (Adsett
+  among them) along the Alaska Highway gas pipeline found them used only by underyearlings and yearlings; no BC study
+  follows fry or juveniles through a winter. The Williston syntheses assume, not show, that juvenile and winter habitats
+  overlap. Adult winter habitat in the Williston watershed rests on one winter of Parsnip radio telemetry and the later
+  acoustic telemetry.
+- **Rearing in the Parsnip's other tributaries.** Fry were found in 6 of 13 Parsnip tributaries sampled in 2005 (the
+  Table and Anzac not sampled), and none were caught or seen in the Table's tributaries; what these tributaries
+  contribute is not measured.
 - **Primary studies cited only through reviews.** Among them: Hawkshaw et al. 2013 (the library holds its abstract
-  only), Northcote 1993 and 1995 (1995 held with no text), Butcher et al. 1981 (Liard), Zemlak and Langston 1998,
-  McPhail 2007, McLean and Langston 1992, Pollard and Miller 2011, Clarke et al. 2005, Stamford et al. 2015, O'Connor
-  et al. 2026, Chu Cho Environmental 2018, Stamford and O'Connor 2022, Sherstone and Blackman 2008, ECL Envirowest
-  1998, EVS 1982d, Armstrong 1986, Tack 1974, Clark 1992, Ott and Morris 2005 and 2006, Kratt 1977, Vascotto 1970,
-  Hughes and Reynolds 1994, Tripp and McCart 1974 and Jessop and Lilley 1975, read here only through Stamford et al.
-  2017, Hagen et al. 2026, Stewart et al. 2007, Stewart et al. 1982, Cannings and Ptolemy 1998 or Cowie and Blackman
-  2007 and 2012.
+  only), Northcote 1993 and 1995 (1995 held with no text), Butcher et al. 1981 (Liard), McPhail 2007, McLean and
+  Langston 1992, Pollard and Miller 2011, Clarke et al. 2005, Stamford et al. 2015, O'Connor et al. 2026, Chu Cho
+  Environmental 2018, Stamford and O'Connor 2022, Sherstone and Blackman 2008, ECL Envirowest 1998, EVS 1982d, Armstrong
+  1986, Tack 1974, Clark 1992, Ott and Morris 2005 and 2006, Kratt 1977, Vascotto 1970, Hughes and Reynolds 1994, Tripp
+  and McCart 1974 and Jessop and Lilley 1975, read here only through Stamford et al. 2017, Hagen et al. 2026, Stewart et
+  al. 2007, Stewart et al. 1982, Cannings and Ptolemy 1998 or Cowie and Blackman 2007 and 2012.
 
 ## How the quotes are checked
 
