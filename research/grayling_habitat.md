@@ -2,7 +2,7 @@
 
 **Verified:** 2026-11-26 · **Issues:** #140 (this evidence), for #280 (the proposed baseline and its retune) and #139
 (the baseline review); the FISS workbook records are #281 · **Produced by:** `data/literature_evidence.csv`'s GR rows
-(audited for meaning, `planning/archive/<#140>/`), `research/grayling_life_history.md`, `data-raw/grayling_use.R`
+(audited for meaning, `planning/archive/2026-11-issue-140-grayling-evidence/`), `research/grayling_life_history.md`, `data-raw/grayling_use.R`
 (`data/gr_use.csv`, log `scripts/logs/habitat/20261126_grayling_use.txt`), `data-raw/grayling_segments.R` (log
 `scripts/logs/habitat/20261126_grayling_segments.txt`) · **Status:** evidence gathered; no value proposed (#280).
 
