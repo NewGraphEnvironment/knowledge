@@ -127,7 +127,7 @@ in May and June caught grayling on 11. The tables say nothing about where grayli
 Hagen et al. 2026 map 85 critical-habitat segments for grayling in six Williston core areas, each with the life
 stages seen there; some segments redraw reaches others already hold, so each Atlas line is counted once, and the
 connector lines that carry a tributary's flow across a river are left out. Read against the Freshwater Atlas lines
-they follow (1,720 km on 80 of the segments, outside lakes and the reservoir), they are large rivers: 93 % of their
+they follow (1,726 km, outside lakes and the reservoir), they are large rivers: 93 % of their
 length lies in river polygons, the median MAD is 30 m³/s and the median width about 57 m, and over 99 % of the length
 is under 2.49 % gradient (the Atlas line's own gradient, which the tuning uses as its gradient sensitivity). The
 segments where fry were recorded look the same (median MAD 37 m³/s, over 99 % under 2.49 %), as do those named as

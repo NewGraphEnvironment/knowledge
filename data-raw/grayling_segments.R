@@ -82,7 +82,7 @@ hits <- DBI::dbGetQuery(con, sprintf("
         0.5 * LEAST(ST_Length(ST_Force2D(f.geom)), b.seg_len)
   ORDER BY b.seg_id, f.linear_feature_id", tmp, buffer_m))
 hits$linear_feature_id <- as.numeric(hits$linear_feature_id)
-say("FWA lines matched (at least half within %g m of a segment): %d lines on %d of %d segments (%.0f km, each line once).",
+say("FWA lines matched (half the shorter of line and segment within %g m of it): %d lines on %d of %d segments (%.0f km, each line once).",
     buffer_m, n_distinct(hits$linear_feature_id), n_distinct(hits$seg_id), nrow(seg),
     sum(distinct(hits, linear_feature_id, length_metre)$length_metre) / 1000)
 
