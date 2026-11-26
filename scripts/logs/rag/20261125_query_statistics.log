@@ -1,0 +1,58 @@
+# After the #274 rebuild: the same three queries on the rebuilt local store, top 5
+# expected hits: scripts/logs/rag/20261125_rebuild_statistics_expected.txt
+# start 2026-11-25T17:20:04Z
+## Q1 summarising a simulation study by bias, coverage and Monte Carlo standard error
+Opening data/rag/statistics.duckdb unverified (verify = FALSE).
+duckdb keeps downloaded extensions and secrets in a temporary directory:
+ℹ /tmp/RtmpkiONuM/duckdb
+This is removed when the R session ends.
+• Extensions are re-downloaded each session.
+• Secrets are lost.
+ℹ Run duckdb(shared_home = TRUE) (or create ~/.duckdb) to keep them (suitable for most users).
+ℹ Run duckdb(shared_home = FALSE) to accept the temporary directory (and silence this message).
+ℹ See ?duckdb_storage for details and alternatives.
+# A tibble: 5 × 9
+  citation_key            origin chunk_id start   end text   score metric method
+  <chr>                   <chr>     <int> <int> <int> <chr>  <dbl> <chr>  <chr> 
+1 morris_etal2019Usingsi… /User…     2977   792  2222 "Sim…  0.205 cosin… hybrid
+2 morris_etal2019Usingsi… /User…     3019 34399 36887 "0/2… 13.0   bm25   hybrid
+3 morris_etal2019Usingsi… /User…     3049 58273 60203 "Mon… 11.5   bm25   hybrid
+4 morris_etal2019Usingsi… /User…     3064 70408 74460 "• “… 12.7   bm25   hybrid
+5 morris_etal2019Usingsi… /User…     3096 95941 97490 "Whi…  0.205 cosin… hybrid
+## Q2 von Mises kernel density estimate with a plug-in bandwidth for circular data
+Opening data/rag/statistics.duckdb unverified (verify = FALSE).
+duckdb keeps downloaded extensions and secrets in a temporary directory:
+ℹ /tmp/Rtmp81dhjr/duckdb
+This is removed when the R session ends.
+• Extensions are re-downloaded each session.
+• Secrets are lost.
+ℹ Run duckdb(shared_home = TRUE) (or create ~/.duckdb) to keep them (suitable for most users).
+ℹ Run duckdb(shared_home = FALSE) to accept the temporary directory (and silence this message).
+ℹ See ?duckdb_storage for details and alternatives.
+# A tibble: 5 × 9
+  citation_key            origin chunk_id start   end text   score metric method
+  <chr>                   <chr>     <int> <int> <int> <chr>  <dbl> <chr>  <chr> 
+1 ridout_linkie2009Estim… /User…     2286  5595  7005 "ove…  0.290 cosin… hybrid
+2 ridout_linkie2009Estim… /User…     2297 14398 15979 "|  …  0.290 cosin… hybrid
+3 taylor2008Automaticban… /User…     2884     1  2421 "pro… 16.7   bm25   hybrid
+4 taylor2008Automaticban… /User…     2924 31984 33594 "| -… 16.3   bm25   hybrid
+5 taylor2008Automaticban… /User…     2931 37582 41311 "est… 15.2   bm25   hybrid
+## Q3 fitting occupancy and abundance models with the unmarked R package
+Opening data/rag/statistics.duckdb unverified (verify = FALSE).
+duckdb keeps downloaded extensions and secrets in a temporary directory:
+ℹ /tmp/Rtmp5Jcuys/duckdb
+This is removed when the R session ends.
+• Extensions are re-downloaded each session.
+• Secrets are lost.
+ℹ Run duckdb(shared_home = TRUE) (or create ~/.duckdb) to keep them (suitable for most users).
+ℹ Run duckdb(shared_home = FALSE) to accept the temporary directory (and silence this message).
+ℹ See ?duckdb_storage for details and alternatives.
+# A tibble: 5 × 9
+  citation_key             origin chunk_id start   end text  score metric method
+  <chr>                    <chr>     <int> <int> <int> <chr> <dbl> <chr>  <chr> 
+1 kellner_etal2023unmarke… /User…     2511     1  1614 "Rec… 0.247 cosin… hybrid
+2 kellner_etal2023unmarke… /User…     2516  4011  6432 "Met… 9.88  bm25   hybrid
+3 kellner_etal2023unmarke… /User…     2519  6433  8775 "Emp… 9.36  bm25   hybrid
+4 kellner_etal2023unmarke… /User…     2524 10406 12801 "rel… 9.28  bm25   hybrid
+5 kellner_etal2023unmarke… /User…     2533 17625 19141 "tur… 0.258 cosin… hybrid
+# end 2026-11-25T17:21:05Z

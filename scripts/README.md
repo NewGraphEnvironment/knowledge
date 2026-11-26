@@ -186,8 +186,9 @@ wf_farm_priority.js                          farm priority/crossing tables out o
       (passage_limits alone: where the access gradients come from and the leap and speed behind them, #234)
 0150  ACTION=build STORE=statistics COLLECTIONS="LP4R4VYR,73PNRGJF,Z7JP8UN2,K2P7XGFG"         then ACTION=push
       (the statistics tree: statistics, detection, survey_design and model_selection, by key; McElreath 2020, BDA3,
-      the detection, removal, eDNA, camera and diversity methods, #95, #216; Wood's GAM book and the occupancy and
-      hierarchical-modelling books join when a PDF is in hand)
+      the detection, removal, eDNA, camera and diversity methods and the works their documentation cites (simulation
+      studies, unmarked, circular densities, separation in logistic regression), #95, #216, #274; Wood's GAM book,
+      the occupancy and hierarchical-modelling books and Seber 1982 join when a PDF is in hand)
       (after a library change, ACTION=update with the same COLLECTIONS brings a store up to date instead; while
        NewGraphEnvironment/cred#48 is open, rebuild it before the push, as the ACTION=update bullet says)
       (a rebuild over an existing local store needs OVERWRITE=TRUE; ACTION=push needs CONFIRM=TRUE to upload)

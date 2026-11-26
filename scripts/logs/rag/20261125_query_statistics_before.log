@@ -1,0 +1,62 @@
+# Before the #274 rebuild: pull statistics from the bucket (ACTION=query VERIFY=TRUE on Q1), cred 0.8.0 and ragnar 0.4.0, top 5
+# expected hits: scripts/logs/rag/20261125_rebuild_statistics_expected.txt; none of the three expected works is in the bucket copy yet
+# start 2026-11-25T17:06:43Z
+## Q1 summarising a simulation study by bias, coverage and Monte Carlo standard error
+Downloaded statistics (32 docs, 11182 chunks, embedded with nomic-embed-text).
+duckdb keeps downloaded extensions and secrets in a temporary directory:
+ℹ /tmp/RtmpyamiXO/duckdb
+This is removed when the R session ends.
+• Extensions are re-downloaded each session.
+• Secrets are lost.
+ℹ Run duckdb(shared_home = TRUE) (or create ~/.duckdb) to keep them (suitable for most users).
+ℹ Run duckdb(shared_home = FALSE) to accept the temporary directory (and silence this message).
+ℹ See ?duckdb_storage for details and alternatives.
+# A tibble: 8 × 9
+  citation_key           origin chunk_id  start    end text  score metric method
+  <chr>                  <chr>     <int>  <int>  <int> <chr> <dbl> <chr>  <chr> 
+1 ridout_linkie2009Esti… /User…     2309 2.40e4 2.56e4 "2 o… 7.59  bm25   hybrid
+2 ridout_linkie2009Esti… /User…     2344 5.20e4 5.36e4 "|  … 8.67  bm25   hybrid
+3 gelman_etal2013Bayesi… /User…     8767 1.23e6 1.23e6 "par… 8.25  bm25   hybrid
+4 gelman_etal2013Bayesi… /User…     8794 1.25e6 1.25e6 "|\n… 0.250 cosin… hybrid
+5 gelman_etal2013Bayesi… /User…    11128 3.12e6 3.12e6 "| -… 7.70  bm25   hybrid
+6 mcelreath2020Statisti… /User…     4495 1.39e6 1.39e6 "In … 0.254 cosin… hybrid
+7 mcelreath2020Statisti… /User…     4511 1.41e6 1.41e6 "The… 0.251 cosin… hybrid
+8 bates_etal2024CrossVa… /User…      703 1.74e5 1.75e5 "Fig… 0.226 cosin… hybrid
+## Q2 von Mises kernel density estimate with a plug-in bandwidth for circular data
+Opening data/rag/statistics.duckdb unverified (verify = FALSE).
+duckdb keeps downloaded extensions and secrets in a temporary directory:
+ℹ /tmp/RtmpFlPEin/duckdb
+This is removed when the R session ends.
+• Extensions are re-downloaded each session.
+• Secrets are lost.
+ℹ Run duckdb(shared_home = TRUE) (or create ~/.duckdb) to keep them (suitable for most users).
+ℹ Run duckdb(shared_home = FALSE) to accept the temporary directory (and silence this message).
+ℹ See ?duckdb_storage for details and alternatives.
+# A tibble: 4 × 9
+  citation_key          origin chunk_id  start    end text   score metric method
+  <chr>                 <chr>     <int>  <int>  <int> <chr>  <dbl> <chr>  <chr> 
+1 hastie_etal2009Eleme… /User…     5563 591142 592803 "Ker…  0.319 cosin… hybrid
+2 ridout_linkie2009Est… /User…     2286   5595   7005 "ove…  0.290 cosin… hybrid
+3 ridout_linkie2009Est… /User…     2297  14398  15979 "|  …  0.290 cosin… hybrid
+4 ridout_linkie2009Est… /User…     2299  15980  20799 "| -… 15.7   bm25   hybrid
+## Q3 fitting occupancy and abundance models with the unmarked R package
+Opening data/rag/statistics.duckdb unverified (verify = FALSE).
+duckdb keeps downloaded extensions and secrets in a temporary directory:
+ℹ /tmp/RtmpohcZ14/duckdb
+This is removed when the R session ends.
+• Extensions are re-downloaded each session.
+• Secrets are lost.
+ℹ Run duckdb(shared_home = TRUE) (or create ~/.duckdb) to keep them (suitable for most users).
+ℹ Run duckdb(shared_home = FALSE) to accept the temporary directory (and silence this message).
+ℹ See ?duckdb_storage for details and alternatives.
+# A tibble: 7 × 9
+  citation_key             origin chunk_id start   end text  score metric method
+  <chr>                    <chr>     <int> <int> <int> <chr> <dbl> <chr>  <chr> 
+1 royle_nichols2003Estima… /User…      897     1  1473 "Eco… 0.302 cosin… hybrid
+2 burton_etal2015REVIEWWi… /User…     2354  1616  4000 "We … 6.43  bm25   hybrid
+3 burton_etal2015REVIEWWi… /User…     2388 28784 31207 "As … 6.56  bm25   hybrid
+4 burton_etal2015REVIEWWi… /User…     2404 41622 43203 "fac… 6.53  bm25   hybrid
+5 dorazio_erickson2018eDN… /User…     1504     1  1601 "eDN… 0.284 cosin… hybrid
+6 dorazio_erickson2018eDN… /User…     1513  7220  9610 "Hun… 0.264 cosin… hybrid
+7 dorazio_erickson2018eDN… /User…     1559 44020 45634 "col… 0.300 cosin… hybrid
+# end 2026-11-25T17:08:10Z

@@ -1,0 +1,33 @@
+# Expected before ACTION=build OVERWRITE=TRUE STORE=statistics COLLECTIONS=LP4R4VYR,73PNRGJF,Z7JP8UN2,K2P7XGFG (#274), written 2026-11-25, cred 0.8.0 and ragnar 0.4.0
+# before (bucket copy): 32 documents, 11182 chunks, as #223 pushed it on 2026-11-21 (its push log); the verified pull is logged in 20261125_query_statistics_before.log
+# members (from a copy of zotero.sqlite with its -wal, the group library, 2026-11-25): 53 distinct, 2 of them in two collections
+#   (mackenzie_royle2005Designingoccupancy, guillera-arroita_etal2010Designoccupancy); #223's 47 plus the 6 filed by #274
+# expected keys with a live PDF: 38, each with one PDF: #223's 32 plus
+  73PNRGJF FHDQDU42 morris_etal2019Usingsimulation
+  73PNRGJF 4AM7FX43 kellner_etal2023unmarkedpackage
+  73PNRGJF I73CU8MR taylor2008Automaticbandwidth
+  73PNRGJF 2N6GFPDK obrien_etal2003Crouchingtigers
+  73PNRGJF E7D64J6T best_fisher1979EfficientSimulation
+  73PNRGJF PQUK2TFD albert_anderson1984existencemaximum
+# expected left out (15), each 'no live PDF', the same 15 as #216's and #223's:
+  K2P7XGFG BBA2Q7W2 breiman_etal1984ClassificationRegression
+  LP4R4VYR BGVWWBV6 BayesianBeliefNets
+  LP4R4VYR XBCBNKW6 kendall1975RankCorrelation
+  LP4R4VYR TNK2RP5H mann1945NonparametricTests
+  LP4R4VYR UTZ4K2QG sen1968EstimatesRegression
+  LP4R4VYR VKB34D98 theil1950RankInvariantMethod
+  Z7JP8UN2 KMCPFP3K albertaremotecamerasteeringcommitteercsc_etal2024RemoteCamera
+  Z7JP8UN2 G8X6IU8M atlas_etal2023Wildsalmon
+  Z7JP8UN2 PS64VIQI castaneda_etal2020DetectingNative
+  Z7JP8UN2 5X6VF6GJ ficetola_etal2015Replicationlevels
+  Z7JP8UN2 R283VZX9 kays_etal2020empiricalevaluation
+  Z7JP8UN2 4DNKES53 lhoste_etal2025newunderwater
+  Z7JP8UN2 TME3DX5P moeller_etal2018Threenovel
+  Z7JP8UN2 M2FQPT9W schmelzle_kinziger2016Usingoccupancy
+  Z7JP8UN2 XJ3JX57M wearn_glover-kapfer2017Cameratrappingconservation
+# expected: 32 documents before, 38 after: 6 added (the six above), 0 dropped
+# expected: no 'Skipped' warning; bates_etal2024CrossValidationWhat read with pdftools again (markitdown: embedded NUL), as in #216 and #223
+# queries, run before the build and after it, top 5, expected hits written as author and year:
+#   Q1 "summarising a simulation study by bias, coverage and Monte Carlo standard error"  expect Morris et al. 2019
+#   Q2 "von Mises kernel density estimate with a plug-in bandwidth for circular data"      expect Taylor 2008; Ridout & Linkie 2009 and Rowcliffe et al. 2014 acceptable
+#   Q3 "fitting occupancy and abundance models with the unmarked R package"                expect Kellner et al. 2023
