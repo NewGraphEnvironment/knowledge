@@ -32,6 +32,13 @@ not the build `data/thresholds.csv` names unless `EVIDENCE_CHECK=FALSE`, and tak
 from link's `default` and from its flow version beside the best-scoring rule, with how far behind and how many parts
 apart (`knw_tune_anchor()`; #141, `research/baseline_anchoring.md`). It needs no database and rescores nothing.
 
+`grayling_use.R` and `grayling_segments.R` are the capture half of grayling's baseline evidence (#140,
+`research/grayling_habitat.md`). The first writes `data/gr_use.csv`: grayling detection by gradient, channel width
+and MAD class on the tuning's own GR rearing population, `0291`'s effort-corrected model with stream-bootstrap
+intervals; it needs no database and refuses evidence that is not the published build. The second reads Hagen et al.
+2026's critical-habitat segments (an EcoCat layer kept in the ignored `data/hagen_segments/`) against the Freshwater
+Atlas on the database and logs, by life stage, the gradient, MAD and width those segments span, aggregates only.
+
 `minimal_network_check.R` sets two evidence builds of the same groups beside each other, one on link's full network and
 one on its minimal network (#120; `research/minimal_network_tuning.md`): the visits placed, the columns that differ,
 the walks and outcomes, access per group, each visit's minimal parent, and with `STORED=TRUE` link's stored habitat km

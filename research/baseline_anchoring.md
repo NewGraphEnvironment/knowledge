@@ -1,7 +1,7 @@
 # How much the starting point chooses the published rule
 
-**Verified:** 2026-11-04 · **Issues:** #141 (this measure), for #139 (the baseline review) and #140 (grayling's
-baseline, read against the "before" below); the second start is #80, where the anchoring showed is #120 ·
+**Verified:** 2026-11-04 · **Issues:** #141 (this measure), for #139 (the baseline review) and #280 (grayling's
+baseline from #140's evidence, read against the "before" below); the second start is #80, where the anchoring showed is #120 ·
 **Produced by:** `data-raw/tune_anchor_check.R` over the saved tuning tables, through `knw_tune_anchor()`; logs
 `scripts/logs/habitat/20261104_tune_anchor_check-*` · **Status:** measured on #92's published tables (published until #145's promotion of 2026-11-04) and on the
 minimal-network candidate; every later run of `scripts/0320` writes the same columns into each summary and its pick
@@ -96,7 +96,7 @@ starts pick different kinds of size test (a MAD floor and a width floor on #92's
 next in #139's order, is steered on the minimal network and not on #92's tables, so it is the key whose
 reading moves most with the build; its pick on the minimal network is the furthest of any from its best in deviance.
 
-## Grayling rearing: the "before" for #140
+## Grayling rearing: the "before" for a rebuilt baseline
 
 `default` is `width>=1.5|g<=0.0349|none` on both readings, outside the region (19.3 behind, SE 6.7, on #92's tables; 14.4,
 SE 11.8, minimal).
@@ -108,7 +108,7 @@ SE 11.8, minimal).
 
 Both readings move `default`'s gradient limit to 5.49 % and leave the near-river exception the best carries (a river of
 50 m³/s within 500 m) off the pick, because `default` has none. The size floor is where the start shows: the best sits
-at 1 m on one reading and 2 m on the other, and the picks at 2 and 1.5 m. A rebuilt baseline (#140) is read by
+at 1 m on one reading and 2 m on the other, and the picks at 2 and 1.5 m. A rebuilt baseline (#280, from #140's evidence: `research/grayling_habitat.md`) is read by
 running the same check on its tuning: if the pick moves fewer parts from the best, the start chooses less.
 
 ## What this is not
