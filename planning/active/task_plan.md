@@ -42,27 +42,27 @@ spawning-site row.
 - [x] Add the new issue to #139's `## Members` table after #140
 
 ## Phase 2: Find the grayling literature
-- [ ] Query `bull_trout_grayling` and `habitat_modelling` (`0150 ACTION=query`, cred ≥ 0.4.0; hybrid rows only, a
+- [x] Query `bull_trout_grayling` and `habitat_modelling` (`0150 ACTION=query`, cred ≥ 0.4.0; hybrid rows only, a
       `bm25`-only row is a failed search) for rearing and spawning gradient, channel size, discharge, spawning
       substrate and site, fluvial/adfluvial movement, overwintering; list each source with its key in `findings.md`
       (drafter brief: `planning/active/drafter-brief.md`; drafters `rows` and `life`)
 - [ ] Trace each review's claim to its original; a needed original missing from the group library goes to
       `data/grayling_additions.csv` through `0270`, with the store rebuilt on m1 only if anything was added
-- [ ] Read Hagen et al. 2026 (`hagen_etal2026futureArctic`) for its habitat definitions by life stage
+- [x] Read Hagen et al. 2026 (`hagen_etal2026futureArctic`) for its habitat definitions by life stage
 
 ## Phase 3: Literature rows and their audit
-- [ ] Append GR rows to `data/literature_evidence.csv` (gradient, channel_width, discharge, stream_order,
+- [x] Append GR rows to `data/literature_evidence.csv` (gradient, channel_width, discharge, stream_order,
       substrate, groundwater, overwintering habitat, depth/velocity a held source does not already give), each by
       CLAUDE.md's drafting conventions; never insert. Timing and onset temperature are quoted in Phase 4's file
-- [ ] Each of the six cells (spawning and rearing gradient, width, MAD) has a value, `qual` or `none` row
+- [x] Each of the six cells (spawning and rearing gradient, width, MAD) has a value, `qual` or `none` row
 - [ ] `Rscript scripts/0280-literature-verify.R` passes (quotes verbatim, values in quotes)
 - [ ] Meaning audit of every new row against its PDF by fresh reviewers, rounds until one finds nothing inside an
       earlier fix, ending on an enumeration of every row's claim with its verdict (review files in `planning/active/`)
 
 ## Phase 4: Grayling life history, quoted
-- [ ] `research/grayling_life_history.md`: forms (fluvial, adfluvial, lacustrine), movement and timing, spawning
+- [x] `research/grayling_life_history.md`: forms (fluvial, adfluvial, lacustrine), movement and timing, spawning
       sites, fry and juvenile rearing, overwintering, each statement quoted with key and page
-- [ ] Add it to `0280`'s `QUOTED_DEFAULT`; `0280` passes
+- [x] Add it to `0280`'s `QUOTED_DEFAULT`; `0280` passes
 - [ ] Meaning audit of every quoted sentence, rounds as Phase 3's
 
 ## Phase 5: Where grayling were caught
