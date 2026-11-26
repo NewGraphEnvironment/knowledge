@@ -1,4 +1,4 @@
-Grayling critical-habitat segments (Hagen et al. 2026), knowledge#140, knowledge c902652. Layer md5 f50ec84e: 85 segments, 3316 km.
+Grayling critical-habitat segments (Hagen et al. 2026), knowledge#140, knowledge 5559546. Layer md5 f50ec84e: 85 segments, 3316 km.
 
 ## Segments by stage as recorded
                             layer          stage  n
@@ -19,6 +19,7 @@ FWA lines matched (half the shorter of line and segment within 25 m of it): 8643
        1496   0.9659091     1.003705
 Connector lines left out: 3355 lines, 97 km.
 Lines in a lake or reservoir polygon left out: 326 lines, 245 km.
+Segments whose kept lines run along less than 90 % of their length: 8 (1 Williston 0 %; 13 Nation 71 %; 21 Omineca 83 %; 56 Lower_Finlay 79 %; 67 NA 70 %; 73 NA 67 %; 78 NA 52 %; 84 NA 51 %).
 Segments left with no line after those filters: 0.
 
 ## By life-stage group, length-weighted over the FWA lines each group's segments follow (gradient in %, MAD in m3/s, width in m)
