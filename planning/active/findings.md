@@ -69,6 +69,13 @@ on 3,919 / 3,727 / 4,032; 1,746 with no `cw_deploy`; 3,283 with no area.
   are counted and dropped, as `0290`); stream and canal edges (`segment_edge_type` 1000, 1050, 1100, 1150, 2000,
   2100, 2300, `0291`'s list); a fished area of 10-10,000 m² (`0291`'s trim). River-polygon edges (1250, 1350) are a
   sensitivity, connectors and lake lines are counted and dropped.
+- **Change 1, before any fit (2026-11-26):** the population is the tuning's own for grayling rearing,
+  `.tune_population(.tune_base(visits_link, edge_stream, area_range), visits_species, "GR", "rear")` with
+  `knw_tune_run()`'s defaults (visit edge types 1000, 1100, 2000, 2300, not in a river polygon, a wetland or a lake;
+  area 10-10,000 m²; in range, not blocked, no natural barrier to GR downstream, `barrier_dnstr_gr`). It replaces the
+  bullet above: the tables then describe the visits the rules are scored on, and the barrier test, not `access_gr`,
+  carries access (so code 2's circularity does not arise). The funnel from the range to this population is logged.
+  The sensitivity "river-polygon edges included" becomes the same base with `wb_river` visits kept.
 - **Columns:** the tuning's: `segment_gradient`, `cw_deploy`, `mad_pick` (`R/tune_run.R`).
 - **Classes, three separate tables:**
   - gradient (%): 0-0.5, 0.5-1, 1-2, 2-2.49, 2.49-3.49, 3.49-5.49, 5.49-8, 8-12, > 12; reference 1-2;
