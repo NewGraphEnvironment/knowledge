@@ -1,5 +1,27 @@
 # Changelog
 
+## knowledge 0.4.51
+
+- Grayling’s evidence for a baseline in `link`’s `default`
+  ([\#140](https://github.com/NewGraphEnvironment/knowledge/issues/140)):
+  115 Arctic grayling rows in `data/literature_evidence.csv` (data rows
+  1190-1304; the table held 30, none on gradient, width or flow), each
+  audited for meaning, with 14 originals the reviews relied on sourced
+  into the group library and the `bull_trout_grayling` store rebuilt; a
+  quoted life history, `research/grayling_life_history.md` (245 quotes,
+  gated by `0280`); the catch rate by gradient, width and MAD class on
+  the tuning’s own grayling rearing population
+  (`data-raw/grayling_use.R`, `data/gr_use.csv`); and Hagen et
+  al. 2026’s critical-habitat segments read on the Freshwater Atlas
+  (`data-raw/grayling_segments.R`). `research/grayling_habitat.md` says
+  what each shows about the six values: no source sets a gradient, width
+  or flow value as a limit, the catch rate does not fall at 2.49 % or
+  3.49 %, and it is lowest under 2 m and under 0.021 m³/s, where few
+  visits caught any fish. No value is proposed here
+  ([\#280](https://github.com/NewGraphEnvironment/knowledge/issues/280)).
+  `inst/NOTICE.md` names the quoted research files and the EcoCat
+  segments layer. No package code changed.
+
 ## knowledge 0.4.50
 
 - The articles put a package or lower-case tool name in code font at
