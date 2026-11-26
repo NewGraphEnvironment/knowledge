@@ -79,7 +79,7 @@ spawning-site row.
       (rates and intervals per class) and a log under `scripts/logs/habitat/` naming the evidence md5s
 - [x] Spawning: what the records can say (GR by month and length from `fish.rds`), stated as what they cannot say
       where spring spawning is unsampled
-- [ ] Hagen et al.'s segments: download to ignored `data/hagen_segments/` (`.gitignore` line), read gradient and
+- [x] Hagen et al.'s segments: download to ignored `data/hagen_segments/` (`.gitignore` line), read gradient and
       size by life stage on this machine's fwapg, log aggregates only
 
 ## Phase 6: Write it up

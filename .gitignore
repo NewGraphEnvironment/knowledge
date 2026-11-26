@@ -47,3 +47,6 @@ data/compare/candidate/
 data/compare/setups/
 # the cut-points article's staged inputs (#149, data-raw/cut_points_stage.R): copies of ignored evidence and runs
 data/stage/
+# Hagen et al. 2026's grayling critical-habitat segments, an EcoCat download whose terms are not settled (#76, #140);
+# data-raw/grayling_segments.R fetches it and logs aggregates only
+data/hagen_segments/
