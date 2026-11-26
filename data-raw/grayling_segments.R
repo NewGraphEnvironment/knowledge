@@ -6,16 +6,19 @@
 # 2026 layers `Arctic_Grayling_Streams_Adult` and `_Juvenile`) and the habitat it is critical for (`CRITICAL_H`).
 # Its layer is published on EcoCat with the report. This reads each segment against the Freshwater Atlas lines it
 # follows and reports, per life-stage group, the km and the length-weighted spread of gradient, MAD and channel
-# width on those lines, as link's rules would read them.
+# width on those lines. Each line is counted once per group, however many of the group's segments overlap it (the
+# layer's segments overlap: two of its life-stage layers redraw reaches the 2021 layer already holds).
 #
 # METHOD: an FWA line (`whse_basemapping.fwa_stream_networks_sp`) belongs to a segment when at least half its length
-# lies within `buffer_m` of the segment. Each line's gradient (`fwa_gradient`) and MAD (`mad_pick`) come from
-# knw_link_flow(), its width (`cw_deploy`, the width link reads where nobody measured) from knw_link_width(), as the
-# evidence build reads them. Lines in a lake or reservoir polygon (`wb_lake`) are counted and left out: the
+# lies within `buffer_m` of the segment. Each line's gradient is the whole Atlas line's (`fwa_gradient`, the tuning's
+# gradient sensitivity; link's rules read their own segment's gradient), its MAD (`mad_pick`) comes from
+# knw_link_flow() and its width (`cw_deploy`, the width link reads where nobody measured) from knw_link_width(), as
+# the evidence build reads them. Lines in a lake (`wb_any_lake`) or a reservoir of 100 ha or more (`wb_lake`) are
+# counted and left out: the
 # Williston Lake segment and lake reaches carry no stream gradient. Groups: a segment counts in every group its stage
 # names (`Adult+Fry` in both adult and fry); "spawning" is a `CRITICAL_H` that names spawning without "possibly".
-# Terms: the layer is an EcoCat download whose terms are not settled (inst/NOTICE.md, #76), so it stays in the ignored
-# data/hagen_segments/ and only aggregates reach the log.
+# Terms: the layer is an EcoCat download whose terms are not settled (inst/NOTICE.md, "Terms not yet settled"), so it
+# stays in the ignored data/hagen_segments/ and only aggregates reach the log.
 #
 # INPUT:  data/hagen_segments/AG_Segments_merged.shp (unzipped from EcoCat r65150's
 #         AG_Segments_merged_1784660602388_5C8FC7930F.zip; the script fetches it when absent); a database with
@@ -78,8 +81,9 @@ hits <- DBI::dbGetQuery(con, sprintf("
   WHERE ST_Length(ST_Intersection(ST_Force2D(f.geom), b.geom)) >= 0.5 * ST_Length(ST_Force2D(f.geom))
   ORDER BY b.seg_id, f.linear_feature_id", tmp, buffer_m))
 hits$linear_feature_id <- as.numeric(hits$linear_feature_id)
-say("FWA lines matched (at least half within %g m of a segment): %d lines on %d of %d segments.",
-    buffer_m, n_distinct(hits$linear_feature_id), n_distinct(hits$seg_id), nrow(seg))
+say("FWA lines matched (at least half within %g m of a segment): %d lines on %d of %d segments (%.0f km, each line once).",
+    buffer_m, n_distinct(hits$linear_feature_id), n_distinct(hits$seg_id), nrow(seg),
+    sum(distinct(hits, linear_feature_id, length_metre)$length_metre) / 1000)
 
 ids <- unique(hits$linear_feature_id)
 fl <- knw_link_flow(con, ids)
@@ -87,11 +91,12 @@ wd <- knw_link_width(con, ids)
 block("Width model control (knw_link_width)", wd$control)
 lines <- hits |>
   left_join(fl |> select(linear_feature_id, fwa_gradient, mad_pick), by = "linear_feature_id") |>
-  left_join(wd$widths |> select(linear_feature_id, cw_deploy, wb_lake, wb_river), by = "linear_feature_id") |>
+  left_join(wd$widths |> select(linear_feature_id, cw_deploy, wb_lake, wb_any_lake, wb_river), by = "linear_feature_id") |>
   left_join(st_drop_geometry(seg), by = "seg_id")
-say("Lines in a lake or reservoir polygon left out: %d lines, %.0f km.", sum(lines$wb_lake %in% TRUE),
-    sum(lines$length_metre[lines$wb_lake %in% TRUE]) / 1000)
-lines <- lines[!(lines$wb_lake %in% TRUE), ]
+in_lake <- lines$wb_lake %in% TRUE | lines$wb_any_lake %in% TRUE
+lk <- distinct(lines[in_lake, ], linear_feature_id, length_metre)
+say("Lines in a lake or reservoir polygon left out: %d lines, %.0f km.", nrow(lk), sum(lk$length_metre) / 1000)
+lines <- lines[!in_lake, ]
 
 groups <- list(
   fry = grepl("fry", lines$stage, ignore.case = TRUE),
@@ -108,7 +113,7 @@ wq <- function(x, w, p) {
 }
 share <- function(ok, w) round(100 * sum(w[ok %in% TRUE]) / sum(w), 1)
 summ <- bind_rows(lapply(names(groups), function(g) {
-  d <- lines[groups[[g]], ]
+  d <- distinct(lines[groups[[g]], ], linear_feature_id, .keep_all = TRUE)   # a line once per group
   w <- d$length_metre
   tibble(group = g, segments = n_distinct(d$seg_id), km = round(sum(w) / 1000),
          grad_p50 = round(100 * wq(d$fwa_gradient, w, 0.5), 2), grad_p90 = round(100 * wq(d$fwa_gradient, w, 0.9), 2),

@@ -163,6 +163,12 @@ fit_ratio <- function(d, resp, labs, link = "cloglog") {
   if (levels(d$cls)[1] != labs[1]) return(setNames(rep(NA_real_, length(labs)), labs))
   r <- ratio(fit(d, resp, link), labs)
   r[!labs %in% levels(d$cls)] <- NA_real_
+  # a separated class (no detection, or one on every visit) has a ratio that runs to 0 or without bound: none, in
+  # the main fit and in every bootstrap resample alike
+  y <- tapply(d[[resp]], d$cls, function(v) all(v == 0L) || all(v == 1L))
+  sep <- labs %in% names(y)[y %in% TRUE]
+  if (sep[1]) return(setNames(rep(NA_real_, length(labs)), labs))   # every ratio is against the reference
+  r[sep] <- NA_real_
   r
 }
 cl <- parallel::makeCluster(n_cores)

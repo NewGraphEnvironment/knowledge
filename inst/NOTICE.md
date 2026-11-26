@@ -93,3 +93,6 @@ The terms for redistributing these files are open in
   `data/corpus_tags.csv`, the `context_*.md` files and `data/pine/reports_found.md`.
 - **bcfishpass**: `data/pine/gnis_seed_ambiguity.csv` and `data/pine/priority_pine_enriched.csv`.
 - **Modelled flows** (PCIC's, through wet) carried on the segments in `inst/vignette-data/bulk_segments.rds`.
+- **EcoCat spatial data**: Hagen et al. 2026's Arctic grayling critical-habitat segments (EcoCat report 65150), read by
+  `data-raw/grayling_segments.R` into the aggregates in `scripts/logs/habitat/*_grayling_segments.txt` and
+  `research/grayling_habitat.md`; the layer itself is not tracked.
