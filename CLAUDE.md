@@ -114,6 +114,8 @@ Issue and PR numbers in the seeded history and in `planning/archive/2026-07-*` r
   `bt_spawn_evidence.csv` (BT spawner-evidence rates by gradient class; `0293`, `research/bt_spawning.md`),
   `ch_mad_use.csv` (CH detection by wet's MAD class and, on small streams, by distance to a large river,
   from FDIS visits; `0294`-`0295`, `research/chinook_stream_size.md`),
+  `gr_use.csv` (GR detection by gradient, channel width and MAD class on the tuning's own GR rearing population,
+  effort-corrected, with stream-bootstrap intervals; `data-raw/grayling_use.R`, `research/grayling_habitat.md`, #140),
   `ch_rule_{tune,curves,flips,compare,checks,change}.csv` (the tuned CH rearing rule: every rule's held-out
   score on the main reading, with each other reading's region and picks, the GAM curves, flow-source flips, and the rule beside `default` on link's segments; `0296`-`0298`,
   `research/chinook_rearing_tuned.md`),

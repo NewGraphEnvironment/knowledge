@@ -62,7 +62,8 @@ work under this repository's licence.
 ## Quotes from published sources
 
 `data/literature_evidence.csv` and `data/ip_model_registry.csv` quote short passages from the papers and reports
-each row cites, so that every value can be checked against its source. The quoted text remains its authors'.
+each row cites, and `research/*_life_history.md` the passages each statement cites, so that every value and statement
+can be checked against its source. The quoted text remains its authors'.
 
 ## Provincial Stream Crossing Information System (PSCIS)
 
