@@ -32,6 +32,12 @@ spawning-site row.
 - **FISS workbook records move to #281 (Al, 2026-11-26, at the plan review):** the built workbook tables hold no
   grayling (`0250` keeps only species with a `species_group`), and reading them needs `0250` extended and the sites
   placed. This PR uses the FDIS visits and says the workbooks are not yet read.
+- **Originals sourced in this PR (Al, 2026-11-26, mid-run):** the drafters found the reviews' values rest on originals
+  the group library lacked. 14 are sourced here (Blackman 2002a, 2002b, 2004; Blackman and Hunter 2001; Hawkshaw and
+  Shrimpton 2014; Hawkshaw et al. 2013; Mathias et al. 1998; Cowie and Blackman 2003, 2004, 2007; Northcote 1995;
+  Stewart et al. 1982; Den Beste and McCart 1984; Stanislawski 1997), filed through `0270` into `species/grayling`,
+  the affected rows and quotes re-drafted from them and audited, and `bull_trout_grayling` rebuilt and pushed on m1.
+  Two the drafters missed are already held (`ballard_shrimpton2009Summaryreport`, `cowie_blackman2012OverviewSummary`).
 - **The plan review's other findings are folded below** (`review-plan.md`, 20 findings with verdicts). `grayling_habitat.md`
   cites evidence rows by data row and quotes nothing, so it stays out of `QUOTED`; GR is not added to `0280`'s
   `COVERAGE`, which would demand all 12 parameters.
@@ -46,8 +52,13 @@ spawning-site row.
       `bm25`-only row is a failed search) for rearing and spawning gradient, channel size, discharge, spawning
       substrate and site, fluvial/adfluvial movement, overwintering; list each source with its key in `findings.md`
       (drafter brief: `planning/active/drafter-brief.md`; drafters `rows` and `life`)
-- [ ] Trace each review's claim to its original; a needed original missing from the group library goes to
-      `data/grayling_additions.csv` through `0270`, with the store rebuilt on m1 only if anything was added
+- [x] Trace each review's claim to its original (drafter notes list them)
+- [ ] Source the 14 missing originals (`planning/active/originals-sourcing.csv`); file the found ones through
+      `data/grayling_additions.csv` and `0270 --collection grayling --parent 9U54XAND` (paywalled ones abstract-only)
+- [ ] Re-draft the rows and quotes that cite an original as `cited_source` from the original itself, and add what
+      the originals give for the six cells; held `ballard_shrimpton2009` and `cowie_blackman2012` read too
+- [ ] Rebuild and push `bull_trout_grayling` on m1 with its whole build list (`0150 ACTION=build OVERWRITE=TRUE`),
+      after Zotero has synced and with a 0-byte `-wal`
 - [x] Read Hagen et al. 2026 (`hagen_etal2026futureArctic`) for its habitat definitions by life stage
 
 ## Phase 3: Literature rows and their audit
