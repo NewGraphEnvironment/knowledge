@@ -28,7 +28,8 @@ What the evidence says about link's six numbers:
 - **MAD.** No source states one. Flows are given for the day of spawning or for a river's mean, from 0.2 m³/s to
   hundreds. The capture records are lowest under 0.021 m³/s.
 
-Most grayling in the capture records, and all of Hagen et al.'s critical-habitat segments, are in large rivers that
+Most grayling in the capture records, and nearly all the length of Hagen et al.'s critical-habitat segments, are in
+large rivers that
 link's stream rules leave to its river branch. The small-stream thresholds are where the evidence is thinnest.
 
 ## Where grayling were caught
