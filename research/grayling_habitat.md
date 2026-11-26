@@ -14,28 +14,24 @@ numbers were set to get the work started. This file gathers what can stand behin
 replacements (#280 does that).
 
 What grayling are expected to do, from the life history (`research/grayling_life_history.md`): they spawn in spring,
-in tributaries and in mainstem rivers; their fry rear first in slow, shallow water at the margins, and in some streams
-move to deeper, faster water as they grow; juveniles and adults feed through summer in clear streams and rivers (in
-the Williston studies juveniles in larger streams, none below fourth order, and adults in the pools of clear
-tributaries, while reviews and Adsett Creek in the Liard also place them in small tributaries); and they winter mostly
-in larger rivers and lakes, some young fish in pools of small tributaries.
+in tributaries and in mainstem rivers, and their fry rear first in slow, shallow water at the margins. Where juveniles
+and adults spend the summer, and where they winter, differs from study to study; that file sets the studies out.
 
 What the evidence says about link's six numbers:
-- **Gradient.** No source gives a gradient value as a limit, though three name steeper reaches as where use or
-  spawning ends. The gradients given are of rivers and reaches where grayling were found, at or under 2 %, and of 27
-  Williston sites with juveniles, from 0 to 6.96 % (mean 1.22 %). The capture records do not fall at 2.49 % or 3.49 %:
-  grayling were caught as often up to 5.49 %, and rarely at 5.49–8 % (2 of 152 visits); too few steeper streams were
-  fished to say more.
-- **Channel width.** No source gives a minimum. Juveniles were found from about 1 m wide upward, and in Alaska selected
-  channels 1-8 m wide. Spawning was seen in a 3 m constructed channel and found by its eggs in a large river in
-  Saskatchewan; most sources call spawning streams small, with no width, and in the Williston large-river spawning is
-  inferred from tagged fish and fry. The capture records are lowest under 2 m, where few fish of any kind were caught.
-- **MAD.** No source gives a MAD limit. Two give a river's mean daily flow where fry were caught (12.9 and
-  142 m³/s); the other flows are of other kinds, from below detection and 0.1 m³/s to about 400 m³/s, and bog streams
-  that dry up in late summer are used for spawning. The capture records are lowest under 0.021 m³/s.
+- **Gradient.** No source gives a gradient value as a limit, though some tie steeper reaches to less use or less
+  spawning. The gradients given are of rivers, reaches and map segments where grayling were found, mostly under 2 %,
+  with juvenile sites on segments up to 6.96 %. The catch rate in the capture records does not fall at 2.49 % or
+  3.49 %: grayling were caught as often up to 5.49 %, and rarely at 5.49–8 % (2 of 152 visits); too few steeper streams
+  were fished to say more.
+- **Channel width.** No source gives a minimum. Juveniles were found at sites from about 1 m wide, and in Alaska
+  appeared to select channels 1-8 m wide. Sources call spawning streams small, name large rivers, or both, and a 3 m
+  constructed channel drew spawners. The catch rate is lowest under 2 m, where few visits caught fish of any kind.
+- **MAD.** No source gives a MAD limit. The flows given are of other kinds (on the day of spawning, a river's mean
+  daily flow, the flow through a sampled pool), from below detection to about 400 m³/s. The catch rate is lowest under
+  0.021 m³/s.
 
-Most grayling in the capture records, and nearly all the length of Hagen et al.'s critical-habitat segments, are in
-large rivers that link's stream rules leave to its river branch. The small-stream thresholds are where the evidence is
+Most visits that caught grayling, and nearly all the length of Hagen et al.'s critical-habitat segments, are in large
+rivers that link's stream rules leave to its river branch. The small-stream thresholds are where the evidence is
 thinnest.
 
 ## Where grayling were caught
@@ -145,66 +141,73 @@ not show where small-stream rearing stops.
 
 The evidence table (`data/literature_evidence.csv`) holds 115 grayling rows from #140, data rows 1190-1304, each a
 verbatim quote checked by `scripts/0280-literature-verify.R` and audited for meaning against its page. Rows are cited
-below by data row. Most say where grayling were found, not where they could not live: a value where grayling were
-found (a site, a reach or a whole river) is coded `dist`, a stated preference `pref`, a reviewer's class `expert`, a
-statement with no value `qual`.
+below by data row. Most say where grayling were found, not where they could not live; each row's `kind` says which.
 
 ### Gradient (rearing 3.49 %, spawning 2.49 %)
 
 No source gives a number. The reviews describe grayling habitat as "medium" or "relatively low" gradient (1190,
-1193-1197), one sentence passed from Hagen et al. 2015 to Stamford et al. 2017 to Hagen et al. 2026 (1194, 1195,
-1197). Three sources say steeper reaches end use: in Adsett Creek habitat for yearlings and older became marginal
-upstream with rapidly increasing gradient (1266); steeper boulder and cobble reaches limit spawning in the Table and
-Anzac (Cowie and Blackman 2003, p. 9, citing Blackman et al. 2001; `research/grayling_life_history.md`); and in the
-Atigun most spawning lay where gradient and scour are less severe (1255). In Adsett Creek, though, yearlings and older
-were densest in the steep sections (1267), and Osilinka fry stopped short of the river's mouth, slightly steeper with
-larger substrate, but were also absent from some low-gradient reaches where they were expected (1265).
+1193-1195, 1197), one sentence passed from Hagen et al. 2015 to Stamford et al. 2017 to Hagen et al. 2026 (1194, 1195,
+1197), and Stamford et al. relay a Williston study as placing fry rearing in low-gradient middle reaches (1196), though
+that study's report found gradient a poor predictor (1263, 1264).
+
+Some sources tie steeper reaches to less use or less spawning. In Adsett Creek, habitat for yearlings and older became
+marginal upstream with rapidly increasing gradient and the loss of riparian cover after a fire (1266). Steeper boulder
+and cobble reaches limit spawning in the Table and Anzac (Cowie and Blackman 2003, p. 9, citing Blackman et al. 2001;
+`research/grayling_life_history.md`). In the Atigun most spawning lay in lakes, side channels and tributaries where
+gradient and scour are less severe (1255). Hawkshaw and Shrimpton relay the suggestion that steep canyons are why
+grayling are absent from the watersheds east of the Williston Reservoir (Hawkshaw and Shrimpton 2014, p. 25). Others
+point the other way: in Adsett Creek yearlings and older were densest in the steep sections, the authors suggest
+(1267); Stamford et al. judge that pools in clear reaches of moderate gradient appear to be a key need of Williston adults, and Hagen and
+Stamford observe fewer adults in Parsnip streams with long low-gradient meanders (both in
+`research/grayling_life_history.md`).
 
 The values are of rivers and reaches where fry and juveniles were caught in the Williston watershed: 0.1 % on the
 Osilinka (1258), 0.2 % on the Omineca (1259), 0.3 % on the Parsnip (1262), under 0.5 % and 1-2 % on the Table (1260,
-1261). The one set measured at sites is Hawkshaw and Shrimpton's: 27 sites with juveniles on segments of 0 to 6.96 %
-(mean 1.22 %), against 0 to 12.55 % at the 30 without (1263). A watershed's gradient did not predict whether juveniles
-were there, but most of the watersheds had maximum gradients under 2.6 %, which the authors say left little contrast to
-test (1264). For spawning, the only value is the Osilinka reach the authors call a spawning and rearing area, inferred
-from fry (1257); in Adsett Creek the most spawning generally lay toward the tails of long runs, particularly runs above
-steep gradients (1256). Overwintering fish in Alberta's Little Smoky held reaches of 0.08-0.33 % (1201, 1268, 1269).
+1261). The one rearing set given site by site is Hawkshaw and Shrimpton's: the map segments holding 27 sites with
+juveniles run from 0 to 6.96 % (mean 1.22 %), against 0 to 12.55 % at the 30 without (1263). A watershed's gradient did
+not predict whether juveniles were there, but most of the watersheds had maximum gradients under 2.6 %, which the
+authors say left little contrast to test (1264). For spawning, the only value is the Osilinka reach the authors call a
+spawning and rearing area, inferred from fry (1257). Overwintering fish in Alberta's Little Smoky held reaches of
+0.08-0.33 % (1201, 1268, 1269).
 
 ### Channel width (rearing 1.5 m, spawning 4 m)
 
 No source gives a minimum. In Alaska juveniles appeared to select channels 1-8 m wide and to select against channels
 wider than 14 m (1215, 1216), and adults in the same streams used channels averaging 10 m and selected against those
 under 6 m (1216's note): preferences, not limits. The Northwest Territories review's habitat class for spawning and
-rearing is about 10 m wide (1202, 1214). In the Williston watershed juveniles were at sites 0.96 to 43 m wetted
-(1272), fry and yearlings were seined in the 60-70 m Parsnip (1271), and yearlings favoured the larger Parsnip over its
-clear tributaries (1273); other sources place juveniles and fry in small tributaries or along mainstem margins, with
-no width (1217, 1218, 1274). For spawning, a constructed 3.0 m channel drew spawners (1203), and every other source
-calls spawning streams small, names rivers, or both, with no width (1204-1213, 1270).
+rearing is about 10 m wide (1202, 1214). In the Williston watershed juveniles were at sites 0.96 to 43 m wetted (1272),
+fry and yearlings were seined in the 60-70 m Parsnip (1271), and yearlings favoured the larger, turbid Parsnip over its
+clear tributaries (1273); other sources place juveniles and fry in small tributaries, or possibly along mainstem
+margins, with no width (1217, 1218, 1274). For spawning, a constructed 3.0 m channel drew spawners (1203), and apart
+from the review's class every other source calls spawning streams small, names rivers, or both, with no width
+(1204-1213, 1270).
 
 ### MAD (rearing 0.021 m³/s, spawning 0.2 m³/s)
 
 No source gives a MAD limit. Two give a river's mean daily flow where fry were caught: the Table's 12.9 m³/s, an
-estimate its author suggested could be low, and the Parsnip's 142 m³/s over 1985-1995 (1278, 1279), beside partial-year means of the Ingenika and Nation, 75.5 and
-104.4 m³/s (1280, 1281). Among the other flows given: on the day of peak spawning in a constructed channel, 0.21 and
-0.25 m³/s (1224, 1225); Adsett Creek's mean through peak spawning, 1.5 m³/s (1276); spawning streams' flows across 34
-location-years, 0.096 to 33.90 m³/s (1223); about 400 m³/s in the Fond du Lac River, where eggs were found (1226); and
-in Interior Alaska, bog streams too small to keep flowing through late summer are used for spawning (1228). Adsett
-Creek, where fry reared through the summer, measured from below detection to about 2.2 m³/s (1277), and the Sukunka
-pools that held two-year-old juveniles carried 1-15 and 21-65 m³/s at sampling (1229, 1230).
+estimate its author suggested could be low, and the Parsnip's 142 m³/s over 1985-1995 (1278, 1279), beside
+partial-year means of the Ingenika and Nation, 75.5 and 104.4 m³/s (1280, 1281). Among the other flows given: on the
+day of peak spawning in a constructed channel, 0.21 and 0.25 m³/s (1224, 1225); Adsett Creek's mean through peak
+spawning, 1.5 m³/s (1276); spawning streams' flows across 34 location-years, 0.096 to 33.90 m³/s (1223); and about
+400 m³/s in the Fond du Lac River, where eggs were found (1226). In Interior Alaska even many bog streams that go dry
+in late summer are used for spawning (1228). Adsett Creek, where fry reared through the summer, measured from below
+detection to about 2.2 m³/s (1277), and the Sukunka pools that held two-year-old juveniles carried 1-15 and 21-65 m³/s
+at sampling (1229, 1230).
 
 ### Stream order (no link value; a size proxy)
 
 At the watershed scale, Hawkshaw and Shrimpton found juveniles absent from study streams below fourth order and both
 present and absent at fourth order and above; order alone predicted presence poorly (1231). Stamford et al. relay the
-study as fry rearing in "e.g. 4th order and larger" tributaries (1232) and, elsewhere, as grayling that "appear more
-limited to cooler fifth order streams" (1233, citing this report and Ballard and Shrimpton 2009); neither original has
-a fifth-order statement. Outside the Williston, grayling apparently spawned in Adsett Creek, a second-order stream, and
-their fry reared there through the summer (1283, 1284).
+study as fry rearing areas that appear centred in "e.g. 4th order and larger" tributaries (1232) and, elsewhere, as
+grayling that "appear more limited to cooler fifth order streams" (1233, citing Hawkshaw and Shrimpton 2014 and
+Ballard and Shrimpton 2009); neither original has a fifth-order statement. Outside the Williston, grayling apparently
+spawned in Adsett Creek, a second-order stream, and their fry reared there through the summer (1283, 1284).
 
 ## What this is not
 
 This is evidence, not a proposal: the next step reads it into a baseline (#280). It is also thin where link needs it
-most. No source sets a gradient, width or flow value as a limit for grayling; the values are where grayling were
-found, many of them large Williston rivers and the rest sites and reaches across BC, the Northwest Territories, Alaska
-and Alberta. The capture records are summer electrofishing on small and mid-sized streams, with most grayling
-captures on river polygons outside them, few spring visits (175 in May and June) and none aimed at spawning, and no
-FISS workbook records yet (#281).
+most. No source sets a gradient, width or flow value as a limit for grayling: the values are where grayling were found,
+with a review's class and widths fish selected, many of them large Williston rivers and the rest sites and reaches
+across BC, the Northwest Territories, Alaska, Alberta, Saskatchewan and Montana. The capture records are summer
+electrofishing on small and mid-sized streams, with most grayling captures on river polygons outside them, few spring
+visits (175 in May and June) and none aimed at spawning, and no FISS workbook records yet (#281).
