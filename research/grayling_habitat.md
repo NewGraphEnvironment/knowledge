@@ -8,7 +8,27 @@
 
 ## In plain words
 
-<!-- LITERATURE: written once the audited rows are final -->
+link calls a stream rearing habitat for Arctic grayling when it is no steeper than 3.49 %, at least 1.5 m wide and
+carries a mean annual discharge (MAD) of at least 0.021 m³/s, and spawning habitat at 2.49 %, 4 m and 0.2 m³/s. Those
+numbers were set to get the work started. This file gathers what can stand behind them instead, without proposing
+replacements (#280 does that).
+
+What grayling are expected to do, from the life history (`research/grayling_life_history.md`): they spawn in spring,
+in tributaries and in mainstem rivers; their fry rear in slow, shallow water at the margins; juveniles and adults feed
+through summer in mid-sized and larger streams and rivers; and they winter in large rivers and lakes.
+
+What the evidence says about link's six numbers:
+- **Gradient.** No source gives a gradient limit for grayling. Where gradients are given they are those of reaches
+  and sites where grayling were found, nearly all under 2 %. The capture records do not fall at 2.49 % or 3.49 %:
+  grayling were caught as often up to 5.49 %, and almost never above it.
+- **Channel width.** No source gives a minimum. Juveniles were found from about 1 m wide upward; spawning was seen in
+  a 3 m constructed channel and in large rivers. The capture records are lowest under 2 m, where few fish of any kind
+  were caught.
+- **MAD.** No source states one. Flows are given for the day of spawning or for a river's mean, from 0.2 m³/s to
+  hundreds. The capture records are lowest under 0.021 m³/s.
+
+Most grayling in the capture records, and all of Hagen et al.'s critical-habitat segments, are in large rivers that
+link's stream rules leave to its river branch. The small-stream thresholds are where the evidence is thinnest.
 
 ## Where grayling were caught
 
@@ -107,4 +127,52 @@ about 60 m, and 99 % of the length is under 2.49 % gradient. The segments where 
 Williston's grayling live and are protected, mostly in rivers link's stream rules leave to the river branch; they do
 not show where small-stream rearing stops.
 
-<!-- WHAT EACH SAYS ABOUT LINK'S SIX VALUES; WHAT THIS IS NOT: written with the literature -->
+## What the literature says about each of link's values
+
+The evidence table (`data/literature_evidence.csv`) holds 115 grayling rows from #140, data rows 1190-1304, each a
+verbatim quote checked by `scripts/0280-literature-verify.R` and audited for meaning against its page. Rows are cited
+below by data row. Most say where grayling were found, not where they could not live: a site measurement is
+coded `dist`, a stated preference `pref`, a statement with no value `qual`.
+
+### Gradient (rearing 3.49 %, spawning 2.49 %)
+
+No source gives a limit. The reviews describe grayling habitat as "medium" or "relatively low" gradient with no number
+(1190, 1193-1197), one sentence passed from Hagen et al. 2015 to Stamford et al. 2017 to Hagen et al. 2026 (1194,
+1195, 1197). The values are reach gradients where fry and juveniles were caught in the Williston watershed: 0.1 % on
+the Osilinka (1258), 0.2 % on the Omineca (1259), 0.3 % on the Parsnip (1262), under 0.5 % and 1-2 % on the Table
+(1260, 1261). Hawkshaw and Shrimpton's 27 sites with juveniles sat on segments of 0 to 6.96 % (mean 1.22 %), against 0
+to 12.55 % at the 30 without (1263), and a watershed's gradient did not predict whether juveniles were there (1264).
+For spawning, the only value is the Osilinka reach the authors call a spawning and rearing area, inferred from fry
+(1257); in Adsett Creek the most spawning generally lay toward the tails of runs before steep sections (1256).
+Overwintering fish in Alberta's Little Smoky held reaches of 0.08-0.33 % (1201, 1268, 1269).
+
+### Channel width (rearing 1.5 m, spawning 4 m)
+
+No source gives a minimum. In Alaska juveniles appeared to select channels 1-8 m wide and to select against channels
+wider than 14 m (1215, 1216), a preference, not a limit. In the Williston watershed juveniles were at sites 0.96 to
+43 m wetted (1272), and fry and yearlings were seined in the 60-70 m Parsnip (1271). For spawning, a constructed 3.0 m
+channel drew spawners (1203), the Northwest Territories review's habitat class is about 10 m (1202), and every other
+source says "small tributaries" or names large rivers, with no width (1204-1213, 1270).
+
+### MAD (rearing 0.021 m³/s, spawning 0.2 m³/s)
+
+No source states a MAD. The flows given are of other kinds: on the day of peak spawning in a constructed channel,
+0.21 and 0.25 m³/s (1224, 1225); Adsett Creek's mean through peak spawning, 1.5 m³/s (1276); spawning streams'
+flows across 34 location-years, 0.096 to 33.90 m³/s (1223); and the mean daily flows of rivers where fry were caught,
+12.9 to 142 m³/s (1278-1281). Adsett Creek, where fry reared through the summer, measured from below detection to
+about 2.2 m³/s (1277).
+
+### Stream order (no link value; a size proxy)
+
+At the watershed scale, Hawkshaw and Shrimpton found juveniles absent from study streams below fourth order and both
+present and absent at fourth order and above; order alone predicted presence poorly (1231). Stamford et al. relay the
+study as fry rearing in "e.g. 4th order and larger" tributaries and, elsewhere, as grayling limited to "cooler fifth
+order streams" (1232, 1233); the report itself has no fifth-order statement. Outside the Williston, grayling spawned in and their fry
+reared through the summer in Adsett Creek, a second-order stream (1283, 1284).
+
+## What this is not
+
+This is evidence, not a proposal: the next step reads it into a baseline (#280). It is also thin where link needs it
+most. No source sets a gradient, width or flow limit for grayling; the values are where grayling were seen, mostly in
+large Williston rivers. The capture records are summer electrofishing on small and mid-sized streams, with most
+grayling captures on river polygons outside them, no spring spawning sample, and no FISS workbook records yet (#281).

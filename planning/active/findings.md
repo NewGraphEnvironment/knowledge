@@ -102,6 +102,21 @@ on 3,919 / 3,727 / 4,032; 1,746 with no `cw_deploy`; 3,283 with no area.
   interval, boots that fit, power) and `scripts/logs/habitat/<date>_grayling_use.txt` (the population funnel, the
   evidence md5s, the knowledge commit, groups modelled, sensitivity, spawning tables).
 
+## Originals and the store (2026-11-26)
+
+- 14 originals sourced (`originals-sourcing.csv`): 12 PDFs from EcoCat, ARLIS and the University of Alberta's
+  repository, title pages checked against the citing reviews' reference lists; Hawkshaw et al. 2013 abstract-only;
+  Northcote 1995 paywalled with no CrossRef abstract, filed and never quoted. Filed by `0270 --collection grayling
+  --parent 9U54XAND` (14 created).
+- `bull_trout_grayling` rebuilt on m1 from a worktree of this branch, Zotero quit and the `-wal` 0 bytes: 208
+  documents, 31,255 chunks (197 before). Stanislawski 1997 skipped (a scan with no text layer; quoted from `0280`'s
+  OCR instead). Pushed; a verified pull on m4 gives the manifest's md5 `a961692d…`.
+- On m4 (cred 0.7.0) a search returns Hawkshaw and Shrimpton 2014's chunks with no citation key; m1's cred 0.8.0
+  resolves them. A stale install on m4, not the store (cred upgrade on m4 is owed elsewhere).
+- 42 older OCR evidence rows (Bjornn and Reiser 1991, Hubert et al. 1985, Ford et al. 1995) fail `quote_not_found` on
+  m4, where the OCR cache was empty and this machine's OCR differs; they verified in the committed 2026-11-18 log.
+  The final gate run is made on m1, whose cache produced that log.
+
 ## Errors Encountered
 
 | Error | Resolution |

@@ -53,11 +53,11 @@ spawning-site row.
       substrate and site, fluvial/adfluvial movement, overwintering; list each source with its key in `findings.md`
       (drafter brief: `planning/active/drafter-brief.md`; drafters `rows` and `life`)
 - [x] Trace each review's claim to its original (drafter notes list them)
-- [ ] Source the 14 missing originals (`planning/active/originals-sourcing.csv`); file the found ones through
+- [x] Source the 14 missing originals (`planning/active/originals-sourcing.csv`); file the found ones through
       `data/grayling_additions.csv` and `0270 --collection grayling --parent 9U54XAND` (paywalled ones abstract-only)
-- [ ] Re-draft the rows and quotes that cite an original as `cited_source` from the original itself, and add what
+- [x] Re-draft the rows and quotes that cite an original as `cited_source` from the original itself, and add what
       the originals give for the six cells; held `ballard_shrimpton2009` and `cowie_blackman2012` read too
-- [ ] Rebuild and push `bull_trout_grayling` on m1 with its whole build list (`0150 ACTION=build OVERWRITE=TRUE`),
+- [x] Rebuild and push `bull_trout_grayling` on m1 with its whole build list (`0150 ACTION=build OVERWRITE=TRUE`),
       after Zotero has synced and with a 0-byte `-wal`
 - [x] Read Hagen et al. 2026 (`hagen_etal2026futureArctic`) for its habitat definitions by life stage
 
