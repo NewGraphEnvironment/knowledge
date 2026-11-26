@@ -120,10 +120,12 @@ in May and June caught grayling on 11. The tables say nothing about where grayli
 ## Hagen et al.'s critical-habitat segments
 
 Hagen et al. 2026 map 85 critical-habitat segments for grayling in six Williston core areas, each with the life
-stages seen there. Read against the Freshwater Atlas lines they follow (3,176 km outside lakes and the reservoir),
-they are large rivers: 93 % of their length lies in river polygons, the median MAD is 35 m³/s and the median width
-about 60 m, and 99 % of the length is under 2.49 % gradient. The segments where fry were recorded look the same
-(median MAD 37 m³/s, 99 % under 2.49 %), as do those named as spawning habitat (26 m³/s). They show where the
+stages seen there; some segments redraw reaches others already hold, so each Atlas line is counted once. Read
+against the Freshwater Atlas lines they follow (1,814 km outside lakes and the reservoir), they are large rivers: 94 %
+of their length lies in river polygons, the median MAD is 29 m³/s and the median width about 56 m, and 99 % of the
+length is under 2.49 % gradient (the Atlas line's own gradient, which the tuning uses as its gradient sensitivity).
+The segments where fry were recorded look the same (median MAD 37 m³/s, 99 % under 2.49 %), as do those named as
+spawning habitat (24 m³/s). They show where the
 Williston's grayling live and are protected, mostly in rivers link's stream rules leave to the river branch; they do
 not show where small-stream rearing stops.
 
