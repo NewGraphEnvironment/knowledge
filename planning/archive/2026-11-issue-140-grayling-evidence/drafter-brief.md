@@ -1,6 +1,6 @@
 # Drafter brief: grayling habitat rows and grayling life history (#140, Phases 3 and 4)
 
-Working directory: `/Users/airvine/Projects/repo/knowledge` (branch `140-grayling-rebuild-link-s-default-from-the`).
+Working directory: the repo root (branch `140-grayling-rebuild-link-s-default-from-the`).
 Two drafters, each with one product. Read the repo's `CLAUDE.md` first, its "Drafting evidence or registry rows"
 section in full: every convention there binds you.
 
@@ -32,7 +32,7 @@ source says, never what link should use.
 ## Sources
 
 Extracted text, one file per citation key, is in
-`/private/tmp/claude-501/-Users-airvine-Projects-repo-knowledge/51965c54-eb55-4fb0-8296-97d995e4a0d9/scratchpad/txt/`:
+`<scratchpad>/txt/`:
 `<key>.txt` is reading order with `\f` (form feed) between pages; `<key>.layout.txt` is `pdftotext -layout`, for
 tables. Page numbers: the number printed on the page; where none is printed, the PDF page, said in `note` ("PDF
 page").
@@ -147,7 +147,7 @@ page.
 ## Checking your draft
 
 ```bash
-S=/private/tmp/claude-501/-Users-airvine-Projects-repo-knowledge/51965c54-eb55-4fb0-8296-97d995e4a0d9/scratchpad
+S=<scratchpad>
 # rows
 { cat data/literature_evidence.csv; tail -n +2 planning/active/draft-rows-evidence.csv; } > $S/merge-rows.csv
 EVIDENCE=$S/merge-rows.csv LOG=$S/verify-rows.csv QUOTED= Rscript scripts/0280-literature-verify.R
