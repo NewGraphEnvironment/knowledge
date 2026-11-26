@@ -96,7 +96,7 @@ starts pick different kinds of size test (a MAD floor and a width floor on #92's
 next in #139's order, is steered on the minimal network and not on #92's tables, so it is the key whose
 reading moves most with the build; its pick on the minimal network is the furthest of any from its best in deviance.
 
-## Grayling rearing: the "before" for #280
+## Grayling rearing: the "before" for a rebuilt baseline
 
 `default` is `width>=1.5|g<=0.0349|none` on both readings, outside the region (19.3 behind, SE 6.7, on #92's tables; 14.4,
 SE 11.8, minimal).
