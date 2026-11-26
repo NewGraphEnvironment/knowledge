@@ -13,7 +13,7 @@ and page. Pages are the printed ones, with these exceptions, where the page is t
 - the abstract of Tack 1980 (Alaska), which carries no page number.
 
 Where a source reports another study, the sentence names it. Every claim says where it was measured: a BC drainage
-(the Williston Reservoir watershed of the upper Peace, the Sukunka in the Peace below the dam, or Adsett Creek in the
+(the Williston Reservoir watershed of the upper Peace, the Sukunka, a Pine River tributary beside the Williston watershed, or Adsett Creek in the
 Liard), or the Northwest Territories, Alberta or Alaska, or range-wide where a review states it so. Habitat values
 are the evidence table's grayling rows in `data/literature_evidence.csv`, and this file does not weigh them; where a
 quote below prints a depth, width, gradient or velocity, the sentence says whether it is a limit or only where fish
@@ -473,8 +473,8 @@ evidence table's grayling rows, where the sites were, not limits; the quote skip
 
 > "although the majority of spawning activity occurred approximately 4 - 5 km from the Prophet River confluence" (stewart_etal1982Ecologicalstudies, p. 31, OCR)
 
-Cannings and Ptolemy, summarising Northcote's (1995) review of the literature, name structure as part of spawning
-capability:
+Cannings and Ptolemy, in the habitat account that opens with Northcote's (1995) summary of the literature, name
+structure as part of spawning capability:
 
 > "Structural elements such as stable large woody debris, boulders and bedrock are important measures of spawning capability." (cannings_ptolemy1998RareFreshwater, p. 48)
 
@@ -498,7 +498,7 @@ after a poor spring (Ridder 2000, Stewart et al. 2007):
 
 > "although adults have also been observed moving to different spawning sites sometimes in response to poor spring conditions" (stamford_etal2017FWCPArctic, p. 10)
 
-Cannings and Ptolemy, summarising Northcote's (1995) review of grayling in general:
+Cannings and Ptolemy, of grayling in general:
 
 > "They show strong reproductive, trophic and refuge homing with offspring utilizing the same habitat areas as their parents." (cannings_ptolemy1998RareFreshwater, p. 48)
 
@@ -570,8 +570,8 @@ edge (the quote starts after a number the scan misreads):
 > "days after emergence, grayling young-of-the-year remained proximal to spawning areas, and occupied peripheral stream habitat (quiescent areas where fast currents and back waters merged)" (stewart_etal1982Ecologicalstudies, p. 44, OCR)
 
 **The Parsnip tributaries.** In the Table and Anzac, Blackman's 1997 electrofishing found grayling fry, like the bull
-trout and burbot fry caught with them, in shallow, slow water, and their upstream limit appeared to fall where the bed
-turned from gravel to cobble (the 12 cm and < 0.1 m/s are given for the three species together, where fry were caught,
+trout and burbot caught with them (which included one- and possibly two-year-olds, p. 7), in shallow, slow water, and their upstream limit appeared to fall where the bed
+turned from gravel to cobble (the 12 cm and < 0.1 m/s are given for the three species together, where they were caught,
 not limits; the grayling's own means are the evidence table's grayling rows):
 
 > "The grayling fry, bull trout and burbot showed a strong affinity for shallow (average 12 cm) low velocity (<0.1m-s) habitats" (blackman20041997Arctic, p. 7)
@@ -700,7 +700,7 @@ tributary (its discussion):
 
 ## Where do juveniles and adults spend the summer?
 
-**Juveniles in the larger rivers.** Across the range, Hagen et al. 2026, citing Tack 1980, Butcher et al. 1981,
+**Where juveniles rear in summer.** Across the range, Hagen et al. 2026, citing Tack 1980, Butcher et al. 1981,
 Northcote 1993 and Stewart et al. 2007, describe juveniles of 100 to 200 mm often using the larger streams through the
 year:
 
@@ -733,7 +733,7 @@ In Alaskan streams along the Trans Alaska Pipeline north of the Yukon River, Den
 
 > "Juvenile grayling also appear to select for narrow channel widths (1 to 8 m wide)" (denbeste_mccart1984Overviewstudies, p. 34)
 
-**Adults upstream in clear, cool water.** Hagen et al. 2026 describe the usual summer split across the Williston core
+**Adults in pools of clear, cool water.** Hagen et al. 2026 describe the usual summer split across the Williston core
 areas, from habitat use recorded mostly in August; they add that adults and juveniles often overlap:
 
 > "Critical habitats were defined primarily by data and observations collected during August" (hagen_etal2026futureArctic, p. 26)
@@ -801,8 +801,8 @@ insects:
 > "Most of their diet consisted of terrestrial insects" (stewart_etal1982Ecologicalstudies, p. 47, OCR)
 
 In Alaskan streams north of the Yukon River, Den Beste and McCart's adults used channels averaging 10 m wide and
-selected against those under 6 m (the 10 m is the average width used and the 6 m a width selected against; neither is a
-limit):
+selected against those under 6 m (the 10 m is the average width used, and widths under 6 m were selected against; neither
+is a limit):
 
 > "The average channel width used by adults was is 10m, but channels less than 6 m wide are selected against." (denbeste_mccart1984Overviewstudies, p. 35)
 
@@ -887,8 +887,8 @@ Shrimpton say little is known of winter movement and habitat in the Omineca regi
 
 > "Under-ice sampling showed some two year olds remain in the deep tributary pools overwinter" (stuart_chislett1979AspectsLife, p. 3)
 
-In Adsett Creek (Liard, BC), the authors suggest wintering in the creek depends on the conditions before freeze-up and
-is not obligatory; winter sampling of similar small tributaries found only underyearlings and yearlings (EVS 1982d,
+In Adsett Creek (Liard, BC), the authors suggest that juveniles' wintering in small tributaries such as Adsett Creek is
+related to the conditions before freeze-up and is not obligatory; winter sampling of similar small tributaries found only underyearlings and yearlings (EVS 1982d,
 reported by Stewart et al. 1982):
 
 > "suggest that the propensity to overwinter in small tributaries such as Adsett Creek is related to physical conditions which preceed freeze up, and that overwintering in such habitat is not obligatory." (stewart_etal1982Ecologicalstudies, p. 90, OCR)
@@ -909,7 +909,8 @@ mean gradient was 0.17 to 0.18 % (where fish wintered, not a limit; the evidence
 
 > "In general, overwintering grounds were not restricted in the Little Smoky River as they are in Alaskan streams (Krueger 1981)." (stanislawski1997FallWinter, p. 42, OCR)
 
-**Deep pools, across the range.** Cannings and Ptolemy, summarising Northcote's (1995) review of the literature:
+**Deep pools, across the range.** Cannings and Ptolemy, in the habitat account that opens with Northcote's (1995)
+summary of the literature:
 
 > "Large deep pools are required for overwintering and holding water." (cannings_ptolemy1998RareFreshwater, p. 48)
 
@@ -998,8 +999,8 @@ Across the range, Stamford et al. 2017 name poorly installed crossings:
 
 - **Spawning sites in the Williston watershed.** No spawning site there has been seen. The Parsnip telemetry gives
   suspected areas (two Anzac reaches, Parsnip side channels, a small Parsnip tributary), inferred from where tagged
-  fish held and where fry were later found; an egg search in the Anzac found none (as did one in the Sukunka, below
-  the dam); elsewhere (the Osilinka, the Nation, the Ospika, the upper Finlay) spawning is inferred from fry. Hagen et
+  fish held and where fry were later found; an egg search in the Anzac found none (as did one in the Sukunka, a Pine River
+  tributary beside the Williston watershed); elsewhere (the Osilinka, the Nation, the Ospika, the upper Finlay) spawning is inferred from fry. Hagen et
   al. 2026 call it a gap:
 
   > "Imprecise knowledge of overwintering and spawning locations remains an important information gap limiting conservation and recovery actions for these life stages" (hagen_etal2026futureArctic, p. 26)

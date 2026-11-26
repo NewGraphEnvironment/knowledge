@@ -76,7 +76,8 @@ spawning-site row.
 - [x] `research/grayling_life_history.md`: forms (fluvial, adfluvial, lacustrine), movement and timing, spawning
       sites, fry and juvenile rearing, overwintering, each statement quoted with key and page
 - [x] Add it to `0280`'s `QUOTED_DEFAULT`; `0280` passes
-- [ ] Meaning audit of every quoted sentence, rounds as Phase 3's
+- [x] Meaning audit of every quoted sentence, rounds as Phase 3's: 32, 29, 6 findings over three rounds, the
+      third applied in the auditor's page-quoted wording and checked
 
 ## Phase 5: Where grayling were caught
 - [x] Write the analysis spec in `findings.md` before any fit: population (quality-passed visits placed on the
