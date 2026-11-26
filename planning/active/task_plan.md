@@ -112,7 +112,8 @@ spawning-site row.
 ## Validation
 
 - [x] Tests pass (`devtools::test()`: 2,678 pass, 0 fail, 2 skip, 2026-11-26)
-- [ ] `/code-check branch` clean (three-round floor)
+- [x] `/code-check branch` clean (three-round floor): five rounds, 5, 2, 5, 3, 1 findings, ended by enumeration
+      (`review-verdict.md`)
 - [ ] PWF checkboxes match landed work
 - [ ] `/planning-archive` on completion
 
