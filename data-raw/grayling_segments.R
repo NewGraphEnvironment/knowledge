@@ -113,9 +113,10 @@ wq <- function(x, w, p) {
 }
 share <- function(ok, w) round(100 * sum(w[ok %in% TRUE]) / sum(w), 1)
 summ <- bind_rows(lapply(names(groups), function(g) {
+  n_seg <- n_distinct(lines$seg_id[groups[[g]]])   # before the dedupe, which keeps one segment per line
   d <- distinct(lines[groups[[g]], ], linear_feature_id, .keep_all = TRUE)   # a line once per group
   w <- d$length_metre
-  tibble(group = g, segments = n_distinct(d$seg_id), km = round(sum(w) / 1000),
+  tibble(group = g, segments = n_seg, km = round(sum(w) / 1000),
          grad_p50 = round(100 * wq(d$fwa_gradient, w, 0.5), 2), grad_p90 = round(100 * wq(d$fwa_gradient, w, 0.9), 2),
          pct_km_grad_le_2.49 = share(d$fwa_gradient <= 0.0249, w), pct_km_grad_le_3.49 = share(d$fwa_gradient <= 0.0349, w),
          pct_km_grad_le_5.49 = share(d$fwa_gradient <= 0.0549, w),
