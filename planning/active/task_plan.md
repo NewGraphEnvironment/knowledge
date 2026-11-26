@@ -66,7 +66,7 @@ spawning-site row.
 - [ ] Meaning audit of every quoted sentence, rounds as Phase 3's
 
 ## Phase 5: Where grayling were caught
-- [ ] Write the analysis spec in `findings.md` before any fit: population (quality-passed visits placed on the
+- [x] Write the analysis spec in `findings.md` before any fit: population (quality-passed visits placed on the
       published network, groups where link marks GR present, no code blocking a GR absence; `access_gr` 1 or 2,
       code 2 never a covariate or stratum, code 0 counted and dropped; link's GR edge types, stream and canal, with
       river-polygon edges counted apart; area 10-10,000 m²), columns (the tuning's: `segment_gradient`,
@@ -74,10 +74,10 @@ spawning-site row.
       MAD around 0.021/0.2 m³/s), responses (GR caught; any fish; GR given fish), model (`0291`'s: cloglog,
       `log(area)`, data set, era from year, group), a fixed seed with resamples drawn before any parallel fit, and
       stop rules
-- [ ] `data-raw/grayling_use.R`: reads `data/fdis/derived/{visits_link,visits_species}.csv` and
+- [x] `data-raw/grayling_use.R`: reads `data/fdis/derived/{visits_link,visits_species}.csv` and
       `data/fdis/build/fish.rds`, refuses tables whose md5s are not the run ledger's, writes `data/gr_use.csv`
       (rates and intervals per class) and a log under `scripts/logs/habitat/` naming the evidence md5s
-- [ ] Spawning: what the records can say (GR by month and length from `fish.rds`), stated as what they cannot say
+- [x] Spawning: what the records can say (GR by month and length from `fish.rds`), stated as what they cannot say
       where spring spawning is unsampled
 - [ ] Hagen et al.'s segments: download to ignored `data/hagen_segments/` (`.gitignore` line), read gradient and
       size by life stage on this machine's fwapg, log aggregates only

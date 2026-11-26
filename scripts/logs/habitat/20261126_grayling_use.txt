@@ -1,0 +1,311 @@
+Where grayling were caught, knowledge#140, knowledge c6fcc16. Evidence data/fdis/derived (md5 c746c582 6a2e28f1 2e0f0f41), fish.rds md5 8cf27351.
+
+## Population funnel
+                                  step visits gr_caught groups
+            in GR's range, not blocked  11567      1231     71
+        + on a stream-branch edge type   6551       316     67
+              + not in a river polygon   6551       316     67
+            + not in a wetland or lake   6389       302     65
+            + fished area 10-10,000 m2   5625       244     61
+ + no natural barrier to GR downstream   1580       229     45
+
+## Visits in GR's range by FWA edge type, and those that caught GR
+ edge_type visits gr_caught
+      1000   6496       306
+      1050    301        22
+      1100     46        10
+      1200    123         4
+      1250   3604       711
+      1300      6         2
+      1350    353        56
+      1410     38         3
+      1425      1        NA
+      1450    590       117
+      2000      9        NA
+River-polygon sensitivity population: 2518 visits (GR caught on 361).
+gradient / gr_caught: 1355 visits in 27 groups modelled; 225 visits in 18 groups with one outcome left out
+gradient / any_fish_caught: 1560 visits in 39 groups modelled; 20 visits in 6 groups with one outcome left out
+gradient / gr_caught_given_fish: 629 visits in 26 groups modelled; 107 visits in 16 groups with one outcome left out
+channel_width / gr_caught: 1355 visits in 27 groups modelled; 225 visits in 18 groups with one outcome left out
+channel_width / any_fish_caught: 1560 visits in 39 groups modelled; 20 visits in 6 groups with one outcome left out
+channel_width / gr_caught_given_fish: 629 visits in 26 groups modelled; 107 visits in 16 groups with one outcome left out
+mad / gr_caught: 1355 visits in 27 groups modelled; 225 visits in 18 groups with one outcome left out
+mad / any_fish_caught: 1560 visits in 39 groups modelled; 20 visits in 6 groups with one outcome left out
+mad / gr_caught_given_fish: 629 visits in 26 groups modelled; 107 visits in 16 groups with one outcome left out
+
+## Rate ratios (also data/gr_use.csv)
+      variable             response           class n_visits n_detect n_groups
+      gradient            gr_caught           1-2 %      385       78       35
+      gradient            gr_caught        <= 0.5 %      158       33       31
+      gradient            gr_caught         0.5-1 %      151       29       32
+      gradient            gr_caught        2-2.49 %      134       19       32
+      gradient            gr_caught     2.49-3.49 %      251       35       34
+      gradient            gr_caught     3.49-5.49 %      295       28       37
+      gradient            gr_caught        5.49-8 %      152        2       28
+      gradient            gr_caught          8-12 %       49        5       16
+      gradient            gr_caught          > 12 %        5        0        5
+      gradient      any_fish_caught           1-2 %      385      216       35
+      gradient      any_fish_caught        <= 0.5 %      158      115       31
+      gradient      any_fish_caught         0.5-1 %      151       97       32
+      gradient      any_fish_caught        2-2.49 %      134       58       32
+      gradient      any_fish_caught     2.49-3.49 %      251      105       34
+      gradient      any_fish_caught     3.49-5.49 %      295      100       37
+      gradient      any_fish_caught        5.49-8 %      152       34       28
+      gradient      any_fish_caught          8-12 %       49       10       16
+      gradient      any_fish_caught          > 12 %        5        1        5
+      gradient gr_caught_given_fish           1-2 %      216       78       29
+      gradient gr_caught_given_fish        <= 0.5 %      115       33       26
+      gradient gr_caught_given_fish         0.5-1 %       97       29       27
+      gradient gr_caught_given_fish        2-2.49 %       58       19       21
+      gradient gr_caught_given_fish     2.49-3.49 %      105       35       23
+      gradient gr_caught_given_fish     3.49-5.49 %      100       28       25
+      gradient gr_caught_given_fish        5.49-8 %       34        2       14
+      gradient gr_caught_given_fish          8-12 %       10        5        7
+      gradient gr_caught_given_fish          > 12 %        1        0        1
+ channel_width            gr_caught           4-8 m      481      105       38
+ channel_width            gr_caught         < 1.5 m       88        6       20
+ channel_width            gr_caught         1.5-2 m      106        7       24
+ channel_width            gr_caught           2-4 m      478       64       43
+ channel_width            gr_caught          8-15 m      195       35       31
+ channel_width            gr_caught         15-30 m       11        2        7
+ channel_width            gr_caught         >= 30 m        4        0        4
+ channel_width            gr_caught        no width      217       10       29
+ channel_width      any_fish_caught           4-8 m      481      323       38
+ channel_width      any_fish_caught         < 1.5 m       88       17       20
+ channel_width      any_fish_caught         1.5-2 m      106       14       24
+ channel_width      any_fish_caught           2-4 m      478      190       43
+ channel_width      any_fish_caught          8-15 m      195      150       31
+ channel_width      any_fish_caught         15-30 m       11        9        7
+ channel_width      any_fish_caught         >= 30 m        4        2        4
+ channel_width      any_fish_caught        no width      217       31       29
+ channel_width gr_caught_given_fish           4-8 m      323      105       33
+ channel_width gr_caught_given_fish         < 1.5 m       17        6       10
+ channel_width gr_caught_given_fish         1.5-2 m       14        7        8
+ channel_width gr_caught_given_fish           2-4 m      190       64       31
+ channel_width gr_caught_given_fish          8-15 m      150       35       30
+ channel_width gr_caught_given_fish         15-30 m        9        2        5
+ channel_width gr_caught_given_fish         >= 30 m        2        0        2
+ channel_width gr_caught_given_fish        no width       31       10       14
+           mad            gr_caught    0.2-0.5 m3/s      241       49       35
+           mad            gr_caught    < 0.021 m3/s      445       28       36
+           mad            gr_caught 0.021-0.05 m3/s      244       40       30
+           mad            gr_caught   0.05-0.2 m3/s      400       75       40
+           mad            gr_caught      0.5-1 m3/s      139       18       29
+           mad            gr_caught        1-5 m3/s      107       19       24
+           mad            gr_caught       5-20 m3/s        2        0        2
+           mad            gr_caught      >= 20 m3/s        2        0        2
+           mad      any_fish_caught    0.2-0.5 m3/s      241      178       35
+           mad      any_fish_caught    < 0.021 m3/s      445       80       36
+           mad      any_fish_caught 0.021-0.05 m3/s      244       86       30
+           mad      any_fish_caught   0.05-0.2 m3/s      400      217       40
+           mad      any_fish_caught      0.5-1 m3/s      139      104       29
+           mad      any_fish_caught        1-5 m3/s      107       68       24
+           mad      any_fish_caught       5-20 m3/s        2        2        2
+           mad      any_fish_caught      >= 20 m3/s        2        1        2
+           mad gr_caught_given_fish    0.2-0.5 m3/s      178       49       31
+           mad gr_caught_given_fish    < 0.021 m3/s       80       28       21
+           mad gr_caught_given_fish 0.021-0.05 m3/s       86       40       20
+           mad gr_caught_given_fish   0.05-0.2 m3/s      217       75       34
+           mad gr_caught_given_fish      0.5-1 m3/s      104       18       27
+           mad gr_caught_given_fish        1-5 m3/s       68       19       22
+           mad gr_caught_given_fish       5-20 m3/s        2        0        2
+           mad gr_caught_given_fish      >= 20 m3/s        1        0        1
+ raw_rate reference rate_ratio ratio_lo     ratio_hi n_boot_ok        power
+    0.203      TRUE      1.000    1.000 1.000000e+00       200           ok
+    0.209     FALSE      1.162    0.705 1.778000e+00       200           ok
+    0.192     FALSE      0.951    0.584 1.583000e+00       200           ok
+    0.142     FALSE      0.869    0.479 1.417000e+00       200           ok
+    0.139     FALSE      1.102    0.701 1.601000e+00       200           ok
+    0.095     FALSE      0.811    0.485 1.282000e+00       200           ok
+    0.013     FALSE      0.124    0.000 3.120000e-01       200 underpowered
+    0.102     FALSE      1.084    0.296 3.426000e+00       200 underpowered
+    0.000     FALSE         NA       NA           NA       198 underpowered
+    0.561      TRUE      1.000    1.000 1.000000e+00       200           ok
+    0.728     FALSE      1.553    1.130 2.260000e+00       200           ok
+    0.642     FALSE      1.188    0.881 1.647000e+00       200           ok
+    0.433     FALSE      0.721    0.449 1.055000e+00       200           ok
+    0.418     FALSE      0.727    0.540 1.049000e+00       200           ok
+    0.339     FALSE      0.509    0.352 6.980000e-01       200           ok
+    0.224     FALSE      0.320    0.167 4.810000e-01       200           ok
+    0.204     FALSE      0.272    0.097 4.490000e-01       200           ok
+    0.200     FALSE      0.352    0.000 1.784000e+00       199 underpowered
+    0.361      TRUE      1.000    1.000 1.000000e+00       195           ok
+    0.287     FALSE      0.757    0.423 1.307000e+00       195           ok
+    0.299     FALSE      0.695    0.394 1.120000e+00       195           ok
+    0.328     FALSE      0.807    0.358 1.613000e+00       195           ok
+    0.333     FALSE      1.706    1.012 3.327000e+00       195           ok
+    0.280     FALSE      1.111    0.629 2.051000e+00       195           ok
+    0.059     FALSE      0.689    0.000 2.783000e+00       195 underpowered
+    0.500     FALSE      3.675    0.559 7.237732e+08       195 underpowered
+    0.000     FALSE         NA       NA           NA        85 underpowered
+    0.218      TRUE      1.000    1.000 1.000000e+00       200           ok
+    0.068     FALSE      0.345    0.113 7.210000e-01       200 underpowered
+    0.066     FALSE      0.260    0.069 4.800000e-01       200 underpowered
+    0.134     FALSE      0.621    0.416 9.070000e-01       200           ok
+    0.179     FALSE      0.913    0.567 1.548000e+00       200           ok
+    0.182     FALSE      0.667    0.000 3.316000e+00       200 underpowered
+    0.000     FALSE         NA       NA           NA       200 underpowered
+    0.046     FALSE      0.253    0.093 4.950000e-01       200           ok
+    0.672      TRUE      1.000    1.000 1.000000e+00       200           ok
+    0.193     FALSE      0.215    0.115 3.640000e-01       200           ok
+    0.132     FALSE      0.149    0.065 2.400000e-01       200           ok
+    0.397     FALSE      0.473    0.366 5.850000e-01       200           ok
+    0.769     FALSE      1.418    1.000 2.021000e+00       200           ok
+    0.818     FALSE      1.030    0.208 1.132900e+01       200 underpowered
+    0.500     FALSE      0.781    0.000 1.374900e+01       194 underpowered
+    0.143     FALSE      0.141    0.079 2.190000e-01       200           ok
+    0.325      TRUE      1.000    1.000 1.000000e+00       196           ok
+    0.353     FALSE      1.858    0.475 6.931000e+00       196 underpowered
+    0.500     FALSE      0.792    0.181 3.102000e+00       196 underpowered
+    0.337     FALSE      0.870    0.499 1.347000e+00       196           ok
+    0.233     FALSE      0.891    0.441 1.790000e+00       196           ok
+    0.222     FALSE      0.971    0.000 1.441600e+01       195 underpowered
+    0.000     FALSE         NA       NA           NA       168 underpowered
+    0.323     FALSE      0.731    0.137 2.244000e+00       196           ok
+    0.203      TRUE      1.000    1.000 1.000000e+00       200           ok
+    0.063     FALSE      0.314    0.143 5.500000e-01       200           ok
+    0.164     FALSE      0.671    0.341 1.237000e+00       200           ok
+    0.188     FALSE      0.782    0.474 1.454000e+00       200           ok
+    0.129     FALSE      0.729    0.339 1.333000e+00       200           ok
+    0.178     FALSE      0.867    0.462 1.767000e+00       200           ok
+    0.000     FALSE         NA       NA           NA       127 underpowered
+    0.000     FALSE         NA       NA           NA       172 underpowered
+    0.739      TRUE      1.000    1.000 1.000000e+00       200           ok
+    0.180     FALSE      0.143    0.095 2.110000e-01       200           ok
+    0.352     FALSE      0.296    0.214 4.310000e-01       200           ok
+    0.542     FALSE      0.572    0.420 8.060000e-01       200           ok
+    0.748     FALSE      1.148    0.823 1.701000e+00       200           ok
+    0.636     FALSE      0.794    0.535 1.324000e+00       200           ok
+    1.000     FALSE         NA       NA           NA       118 underpowered
+    0.500     FALSE      0.745    0.000 1.210000e+01       177 underpowered
+    0.275      TRUE      1.000    1.000 1.000000e+00       199           ok
+    0.350     FALSE      0.939    0.333 2.085000e+00       199           ok
+    0.465     FALSE      1.515    0.775 2.999000e+00       199           ok
+    0.346     FALSE      1.024    0.619 1.736000e+00       199           ok
+    0.173     FALSE      0.793    0.324 1.625000e+00       199           ok
+    0.279     FALSE      1.094    0.468 3.008000e+00       199           ok
+    0.000     FALSE         NA       NA           NA       121 underpowered
+    0.000     FALSE         NA       NA           NA       120 underpowered
+
+## Sensitivity: the main ratio, the logit link's odds ratio, and river-polygon visits kept
+      variable             response           class  main logit_or rivers_kept
+      gradient            gr_caught           1-2 % 1.000    1.000       1.000
+      gradient            gr_caught        <= 0.5 % 1.162    1.096       1.263
+      gradient            gr_caught         0.5-1 % 0.951    0.878       1.022
+      gradient            gr_caught        2-2.49 % 0.869    0.790       0.656
+      gradient            gr_caught     2.49-3.49 % 1.102    1.016       0.785
+      gradient            gr_caught     3.49-5.49 % 0.811    0.688       0.625
+      gradient            gr_caught        5.49-8 % 0.124    0.096       0.083
+      gradient            gr_caught          8-12 % 1.084    1.064       0.760
+      gradient            gr_caught          > 12 %    NA       NA          NA
+      gradient      any_fish_caught           1-2 % 1.000    1.000       1.000
+      gradient      any_fish_caught        <= 0.5 % 1.553    2.130       1.858
+      gradient      any_fish_caught         0.5-1 % 1.188    1.460       1.276
+      gradient      any_fish_caught        2-2.49 % 0.721    0.635       0.698
+      gradient      any_fish_caught     2.49-3.49 % 0.727    0.617       0.682
+      gradient      any_fish_caught     3.49-5.49 % 0.509    0.406       0.489
+      gradient      any_fish_caught        5.49-8 % 0.320    0.226       0.277
+      gradient      any_fish_caught          8-12 % 0.272    0.175       0.364
+      gradient      any_fish_caught          > 12 % 0.352    0.297       0.313
+      gradient gr_caught_given_fish           1-2 % 1.000    1.000       1.000
+      gradient gr_caught_given_fish        <= 0.5 % 0.757    0.575       0.811
+      gradient gr_caught_given_fish         0.5-1 % 0.695    0.610       0.735
+      gradient gr_caught_given_fish        2-2.49 % 0.807    0.678       0.669
+      gradient gr_caught_given_fish     2.49-3.49 % 1.706    1.872       1.164
+      gradient gr_caught_given_fish     3.49-5.49 % 1.111    1.017       0.939
+      gradient gr_caught_given_fish        5.49-8 % 0.689    0.607       0.274
+      gradient gr_caught_given_fish          8-12 % 3.675    7.082       1.899
+      gradient gr_caught_given_fish          > 12 %    NA       NA          NA
+ channel_width            gr_caught           4-8 m 1.000    1.000       1.000
+ channel_width            gr_caught         < 1.5 m 0.345    0.264       0.289
+ channel_width            gr_caught         1.5-2 m 0.260    0.173       0.222
+ channel_width            gr_caught           2-4 m 0.621    0.495       0.522
+ channel_width            gr_caught          8-15 m 0.913    0.873       0.825
+ channel_width            gr_caught         15-30 m 0.667    0.480       0.828
+ channel_width            gr_caught         >= 30 m    NA       NA       1.130
+ channel_width            gr_caught        no width 0.253    0.189       0.237
+ channel_width      any_fish_caught           4-8 m 1.000    1.000       1.000
+ channel_width      any_fish_caught         < 1.5 m 0.215    0.122       0.211
+ channel_width      any_fish_caught         1.5-2 m 0.149    0.083       0.146
+ channel_width      any_fish_caught           2-4 m 0.473    0.327       0.451
+ channel_width      any_fish_caught          8-15 m 1.418    1.846       1.372
+ channel_width      any_fish_caught         15-30 m 1.030    0.919       1.573
+ channel_width      any_fish_caught         >= 30 m 0.781    0.563       1.518
+ channel_width      any_fish_caught        no width 0.141    0.082       0.229
+ channel_width gr_caught_given_fish           4-8 m 1.000    1.000       1.000
+ channel_width gr_caught_given_fish         < 1.5 m 1.858    2.334       1.196
+ channel_width gr_caught_given_fish         1.5-2 m 0.792    0.478       0.833
+ channel_width gr_caught_given_fish           2-4 m 0.870    0.668       0.818
+ channel_width gr_caught_given_fish          8-15 m 0.891    0.757       0.623
+ channel_width gr_caught_given_fish         15-30 m 0.971    0.675       0.683
+ channel_width gr_caught_given_fish         >= 30 m    NA       NA       0.932
+ channel_width gr_caught_given_fish        no width 0.731    0.870       0.639
+           mad            gr_caught    0.2-0.5 m3/s 1.000    1.000       1.000
+           mad            gr_caught    < 0.021 m3/s 0.314    0.231       0.266
+           mad            gr_caught 0.021-0.05 m3/s 0.671    0.556       0.539
+           mad            gr_caught   0.05-0.2 m3/s 0.782    0.697       0.698
+           mad            gr_caught      0.5-1 m3/s 0.729    0.665       0.751
+           mad            gr_caught        1-5 m3/s 0.867    0.752       0.764
+           mad            gr_caught       5-20 m3/s    NA       NA       2.053
+           mad            gr_caught      >= 20 m3/s    NA       NA       0.825
+           mad      any_fish_caught    0.2-0.5 m3/s 1.000    1.000       1.000
+           mad      any_fish_caught    < 0.021 m3/s 0.143    0.069       0.140
+           mad      any_fish_caught 0.021-0.05 m3/s 0.296    0.161       0.310
+           mad      any_fish_caught   0.05-0.2 m3/s 0.572    0.409       0.610
+           mad      any_fish_caught      0.5-1 m3/s 1.148    1.189       1.310
+           mad      any_fish_caught        1-5 m3/s 0.794    0.691       1.075
+           mad      any_fish_caught       5-20 m3/s    NA       NA       1.449
+           mad      any_fish_caught      >= 20 m3/s 0.745    0.489       1.176
+           mad gr_caught_given_fish    0.2-0.5 m3/s 1.000    1.000       1.000
+           mad gr_caught_given_fish    < 0.021 m3/s 0.939    1.131       0.918
+           mad gr_caught_given_fish 0.021-0.05 m3/s 1.515    1.925       1.154
+           mad gr_caught_given_fish   0.05-0.2 m3/s 1.024    1.089       0.937
+           mad gr_caught_given_fish      0.5-1 m3/s 0.793    0.719       0.602
+           mad gr_caught_given_fish        1-5 m3/s 1.094    1.134       0.709
+           mad gr_caught_given_fish       5-20 m3/s    NA       NA       1.843
+           mad gr_caught_given_fish      >= 20 m3/s    NA       NA       0.803
+
+## Visits by month (population), and with GR caught
+ month visits gr_caught
+     1      1        NA
+     2      1        NA
+     3      2        NA
+     5     44         3
+     6    131         8
+     7    298        44
+     8    476       110
+     9    583        59
+    10     43         5
+    11      1        NA
+
+## GR length (mm, 10 mm bins) by month, fish measured on population visits
+ length_mm 5  6  7  8  9 10
+     20-30 0  0  1  0  0  0
+     30-40 0  0  4 11  1  0
+     40-50 0  0  3 58 10  0
+     50-60 1  0  1 41 45  0
+     60-70 0  0 10 33 57  0
+     70-80 0 10  9  7 39  2
+     80-90 0  5  9  9 33  3
+    90-100 0  0 13 11 10  2
+   100-110 0  0 18 19  3  0
+   110-120 0  4 14 30 10  0
+   120-130 0  0  8 43  8  0
+   130-140 0  0 10 33  5  3
+   140-150 0  0 13 37  4  2
+   150-160 0  1  7 35  2  3
+   160-170 1  0  6 21  1  5
+   170-180 0  0  6 17  2  1
+   180-190 0  0  5 15 10  2
+   190-200 0  1  7 13  3  1
+   200-210 0  0  7 17 10  1
+   210-220 0  1  6  9  8  0
+   220-230 0  5  7 14  8  0
+   230-240 0  2  3  3  4  0
+   240-250 0  2  3  7  2  0
+   250-260 0  1  5  6  2  0
+   260-270 0  0  1  5  5  0
+   270-280 0  1  3  2  1  0
+   280-290 0  1  0  1  0  0
+   290-300 0  0  0  4  0  0
+    >= 300 0  0  3  4  0  0
