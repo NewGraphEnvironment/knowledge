@@ -66,9 +66,11 @@ spawning-site row.
       substrate, groundwater, overwintering habitat, depth/velocity a held source does not already give), each by
       CLAUDE.md's drafting conventions; never insert. Timing and onset temperature are quoted in Phase 4's file
 - [x] Each of the six cells (spawning and rearing gradient, width, MAD) has a value, `qual` or `none` row
-- [ ] `Rscript scripts/0280-literature-verify.R` passes (quotes verbatim, values in quotes)
-- [ ] Meaning audit of every new row against its PDF by fresh reviewers, rounds until one finds nothing inside an
-      earlier fix, ending on an enumeration of every row's claim with its verdict (review files in `planning/active/`)
+- [x] `Rscript scripts/0280-literature-verify.R` passes for every GR row and both quoted files (the run still exits 1 on
+      42 older OCR rows broken since #217 replaced their scans: #282)
+- [x] Meaning audit of every new row against its PDF by fresh reviewers, rounds until one finds nothing inside an
+      earlier fix, ending on an enumeration of every row's claim with its verdict (review files in `planning/active/`): 14, 9, 6, 4 findings over
+      four rounds, the fourth's checked against the pages
 
 ## Phase 4: Grayling life history, quoted
 - [x] `research/grayling_life_history.md`: forms (fluvial, adfluvial, lacustrine), movement and timing, spawning
@@ -97,9 +99,9 @@ spawning-site row.
 - [ ] `research/grayling_habitat.md`: plain-language walk first (life-history expectation, the literature, the
       catch tables, Hagen's segments), what each says about each of link's six GR values, what it is not; no
       proposed value (the next member's)
-- [ ] Rows in `research/README.md` for both new files; `data-raw/README.md` entry; CLAUDE.md's root-tier entry
+- [x] Rows in `research/README.md` for both new files; `data-raw/README.md` entry; CLAUDE.md's root-tier entry
       for `data/gr_use.csv`; `inst/NOTICE.md`'s quotes line names `research/*_life_history.md`
-- [ ] Point `research/baseline_anchoring.md` (the "before" section) and `research/README.md`'s rows for it and for
+- [x] Point `research/baseline_anchoring.md` (the "before" section) and `research/README.md`'s rows for it and for
       `grayling_rearing_tuned.md` at #280 and the new file
 
 ## Owed at the end (reported, done after merge)
@@ -108,7 +110,7 @@ spawning-site row.
 
 ## Validation
 
-- [ ] Tests pass (`devtools::test()`)
+- [x] Tests pass (`devtools::test()`: 2,678 pass, 0 fail, 2 skip, 2026-11-26)
 - [ ] `/code-check branch` clean (three-round floor)
 - [ ] PWF checkboxes match landed work
 - [ ] `/planning-archive` on completion
