@@ -17,12 +17,15 @@
 #   level is dropped, and groups where the response never or always occurs are left out and counted. Under cloglog a
 #   class coefficient multiplies the detection rate whatever the effort. The rate ratio is exp(coefficient) against
 #   the reference class. A fit that does not converge in 100 iterations gives NA. Raw rates beside every model.
-#   A class with no detection, or detections on every visit, is separated and carries no ratio. In a resample a
-#   separated class takes its limit (0, or Inf) and counts in the interval, so a bound can be 0 or Inf. An underpowered class can still be nearly separated in some resamples, and its interval then runs
+#   A class with no detection, or detections on every visit, is separated: its visits are fitted apart, so it cannot
+#   stop the other classes converging, and it carries no ratio. In a resample a separated class takes its limit (0, or
+#   Inf) and counts in the interval, so a bound can be 0 or Inf. An underpowered class can still be nearly separated in some resamples, and its interval then runs
 #   very wide (gradient 8-12 % among visits with fish): read it as no information.
 # INTERVALS: 200 bootstrap resamples of streams (blue_line_key), seed 140, drawn in order before the socket-cluster
 #   fits, so the output does not depend on the number of workers.
-# POWER: `ok` with >= 30 visits and >= 10 detections of the response in the class, else `underpowered`. A response
+# POWER: `ok` with >= 30 visits and >= 10 detections of the response in the class among the visits the model was
+#   fitted to (`n_visits_fit`, `n_detect_fit`: groups holding both outcomes), else `underpowered`. `n_visits` and
+#   `n_detect` count the whole population. A response
 #   with fewer than 4 groups holding both outcomes is not modelled.
 # SPAWNING: summer electrofishing seldom samples spring spawning, so the log gives the months the population was
 #   fished in and GR length by month (data/fdis/build/fish.rds), in 10 mm bins; no spawning table is fitted.
@@ -165,15 +168,19 @@ with_cls <- function(d, v) {
 fit_ratio <- function(d, resp, labs, link = "cloglog", at_limit = FALSE) {
   d$cls <- droplevels(d$cls)
   if (levels(d$cls)[1] != labs[1]) return(setNames(rep(NA_real_, length(labs)), labs))
-  r <- ratio(fit(d, resp, link), labs)
-  r[!labs %in% levels(d$cls)] <- NA_real_
-  # a separated class (no detection, or one on every visit) has a fitted ratio that runs to 0 or without bound: the
-  # main fit reports none, a resample reports the limit
+  # a separated class (no detection, or one on every visit) has a fitted ratio that runs to 0 or without bound, and
+  # left in the fit it can stop the others converging: its visits are fitted apart (left out, and the groups left with
+  # one outcome dropped again), the main fit reports no ratio for it and a resample reports the limit
   none <- tapply(d[[resp]], d$cls, function(v) all(v == 0L))
   all1 <- tapply(d[[resp]], d$cls, function(v) all(v == 1L))
   s0 <- labs %in% names(none)[none %in% TRUE]
   s1 <- labs %in% names(all1)[all1 %in% TRUE]
   if (s0[1] || s1[1]) return(setNames(rep(NA_real_, length(labs)), labs))   # every ratio is against the reference
+  d2 <- modelled(d[!d$cls %in% labs[s0 | s1], ], resp)
+  d2$cls <- droplevels(d2$cls)
+  if (!nrow(d2) || levels(d2$cls)[1] != labs[1]) return(setNames(rep(NA_real_, length(labs)), labs))
+  r <- ratio(fit(d2, resp, link), labs)
+  r[!labs %in% levels(d2$cls)] <- NA_real_
   r[s0] <- if (at_limit) 0 else NA_real_
   r[s1] <- if (at_limit) Inf else NA_real_
   r
@@ -185,11 +192,11 @@ parallel::clusterExport(cl, c("modelled", "fit", "ratio", "fit_ratio", "nuisance
 bq <- function(x, p) {
   x <- x[!is.na(x)]
   if (!length(x)) return(NA_real_)
-  if (p < 0.5 && mean(x == 0) > p) return(0)
-  if (p > 0.5 && mean(x == Inf) > 1 - p) return(Inf)
   f <- x[is.finite(x)]
-  x[x == Inf] <- max(f)
-  unname(stats::quantile(x, p))
+  if (!length(f)) return(Inf)                  # every resample unbounded
+  x[x == Inf] <- 1e300                         # above every finite ratio; a quantile that reaches it is Inf
+  q <- unname(stats::quantile(x, p))
+  if (q > max(f)) Inf else q
 }
 boot <- function(d, resp, labs, s) {
   set.seed(s)
@@ -228,10 +235,12 @@ for (v in names(vars)) for (r in names(responses)) {
       responses[[r]]$label, nrow(d), n_both, nrow(d_resp) - nrow(d), n_distinct(d_resp$wsg) - n_both,
       if (n_both < min_groups) " (too few groups: raw rates only)" else "")
   cnt <- d_resp |> group_by(cls, .drop = FALSE) |>
-    summarise(n_visits = n(), n_detect = sum(.data[[y]]), n_groups = n_distinct(wsg), .groups = "drop")
+    summarise(n_visits = n(), n_detect = sum(.data[[y]]), n_groups = n_distinct(wsg), .groups = "drop") |>
+    left_join(d |> group_by(cls, .drop = FALSE) |>
+                summarise(n_visits_fit = n(), n_detect_fit = sum(.data[[y]]), .groups = "drop"), by = "cls")
   out[[paste(v, r)]] <- tibble(variable = v, response = responses[[r]]$label, class = labs) |>
     left_join(cnt |> mutate(class = as.character(cls)) |> select(-cls), by = "class") |>
-    mutate(across(c(n_visits, n_detect, n_groups), ~ coalesce(.x, 0L)),
+    mutate(across(c(n_visits, n_detect, n_groups, n_visits_fit, n_detect_fit), ~ coalesce(.x, 0L)),
            raw_rate = ifelse(n_visits > 0, n_detect / n_visits, NA_real_),
            reference = class == vars[[v]]$ref,
            # a class with no detection (or every visit a detection) is separated: its fitted ratio runs to 0 (or
@@ -241,7 +250,8 @@ for (v in names(vars)) for (r in names(responses)) {
            ratio_lo = ifelse(sep, NA_real_, apply(bw, 2, bq, 0.025)),
            ratio_hi = ifelse(sep, NA_real_, apply(bw, 2, bq, 0.975)),
            n_boot_ok = if (n_both >= min_groups) colSums(!is.na(bw)) else 0L,
-           power = if_else(n_visits >= min_visits & n_detect >= min_detect, "ok", "underpowered"))
+           # counted on the rows the model was fitted to (groups with both outcomes), not the whole population
+           power = if_else(n_visits_fit >= min_visits & n_detect_fit >= min_detect, "ok", "underpowered"))
   if (n_both >= min_groups) {
     dr <- modelled(responses[[r]]$data(with_cls(d_river, v)), y)
     sep_main <- out[[paste(v, r)]]$sep

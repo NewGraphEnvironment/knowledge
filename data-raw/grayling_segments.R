@@ -13,8 +13,8 @@
 # lies within `buffer_m` of the segment. Each line's gradient is the whole Atlas line's (`fwa_gradient`, the tuning's
 # gradient sensitivity; link's rules read their own segment's gradient), its MAD (`mad_pick`) comes from
 # knw_link_flow() and its width (`cw_deploy`, the width link reads where nobody measured) from knw_link_width(), as
-# the evidence build reads them. Lines in a lake (`wb_any_lake`) or a reservoir of 100 ha or more (`wb_lake`) are
-# counted and left out: the
+# the evidence build reads them. Connector lines (edge types 1400-1450), which carry their tributary's flow, and lines
+# in a lake (`wb_any_lake`) or a reservoir of 100 ha or more (`wb_lake`) are counted and left out: the
 # Williston Lake segment and lake reaches carry no stream gradient. Groups: a segment counts in every group its stage
 # names (`Adult+Fry` in both adult and fry); "spawning" is a `CRITICAL_H` that names spawning without "possibly".
 # Terms: the layer is an EcoCat download whose terms are not settled (inst/NOTICE.md, "Terms not yet settled"), so it
@@ -93,6 +93,12 @@ lines <- hits |>
   left_join(fl |> select(linear_feature_id, fwa_gradient, mad_pick), by = "linear_feature_id") |>
   left_join(wd$widths |> select(linear_feature_id, cw_deploy, wb_lake, wb_any_lake, wb_river), by = "linear_feature_id") |>
   left_join(st_drop_geometry(seg), by = "seg_id")
+# connectors (edge types 1400-1450) join a tributary to the river it enters and carry the tributary's flow: they lie
+# along the segment without being the river it maps (code-check round 3)
+conn <- lines$edge_type >= 1400 & lines$edge_type < 1500
+ck <- distinct(lines[conn, ], linear_feature_id, length_metre)
+say("Connector lines left out: %d lines, %.0f km.", nrow(ck), sum(ck$length_metre) / 1000)
+lines <- lines[!conn, ]
 in_lake <- lines$wb_lake %in% TRUE | lines$wb_any_lake %in% TRUE
 lk <- distinct(lines[in_lake, ], linear_feature_id, length_metre)
 say("Lines in a lake or reservoir polygon left out: %d lines, %.0f km.", nrow(lk), sum(lk$length_metre) / 1000)
