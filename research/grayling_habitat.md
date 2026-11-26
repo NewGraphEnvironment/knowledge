@@ -20,7 +20,8 @@ through summer in mid-sized and larger streams and rivers; and they winter in la
 What the evidence says about link's six numbers:
 - **Gradient.** No source gives a gradient limit for grayling. Where gradients are given they are those of reaches
   and sites where grayling were found, nearly all under 2 %. The capture records do not fall at 2.49 % or 3.49 %:
-  grayling were caught as often up to 5.49 %, and almost never above it.
+  grayling were caught as often up to 5.49 %, and rarely at 5.49–8 % (2 of 152 visits); too few steeper streams were
+  fished to say more.
 - **Channel width.** No source gives a minimum. Juveniles were found from about 1 m wide upward; spawning was seen in
   a 3 m constructed channel and in large rivers. The capture records are lowest under 2 m, where few fish of any kind
   were caught.
@@ -58,18 +59,19 @@ streams; the river polygons where most grayling were caught are not in them.
 
 | gradient | visits | with grayling | rate ratio (95 % interval) |
 |---|---|---|---|
-| ≤ 0.5 % | 158 | 33 | 1.16 (0.71–1.78) |
-| 0.5–1 % | 151 | 29 | 0.95 (0.58–1.58) |
-| 1–2 % (reference) | 385 | 78 | 1 |
-| 2–2.49 % | 134 | 19 | 0.87 (0.48–1.42) |
-| 2.49–3.49 % | 251 | 35 | 1.10 (0.70–1.60) |
-| 3.49–5.49 % | 295 | 28 | 0.81 (0.49–1.28) |
-| 5.49–8 % | 152 | 2 | underpowered: 2 catches |
-| 8–12 % | 49 | 5 | underpowered |
+| <= 0.5 % | 158 | 33 | 1.162 (0.705–1.778) |
+| 0.5-1 % | 151 | 29 | 0.951 (0.584–1.583) |
+| 1-2 % (reference) | 385 | 78 | 1 |
+| 2-2.49 % | 134 | 19 | 0.869 (0.479–1.417) |
+| 2.49-3.49 % | 251 | 35 | 1.102 (0.701–1.601) |
+| 3.49-5.49 % | 295 | 28 | 0.811 (0.485–1.282) |
+| 5.49-8 % | 152 | 2 | 0.124 (0.000–0.312), underpowered |
+| 8-12 % | 49 | 5 | 1.084 (0.296–3.426), underpowered |
 | > 12 % | 5 | 0 | none caught |
 
 The catch rate does not fall across link's spawning limit (2.49 %) or its rearing limit (3.49 %): every class up to
-5.49 % sits within the reference's interval. Above 5.49 % grayling were caught on 2 of 152 visits. The tuning's picks
+5.49 % has an interval that holds 1. At 5.49–8 % grayling were caught on 2 of 152 visits; the 54 steeper visits caught
+5, too few to read. The tuning's picks
 move `default`'s gradient limit to 5.49 % on both networks (`research/baseline_anchoring.md`), and these counts are
 the same visits seen class by class.
 
@@ -77,14 +79,14 @@ the same visits seen class by class.
 
 | width (m) | visits | with grayling | rate ratio (95 % interval) |
 |---|---|---|---|
-| < 1.5 | 88 | 6 | 0.35 (0.11–0.72), underpowered |
-| 1.5–2 | 106 | 7 | 0.26 (0.07–0.48), underpowered |
-| 2–4 | 478 | 64 | 0.62 (0.42–0.91) |
-| 4–8 (reference) | 481 | 105 | 1 |
-| 8–15 | 195 | 35 | 0.91 (0.57–1.55) |
-| 15–30 | 11 | 2 | underpowered |
-| ≥ 30 | 4 | 0 | none caught |
-| no width (order-1, unmeasured) | 217 | 10 | 0.25 (0.09–0.50) |
+| < 1.5 | 88 | 6 | 0.345 (0.113–0.721), underpowered |
+| 1.5-2 | 106 | 7 | 0.260 (0.069–0.480), underpowered |
+| 2-4 | 478 | 64 | 0.621 (0.416–0.907) |
+| 4-8 (reference) | 481 | 105 | 1 |
+| 8-15 | 195 | 35 | 0.913 (0.567–1.548) |
+| 15-30 | 11 | 2 | 0.667 (0.000–3.316), underpowered |
+| >= 30 | 4 | 0 | none caught |
+| no width | 217 | 10 | 0.253 (0.093–0.495) |
 
 Grayling were caught about a quarter to a third as often in channels under 2 m as in channels of 4–8 m, and about
 0.6 times as often at 2–4 m. Fewer visits caught any fish at all in those small channels (any-fish ratios 0.15–0.47
@@ -96,22 +98,23 @@ any fish.
 
 | MAD (m³/s) | visits | with grayling | rate ratio (95 % interval) |
 |---|---|---|---|
-| < 0.021 | 445 | 28 | 0.31 (0.14–0.55) |
-| 0.021–0.05 | 244 | 40 | 0.67 (0.34–1.24) |
-| 0.05–0.2 | 400 | 75 | 0.78 (0.47–1.45) |
-| 0.2–0.5 (reference) | 241 | 49 | 1 |
-| 0.5–1 | 139 | 18 | 0.73 (0.34–1.33) |
-| 1–5 | 107 | 19 | 0.87 (0.46–1.77) |
-| ≥ 5 | 4 | 0 | none caught |
+| < 0.021 | 445 | 28 | 0.314 (0.143–0.550) |
+| 0.021-0.05 | 244 | 40 | 0.671 (0.341–1.237) |
+| 0.05-0.2 | 400 | 75 | 0.782 (0.474–1.454) |
+| 0.2-0.5 (reference) | 241 | 49 | 1 |
+| 0.5-1 | 139 | 18 | 0.729 (0.339–1.333) |
+| 1-5 | 107 | 19 | 0.867 (0.462–1.767) |
+| 5-20 | 2 | 0 | none caught |
+| >= 20 | 2 | 0 | none caught |
 
-Below link's rearing floor (0.021 m³/s) grayling were caught about a third as often as at 0.2–0.5 m³/s. Above it no
-class differs from the reference by more than its interval allows; the scored population holds almost no stream over
+Below link's rearing floor (0.021 m³/s) grayling were caught about a third as often as at 0.2–0.5 m³/s. Above it every
+class has an interval that holds 1; the scored population holds almost no stream over
 5 m³/s, because larger rivers are river polygons.
 
 ### How firm these are
 
 The pattern holds under a logit link and with river-polygon visits added back (the log's sensitivity table): channels
-under 2 m, MAD under 0.021 m³/s and gradients over 5.49 % stay low. With river polygons added, the classes from 2 to
+under 2 m, MAD under 0.021 m³/s and gradients of 5.49–8 % stay low. With river polygons added, the classes from 2 to
 5.49 % read somewhat lower (0.62–0.78 against 1–2 %). Two limits apply to all of them. Code 2 of link's grayling access is set by
 grayling records upstream, so it is never used here; access enters only as the tuning's barrier test. And summer
 electrofishing samples rearing, not spawning: 1,357 of the 1,580 visits were fished in July to September, and the 175
