@@ -76,7 +76,8 @@ DBI::dbWriteTable(con, tmp, data.frame(seg_id = seg$seg_id, wkt = st_as_text(st_
 hits <- DBI::dbGetQuery(con, sprintf("
   WITH s AS (SELECT seg_id, ST_SetSRID(ST_GeomFromText(wkt), 3005) AS geom FROM %s),
   b AS (SELECT seg_id, ST_Length(geom) AS seg_len, ST_Buffer(geom, %f) AS geom FROM s)
-  SELECT b.seg_id, f.linear_feature_id, f.edge_type, f.length_metre
+  SELECT b.seg_id, f.linear_feature_id, f.edge_type, f.length_metre,
+         ST_Length(ST_Intersection(ST_Force2D(f.geom), b.geom)) AS in_buffer_m, b.seg_len
   FROM b JOIN whse_basemapping.fwa_stream_networks_sp f ON ST_Intersects(f.geom, b.geom)
   WHERE ST_Length(ST_Intersection(ST_Force2D(f.geom), b.geom)) >=
         0.5 * LEAST(ST_Length(ST_Force2D(f.geom)), b.seg_len)
@@ -105,6 +106,15 @@ lk <- distinct(lines[in_lake, ], linear_feature_id, length_metre)
 say("Lines in a lake or reservoir polygon left out: %d lines, %.0f km.", nrow(lk), sum(lk$length_metre) / 1000)
 lines <- lines[!in_lake, ]
 
+# coverage: the share of each segment's length its kept lines run along (length inside the buffer), so a segment whose
+# own stream is split across lines the rule does not all match is named rather than hidden (code-check round 5)
+cov <- lines |> group_by(seg_id) |> summarise(cover = sum(in_buffer_m) / first(seg_len), .groups = "drop")
+cov <- left_join(tibble(seg_id = seg$seg_id, stage = seg$stage, core_area = seg$core_area), cov, by = "seg_id") |>
+  mutate(cover = coalesce(cover, 0))
+low <- cov[cov$cover < 0.9, ]
+say("Segments whose kept lines run along less than 90 %% of their length: %d%s.", nrow(low),
+    if (nrow(low)) paste0(" (", paste(sprintf("%d %s %.0f %%", low$seg_id, low$core_area, 100 * low$cover),
+                                     collapse = "; "), ")") else "")
 lost <- setdiff(seg$seg_id, lines$seg_id)
 say("Segments left with no line after those filters: %d%s.", length(lost),
     if (length(lost)) paste0(" (", paste(seg$stage[lost], seg$core_area[lost], sep = ", ", collapse = "; "), ")") else "")
