@@ -29,3 +29,9 @@
 - `research/grayling_habitat.md`, README rows, NOTICE, CLAUDE.md and data-raw README entries.
 - Code-check rounds 1-3 fixed 5, 2 and 5 findings (one mechanism: a summary over rows that are not its units);
   round 4 enumerates.
+
+## Close, 2026-11-26
+- Code-check five rounds (5, 2, 5, 3, 1 findings), ended by enumeration; verdict `review-verdict.md`.
+- Write-up meaning audit three rounds (17, 18, 10); final gate logs committed (all 115 GR rows and 415 research
+  quotes verify; 42 older rows fail, #282).
+- Next: `/planning-archive`, then the PR.

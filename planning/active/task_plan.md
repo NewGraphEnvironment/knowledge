@@ -97,9 +97,10 @@ spawning-site row.
       size by life stage on this machine's fwapg, log aggregates only
 
 ## Phase 6: Write it up
-- [ ] `research/grayling_habitat.md`: plain-language walk first (life-history expectation, the literature, the
+- [x] `research/grayling_habitat.md`: plain-language walk first (life-history expectation, the literature, the
       catch tables, Hagen's segments), what each says about each of link's six GR values, what it is not; no
-      proposed value (the next member's)
+      proposed value (the next member's); meaning audit 17, 18, 10 findings, the third round's fixes checked
+      against `data/gr_use.csv` and the rows
 - [x] Rows in `research/README.md` for both new files; `data-raw/README.md` entry; CLAUDE.md's root-tier entry
       for `data/gr_use.csv`; `inst/NOTICE.md`'s quotes line names `research/*_life_history.md`
 - [x] Point `research/baseline_anchoring.md` (the "before" section) and `research/README.md`'s rows for it and for
@@ -114,7 +115,7 @@ spawning-site row.
 - [x] Tests pass (`devtools::test()`: 2,678 pass, 0 fail, 2 skip, 2026-11-26)
 - [x] `/code-check branch` clean (three-round floor): five rounds, 5, 2, 5, 3, 1 findings, ended by enumeration
       (`review-verdict.md`)
-- [ ] PWF checkboxes match landed work
+- [x] PWF checkboxes match landed work
 - [ ] `/planning-archive` on completion
 
 Verification: `0280` passes on the appended rows and the quoted file; the meaning audit ends on a claim-by-row
