@@ -112,7 +112,7 @@ class differs from the reference by more than its interval allows; the scored po
 
 The pattern holds under a logit link and with river-polygon visits added back (the log's sensitivity table): channels
 under 2 m, MAD under 0.021 m³/s and gradients over 5.49 % stay low. With river polygons added, the classes from 2 to
-5.49 % read somewhat lower (0.63–0.79 against 1–2 %). Two limits apply to all of them. Code 2 of link's grayling access is set by
+5.49 % read somewhat lower (0.62–0.78 against 1–2 %). Two limits apply to all of them. Code 2 of link's grayling access is set by
 grayling records upstream, so it is never used here; access enters only as the tuning's barrier test. And summer
 electrofishing samples rearing, not spawning: 1,357 of the 1,580 visits were fished in July to September, and the 175
 in May and June caught grayling on 11. The tables say nothing about where grayling spawn.

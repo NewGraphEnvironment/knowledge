@@ -17,8 +17,8 @@
 #   level is dropped, and groups where the response never or always occurs are left out and counted. Under cloglog a
 #   class coefficient multiplies the detection rate whatever the effort. The rate ratio is exp(coefficient) against
 #   the reference class. A fit that does not converge in 100 iterations gives NA. Raw rates beside every model.
-#   A class with no detection, or detections on every visit, is separated and carries no ratio, in the main fit and in
-#   each resample. An underpowered class can still be nearly separated in some resamples, and its interval then runs
+#   A class with no detection, or detections on every visit, is separated and carries no ratio. In a resample a
+#   separated class takes its limit (0, or Inf) and counts in the interval, so a bound can be 0 or Inf. An underpowered class can still be nearly separated in some resamples, and its interval then runs
 #   very wide (gradient 8-12 % among visits with fish): read it as no information.
 # INTERVALS: 200 bootstrap resamples of streams (blue_line_key), seed 140, drawn in order before the socket-cluster
 #   fits, so the output does not depend on the number of workers.
@@ -160,21 +160,37 @@ with_cls <- function(d, v) {
   d
 }
 # a class with no visit in a fit's data is dropped from its factor, so its ratio is NA there, never 1
-fit_ratio <- function(d, resp, labs, link = "cloglog") {
+# `at_limit`: a separated class takes its limit (0 with no detection, Inf with one on every visit) rather than NA, so a
+# bootstrap resample in which the class separated still counts in the interval's tail (code-check round 2)
+fit_ratio <- function(d, resp, labs, link = "cloglog", at_limit = FALSE) {
   d$cls <- droplevels(d$cls)
   if (levels(d$cls)[1] != labs[1]) return(setNames(rep(NA_real_, length(labs)), labs))
   r <- ratio(fit(d, resp, link), labs)
   r[!labs %in% levels(d$cls)] <- NA_real_
-  # a separated class (no detection, or one on every visit) has a ratio that runs to 0 or without bound: none, in
-  # the main fit and in every bootstrap resample alike
-  y <- tapply(d[[resp]], d$cls, function(v) all(v == 0L) || all(v == 1L))
-  sep <- labs %in% names(y)[y %in% TRUE]
-  if (sep[1]) return(setNames(rep(NA_real_, length(labs)), labs))   # every ratio is against the reference
-  r[sep] <- NA_real_
+  # a separated class (no detection, or one on every visit) has a fitted ratio that runs to 0 or without bound: the
+  # main fit reports none, a resample reports the limit
+  none <- tapply(d[[resp]], d$cls, function(v) all(v == 0L))
+  all1 <- tapply(d[[resp]], d$cls, function(v) all(v == 1L))
+  s0 <- labs %in% names(none)[none %in% TRUE]
+  s1 <- labs %in% names(all1)[all1 %in% TRUE]
+  if (s0[1] || s1[1]) return(setNames(rep(NA_real_, length(labs)), labs))   # every ratio is against the reference
+  r[s0] <- if (at_limit) 0 else NA_real_
+  r[s1] <- if (at_limit) Inf else NA_real_
   r
 }
 cl <- parallel::makeCluster(n_cores)
 parallel::clusterExport(cl, c("modelled", "fit", "ratio", "fit_ratio", "nuisance"))
+# a bootstrap bound: the resamples' quantile, separated ones at their limit; a tail of separated resamples larger than
+# the bound's share gives the limit itself (0 or Inf), and Inf never enters the interpolation
+bq <- function(x, p) {
+  x <- x[!is.na(x)]
+  if (!length(x)) return(NA_real_)
+  if (p < 0.5 && mean(x == 0) > p) return(0)
+  if (p > 0.5 && mean(x == Inf) > 1 - p) return(Inf)
+  f <- x[is.finite(x)]
+  x[x == Inf] <- max(f)
+  unname(stats::quantile(x, p))
+}
 boot <- function(d, resp, labs, s) {
   set.seed(s)
   streams <- levels(droplevels(factor(d$blue_line_key)))
@@ -183,7 +199,7 @@ boot <- function(d, resp, labs, s) {
   parallel::clusterExport(cl, c("d", "idx", "resp", "labs"), envir = environment())
   w <- parallel::parLapply(cl, picks, function(pick) {
     bd <- modelled(d[unlist(idx[pick], use.names = FALSE), ], resp)
-    tryCatch(fit_ratio(bd, resp, labs), error = function(e) rep(NA_real_, length(labs)))
+    tryCatch(fit_ratio(bd, resp, labs, at_limit = TRUE), error = function(e) rep(NA_real_, length(labs)))
   })
   if (!all(vapply(w, function(x) is.numeric(x) && length(x) == length(labs), logical(1)))) stop("a bootstrap worker failed")
   do.call(rbind, w)
@@ -222,8 +238,8 @@ for (v in names(vars)) for (r in names(responses)) {
            # without bound) and says nothing a raw rate does not, so it carries no ratio
            sep = n_detect == 0L | n_detect == n_visits,
            rate_ratio = ifelse(sep, NA_real_, unname(rr[class])),
-           ratio_lo = ifelse(sep, NA_real_, apply(bw, 2, quantile, 0.025, na.rm = TRUE, names = FALSE)),
-           ratio_hi = ifelse(sep, NA_real_, apply(bw, 2, quantile, 0.975, na.rm = TRUE, names = FALSE)),
+           ratio_lo = ifelse(sep, NA_real_, apply(bw, 2, bq, 0.025)),
+           ratio_hi = ifelse(sep, NA_real_, apply(bw, 2, bq, 0.975)),
            n_boot_ok = if (n_both >= min_groups) colSums(!is.na(bw)) else 0L,
            power = if_else(n_visits >= min_visits & n_detect >= min_detect, "ok", "underpowered"))
   if (n_both >= min_groups) {
@@ -241,7 +257,7 @@ parallel::stopCluster(cl)
 res <- bind_rows(out) |>
   select(-sep) |>
   mutate(across(c(raw_rate, rate_ratio, ratio_lo, ratio_hi), ~ round(.x, 3)),
-         across(c(ratio_lo, ratio_hi), ~ ifelse(is.finite(.x), .x, NA_real_)))
+         across(c(ratio_lo, ratio_hi), ~ ifelse(is.nan(.x), NA_real_, .x)))   # Inf stays: an unbounded tail
 block("Rate ratios (also data/gr_use.csv)", res)
 block("Sensitivity: the main ratio, the logit link's odds ratio, and river-polygon visits kept",
       bind_rows(sens) |> mutate(across(c(main, logit_or, rivers_kept), ~ round(.x, 3))))
