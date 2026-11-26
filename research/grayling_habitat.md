@@ -51,8 +51,9 @@ underpowered.
 
 ### Most grayling were caught where the tuning does not look
 
-Of the 1,231 visits in grayling's range that caught grayling, 884 sit on river-polygon lines (711 on main flow
-inside a double-line river, 56 on its side channels, 117 on connectors). The tuning's population leaves river polygons
+Of the 1,231 visits in grayling's range that caught grayling, 882 sit in a double-line river by the tuning's own
+river-polygon test (by edge type: 711 on main flow inside the river, 56 on its side channels and 117 on connectors, two
+of which lie outside any river polygon). The tuning's population leaves river polygons
 out, as link's stream rules do, so only 229 of the 1,231 are scored. The tables below describe small and mid-sized
 streams; the river polygons where most grayling were caught are not in them.
 

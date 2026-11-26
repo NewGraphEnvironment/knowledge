@@ -9,11 +9,11 @@
 # width on those lines. Each line is counted once per group, however many of the group's segments overlap it (the
 # layer's segments overlap: two of its life-stage layers redraw reaches the 2021 layer already holds).
 #
-# METHOD: an FWA line (`whse_basemapping.fwa_stream_networks_sp`) belongs to a segment when at least half its length
-# lies within `buffer_m` of the segment. Each line's gradient is the whole Atlas line's (`fwa_gradient`, the tuning's
+# METHOD: an FWA line (`whse_basemapping.fwa_stream_networks_sp`) belongs to a segment when at least half the shorter
+# of the two (the line, or a segment shorter than the line it follows) lies within `buffer_m` of the segment. Each line's gradient is the whole Atlas line's (`fwa_gradient`, the tuning's
 # gradient sensitivity; link's rules read their own segment's gradient), its MAD (`mad_pick`) comes from
 # knw_link_flow() and its width (`cw_deploy`, the width link reads where nobody measured) from knw_link_width(), as
-# the evidence build reads them. Connector lines (edge types 1400-1450), which carry their tributary's flow, and lines
+# the evidence build reads them. Connector lines (edge types 1400, 1410 and 1450), which carry their tributary's flow, and lines
 # in a lake (`wb_any_lake`) or a reservoir of 100 ha or more (`wb_lake`) are counted and left out: the
 # Williston Lake segment and lake reaches carry no stream gradient. Groups: a segment counts in every group its stage
 # names (`Adult+Fry` in both adult and fry); "spawning" is a `CRITICAL_H` that names spawning without "possibly".
@@ -75,10 +75,11 @@ DBI::dbWriteTable(con, tmp, data.frame(seg_id = seg$seg_id, wkt = st_as_text(st_
                   overwrite = TRUE)
 hits <- DBI::dbGetQuery(con, sprintf("
   WITH s AS (SELECT seg_id, ST_SetSRID(ST_GeomFromText(wkt), 3005) AS geom FROM %s),
-  b AS (SELECT seg_id, ST_Buffer(geom, %f) AS geom FROM s)
+  b AS (SELECT seg_id, ST_Length(geom) AS seg_len, ST_Buffer(geom, %f) AS geom FROM s)
   SELECT b.seg_id, f.linear_feature_id, f.edge_type, f.length_metre
   FROM b JOIN whse_basemapping.fwa_stream_networks_sp f ON ST_Intersects(f.geom, b.geom)
-  WHERE ST_Length(ST_Intersection(ST_Force2D(f.geom), b.geom)) >= 0.5 * ST_Length(ST_Force2D(f.geom))
+  WHERE ST_Length(ST_Intersection(ST_Force2D(f.geom), b.geom)) >=
+        0.5 * LEAST(ST_Length(ST_Force2D(f.geom)), b.seg_len)
   ORDER BY b.seg_id, f.linear_feature_id", tmp, buffer_m))
 hits$linear_feature_id <- as.numeric(hits$linear_feature_id)
 say("FWA lines matched (at least half within %g m of a segment): %d lines on %d of %d segments (%.0f km, each line once).",
@@ -93,9 +94,9 @@ lines <- hits |>
   left_join(fl |> select(linear_feature_id, fwa_gradient, mad_pick), by = "linear_feature_id") |>
   left_join(wd$widths |> select(linear_feature_id, cw_deploy, wb_lake, wb_any_lake, wb_river), by = "linear_feature_id") |>
   left_join(st_drop_geometry(seg), by = "seg_id")
-# connectors (edge types 1400-1450) join a tributary to the river it enters and carry the tributary's flow: they lie
+# connectors (edge types 1400, 1410 and 1450) join a tributary to the river it enters and carry the tributary's flow: they lie
 # along the segment without being the river it maps (code-check round 3)
-conn <- lines$edge_type >= 1400 & lines$edge_type < 1500
+conn <- lines$edge_type %in% c(1400L, 1410L, 1450L)   # 1425 (subsurface flow) and 1475 (lake arm) are not connectors
 ck <- distinct(lines[conn, ], linear_feature_id, length_metre)
 say("Connector lines left out: %d lines, %.0f km.", nrow(ck), sum(ck$length_metre) / 1000)
 lines <- lines[!conn, ]
@@ -104,6 +105,16 @@ lk <- distinct(lines[in_lake, ], linear_feature_id, length_metre)
 say("Lines in a lake or reservoir polygon left out: %d lines, %.0f km.", nrow(lk), sum(lk$length_metre) / 1000)
 lines <- lines[!in_lake, ]
 
+lost <- setdiff(seg$seg_id, lines$seg_id)
+say("Segments left with no line after those filters: %d%s.", length(lost),
+    if (length(lost)) paste0(" (", paste(seg$stage[lost], seg$core_area[lost], sep = ", ", collapse = "; "), ")") else "")
+seg_groups <- list(
+  fry = grepl("fry", seg$stage, ignore.case = TRUE),
+  juvenile = grepl("juvenile", seg$stage, ignore.case = TRUE),
+  adult = grepl("adult", seg$stage, ignore.case = TRUE),
+  spawning = grepl("spawning", seg$critical, ignore.case = TRUE) & !grepl("possibly spawning", seg$critical, ignore.case = TRUE),
+  possibly_spawning = grepl("possibly spawning", seg$critical, ignore.case = TRUE),
+  all = rep(TRUE, nrow(seg)))
 groups <- list(
   fry = grepl("fry", lines$stage, ignore.case = TRUE),
   juvenile = grepl("juvenile", lines$stage, ignore.case = TRUE),
@@ -119,7 +130,7 @@ wq <- function(x, w, p) {
 }
 share <- function(ok, w) round(100 * sum(w[ok %in% TRUE]) / sum(w), 1)
 summ <- bind_rows(lapply(names(groups), function(g) {
-  n_seg <- n_distinct(lines$seg_id[groups[[g]]])   # before the dedupe, which keeps one segment per line
+  n_seg <- sum(seg_groups[[g]])   # from the layer, before any line is matched or filtered
   d <- distinct(lines[groups[[g]], ], linear_feature_id, .keep_all = TRUE)   # a line once per group
   w <- d$length_metre
   tibble(group = g, segments = n_seg, km = round(sum(w) / 1000),
