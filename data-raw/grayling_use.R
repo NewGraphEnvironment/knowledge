@@ -17,7 +17,9 @@
 #   level is dropped, and groups where the response never or always occurs are left out and counted. Under cloglog a
 #   class coefficient multiplies the detection rate whatever the effort. The rate ratio is exp(coefficient) against
 #   the reference class. A fit that does not converge in 100 iterations gives NA. Raw rates beside every model.
-#   A class with no detection, or detections on every visit, is separated and carries no ratio.
+#   A class with no detection, or detections on every visit, is separated and carries no ratio, in the main fit and in
+#   each resample. An underpowered class can still be nearly separated in some resamples, and its interval then runs
+#   very wide (gradient 8-12 % among visits with fish): read it as no information.
 # INTERVALS: 200 bootstrap resamples of streams (blue_line_key), seed 140, drawn in order before the socket-cluster
 #   fits, so the output does not depend on the number of workers.
 # POWER: `ok` with >= 30 visits and >= 10 detections of the response in the class, else `underpowered`. A response
