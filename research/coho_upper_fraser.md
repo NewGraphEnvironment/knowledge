@@ -17,9 +17,9 @@ Pages are the printed ones, except the Westworth inventory's, which has no print
 - **Above the Nechako confluence there are two records, and neither rests on a survey.** The Bowron River's is a 2004
   entry carried from a draft recovery strategy, and DFO itself calls coho there unconfirmed. Willow River's (Slade
   Creek, 1995) comes from a community advisor's quarterly report.
-- **So link's `default` coho range takes in two groups on compilations alone.** BOWR and WILL are in it, while
-  FRAN, with fry caught on a 2018 survey, is out of it, as are STUL and STUR, where DFO names coho seen in the Stuart
-  system.
+- **So link's `default` coho range takes in two groups on compilations alone, and leaves out two with surveys.**
+  BOWR and WILL are in it. NAZR, where DFO counted Nazko River spawners, and FRAN, with fry caught on a 2018 survey,
+  are out of it, as are STUL and STUR, where DFO names coho seen in the Stuart system.
 
 ## How the records were judged
 
@@ -115,24 +115,30 @@ Notes on single records:
 
 ## What this means for link's coho range
 
-link's `default` coho range takes in BOWR and WILL and leaves out STUR, STUL and FRAN (#284's measurement of
-2026-11-26). Against the records:
+link's `default` coho range takes in BOWR and WILL and leaves out CHES, FRAN, NAZR, STUL and STUR, the five groups
+here that hold coho records and are outside it (its `wsg_species_presence` table, 2026-11-27). Against the records:
 
 - **BOWR** rests on one doubtful 2004 entry. Nothing here confirms coho in the Bowron.
 - **WILL** rests on one compilation, the 1995 community advisor's report.
+- **NAZR** holds the Nazko River's NuSEDS population (adults present in 1999, 6 spawners in 2001), a survey in the
+  West Road system. NuSEDS records carry no watershed group here, but 370 of the Nazko River's 371 named stream lines
+  lie in NAZR.
 - **FRAN** holds the most recent survey in the upper Nechako, fry caught in 2018, and is outside the range.
+- **CHES** holds one compilation, an unnamed stream from a 1994 draft report.
 - **STUL and STUR** hold a 1976 lake survey whose report is not held and a 2004 compilation. DFO's 2020 map names coho
   seen in two other Stuart system streams (Kuzkwa River, Kazchek Creek), with no record behind them here.
 
 The records say the range's upper edge on the Fraser itself is not supported, and its edge within the Nechako system
-is drawn tighter than the surveys reach. Whether link's range should change is not decided here.
+is drawn tighter than the surveys reach, in the West Road system as well. Whether link's range should change is not
+decided here.
 
 ## Gaps
 
 - Four survey records rest on a citation or a bare database entry, with neither the report nor a field record held: the 1984
   reconnaissance sampling (a paper copy at the UNBC archive), the 1996 Upper Fraser EEM report, the Ocock Lake survey
-  and the RAB Greer Creek survey. Four more rest on FDIS field records whose reports are not held: Triton's 2014
-  Ahbau report, Marlim's 2018 culvert inventory (two records) and Triton's 2010 fry emergence report, which is on the
+  and the RAB Greer Creek survey. Five more rest on FDIS field records whose reports are not held: Triton's 2014
+  Ahbau report (two records, one event), Marlim's 2018 culvert inventory (two records, one event) and Triton's 2010
+  fry emergence report, which is on the
   Nechako Fisheries Conservation Program's site but was not retrieved.
 - The 2004 draft recovery strategy is not public.
 - The Pacific Salmon Foundation's corrections to NuSEDS (#285) carry flags on Fraser coho populations; they are not

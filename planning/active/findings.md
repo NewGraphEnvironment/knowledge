@@ -269,3 +269,13 @@ BOWR (2004, doubtful) and WILL (Slade Creek, 1995, a compilation; it lands on Tr
 FRAN is the Francois Lake group, in the Nechako system. The full `0280` run verifies the file's 5 quotes; it exits 1 on
 #282's 42 OCR evidence rows, the same counts as the committed 2026-11-26 log. No `data/nuseds_reach_groups.csv` row was
 added: a row moves `timing_nuseds.R`'s coho windows.
+
+## Code-check rounds 1 and 2 (2026-11-27)
+
+Round 1 (`review-round1.md`): the cut dropped a Fraser side-channel record (fixed: localcode); the two push logs held
+the bucket's whole manifest, naming a private repository and a project repository (trimmed to their own entry, and the
+two unpushed commits folded, so no commit holds them); log path, qualifier, row order, Gaps and a `why` corrected.
+Round 2 (`review-round2.md`): the round 1 fixes hold over every input; NAZR is also outside link's coho range and holds
+the Nazko River's NuSEDS survey, so the range section now names CHES, FRAN, NAZR, STUL and STUR; the Gaps count of
+FDIS-based records was four and is five. Neither round 2 finding sits inside a round 1 fix. The private name the
+round 1 reviewer quoted was removed from its findings file.

@@ -76,7 +76,7 @@ and cred#48's state for the 0150 floor; `git grep cred#48`; the tracked logs for
 
 - **[security]** scripts/logs/rag/20261127_push_coho.log and scripts/logs/rag/20261127_push_habitat_modelling.log
   (excluded from the review diff, but tracked on the branch) — each holds the bucket's whole merged manifest, which
-  names `NewGraphEnvironment/fish_passage_template_reporting` (a PRIVATE repository; `gh repo view` reports
+  names a private repository's name (a PRIVATE repository; `gh repo view` reports
   visibility PRIVATE) with its branch and head SHA, twice per file. CLAUDE.md: "a committed push log keeps only its
   own store's entry", and the public-repo rule bars naming private repositories in tracked files. `origin/main` holds
   no copy of that name in `scripts/logs/rag/`; the earlier push logs (20261121, 20261125) keep only their own entry.
