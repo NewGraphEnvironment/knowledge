@@ -2,9 +2,9 @@
 
 **Verified:** 2026-11-27 · **Issues:** #284 (this; the `coho` store it built); relates #228 (salmon records per stream)
 and #285 (NuSEDS beside the Pacific Salmon Foundation's corrections, whose Fraser coho flags are not read here yet) ·
-**Produced by:** `data-raw/coho_upper_fraser_records.R` (log `scripts/logs/coho/20261127_upper_fraser_records.*`, 30
-records), each record's source read in the `coho` store's documents; every quote checked by
-`scripts/0280-literature-verify.R`, which lists this file in `QUOTED` · **Status:** complete for the 30 records; gaps
+**Produced by:** `data-raw/coho_upper_fraser_records.R` (log `scripts/logs/coho/20261127_coho_upper_fraser_records.*`,
+31 records), each record's source read in the `coho` store's documents; every quote checked by
+`scripts/0280-literature-verify.R`, which lists this file in `QUOTED` · **Status:** complete for the 31 records; gaps
 at the end.
 
 Pages are the printed ones, except the Westworth inventory's, which has no printed numbers: its page is the PDF's.
@@ -27,14 +27,15 @@ The records are every coho record in the Fraser drainage upstream of the Quesnel
 fish observations as bcfishobs places them, the published FDIS electrofishing evidence, and DFO's NuSEDS escapement
 records. Each is given one of four verdicts from its own source:
 
-- **survey**: a field survey caught, measured or counted the fish, and its report or record says so. Where the report
-  is not held, the verdict adds that the report is not held.
+- **survey**: a field survey caught, measured or counted the fish, and its report or its field record says so. Where
+  only a citation of the report is held, with neither the report nor a field record, the verdict adds that the report
+  is not held.
 - **compilation**: the record is carried from a summary, a map, a stream file or a personal communication, with no
   survey behind it in the source.
 - **doubtful**: its source, place or date conflicts with other sources, or it has none.
 - **no observation**: the record holds no sighting at all.
 
-Of the 30 records, 15 are surveys, 12 compilations, 2 doubtful and 1 holds no observation.
+Of the 31 records, 15 are surveys, 13 compilations, 2 doubtful and 1 holds no observation.
 
 ## What DFO says about the upper limit
 
@@ -56,13 +57,16 @@ such as Westroad River and tributaries, Nechako River, Kuzkwa River, Kazchek Cre
 
 ## The records, by place
 
-Record ids are the log's (`obs:` the Province's observation key, `fdis:` the visit, `nuseds:` the population).
-Places run from the Quesnel's mouth upstream.
+Record ids are the log's (`obs:` the Province's observation key, `fdis:` the visit, `nuseds:` the population). Rows
+are grouped by the tributary they lie on, in order up the Fraser from the Quesnel's mouth (the Fraser itself, the
+Cottonwood, the West Road, Naver Creek, the Nechako, the Willow, the Bowron); within a tributary they are not in
+network order.
 
 | record | group | place | date | source | verdict |
 |---|---|---|---|---|---|
 | `obs:c1262aeb8a` | COTR | Fraser River | 1996-06 | Upper Fraser River EEM cycle one interpretive report | survey, report not held |
 | `obs:83623c516c` | COTR | Swift River | 1986 | Quesnel River Hatchery manager, personal communication | compilation |
+| `obs:c51f92359e` | COTR | Swift River | 2004 | 2004 draft recovery strategy | compilation |
 | `nuseds:2487` | | Swift River | 2000 | NuSEDS: not inspected | no observation |
 | `obs:94e4f8d30d` | COTR | Ahbau Creek | 2014-09-16 | FDIS, Ahbau Creek Compensation 2014 (Triton) | survey |
 | `fdis:172649_1_1` | COTR | Ahbau Creek | 2014-09-16 | FDIS extract: one coho, measured | survey (the same event) |
@@ -94,10 +98,12 @@ Places run from the Quesnel's mouth upstream.
 
 Notes on single records:
 
-- **The 2004 entries** (`obs:93f8af4399`, `obs:59bce25800`, `obs:f1f6bf3008`, `obs:d578bf599c`) cite the
-  consultative draft of the national recovery strategy for Interior Fraser coho, which is not public. Two also cite
-  Irvine et al.'s 2001 stock status assessment. Each is dated 1 January 2004, the draft's year, not a survey date.
-  The West Road and Nechako entries agree with surveys; the Stuart entry stands alone. The Bowron entry is doubtful,
+- **The 2004 entries** (`obs:c51f92359e`, `obs:93f8af4399`, `obs:f1f6bf3008`, `obs:d578bf599c`, `obs:59bce25800`)
+  cite the consultative draft of the national recovery strategy for Interior Fraser coho, which is not public. Two
+  also cite Irvine et al.'s 2001 stock status assessment. Each is dated 1 January 2004, the draft's year, not a survey
+  date. The West Road and Nechako entries agree with surveys; the Swift River and Stuart entries stand alone. The
+  Swift River entry lies on a Fraser side channel at the Cottonwood's mouth, which carries the Fraser's watershed
+  code. The Bowron entry is doubtful,
   because DFO's own later assessments (2013 and 2020, quoted above) still call coho there unconfirmed.
 - **Dahl Creek.** The inventory caught coho in the creek's lowest reach: "Also numerous coho salmon ranging in size
   from 67 to 85 mm were sampled." (westworthassociatesenvironmentalltd_20011996Reconnaissance, p. 40). The Province
@@ -123,10 +129,11 @@ is drawn tighter than the surveys reach. Whether link's range should change is n
 
 ## Gaps
 
-- The reports behind six survey records are not held: the 1984 reconnaissance sampling (a paper copy at the UNBC
-  archive), the 1996 Upper Fraser EEM report, the Ocock Lake survey, the RAB Greer Creek survey, Triton's 2014 Ahbau
-  report and Marlim's 2018 culvert inventory. Triton's 2010 fry emergence report is on the Nechako Fisheries
-  Conservation Program's site but was not retrieved.
+- Four survey records rest on a citation or a bare database entry, with neither the report nor a field record held: the 1984
+  reconnaissance sampling (a paper copy at the UNBC archive), the 1996 Upper Fraser EEM report, the Ocock Lake survey
+  and the RAB Greer Creek survey. Four more rest on FDIS field records whose reports are not held: Triton's 2014
+  Ahbau report, Marlim's 2018 culvert inventory (two records) and Triton's 2010 fry emergence report, which is on the
+  Nechako Fisheries Conservation Program's site but was not retrieved.
 - The 2004 draft recovery strategy is not public.
 - The Pacific Salmon Foundation's corrections to NuSEDS (#285) carry flags on Fraser coho populations; they are not
   read here yet.

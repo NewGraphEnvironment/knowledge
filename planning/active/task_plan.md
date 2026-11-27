@@ -64,7 +64,7 @@ What exploration settled (2026-11-26, from a copy of `zotero.sqlite` taken with 
       the Province's source fields, so there is no `bcdata` join). It gathers every coho record there: bcfishobs, the
       published FDIS evidence and NuSEDS v1 (populations unplaced, since their codes are mainstems). Output:
       `scripts/logs/coho/<date>_upper_fraser_records.{txt,csv}`, one row per record with a stable id. It asserts the
-      counts it was written against: 24 bcfishobs records in 10 groups, one FDIS visit with coho, five NuSEDS
+      counts it was written against: 25 bcfishobs records in 10 groups (24 before code-check round 1 placed side-channel points by their local code), one FDIS visit with coho, five NuSEDS
       populations (the issue named three)
 - [x] Why the 2018 FRAN FDIS coho-fry collections are missing from the published evidence (placement, range, a
       filter, or a later export)
@@ -133,7 +133,7 @@ What exploration settled (2026-11-26, from a copy of `zotero.sqlite` taken with 
 - [x] (Four, as written: survey, compilation, doubtful, and no observation for NuSEDS's not-inspected record.) Define the three verdicts before judging: survey (the record comes from a field survey whose report says how the
       fish were caught or seen), compilation (it is carried from another record or a summary, with no survey behind
       it in the source), doubtful (its date, place or identity conflicts with its source or with other records)
-- [x] One verdict per record id in the Phase 1 log: 24 bcfishobs (the 2018 FRAN collections among them), 5 NuSEDS
+- [x] One verdict per record id in the Phase 1 log: 25 bcfishobs (the 2018 FRAN collections among them), 5 NuSEDS
       and the FDIS visit. Each verdict quotes its passage from a keyed group item with a PDF where a document carries it
 - [x] `research/coho_upper_fraser.md`: open with the answer (how far up the Fraser coho are confirmed), then the
       records table, then what it means for BOWR and WILL in link's range and for STUR, STUL and FRAN outside it.
@@ -172,6 +172,6 @@ How each change is proved:
   equal to the gap, the bucket ETag matched, and four queries with expectations written first.
 - `habitat_modelling`: document counts before and after, the free-page share before and after the update (cred#48's
   fix), ETag matched.
-- Check: the script asserts its counts (24, 1, 5), one verdict per record id, each with its source passage, and `0280`
+- Check: the script asserts its counts (25, 1, 5), one verdict per record id, each with its source passage, and `0280`
   passes with the research file in `QUOTED`; `public_sweep.py` finds no database host in the script or log.
 

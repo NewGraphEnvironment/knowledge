@@ -6,8 +6,11 @@
 #
 # WHY / DESIGN NOTES:
 #   - WHERE "UPPER FRASER" STARTS. A record counts when its watershed code lies on a Fraser tributary entering
-#     upstream of the Quesnel River (the code's second part above Quesnel's 458399), or on the Fraser mainstem above
-#     the Quesnel's mouth. The Quesnel system itself is left out: it is part of the coho range nobody doubts. #284's
+#     upstream of the Quesnel River (the code's second part above Quesnel's 458399), or, for a point whose watershed
+#     code is the Fraser's own (`100`), when its local code's second part is above it: a side channel or connector
+#     carries the Fraser's watershed code and a measure along its own line from 0, so its place on the Fraser is in
+#     the local code, as the mainstem's is. The Quesnel system itself is left out: it is part of the coho range
+#     nobody doubts. #284's
 #     body took "north of about Quesnel's latitude", which no single latitude reproduces (its 36 bcfishobs records sit
 #     between the counts above 52.7 and 52.8 degrees, printed below), so the population is set by the network.
 #   - THREE RECORD SETS.
@@ -19,7 +22,7 @@
 #       nuseds  knowledge/nuseds/<VERSION> over HTTPS: one row per coho population whose stream lies in the
 #               population, its estimates by year in one field.
 #     link's coho range is not written here: its presence table is sourced from bcfishpass (inst/NOTICE.md, #76).
-#   - IT CHECKS ITS OWN COUNTS. The script stops unless it finds 24 bcfishobs records in 10 groups, the coho visit
+#   - IT CHECKS ITS OWN COUNTS. The script stops unless it finds 25 bcfishobs records in 10 groups, the coho visit
 #     in FDIS and five NuSEDS populations, the counts it was written against (2026-11-26; #284's body named three, missing
 #     the Nazko River's and the Swift River's, whose one record was not inspected). A change in any of the
 #     three inputs then shows as a stop, not as a quietly different table.
@@ -45,32 +48,30 @@ quesnel <- 458399L   # the Quesnel River's place on the Fraser (watershed code 1
 
 con <- DBI::dbConnect(RPostgres::Postgres())
 
-# ---- the Quesnel's mouth on the Fraser mainstem ----
-mouth_m <- DBI::dbGetQuery(con, "
-  SELECT min(downstream_route_measure) AS m FROM whse_basemapping.fwa_stream_networks_sp
-  WHERE wscode_ltree = '100' AND localcode_ltree = '100.458399'")$m
-stopifnot(length(mouth_m) == 1L, is.finite(mouth_m))
-cat(sprintf("Quesnel River mouth: Fraser mainstem measure %.1f m\n", mouth_m))
-
-# upstream(): a code as ltree text ("100.567134.123") or a FWA dashed code ("100-567134-000000-..."), and the
-# measure along it, upstream of the Quesnel's mouth?
-upstream <- function(code, measure = NA_real_) {
-  parts <- strsplit(gsub("-", ".", code), ".", fixed = TRUE)
-  vapply(seq_along(parts), function(i) {
-    p <- parts[[i]]
-    p <- p[!grepl("^0+$", p)]          # a dashed code pads with zero fields
-    if (length(p) == 0L || is.na(p[1]) || p[1] != "100") return(FALSE)
-    if (length(p) == 1L) return(!is.na(measure[i]) && measure[i] > mouth_m)
-    as.integer(p[2]) > quesnel
-  }, logical(1))
+# second(): the second part of an ltree code ("100.567134.123") or a FWA dashed code ("100-567134-000000-..."),
+# NA where it has none (a dashed code pads with zero fields) or its first part is not the Fraser's.
+second <- function(code) {
+  vapply(strsplit(gsub("-", ".", code), ".", fixed = TRUE), function(p) {
+    p <- p[!grepl("^0+$", p)]
+    if (length(p) < 2L || p[1] != "100") NA_integer_ else as.integer(p[2])
+  }, integer(1))
+}
+# upstream(): a record's watershed code, and its local code where it has one, upstream of the Quesnel's mouth? A
+# code with a second part is a tributary's; a bare `100` is on the Fraser itself, placed by its local code.
+upstream <- function(code, localcode = NA_character_) {
+  w <- second(code)
+  fraser <- !is.na(code) & sub("^100([.-]0+)*$", "100", code) == "100"
+  l <- second(ifelse(is.na(localcode), "", localcode))
+  ifelse(fraser, !is.na(l) & l > quesnel, !is.na(w) & w > quesnel)
 }
 stopifnot(upstream("100.567134"), !upstream("100.458399.1"), upstream("100-594120-000000"),
-          !upstream("100-000000-000000"), upstream("100", mouth_m + 1), !upstream("100", mouth_m - 1))
+          !upstream("100-000000-000000"), upstream("100", "100.478686"), !upstream("100", "100.458399"),
+          !upstream("100", "100"), !upstream("100"), !upstream("200.567134"), !upstream(NA_character_))
 
 # ---- obs: bcfishobs ----
 obs <- DBI::dbGetQuery(con, "
   SELECT observation_key, fish_observation_point_id, watershed_group_code, wscode::text AS wscode,
-         downstream_route_measure, observation_date, point_type_code, gazetted_name, waterbody_type, life_stage,
+         localcode::text AS localcode, observation_date, point_type_code, gazetted_name, waterbody_type, life_stage,
          activity, agency_name, source, source_ref
   FROM bcfishobs.observations
   WHERE species_code = 'CO' AND wscode <@ '100'::ltree
@@ -82,11 +83,11 @@ lat <- DBI::dbGetQuery(con, "
 DBI::dbDisconnect(con)
 cat(sprintf("bcfishobs coho in the Fraser drainage: %d; north of 52.7 deg %d, of 52.8 deg %d (#284's body: 36)\n",
             nrow(obs), lat$n527, lat$n528))
-obs <- obs[upstream(obs$wscode, obs$downstream_route_measure), , drop = FALSE]
+obs <- obs[upstream(obs$wscode, obs$localcode), , drop = FALSE]
 cat(sprintf("bcfishobs coho upstream of the Quesnel's mouth: %d in %d groups (%s)\n", nrow(obs),
             length(unique(obs$watershed_group_code)), paste(sort(unique(obs$watershed_group_code)), collapse = ", ")))
-if (nrow(obs) != 24L || length(unique(obs$watershed_group_code)) != 10L) {
-  stop("expected 24 bcfishobs records in 10 groups (2026-11-26): the observations or the cut have moved", call. = FALSE)
+if (nrow(obs) != 25L || length(unique(obs$watershed_group_code)) != 10L) {
+  stop("expected 25 bcfishobs records in 10 groups (2026-11-27): the observations or the cut have moved", call. = FALSE)
 }
 rec_obs <- data.frame(
   record_id = paste0("obs:", obs$observation_key),
@@ -106,12 +107,12 @@ rec_obs <- data.frame(
 
 # ---- fdis: the published electrofishing evidence ----
 vl <- readr::read_csv(file.path(evidence_dir, "visits_link.csv"), show_col_types = FALSE, progress = FALSE,
-                      col_select = c("site_visit", "watershed_group_code", "wscode", "downstream_route_measure",
+                      col_select = c("site_visit", "watershed_group_code", "wscode", "localcode",
                                      "date", "agency", "gnis_name", "data_set"),
                       col_types = readr::cols(.default = readr::col_character()))
 vs <- readr::read_csv(file.path(evidence_dir, "visits_species.csv"), show_col_types = FALSE, progress = FALSE,
                       col_types = readr::cols(.default = readr::col_character()))
-vl <- vl[!is.na(vl$wscode) & upstream(vl$wscode, as.numeric(vl$downstream_route_measure)), , drop = FALSE]
+vl <- vl[!is.na(vl$wscode) & upstream(vl$wscode, vl$localcode), , drop = FALSE]
 co <- vs[vs$species_code == "CO" & vs$site_visit %in% vl$site_visit &
            !is.na(vs$n_caught) & as.integer(vs$n_caught) > 0L, , drop = FALSE]
 cat(sprintf("FDIS visits upstream of the Quesnel's mouth: %d in %d groups; %d caught coho\n", nrow(vl),

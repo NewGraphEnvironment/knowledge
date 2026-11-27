@@ -100,9 +100,10 @@ Log: `scripts/logs/coho/20261127_coho_upper_fraser_records.{txt,csv}` (30 record
 - **The five 2004 entries rest on one compilation.** BLAR, BOWR, LCHL and STUR's 2004-01-01 records (survey ids
   7501690, 7501691, 7503425, 7503426) cite "National recovery strategy for coho salmon (Oncorhynchus kisutch) in the
   Interior Fraser watershed, British Columbia, Consultative Draft" (2004), two of them also "2001 Stock Status
-  Assessment of Coho Salmon from the Interior Fraser River". The issue's fifth (Swift, COTR) is a 1986 personal
-  communication from the Quesnel River Hatchery manager, not a 2004 entry; inside the network cut, four 2004 entries
-  remain.
+  Assessment of Coho Salmon from the Interior Fraser River". (Corrected in code-check round 1: the issue's fifth, Swift
+  River in COTR, survey id 7503424, is a 2004 entry too. It lies on a Fraser side channel at the Cottonwood's mouth
+  whose watershed code is the Fraser's, and the first version of the cut, which placed a bare `100` code by its
+  measure on the mainstem, dropped it. The cut now places such a point by its local code: 25 bcfishobs records.)
 - **The 2018 FRAN coho fry** are FDIS collections 233885 and 245547 (Marlim Ecological Consulting, "200 FSR Culvert
   Replacement Inventory - 2018", one site and date under two collection ids). `bcfishobs_fdis_match.csv` marks both
   unmatched: they are not in the 2022 electrofishing extract, which holds electrofishing only, so they were most
@@ -260,7 +261,7 @@ Zotero was reopened after the pushes.
 
 ## Phase 5: the judgement (2026-11-27)
 
-`research/coho_upper_fraser.md`: 30 records, 15 survey, 12 compilation, 2 doubtful (the Bowron 2004 entry, which DFO
+`research/coho_upper_fraser.md`: 31 records (30 before round 1's fix), 15 survey, 13 compilation, 2 doubtful (the Bowron 2004 entry, which DFO
 still calls unconfirmed, and Micks Creek's RAB record with no date or source), 1 no observation (Swift River, not
 inspected). The verdicts gained a fourth, "no observation", for that NuSEDS record. Placing each record on the network:
 every survey lies at or below the Nechako confluence (`100.567134`); the only two records above it on the Fraser are
