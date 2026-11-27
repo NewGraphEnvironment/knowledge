@@ -162,7 +162,7 @@ What exploration settled (2026-11-26, from a copy of `zotero.sqlite` taken with 
 - [x] `/code-check branch` (three-round floor; ends on an enumeration of every CSV row against its title page, and
       every research claim against its passage), and #56's `public_sweep.py` over the branch
 - [x] PWF checkboxes match landed work
-- [ ] `/planning-archive` on completion
+- [x] `/planning-archive` on completion
 
 How each change is proved:
 - CSVs: every PDF source starts `%PDF`, and every metadata row is read against its title page.
