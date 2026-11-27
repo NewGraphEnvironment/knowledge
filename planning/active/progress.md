@@ -24,3 +24,8 @@
   `data/rag/pdf/coho/`; dedupe moved Burnett et al. 2007 and the Westworth inventory to members; gap list in findings;
   #284's body carries the decisions and the corrected premises
 - Next: Phase 3 needs Al: his downloads for the gap list (optional), then the live `0270` run (Web API writes)
+
+## Phase 3, 2026-11-27
+- Completed: live `0270` run and its retry (one 500); the no-op dry run; `49HFCT96` found to hold the same Sandercock
+  scan and trashed; `ZPUIT73I` now 61 live, 61 keyed, 55 with a PDF; cred 0.8.1 (cred#48's fix) installed
+- Next: Phase 4: build `coho` with Zotero quit, then update `habitat_modelling`

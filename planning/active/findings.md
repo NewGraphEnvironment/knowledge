@@ -176,3 +176,25 @@ first creator and year, which differ (Committee 2002 against Schweigert 2017).
   additions would be created, and no `exists` or `copy exists` hit. Three Bulkley overwintering members (Donas &
   Newman 2006, 2007, 2010) would get a PDF from a local copy of the same work, so 4 members stay without one: Holtby
   1988, Bramblett et al. 2002, Swales et al. 1986, Brakensiek & Hankin 2007.
+
+## Phase 3: the live run (2026-11-27)
+
+- Live run (`scripts/logs/rag/20261127_0270_coho_live.log`): 25 members added, 21 additions created, one PDF upload
+  failed with a server 500 (Irvine et al. 2000, `VEQWXGMB`). The rerun (`..._live2.log`, exit 0) attached it. The
+  dry run after both (`..._dryrun2.log`) printed no `would` line and exited 0.
+- **Correction: `49HFCT96` had a file.** It is a standalone attachment (`imported_url` from coastcoho.org) whose file
+  is the same Sandercock scan, byte for byte (md5 `fbc454da42fc8b8e363373b17e12dbaa`), which is why the new
+  Sandercock item's upload registered without sending. The measure called it NOPDF because `0270`'s `local_pdf()`
+  looks only at child attachments. The issue's premise ("no PDF attached") and Phase 2's were both wrong about the
+  file and right that no store could take it: a standalone attachment has no citation key. Trashed through the Web
+  API (204) after checking that `XJ6VCFEM`'s attachment holds the same md5.
+
+| `ZPUIT73I` | before (2026-11-26) | after (2026-11-27) |
+|---|---|---|
+| live items | 16 | 62 (61 after the trash) |
+| with a Better BibTeX key | 15 | 61 |
+| with a PDF on disk (child attachment) | 15 | 55 |
+| MB on disk | 25.0 | 271.1 |
+
+The six keyed items without a PDF: Holtby 1988, Bramblett et al. 2002, Swales et al. 1986, Brakensiek & Hankin 2007
+(members, no PDF anywhere in the group), and Peterson 1982 (immigration) and Bradford & Irvine 2000 (abstract only).

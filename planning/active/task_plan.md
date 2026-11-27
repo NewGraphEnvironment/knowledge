@@ -101,16 +101,16 @@ What exploration settled (2026-11-26, from a copy of `zotero.sqlite` taken with 
       decisions
 
 ## Phase 3: file the collection through `0270` (Al present for the live run)
-- [ ] Al's hand downloads in the ignored `data/rag/pdf/coho/`, their rows added to the additions CSV before the first
+- [x] (None: Al gave no downloads before the live run; the gap list stays in findings.) Al's hand downloads in the ignored `data/rag/pdf/coho/`, their rows added to the additions CSV before the first
       dry run
 - [x] Re-run the `%PDF` check on every URL through `0153`'s `fetch`
 - [x] `0270 --collection coho --parent 9U54XAND --dry-run`; check every `exists` / `copy exists` hit against the item
       it was meant to match
-- [ ] Live run, then wait for Zotero to sync. A second dry run with no `would` lines and exit 0 proves nothing is
+- [x] Live run, then wait for Zotero to sync. A second dry run with no `would` lines and exit 0 proves nothing is
       left to do. Logs go to `scripts/logs/rag/<date>_0270_coho*.log`
-- [ ] Trash the empty standalone attachment `49HFCT96` through the Web API once Sandercock 1991's item holds its PDF.
+- [x] Trash the empty standalone attachment `49HFCT96` through the Web API once Sandercock 1991's item holds its PDF.
       Until then, the build lists it as left out and it belongs in the recorded gap
-- [ ] Re-measure from a guarded copy: before/after table (live items, keyed, PDF on disk, MB uploaded)
+- [x] Re-measure from a guarded copy: before/after table (live items, keyed, PDF on disk, MB uploaded)
 
 ## Phase 4: build, query and push `coho`; update `habitat_modelling`
 - [ ] Hard gate: every member's PDF on disk, Zotero quit, `-wal` 0 bytes. Then `ACTION=build STORE=coho
