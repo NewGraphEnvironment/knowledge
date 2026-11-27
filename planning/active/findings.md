@@ -168,3 +168,11 @@ first creator and year, which differ (Committee 2002 against Schweigert 2017).
   Compensation 2014 and Marlim's 200 FSR culvert inventory 2018 (FDIS projects, no report found); Triton's Nechako
   fry emergence 2010 report (nfcp.org answers a script with HTML; a browser may get it);
 - the eight members without a PDF above.
+
+## Phase 3 before the live run (2026-11-27)
+
+- `%PDF` check through `0153`'s `fetch`: 17 of 17 URL sources return a PDF (the two printed files are local).
+- Dry run (`scripts/logs/rag/20261127_0270_coho_dryrun.log`, exit 0): 15 members already in, 25 would be added, 21
+  additions would be created, and no `exists` or `copy exists` hit. Three Bulkley overwintering members (Donas &
+  Newman 2006, 2007, 2010) would get a PDF from a local copy of the same work, so 4 members stay without one: Holtby
+  1988, Bramblett et al. 2002, Swales et al. 1986, Brakensiek & Hankin 2007.
