@@ -11,15 +11,16 @@ Pages are the printed ones, except the Westworth inventory's, which has no print
 
 ## In brief
 
-- **Coho are confirmed by survey through the Nechako system and no further up the Fraser.** Fish were caught or
-  counted in the Nechako mainstem, Dahl Creek on the Chilako, the Francois Lake group, Ahbau Creek, the West Road
-  (Blackwater) and the Nazko. Every one of these lies at or below the Nechako confluence.
+- **Coho are confirmed by survey through the Nechako system and no further up the Fraser.** Every one of the 15
+  survey records lies at or below the Nechako confluence: the Fraser near Quesnel, Ahbau Creek, the West Road
+  (Blackwater) and the Nazko, the Nechako mainstem and Greer Creek, Dahl Creek on the Chilako, the Francois Lake
+  group, and Ocock Lake in the Stuart system.
 - **Above the Nechako confluence there are two records, and neither rests on a survey.** The Bowron River's is a 2004
   entry carried from a draft recovery strategy, and DFO itself calls coho there unconfirmed. Willow River's (Slade
   Creek, 1995) comes from a community advisor's quarterly report.
-- **So link's `default` coho range takes in two groups on compilations alone, and leaves out two with surveys.**
-  BOWR and WILL are in it. NAZR, where DFO counted Nazko River spawners, and FRAN, with fry caught on a 2018 survey,
-  are out of it, as are STUL and STUR, where DFO names coho seen in the Stuart system.
+- **So link's `default` coho range takes in two groups on compilations alone, and leaves out three with surveys.**
+  BOWR and WILL are in it. NAZR, where DFO counted Nazko River spawners, FRAN, with fry caught on a 2018 survey, and
+  STUL, with a 1976 survey of Ocock Lake whose report is not held, are out of it.
 
 ## How the records were judged
 
@@ -101,7 +102,8 @@ Notes on single records:
 - **The 2004 entries** (`obs:c51f92359e`, `obs:93f8af4399`, `obs:f1f6bf3008`, `obs:d578bf599c`, `obs:59bce25800`)
   cite the consultative draft of the national recovery strategy for Interior Fraser coho, which is not public. Two
   also cite Irvine et al.'s 2001 stock status assessment. Each is dated 1 January 2004, the draft's year, not a survey
-  date. The West Road and Nechako entries agree with surveys; the Swift River and Stuart entries stand alone. The
+  date. The West Road and Nechako entries agree with surveys. The Swift River entry has no survey of the Swift beside
+  it, and the Stuart River entry has only the 1976 Ocock Lake survey elsewhere in the Stuart system. The
   Swift River entry lies on a Fraser side channel at the Cottonwood's mouth, which carries the Fraser's watershed
   code. The Bowron entry is doubtful,
   because DFO's own later assessments (2013 and 2020, quoted above) still call coho there unconfirmed.
@@ -109,7 +111,9 @@ Notes on single records:
   from 67 to 85 mm were sampled." (westworthassociatesenvironmentalltd_20011996Reconnaissance, p. 40). The Province
   dates both records December 1998, the report's date; the sampling was in 1996.
 - **The 2018 FRAN fry** are one site and date under two FDIS collection ids. Neither is in the published FDIS
-  evidence, because the extract it was built from holds electrofishing only; the observation records no method.
+  evidence, because neither is in the two extracts it was built from: 245547 is above every collection id in both,
+  so it was loaded after them, and 233885 falls inside their range but is not there. The extracts hold
+  electrofishing only, and the observation records no method, so why 233885 is missing is not known.
 - **Ocock Lake** is a lake record, which bcfishobs places 1.26 km from a mapped stream.
 - **Willow River.** The Slade Creek record lands on Tregillus Creek, the stream Slade Creek flows into.
 
@@ -125,8 +129,9 @@ here that hold coho records and are outside it (its `wsg_species_presence` table
   lie in NAZR.
 - **FRAN** holds the most recent survey in the upper Nechako, fry caught in 2018, and is outside the range.
 - **CHES** holds one compilation, an unnamed stream from a 1994 draft report.
-- **STUL and STUR** hold a 1976 lake survey whose report is not held and a 2004 compilation. DFO's 2020 map names coho
-  seen in two other Stuart system streams (Kuzkwa River, Kazchek Creek), with no record behind them here.
+- **STUL** holds the 1976 Ocock Lake survey, whose report is not held, and **STUR** a 2004 compilation. DFO's 2020
+  map names coho seen in two other Stuart system streams, Kuzkwa River (LTRE) and Kazchek Creek (MIDR), with no
+  record behind them here; both groups are outside link's range too.
 
 The records say the range's upper edge on the Fraser itself is not supported, and its edge within the Nechako system
 is drawn tighter than the surveys reach, in the West Road system as well. Whether link's range should change is not

@@ -23,7 +23,7 @@
 #               population, its estimates by year in one field.
 #     link's coho range is not written here: its presence table is sourced from bcfishpass (inst/NOTICE.md, #76).
 #   - IT CHECKS ITS OWN COUNTS. The script stops unless it finds 25 bcfishobs records in 10 groups, the coho visit
-#     in FDIS and five NuSEDS populations, the counts it was written against (2026-11-26; #284's body named three, missing
+#     in FDIS and five NuSEDS populations, the counts it was written against (2026-11-27; #284's body named three, missing
 #     the Nazko River's and the Swift River's, whose one record was not inspected). A change in any of the
 #     three inputs then shows as a stop, not as a quietly different table.
 #

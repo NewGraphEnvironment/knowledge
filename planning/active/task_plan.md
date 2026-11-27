@@ -158,10 +158,10 @@ What exploration settled (2026-11-26, from a copy of `zotero.sqlite` taken with 
       (Phase 4's last box)
 
 ## Validation
-- [ ] Tests pass (`devtools::test()`; no `R/` change expected)
-- [ ] `/code-check branch` (three-round floor; ends on an enumeration of every CSV row against its title page, and
+- [x] Tests pass (`devtools::test()`; no `R/` change expected)
+- [x] `/code-check branch` (three-round floor; ends on an enumeration of every CSV row against its title page, and
       every research claim against its passage), and #56's `public_sweep.py` over the branch
-- [ ] PWF checkboxes match landed work
+- [x] PWF checkboxes match landed work
 - [ ] `/planning-archive` on completion
 
 How each change is proved:

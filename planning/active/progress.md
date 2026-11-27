@@ -42,3 +42,10 @@
   rows for the Province's observations and the coho log; `scripts/README.md`, `CLAUDE.md` and `research/README.md`
   entries; #285's body carries the PSF task; #287 filed; #284's body carries the outcome
 - Next: tests, `/code-check branch`, archive, PR
+
+## Validation, 2026-11-27
+- Tests: `devtools::test()`, 466 blocks, 0 failed, 3 skipped
+- `/code-check branch`: round 1 six findings (a dropped side-channel record, private repo names in two push logs before
+  any push, text), round 2 two (NAZR outside link's range, a Gaps count), round 3 three, one inside round 2's fix (the
+  In brief survey count), plus a stale `why` and an unestablished cause; ended on an enumeration
+  (`review-enumeration.md`) deriving every summary from the records table

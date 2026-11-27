@@ -112,9 +112,11 @@ Log: `scripts/logs/coho/20261127_coho_upper_fraser_records.{txt,csv}` (30 record
   fish, Triton's "Ahbau Creek Compensation - 2014"), which is also bcfishobs record `obs:94e4f8d30d`. The issue's
   7,030 visits in 33 groups was another population.
 - **NuSEDS**: five populations, not three. Besides Ahbau Creek, West Road River and Nechako River: Nazko River
-  (1999 "0 spawners" with adults present; 2001 six spawners) and Swift River (one record, 2000, not inspected). Ahbau
-  Creek's population carries the Cottonwood River's mainstem code (`100-478686`), and the Nechako's and West Road's
-  are mainstem codes, so none is placed in a group by its code alone.
+  (1999 "0 spawners" with adults present; 2001 six spawners) and Swift River (one record, 2000, not inspected).
+  (Corrected in code-check round 3: the Swift River population carries the Cottonwood mainstem code, `100-478686`,
+  and Ahbau Creek's carries `100-478686-071246`, which matches no Atlas line; the Atlas's Ahbau Creek is
+  `100.478686.182856`, in COTR.) The Nechako's and West Road's are mainstem codes, so none of the five is placed in a
+  group by its code alone.
 
 Record sources to gather in Phase 2 (each judged record's own report, where public):
 - the 2004 consultative draft national recovery strategy for Interior Fraser coho, and the 2001 stock status
