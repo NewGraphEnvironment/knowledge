@@ -113,10 +113,10 @@ What exploration settled (2026-11-26, from a copy of `zotero.sqlite` taken with 
 - [x] Re-measure from a guarded copy: before/after table (live items, keyed, PDF on disk, MB uploaded)
 
 ## Phase 4: build, query and push `coho`; update `habitat_modelling`
-- [ ] Hard gate: every member's PDF on disk, Zotero quit, `-wal` 0 bytes. Then `ACTION=build STORE=coho
+- [x] Hard gate: every member's PDF on disk, Zotero quit, `-wal` 0 bytes. Then `ACTION=build STORE=coho
       COLLECTIONS=ZPUIT73I`, logged to `scripts/logs/rag/<date>_build_coho.log` with home paths written as `~/`. The
       left-out list must equal the recorded gap, and every origin must map to a live group attachment of a live member
-- [ ] Four `ACTION=query` checks, with the expected documents written in the log before each runs and the top 5 keys
+- [x] Four `ACTION=query` checks, with the expected documents written in the log before each runs and the top 5 keys
       recorded after: how far up the Fraser coho are known; overwinter habitat of juvenile coho; causes of the
       Interior Fraser decline; temperature limits for juvenile coho. A miss is reported, not tuned away
 - [ ] Commit the CSVs and logs before the push (the manifest records the head sha). Then an `ACTION=push` dry run,

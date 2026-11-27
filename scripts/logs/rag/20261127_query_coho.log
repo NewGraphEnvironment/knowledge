@@ -1,0 +1,91 @@
+
+=== QUERY: how far upstream in the Fraser River do coho salmon occur, upper Fraser presence not confirmed
+--- expected (written before the run): the IFC conservation strategy (2007), schweigert_etal2017COSEWICassessmenta, decker_irvine2013PreCOSEWICAssessment, arbeider_etal2020InteriorFraser, the COSEWIC 2002 report
+Opening data/rag/coho.duckdb unverified (verify = FALSE).
+duckdb keeps downloaded extensions and secrets in a temporary directory:
+ℹ /tmp/Rtmp76ai4k/duckdb
+This is removed when the R session ends.
+• Extensions are re-downloaded each session.
+• Secrets are lost.
+ℹ Run duckdb(shared_home = TRUE) (or create ~/.duckdb) to keep them (suitable for most users).
+ℹ Run duckdb(shared_home = FALSE) to accept the temporary directory (and silence this message).
+ℹ See ?duckdb_storage for details and alternatives.
+# A tibble: 9 × 9
+  citation_key          origin chunk_id  start    end text   score metric method
+  <chr>                 <chr>     <int>  <int>  <int> <chr>  <dbl> <chr>  <chr> 
+1 decker_irvine2013Pre… /User…     6525 109575 111189 "Riv…  9.98  bm25   hybrid
+2 committeeonthestatus… /User…     6827  27053  28632 "CWT…  0.182 cosin… hybrid
+3 interiorfrasercohore… /User…     2498  47325  49638 "7\n… 10.2   bm25   hybrid
+4 interiorfrasercohore… /User…     2517  62430  63809 "The…  0.160 cosin… hybrid
+5 interiorfrasercohore… /User…     2536  77626  79207 "The…  0.165 cosin… hybrid
+6 interiorfrasercohore… /User…     2822 306410 307978 "y. …  0.174 cosin… hybrid
+7 fisheriesandoceansca… /User…     6743  24906  26175 "Fre…  9.99  bm25   hybrid
+8 schweigert_etal2017C… /User…      522  40778  42420 "thr…  9.97  bm25   hybrid
+9 arbeider_etal2020Int… /User…     9531  98233 100121 "The…  9.73  bm25   hybrid
+
+=== QUERY: overwinter habitat of juvenile coho salmon, off-channel ponds and side channels in winter
+--- expected (written before the run): bustard_narver1975AspectsWinter, nickelson_etal1992SeasonalChanges, swales_levings1989RoleOffChannela, peterson1982PopulationCharacteristics, solazzi_etal2000Effectsincreasing, quinn_peterson1996influencehabitat
+Opening data/rag/coho.duckdb unverified (verify = FALSE).
+duckdb keeps downloaded extensions and secrets in a temporary directory:
+ℹ /tmp/RtmpZmYXc1/duckdb
+This is removed when the R session ends.
+• Extensions are re-downloaded each session.
+• Secrets are lost.
+ℹ Run duckdb(shared_home = TRUE) (or create ~/.duckdb) to keep them (suitable for most users).
+ℹ Run duckdb(shared_home = FALSE) to accept the temporary directory (and silence this message).
+ℹ See ?duckdb_storage for details and alternatives.
+# A tibble: 8 × 9
+  citation_key             origin chunk_id start   end text  score metric method
+  <chr>                    <chr>     <int> <int> <int> <chr> <dbl> <chr>  <chr> 
+1 roni_etal2002ReviewStre… /User…     2274 14252 16812 "hab… 9.60  bm25   hybrid
+2 nickelson_etal1992Seaso… /User…     2395 20030 21615 "coh… 0.130 cosin… hybrid
+3 interiorfrasercohorecov… /User…     2553 91210 92771 "poo… 0.140 cosin… hybrid
+4 rosenfeld_etal2008Effec… /User…     1732   732  3177 "Abs… 9.35  bm25   hybrid
+5 rosenfeld_etal2008Effec… /User…     1776 35736 37401 "mor… 9.18  bm25   hybrid
+6 swales_levings1989RoleO… /User…      141  4719  6638 "n a… 9.30  bm25   hybrid
+7 swales_levings1989RoleO… /User…      143  6639  8037 "Juv… 0.140 cosin… hybrid
+8 ebersole_etal2006Juveni… /User…      249  6405  7994 "ove… 0.151 cosin… hybrid
+
+=== QUERY: causes of the decline of interior Fraser coho: exploitation, marine survival and freshwater habitat
+--- expected (written before the run): irvine_etal2000StockStatus, irvine_etal20012001Stock, the IFC conservation strategy, arbeider_etal2020InteriorFraser, decker_irvine2013PreCOSEWICAssessment
+Opening data/rag/coho.duckdb unverified (verify = FALSE).
+duckdb keeps downloaded extensions and secrets in a temporary directory:
+ℹ /tmp/RtmpJYgJDd/duckdb
+This is removed when the R session ends.
+• Extensions are re-downloaded each session.
+• Secrets are lost.
+ℹ Run duckdb(shared_home = TRUE) (or create ~/.duckdb) to keep them (suitable for most users).
+ℹ Run duckdb(shared_home = FALSE) to accept the temporary directory (and silence this message).
+ℹ See ?duckdb_storage for details and alternatives.
+# A tibble: 7 × 9
+  citation_key          origin chunk_id  start    end text   score metric method
+  <chr>                 <chr>     <int>  <int>  <int> <chr>  <dbl> <chr>  <chr> 
+1 committeeonthestatus… /User…     6803   8205  10426 "Rec…  0.180 cosin… hybrid
+2 committeeonthestatus… /User…     6806  10427  12904 "Sin…  0.188 cosin… hybrid
+3 committeeonthestatus… /User…     6890  77718  79949 "spe… 10.1   bm25   hybrid
+4 regionalcohoresponse… /User…     7492 276797 278270 "Ske…  0.197 cosin… hybrid
+5 interiorfrasercohore… /User…     2637 158355 159934 "Sin…  9.68  bm25   hybrid
+6 interiorfrasercohore… /User…     2678 191193 192973 "can…  9.90  bm25   hybrid
+7 schweigert_etal2017C… /User…      488  13591  15228 "App… 10.4   bm25   hybrid
+
+=== QUERY: upper temperature limits for juvenile coho rearing
+--- expected (written before the run): richter_kolmes2005MaximumTemperature, lusardi_etal2020Oversummergrowth, sandercock1991LifeHistory, holtby_scrivener1989Observedsimulated, mcmahon1983Habitatsuitability
+Opening data/rag/coho.duckdb unverified (verify = FALSE).
+duckdb keeps downloaded extensions and secrets in a temporary directory:
+ℹ /tmp/RtmpVb8Kyp/duckdb
+This is removed when the R session ends.
+• Extensions are re-downloaded each session.
+• Secrets are lost.
+ℹ Run duckdb(shared_home = TRUE) (or create ~/.duckdb) to keep them (suitable for most users).
+ℹ Run duckdb(shared_home = FALSE) to accept the temporary directory (and silence this message).
+ℹ See ?duckdb_storage for details and alternatives.
+# A tibble: 7 × 9
+  citation_key             origin chunk_id start   end text  score metric method
+  <chr>                    <chr>     <int> <int> <int> <chr> <dbl> <chr>  <chr> 
+1 reeves_etal1989Identifi… /User…       13  9728 11199 "Str… 5.09  bm25   hybrid
+2 lusardi_etal2020Oversum… /User…      707 43195 44790 "We … 0.220 cosin… hybrid
+3 lusardi_etal2020Oversum… /User…      712 47295 49620 "Pub… 0.222 cosin… hybrid
+4 richter_kolmes2005Maxim… /User…     3034 35208 36825 "Adj… 5.23  bm25   hybrid
+5 richter_kolmes2005Maxim… /User…     3036 36826 38399 "ran… 0.234 cosin… hybrid
+6 richter_kolmes2005Maxim… /User…     3041 40775 42429 "Hic… 5.15  bm25   hybrid
+7 richter_kolmes2005Maxim… /User…     3059 55198 57613 "195… 6.02  bm25   hybrid

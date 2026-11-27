@@ -198,3 +198,54 @@ first creator and year, which differ (Committee 2002 against Schweigert 2017).
 
 The six keyed items without a PDF: Holtby 1988, Bramblett et al. 2002, Swales et al. 1986, Brakensiek & Hankin 2007
 (members, no PDF anywhere in the group), and Peterson 1982 (immigration) and Bradford & Irvine 2000 (abstract only).
+
+## What the Interior Fraser documents say about the upper limit (2026-11-27, read in the PDFs; for Phase 5)
+
+- Irvine et al. 2000 (Res. Doc. 2000/125): coho "are found well upstream of the northern boundary shown on Fig. 1
+  although generally in limited numbers; for example they have been documented in the Nechako River drainage, west of
+  Prince George."
+- Irvine et al. 2001 (Res. Doc. 2001/083): "Coho are prevalent throughout the Thompson watershed but their
+  distribution in non-Thompson Fraser systems is not well known. They are recorded as far upstream as the Nechako
+  drainage"; and "Coho are confirmed in the Seton, Bridge, Chilcotin, Westroad, and Nechako rivers, and are suspected
+  of being in the several other non-Thompson systems."
+- COSEWIC 2002 and Decker & Irvine 2013: at least as far upstream as the Nechako; Bowron suspected, not confirmed.
+- Arbeider et al. 2020 (Res. Doc. 2020/025), Figure 7's caption: "Coho Salmon have been observed in some of these
+  systems, such as Westroad River and tributaries, Nechako River, Kuzkwa River, Kazchek Creek, and Bowron River
+  (unconfirmed); however, there is no regular or formal surveys of most streams." Kuzkwa River and Kazchek Creek are
+  Stuart system streams, Kuzkwa River in LTRE (Trembleur Lake) and Kazchek Creek in MIDR (Middle River), checked
+  against the Freshwater Atlas. Neither has a coho record in bcfishobs, FDIS or NuSEDS: a lead for the check, not a
+  record.
+
+## Phase 4: the `coho` store (2026-11-27)
+
+Build (`scripts/logs/rag/20261127_build_coho.log`, cred 0.8.1, ragnar 0.4.0, nomic-embed-text, Zotero quit with a
+0-byte `-wal`; 15:00 to about 15:07 UTC): 61 members, 6 left out (no live PDF), exactly the recorded gap (4 members
+with no PDF, 2 abstract only); 55 keys; 2 PDFs with no text skipped (`departmentoffisheriesandoceans1996Fraserriver`,
+already a member, and `donas_newman2007BulkleyRiver`); **53 documents, 10,059 chunks, 139,735,040 bytes (133.2 MiB,
+0 free blocks), md5 `ff810881567f0c4dfcab9488ee873608`**. Every one of the 53 origins is a live group attachment of
+a live `ZPUIT73I` member.
+
+The build warned "Taking several PDFs for 1 item(s): irvine_etal2000StockStatus (2)" and "Skipping 1 missing file":
+the failed upload of the live run had left an attachment with no file (`MQZIH4Z7`) beside the retry's (`8P4S4IXH`).
+The store took the good one; `MQZIH4Z7` was trashed through the Web API (204). Filed as #286.
+
+Queries (`scripts/logs/rag/20261127_query_coho.log`, expectations written before each, all `hybrid`):
+1. how far upstream coho occur: hit (Decker & Irvine 2013, COSEWIC 2002, the 2007 strategy, COSEWIC 2017, Arbeider
+   et al. 2020);
+2. overwinter habitat: partial (Nickelson et al. 1992, Swales & Levings 1989 hit; Bustard & Narver, Peterson,
+   Solazzi, Quinn & Peterson missed; Roni et al. 2002, Rosenfeld et al. 2008 and Ebersole et al. 2006 instead);
+3. causes of the Interior Fraser decline: partial (COSEWIC 2002, the strategy, COSEWIC 2017 hit; the Irvine et al.
+   reports and Arbeider et al. missed; the Coho Response Team's Skeena report came in);
+4. temperature limits: partial (Richter & Kolmes, Lusardi et al. hit; Sandercock, Holtby & Scrivener and McMahon
+   missed; Reeves et al. 1989 came in).
+
+OCR owed: the two no-text scans above (as #124 owed Tredger).
+
+## Phase 4: `habitat_modelling` with `ZPUIT73I` (2026-11-27, cred 0.8.1)
+
+Pulled and verified first (md5 matched the manifest: 414 documents, 903.5 MiB, 0 free blocks). `ACTION=update` over
+its whole list plus `ZPUIT73I` (`scripts/logs/rag/20261127_update_habitat_modelling.log`, 15:09 to 15:18 UTC): 49
+added, 0 replaced, 0 dropped, 414 kept: **463 documents, 78,529 chunks, 1,239,429,120 bytes (1.1 GiB), 0 free blocks**,
+md5 `96c88c454c83309908361c1b3206a14d`. cred#48's fix holds: the updated file has no free blocks, against 32 to 76 %
+after #194's updates on cred 0.7.0. The run warned about Irvine et al. 2000's two PDFs because the local database
+still held `MQZIH4Z7` (trashed through the Web API with Zotero quit); its file was missing, so the update skipped it.

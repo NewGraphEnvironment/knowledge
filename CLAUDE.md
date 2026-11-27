@@ -232,11 +232,11 @@ A push that failed partway (a dropped connection) leaves the same state, so read
 connect: #172's reconnect after one replaced an updated `habitat_modelling` with the older bucket copy. To bring a
 cred-built store up to date after a library change, `0150 ACTION=update` with the store's whole build list
 (`scripts/README.md`): cred's `crd_store_update()` drops every document outside the keys it is given, so `0150` refuses
-a store holding any document from outside Zotero storage (`fraser`, `peace`, `pine`). An update leaves the space it
-frees inside the file (NewGraphEnvironment/cred#48): #194's updates left 32 to 76 % of their blocks free
-(`habitat_modelling` 3.6 GiB holding 0.9), so until that is fixed an updated store is rebuilt (`ACTION=build
-OVERWRITE=TRUE`, the same build list) before its push (`scripts/README.md`, the `ACTION=update` bullet, which says what a rebuild drops that an update
-keeps).
+a store holding any document from outside Zotero storage (`fraser`, `peace`, `pine`). From cred 0.8.1 an update
+writes the store into a fresh file, the size a fresh build would be (NewGraphEnvironment/cred#48; before it, #194's
+updates left 32 to 76 % of their blocks free, `habitat_modelling` 3.6 GiB holding 0.9, and an updated store was rebuilt
+before its push), and `0150` refuses an update on an older cred (`scripts/README.md`, the `ACTION=update` bullet, which
+says what a rebuild drops that an update keeps).
 
 `crd_store_build()` reads the local `~/Zotero/zotero.sqlite`, takes the Better BibTeX citation keys it is given, and
 names each document by its attachment's path (`storage/<attachment key>/<file>`), which `crd_search()` resolves back to
