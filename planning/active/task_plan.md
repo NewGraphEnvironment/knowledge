@@ -36,57 +36,84 @@ What exploration settled (2026-11-26, from a copy of `zotero.sqlite` taken with 
    2016, and upper Fraser survey reports that record or look for coho (Bowron, Willow, Nechako, Stuart, Blackwater).
    The series stop at what those sites link, and EcoCat stays out. Al's condition (answer 1: "assumes we have
    Sandercock 1991 and the Pacific Northwest rearing and overwinter paper and understand the habitat and life history
-   literature"): Phase 1 lists the core coho freshwater habitat and life-history works, checks each against the group
+   literature"): Phase 2 lists the core coho freshwater habitat and life-history works, checks each against the group
    library, makes every keyed copy a member, and files or lists for download each one missing. A quoted coho
    life-history write-up, like `bull_trout_life_history.md` (#198) and `grayling_life_history.md` (#140), is its own
-   issue, filed in Phase 5. Say at the gate if you want it on this branch instead.
+   issue, filed in Phase 6. Say at the gate if you want it on this branch instead.
 2. **`ZPUIT73I` joins `habitat_modelling`'s build list.** Al is fixing cred#48 now, so `habitat_modelling` is brought
    up to date with `ACTION=update` on the fixed cred once it merges, not rebuilt (answer 2).
 3. Store name `coho`, built from `ZPUIT73I` alone.
-4. (Mechanism, decided here.) The record table is written by a committed script to `scripts/logs/coho/`, and the
-   judgement of each record goes in `research/coho_upper_fraser.md`, keyed by the record's id. A judged column in a
-   generated table would break the rule that read-back shape matches write-back shape. Source fields for the 2004
-   FISS entries come from the Province's observation layer through `bcdata`, joined to bcfishobs by observation id.
+4. (Mechanism, decided here.) A committed script writes the record table to `scripts/logs/coho/`. The judgement of
+   each record goes in `research/coho_upper_fraser.md`, keyed by the record's id: a judged column in a generated table
+   would break the rule that read-back shape matches write-back shape. The log carries only the Province's fields
+   (observation id and key, date, species, life stage, source, project, survey id) plus the watershed group, so its
+   terms are the Province's (OGL-BC, read from the layer's catalogue record). link's coho range is stated in the
+   research file's prose, never as a tracked table, because link's presence table is sourced from bcfishpass, whose
+   terms are #76's.
+5. (Plan review, 2026-11-26, `review-284.md`.) The records script runs first, since its source fields name the
+   reports to gather. EcoCat searches stay out, but a single EcoCat report behind a judged record is gathered: the
+   issue asks for the sources of the 2004 FISS entries, and #190 kept Lamson 2020 the same way. An addition with no PDF
+   stays out of the CSV until it has one, or until it qualifies as `none` (a DOI whose CrossRef record has an
+   abstract), because `0270` refuses an addition with an empty `pdf`. A `bookSection` records no editors
+   (`row_creators` types every creator as author, as `data/temperature_additions.csv`'s rows already do), so the book
+   title carries Groot & Margolis.
 
-## Phase 1: inventory, core literature, PDFs and the two CSVs (no Zotero writes)
-- [ ] Re-measure `ZPUIT73I` from a guarded copy (`0270`'s `db()`): live items, keyed, PDF on disk
+## Phase 1: the records, first (the sources they name feed Phase 2)
+- [ ] `data-raw/coho_upper_fraser_records.R`, which names the upper Fraser groups explicitly (the Fraser drainage north
+      of about Quesnel's latitude) and gathers every coho record in them: FDIS evidence, NuSEDS v1 (with mainstem
+      populations that cross groups listed "apart"), bcfishobs on the published build's database, and the Province's
+      observation layer through `bcdata` for each record's source, project and survey fields. bcfishobs and the layer
+      are joined on `observation_key` (`R/bcfishobs_match.R`), and the log records the join rate. Output:
+      `scripts/logs/coho/<date>_upper_fraser_records.csv`, one row per record with a stable id. It asserts the
+      issue's counts (3 NuSEDS populations; 36 bcfishobs records in 12 groups). For FDIS (1 of 7,030 visits in 33
+      groups, whose list the issue does not give) it recovers the group list or logs why the count differs
+- [ ] Why the 2018 FRAN FDIS coho-fry collections are missing from the published evidence (placement, range, a
+      filter, or a later export)
+- [ ] The reports each record names (the 2004 survey ids 7501690–7503426 and the 2018 FRAN collections among them),
+      listed in findings as Phase 2's record sources
+
+## Phase 2: inventory, core literature, PDFs and the two CSVs (no Zotero writes)
+- [x] Re-measure `ZPUIT73I` from a guarded copy (`0270`'s `db()`): live items, keyed, PDF on disk
 - [ ] Core literature (decision 1): list the coho freshwater habitat and life-history works the field cites
       (Sandercock 1991; Bustard & Narver 1975; Nickelson et al. 1992 ×2; Quinn & Peterson 1996; Swales & Levings 1989;
       Peterson 1982; Solazzi et al. 2000; Rosenfeld et al. 2000; Ebersole et al. 2006; McMahon 1983 HSI; Bradford
       et al. on interior coho; Burnett et al. 2007 intrinsic potential; anything the IFC strategy and COSEWIC 2017 lean
       on for freshwater habitat), each marked held (key, PDF), held elsewhere in the group, or missing. Recorded in
       findings, and it becomes the life-history issue's starting list
-- [ ] Sandercock 1991: find an open copy (ResearchGate, title search, author or institution pages). If there is none, list it for Al to download. The addition is a `bookSection`
-      with its metadata taken from the book's own title and copyright pages
+- [ ] Sandercock 1991: find an open copy (ResearchGate, title search, author or institution pages). If there is none,
+      list it for Al to download. The addition is a `bookSection` (decision 5), with its metadata taken from the
+      chapter and the book's title and copyright pages
 - [ ] Interior Fraser series: Decker & Irvine 2013; DFO/CSAS IFC stock assessments and the recovery potential
       assessment; the IFC Recovery Team's reports; COSEWIC 2002 and 2016; the federal SARA registry pages (printed to
       PDF where no PDF is served, as #124 did)
-- [ ] Record sources: the reports behind the 2018 FRAN FDIS collections and the 2004 FISS entries (survey ids
-      7501690–7503426, from the Province's layer's source and project fields), and the Bowron, Willow, Nechako, Stuart
-      and Blackwater survey reports that record or look for coho, where public
+- [ ] Record sources (Phase 1's list), and the Bowron, Willow, Nechako, Stuart and Blackwater survey reports that
+      record or look for coho, where public
 - [ ] Metadata for each addition from its own title page or "cite as" line, never a listing page or a sibling (#124
       round 3, #190's review)
 - [ ] Dedupe every addition by title and DOI against every library, trash included, from a guarded copy. A live group
       copy elsewhere becomes a member row, the keyed copy that has a PDF where there are duplicates; the duplicates are
       listed in findings and not merged here. A trashed copy is restored, not recreated
-- [ ] Rows follow #190's rules: a member with no PDF has an empty `pdf`; an addition with no PDF needs a DOI whose
-      CrossRef record has an abstract, or it goes on the gap list; URLs percent-encoded; no other library's name or
-      key in any tracked file
+- [ ] Rows follow #190's rules: a member with no PDF has an empty `pdf`; an addition is in the CSV only with a PDF
+      source in hand, or as `none` with a DOI whose CrossRef record has an abstract (decision 5), and every other one
+      goes on the gap or download list; URLs percent-encoded; no other library's name or key in any tracked file
 - [ ] Write `data/coho_members.csv` and `data/coho_additions.csv`, and record per-source counts and MB in findings
-- [ ] #284's body: corrected premises (the file-named item is Sandercock 1991 with no file) and the decided breadth
+- [ ] `inst/NOTICE.md`: confirm the CSVs need no row (our bibliography, not a source's data), as #190 did
+- [ ] #284's body: corrected premises (the file-named item is Sandercock 1991 with no file), the decided breadth and
+      decisions
 
-## Phase 2: file the collection through `0270` (Al present for the live run)
-- [ ] Al's hand downloads in the ignored `data/rag/pdf/coho/` before the first dry run (or those rows' `pdf` left empty)
+## Phase 3: file the collection through `0270` (Al present for the live run)
+- [ ] Al's hand downloads in the ignored `data/rag/pdf/coho/`, their rows added to the additions CSV before the first
+      dry run
 - [ ] Re-run the `%PDF` check on every URL through `0153`'s `fetch`
 - [ ] `0270 --collection coho --parent 9U54XAND --dry-run`; check every `exists` / `copy exists` hit against the item
       it was meant to match
 - [ ] Live run, then wait for Zotero to sync. A second dry run with no `would` lines and exit 0 proves nothing is
       left to do. Logs go to `scripts/logs/rag/<date>_0270_coho*.log`
-- [ ] Trash the empty standalone attachment `49HFCT96` through the Web API once Sandercock 1991's item holds its PDF
-      (or when Al decides it has no copy)
+- [ ] Trash the empty standalone attachment `49HFCT96` through the Web API once Sandercock 1991's item holds its PDF.
+      Until then, the build lists it as left out and it belongs in the recorded gap
 - [ ] Re-measure from a guarded copy: before/after table (live items, keyed, PDF on disk, MB uploaded)
 
-## Phase 3: build, query and push `coho`; update `habitat_modelling`
+## Phase 4: build, query and push `coho`; update `habitat_modelling`
 - [ ] Hard gate: every member's PDF on disk, Zotero quit, `-wal` 0 bytes. Then `ACTION=build STORE=coho
       COLLECTIONS=ZPUIT73I`, logged to `scripts/logs/rag/<date>_build_coho.log` with home paths written as `~/`. The
       left-out list must equal the recorded gap, and every origin must map to a live group attachment of a live member
@@ -95,38 +122,41 @@ What exploration settled (2026-11-26, from a copy of `zotero.sqlite` taken with 
       Interior Fraser decline; temperature limits for juvenile coho. A miss is reported, not tuned away
 - [ ] Commit the CSVs and logs before the push (the manifest records the head sha). Then an `ACTION=push` dry run,
       then `CONFIRM=TRUE` with Al present; read the push's result before any verified connect
-- [ ] `habitat_modelling` (decision 2): once cred#48's fix is merged and installed, `ACTION=update
-      STORE=habitat_modelling` with its whole list plus `ZPUIT73I`, check that the file's free space is gone, then
-      push. If cred#48 has not merged when the rest is done, this moves to Owed
+- [ ] `habitat_modelling` (decision 2), once cred#48's fix is merged and installed:
+      - pull the store with `ACTION=query VERIFY=TRUE` and confirm Ollama is running;
+      - measure free space before and after (`pragma freelist_count` over `page_count`);
+      - run `ACTION=update STORE=habitat_modelling` over its whole list plus `ZPUIT73I`, then push;
+      - on this branch, add a cred version floor for `ACTION=update` in `0150`, and retire the rebuild-after-update
+        text that `git grep -n cred#48` finds (`0150`'s messages, `scripts/README.md`, `CLAUDE.md`).
+      If cred#48 has not merged when the rest is done, all of this moves to Owed
 
-## Phase 4: the check: upper Fraser coho records judged by their source
-- [ ] `data-raw/coho_upper_fraser_records.R`: the upper Fraser groups named explicitly (the Fraser drainage north of
-      about Quesnel's latitude), then every coho record there from FDIS evidence, NuSEDS v1, bcfishobs (the published build's database)
-      with the Province's source fields through `bcdata`, and link's `default` coho range. Written to
-      `scripts/logs/coho/<date>_upper_fraser_records.csv`, one row per record with a stable id. It reproduces the
-      issue's counts (1 of 7,030 FDIS visits; 3 NuSEDS populations; 36 bcfishobs records in 12 groups) or says why it
-      does not
-- [ ] Why the 2018 FRAN FDIS coho-fry collections are missing from the published evidence (placement, range, a
-      filter, or a later export)
-- [ ] Judge each record by its source, read in the `coho` store and the record's own report: survey,
-      compilation or doubtful. Each judgement quotes its passage where a document carries it
+## Phase 5: the check: upper Fraser coho records judged by their source
+- [ ] Define the three verdicts before judging: survey (the record comes from a field survey whose report says how the
+      fish were caught or seen), compilation (it is carried from another record or a summary, with no survey behind
+      it in the source), doubtful (its date, place or identity conflicts with its source or with other records)
+- [ ] One verdict per record id in the Phase 1 log: 36 bcfishobs, 3 NuSEDS, the FDIS visit and the 2018 FRAN
+      collections. Each verdict quotes its passage from a keyed group item with a PDF where a document carries it
 - [ ] `research/coho_upper_fraser.md`: open with the answer (how far up the Fraser coho are confirmed), then the
       records table, then what it means for BOWR and WILL in link's range and for STUR, STUL and FRAN outside it.
       Gaps at the end. The PSF flags are read in if #285 has landed; otherwise #285's body gets a task to feed them in
-- [ ] `research/README.md` row; `inst/NOTICE.md` row for the Province's fish observations (licence read from its
+- [ ] Add `research/coho_upper_fraser.md` to `0280`'s `QUOTED_DEFAULT` and to NOTICE's "Quotes from published sources"
+      row; `0280` passes with it
+- [ ] `data/nuseds_reach_groups.csv`: a row for each NuSEDS mainstem reach the check places in a group
+- [ ] `research/README.md` row. `inst/NOTICE.md` row for the Province's fish observations (licence read from its
       catalogue record), and the FDIS and NuSEDS rows name the new log file
 
-## Phase 5: docs and issues
+## Phase 6: docs and issues
 - [ ] `scripts/README.md`: the `0270 --collection coho --parent 9U54XAND` line, `0150 ACTION=build STORE=coho
       COLLECTIONS=ZPUIT73I`, and `ZPUIT73I` added to `habitat_modelling`'s list (with the update note)
 - [ ] `CLAUDE.md` layout: `coho_{members,additions}.csv` beside the cutthroat ones, the `coho` store, and that
       `species/coho` also feeds `habitat_modelling`
-- [ ] File "Coho life history: one research file quoted from the coho store" (decision 1), seeded with Phase 1's
+- [ ] File "Coho life history: one research file quoted from the coho store" (decision 1), seeded with Phase 2's
       core list and gaps
 - [ ] #284's body: the gap (documents with no PDF anywhere) and the outcome
 
 ## Owed at the end (reported, done after merge)
-- [ ] The `habitat_modelling` update and push, only if cred#48 has not merged by the PR (Phase 3's last box)
+- [ ] The `habitat_modelling` update and push and the retired cred#48 text, only if cred#48 has not merged by the PR
+      (Phase 4's last box)
 
 ## Validation
 - [ ] Tests pass (`devtools::test()`; no `R/` change expected)
@@ -141,6 +171,8 @@ How each change is proved:
 - Collection: the before/after counts from a guarded copy.
 - Store: its manifest entry (documents, chunks, md5), every origin mapped to a live attachment, the left-out list
   equal to the gap, the bucket ETag matched, and four queries with expectations written first.
-- `habitat_modelling`: document counts before and after, free blocks after the update (cred#48's fix), ETag matched.
-- Check: the script reproduces the issue's counts, and every judgement carries its source passage.
+- `habitat_modelling`: document counts before and after, the free-page share before and after the update (cred#48's
+  fix), ETag matched.
+- Check: the script asserts the issue's counts, one verdict per record id, each with its source passage, and `0280`
+  passes with the research file in `QUOTED`; `public_sweep.py` finds no database host in the script or log.
 

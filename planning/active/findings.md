@@ -47,3 +47,39 @@ Relates to #124 and #190 (the sturgeon and cutthroat stores this follows), #228 
 
 | Error | Resolution |
 |-------|------------|
+
+## `ZPUIT73I` before filing (2026-11-26, guarded copy through `0270`'s `db()`)
+
+live 16, keyed 15, PDF on disk 15 (25.0 MB). The one unkeyed item is `49HFCT96`, a standalone attachment titled
+`Life-History-of-Coho-Salmon.pdf` with no file. Members (citation keys): the IFC Recovery Team's 2007 conservation
+strategy, `irvineInteriorFraser`, `ebersole_etal2006JuvenileCoho`, `porter_etal2000PredictiveModels`,
+`schweigert_etal2017COSEWICassessmenta`, `reeves_etal1989Identificationphysical`, `sheffieldREARINGCOHO`,
+`parkinson_etal2017EvidenceFreshwater`, `wigington_etal2006CohoSalmon`, `lusardi_etal2020Oversummergrowth`,
+`anderson_etal2013Dispersaltributary`, `zoellick_etalAdultCoho`, `mull_wilzbach2007SelectionSpawning`,
+`pess_etal2011InfluencesBody`, `departmentoffisheriesandoceans1996Fraserriver`.
+
+## Core coho freshwater literature against the group library (2026-11-26, title match over a guarded copy)
+
+Held in the group, outside `species/coho` (member candidates, keyed copy with a PDF):
+- Nickelson et al. 1992, seasonal habitat use (`nickelson_etal1992SeasonalChanges`)
+- Quinn & Peterson 1996, habitat complexity and over-winter survival (`quinn_peterson1996influencehabitat`)
+- Swales & Levings 1989, off-channel ponds, Coldwater River: three group copies, only
+  `swales_levings1989RoleOffChannela` has a PDF
+- McMahon 1983 HSI model (`mcmahon1983Habitatsuitability`)
+- Rosenfeld et al. 2000, habitat factors, cutthroat and coho (`rosenfeld_etal2000Habitatfactors`)
+- Rosenfeld et al. 2008, side-channel structure (`rosenfeld_etal2008EffectsSide`)
+- Roni et al. 2002, restoration review: two copies, `roni_etal2002ReviewStreama` has the PDF
+- Holtby 1988, Carnation Creek logging and temperature (`holtby1988EffectsLogging`, no PDF)
+- Also coho-specific, from the earlier title sweep: Bramblett et al. 2002, Pollock et al. 2004, Wigington et al. 2006
+  (a second copy), Richter & Kolmes 2005 (two copies), the Bulkley overwintering series, Coho Response Team 1998
+
+Not held (search and file, or list for download): Sandercock 1991 (the file-named item; Groot & Margolis's book is
+not held either), Bustard & Narver 1975 (winter ecology), Peterson 1982 (immigration to ponds; wall-base channels),
+Solazzi et al. 2000 (winter habitat), Bisson et al. 1988 (channel units), Beechie et al. 1994 (Skagit rearing habitat),
+Sharma & Hilborn 2001, Pess et al. 2002, Brett 1952, Konecki et al. 1995, Bradford & Irvine 2000 (interior Fraser
+decline), Irvine et al. 2002 (status), COSEWIC 2002, Decker & Irvine 2013, a recovery potential assessment for IFC,
+Burnett et al. 2007 (intrinsic potential; the group holds other IP work but not this paper).
+
+Group items with a file name for a title and no metadata (`HZ7U2NDV`, `2V3CHLXQ`, `MAZGC7MB`, `EP3EXP7M`,
+`VXSD95DA`) sit beside keyed copies of the same works; they are left as they are (the #126 attachment cleanup is the
+place for them).
