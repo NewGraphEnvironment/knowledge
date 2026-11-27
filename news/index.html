@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">knowledge</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.4.51</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.4.52</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -40,9 +40,13 @@
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="../logo.png" class="logo" alt=""><h1>Changelog</h1>
-      <small>Source: <a href="https://github.com/NewGraphEnvironment/knowledge/blob/main/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
+      <small>Source: <a href="https://github.com/NewGraphEnvironment/knowledge/blob/v0.4.52/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
     </div>
 
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="0.4.52" id="knowledge-0452">knowledge 0.4.52<a class="anchor" aria-label="anchor" href="#knowledge-0452"></a></h2>
+<ul><li>A coho store, and the upper Fraser coho records judged by their source (<a href="https://github.com/NewGraphEnvironment/knowledge/issues/284" class="external-link">#284</a>). The group’s <code>species/coho</code> collection (<code>ZPUIT73I</code>) grew from 16 items to 61 through <code>0270</code> (<code>data/coho_members.csv</code>, <code>data/coho_additions.csv</code>): Sandercock 1991, DFO’s Interior Fraser coho assessments from 2000 to 2021, COSEWIC 2002, the 2026 SARA scenarios page, and the core coho freshwater habitat and life-history papers the group held under other collections. The <code>coho</code> store is built from it alone (53 documents), and <code>ZPUIT73I</code> joins <code>habitat_modelling</code>, brought up to date in place: <code>0150 ACTION=update</code> now needs cred 0.8.1, whose update leaves no freed space in the file, and the rule to rebuild a store after an update is retired. <code>data-raw/coho_upper_fraser_records.R</code> gathers every coho record in the Fraser upstream of the Quesnel River’s mouth from the Province’s observations, the FDIS evidence and NuSEDS (31 records), and <code>research/coho_upper_fraser.md</code> judges each by its own source: coho are confirmed by survey through the Nechako system and no further up the Fraser, and <code>link</code>’s coho range takes in BOWR and WILL on a doubtful 2004 entry and a 1995 compilation while leaving out NAZR, FRAN and STUL, which hold surveys. Its quotes are gated by <code>0280</code>, and <code>inst/NOTICE.md</code> names the Province’s observations in the records log. No package code changed.</li>
+</ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.4.51" id="knowledge-0451">knowledge 0.4.51<a class="anchor" aria-label="anchor" href="#knowledge-0451"></a></h2>
 <ul><li>Grayling’s evidence for a baseline in <code>link</code>’s <code>default</code> (<a href="https://github.com/NewGraphEnvironment/knowledge/issues/140" class="external-link">#140</a>): 115 Arctic grayling rows in <code>data/literature_evidence.csv</code> (data rows 1190-1304; the table held 30, none on gradient, width or flow), each audited for meaning, with 14 originals the reviews relied on sourced into the group library and the <code>bull_trout_grayling</code> store rebuilt; a quoted life history, <code>research/grayling_life_history.md</code> (245 quotes, gated by <code>0280</code>); the catch rate by gradient, width and MAD class on the tuning’s own grayling rearing population (<code>data-raw/grayling_use.R</code>, <code>data/gr_use.csv</code>); and Hagen et al. 2026’s critical-habitat segments read on the Freshwater Atlas (<code>data-raw/grayling_segments.R</code>). <code>research/grayling_habitat.md</code> says what each shows about the six values: no source sets a gradient, width or flow value as a limit, the catch rate does not fall at 2.49 % or 3.49 %, and it is lowest under 2 m and under 0.021 m³/s, where few visits caught any fish. No value is proposed here (<a href="https://github.com/NewGraphEnvironment/knowledge/issues/280" class="external-link">#280</a>). <code>inst/NOTICE.md</code> names the quoted research files and the EcoCat segments layer. No package code changed.</li>

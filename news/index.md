@@ -1,5 +1,30 @@
 # Changelog
 
+## knowledge 0.4.52
+
+- A coho store, and the upper Fraser coho records judged by their source
+  ([\#284](https://github.com/NewGraphEnvironment/knowledge/issues/284)).
+  The group’s `species/coho` collection (`ZPUIT73I`) grew from 16 items
+  to 61 through `0270` (`data/coho_members.csv`,
+  `data/coho_additions.csv`): Sandercock 1991, DFO’s Interior Fraser
+  coho assessments from 2000 to 2021, COSEWIC 2002, the 2026 SARA
+  scenarios page, and the core coho freshwater habitat and life-history
+  papers the group held under other collections. The `coho` store is
+  built from it alone (53 documents), and `ZPUIT73I` joins
+  `habitat_modelling`, brought up to date in place: `0150 ACTION=update`
+  now needs cred 0.8.1, whose update leaves no freed space in the file,
+  and the rule to rebuild a store after an update is retired.
+  `data-raw/coho_upper_fraser_records.R` gathers every coho record in
+  the Fraser upstream of the Quesnel River’s mouth from the Province’s
+  observations, the FDIS evidence and NuSEDS (31 records), and
+  `research/coho_upper_fraser.md` judges each by its own source: coho
+  are confirmed by survey through the Nechako system and no further up
+  the Fraser, and `link`’s coho range takes in BOWR and WILL on a
+  doubtful 2004 entry and a 1995 compilation while leaving out NAZR,
+  FRAN and STUL, which hold surveys. Its quotes are gated by `0280`, and
+  `inst/NOTICE.md` names the Province’s observations in the records log.
+  No package code changed.
+
 ## knowledge 0.4.51
 
 - Grayling’s evidence for a baseline in `link`’s `default`
