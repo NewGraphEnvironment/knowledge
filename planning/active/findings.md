@@ -249,3 +249,22 @@ added, 0 replaced, 0 dropped, 414 kept: **463 documents, 78,529 chunks, 1,239,42
 md5 `96c88c454c83309908361c1b3206a14d`. cred#48's fix holds: the updated file has no free blocks, against 32 to 76 %
 after #194's updates on cred 0.7.0. The run warned about Irvine et al. 2000's two PDFs because the local database
 still held `MQZIH4Z7` (trashed through the Web API with Zotero quit); its file was missing, so the update skipped it.
+
+## Phase 4: the pushes (2026-11-27)
+
+`coho` uploaded 15:18:47 UTC (`scripts/logs/rag/20261127_push_coho.log`): the bucket object is 139,735,040 bytes,
+and its multipart ETag `3c735e8f…-17` matches the local file recomputed at 8 MiB parts. `habitat_modelling` uploaded
+15:19:38 UTC (`..._push_habitat_modelling.log`): 1,239,429,120 bytes, ETag `97ca9e75…-148` matched the same way. Both
+manifest entries name this branch and head `57c458bd`. The merged manifest now holds 14 stores, `coho` the newest.
+Zotero was reopened after the pushes.
+
+## Phase 5: the judgement (2026-11-27)
+
+`research/coho_upper_fraser.md`: 30 records, 15 survey, 12 compilation, 2 doubtful (the Bowron 2004 entry, which DFO
+still calls unconfirmed, and Micks Creek's RAB record with no date or source), 1 no observation (Swift River, not
+inspected). The verdicts gained a fourth, "no observation", for that NuSEDS record. Placing each record on the network:
+every survey lies at or below the Nechako confluence (`100.567134`); the only two records above it on the Fraser are
+BOWR (2004, doubtful) and WILL (Slade Creek, 1995, a compilation; it lands on Tregillus Creek, which Slade Creek joins).
+FRAN is the Francois Lake group, in the Nechako system. The full `0280` run verifies the file's 5 quotes; it exits 1 on
+#282's 42 OCR evidence rows, the same counts as the committed 2026-11-26 log. No `data/nuseds_reach_groups.csv` row was
+added: a row moves `timing_nuseds.R`'s coho windows.

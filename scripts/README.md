@@ -164,6 +164,7 @@ wf_farm_priority.js                          farm priority/crossing tables out o
       (--collection sturgeon --parent 9U54XAND: species/sturgeon, from data/sturgeon_members.csv and _additions.csv)
       (--collection westslope_cutthroat --parent 9U54XAND: species/westslope_cutthroat, from data/westslope_cutthroat_*.csv)
       (--collection bull_trout --parent 9U54XAND: species/bull_trout, from data/bull_trout_*.csv, #194)
+      (--collection coho --parent 9U54XAND: species/coho, from data/coho_*.csv, #284)
       (--collection statistics --parent top: the top-level statistics collection, from data/statistics_*.csv, #95)
       (--collection detection --parent LP4R4VYR: statistics/detection, from data/detection_*.csv, #216)
       (--collection passage_limits --parent ESNB4BQB: Fisheries/Fish Passage/passage_limits, from
@@ -173,13 +174,14 @@ wf_farm_priority.js                          farm priority/crossing tables out o
        removing an override leaves the held value, #216)
 0275  carry out data/zotero_attachment_verdicts.csv on the group's attachments   --dry-run first, then live
       (merge an item's report parts into one PDF, keep one copy, split a separate document to its own item, #126, #151)
-0150  ACTION=build STORE=habitat_modelling COLLECTIONS="U9ZCZ6RN,RXNFPBPH,VHWEK6RE,GELFSUTU,9U54XAND,SW2RXUJC,DQP29KU7,X29BX4U8,W4425VK5,545K8HP4"
-      (habitat_modelling, chinook, bull_trout, grayling, species, temperature, wedzin_kwa_chinook, hydrology and the
-      two salmon collections, by key)                                                    then ACTION=push
+0150  ACTION=build STORE=habitat_modelling COLLECTIONS="U9ZCZ6RN,RXNFPBPH,VHWEK6RE,GELFSUTU,9U54XAND,SW2RXUJC,DQP29KU7,X29BX4U8,W4425VK5,545K8HP4,ZPUIT73I"
+      (habitat_modelling, chinook, bull_trout, grayling, species, temperature, wedzin_kwa_chinook, hydrology, the
+      two salmon collections and coho (#284), by key)                                     then ACTION=push
 0150  ACTION=build STORE=bull_trout_grayling COLLECTIONS="VHWEK6RE,GELFSUTU"               then ACTION=push
 0150  ACTION=build STORE=bull_trout COLLECTIONS=VHWEK6RE                                   then ACTION=push
 0150  ACTION=build STORE=sturgeon COLLECTIONS=WEUFTSDC                                     then ACTION=push
 0150  ACTION=build STORE=westslope_cutthroat COLLECTIONS=TIDR3PNN                          then ACTION=push
+0150  ACTION=build STORE=coho COLLECTIONS=ZPUIT73I                                         then ACTION=push
 0150  ACTION=build STORE=temperature COLLECTIONS=SW2RXUJC                                  then ACTION=push
 0150  ACTION=build STORE=flow COLLECTIONS=FWTJDD8Z                                         then ACTION=push
 0150  ACTION=build STORE=fish_passage COLLECTIONS=HJZKI75D                                then ACTION=push
@@ -551,6 +553,11 @@ The cited basis for CH and BT habitat thresholds (#19). Not per watershed group.
   habitat rule, the Williston, Peace and Columbia series and the reviews.
   Unlike sturgeon and cutthroat, `VHWEK6RE` is also in `habitat_modelling`'s list and in `bull_trout_grayling`'s, so a
   change to the collection is followed by `ACTION=update` on all three.
+  The `coho` store is built from `species/coho` alone (`COLLECTIONS=ZPUIT73I`, #284): the core coho freshwater habitat
+  and life-history literature (Sandercock 1991, the Pacific Northwest rearing and overwinter papers), DFO's Interior
+  Fraser coho assessments from 2000 to 2021, COSEWIC 2002 and 2016, and the reports behind upper Fraser coho records.
+  `ZPUIT73I` is also in `habitat_modelling`'s list, so a change to the collection is followed by `ACTION=update` on
+  both.
   The `statistics` store is built from the whole `statistics` tree (#216): the top-level collection (`LP4R4VYR`,
   `--parent top`, #95), the texts the tuning method is read against (#185), and its subcollections `detection`
   (`73PNRGJF`, the methods literature for detection, occupancy, removal, eDNA, camera surveys and diversity, from

@@ -29,3 +29,16 @@
 - Completed: live `0270` run and its retry (one 500); the no-op dry run; `49HFCT96` found to hold the same Sandercock
   scan and trashed; `ZPUIT73I` now 61 live, 61 keyed, 55 with a PDF; cred 0.8.1 (cred#48's fix) installed
 - Next: Phase 4: build `coho` with Zotero quit, then update `habitat_modelling`
+
+## Phase 4, 2026-11-27
+- Completed: `coho` built (53 documents), queried (4 with expectations first) and pushed; `habitat_modelling` updated
+  in place with `ZPUIT73I` on cred 0.8.1 (49 added, 0 dropped, 0 free blocks) and pushed; both ETags matched; `0150`
+  needs cred >= 0.8.1 for an update and the rebuild-after-update rule is gone; #286 filed for `0270`'s failed upload
+- Commits: 57c458bd and this one
+- Next: Phase 5, the judgement of each record and `research/coho_upper_fraser.md`
+
+## Phases 5 and 6, 2026-11-27
+- Completed: `research/coho_upper_fraser.md` (30 verdicts, 5 quotes checked by `0280`, now in `QUOTED_DEFAULT`); NOTICE
+  rows for the Province's observations and the coho log; `scripts/README.md`, `CLAUDE.md` and `research/README.md`
+  entries; #285's body carries the PSF task; #287 filed; #284's body carries the outcome
+- Next: tests, `/code-check branch`, archive, PR

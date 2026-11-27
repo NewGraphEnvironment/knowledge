@@ -72,7 +72,8 @@ registry_path <- Sys.getenv("REGISTRY", "data/ip_model_registry.csv")
 ocr_dir <- file.path("data", "rag", "ocr")
 # Research files whose quotes are checked (see "quotes in research files"); QUOTED= replaces the
 # list (space-separated), and QUOTED= with nothing checks none.
-QUOTED_DEFAULT <- c("research/bull_trout_life_history.md", "research/grayling_life_history.md")
+QUOTED_DEFAULT <- c("research/bull_trout_life_history.md", "research/grayling_life_history.md",
+                    "research/coho_upper_fraser.md")
 COVERAGE <- list(
   species = c("CH", "BT", "CO", "ST"),
   parameter = c("spawn_gradient_max", "spawn_gradient_min", "spawn_channel_width_min",

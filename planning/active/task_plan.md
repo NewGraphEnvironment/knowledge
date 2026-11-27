@@ -119,9 +119,9 @@ What exploration settled (2026-11-26, from a copy of `zotero.sqlite` taken with 
 - [x] Four `ACTION=query` checks, with the expected documents written in the log before each runs and the top 5 keys
       recorded after: how far up the Fraser coho are known; overwinter habitat of juvenile coho; causes of the
       Interior Fraser decline; temperature limits for juvenile coho. A miss is reported, not tuned away
-- [ ] Commit the CSVs and logs before the push (the manifest records the head sha). Then an `ACTION=push` dry run,
+- [x] Commit the CSVs and logs before the push (the manifest records the head sha). Then an `ACTION=push` dry run,
       then `CONFIRM=TRUE` with Al present; read the push's result before any verified connect
-- [ ] `habitat_modelling` (decision 2), once cred#48's fix is merged and installed:
+- [x] `habitat_modelling` (decision 2), once cred#48's fix is merged and installed:
       - pull the store with `ACTION=query VERIFY=TRUE` and confirm Ollama is running;
       - measure free space before and after (`pragma freelist_count` over `page_count`);
       - run `ACTION=update STORE=habitat_modelling` over its whole list plus `ZPUIT73I`, then push;
@@ -130,31 +130,31 @@ What exploration settled (2026-11-26, from a copy of `zotero.sqlite` taken with 
       If cred#48 has not merged when the rest is done, all of this moves to Owed
 
 ## Phase 5: the check: upper Fraser coho records judged by their source
-- [ ] Define the three verdicts before judging: survey (the record comes from a field survey whose report says how the
+- [x] (Four, as written: survey, compilation, doubtful, and no observation for NuSEDS's not-inspected record.) Define the three verdicts before judging: survey (the record comes from a field survey whose report says how the
       fish were caught or seen), compilation (it is carried from another record or a summary, with no survey behind
       it in the source), doubtful (its date, place or identity conflicts with its source or with other records)
-- [ ] One verdict per record id in the Phase 1 log: 24 bcfishobs (the 2018 FRAN collections among them), 5 NuSEDS
+- [x] One verdict per record id in the Phase 1 log: 24 bcfishobs (the 2018 FRAN collections among them), 5 NuSEDS
       and the FDIS visit. Each verdict quotes its passage from a keyed group item with a PDF where a document carries it
-- [ ] `research/coho_upper_fraser.md`: open with the answer (how far up the Fraser coho are confirmed), then the
+- [x] `research/coho_upper_fraser.md`: open with the answer (how far up the Fraser coho are confirmed), then the
       records table, then what it means for BOWR and WILL in link's range and for STUR, STUL and FRAN outside it.
       Gaps at the end. The PSF flags are read in if #285 has landed; otherwise #285's body gets a task to feed them in
-- [ ] Add `research/coho_upper_fraser.md` to `0280`'s `QUOTED_DEFAULT` and to NOTICE's "Quotes from published sources"
+- [x] (Its 5 quotes verify; the gate's exit 1 is #282's 42 OCR rows, unchanged from 2026-11-26.) Add `research/coho_upper_fraser.md` to `0280`'s `QUOTED_DEFAULT` and to NOTICE's "Quotes from published sources"
       row; `0280` passes with it
-- [ ] `data/nuseds_reach_groups.csv`: a row for each NuSEDS mainstem reach the check places in a group
-- [ ] `research/README.md` row. `inst/NOTICE.md` row for the Province's fish observations (licence read from its
+- [x] (None placed: a row moves `timing_nuseds.R`'s coho windows, which #228 and #285 own; the research table leaves the five populations' group blank.) `data/nuseds_reach_groups.csv`: a row for each NuSEDS mainstem reach the check places in a group
+- [x] `research/README.md` row. `inst/NOTICE.md` row for the Province's fish observations (licence read from its
       catalogue record), and the FDIS and NuSEDS rows name the new log file
 
 ## Phase 6: docs and issues
-- [ ] `scripts/README.md`: the `0270 --collection coho --parent 9U54XAND` line, `0150 ACTION=build STORE=coho
+- [x] `scripts/README.md`: the `0270 --collection coho --parent 9U54XAND` line, `0150 ACTION=build STORE=coho
       COLLECTIONS=ZPUIT73I`, and `ZPUIT73I` added to `habitat_modelling`'s list (with the update note)
-- [ ] `CLAUDE.md` layout: `coho_{members,additions}.csv` beside the cutthroat ones, the `coho` store, and that
+- [x] `CLAUDE.md` layout: `coho_{members,additions}.csv` beside the cutthroat ones, the `coho` store, and that
       `species/coho` also feeds `habitat_modelling`
-- [ ] File "Coho life history: one research file quoted from the coho store" (decision 1), seeded with Phase 2's
+- [x] (#287) File "Coho life history: one research file quoted from the coho store" (decision 1), seeded with Phase 2's
       core list and gaps
-- [ ] #284's body: the gap (documents with no PDF anywhere) and the outcome
+- [x] #284's body: the gap (documents with no PDF anywhere) and the outcome
 
 ## Owed at the end (reported, done after merge)
-- [ ] The `habitat_modelling` update and push and the retired cred#48 text, only if cred#48 has not merged by the PR
+- [x] (Not owed: cred#48 merged and the update ran on this branch.) The `habitat_modelling` update and push and the retired cred#48 text, only if cred#48 has not merged by the PR
       (Phase 4's last box)
 
 ## Validation
