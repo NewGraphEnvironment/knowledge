@@ -129,3 +129,42 @@ Record sources to gather in Phase 2 (each judged record's own report, where publ
 - not documents: DFO fishery officers' stream files and personal communications (1986, 1989), the Quesnel River
   Hatchery manager (1986), "Untitled" (1994), "SISS map information (source not indicated)" (1995), Community
   Advisors' quarterly reports (1995), and two RAB records with no reference.
+
+## Phase 2: the two CSVs (2026-11-27)
+
+`data/coho_members.csv`: 40 rows. The 15 keyed items already in `ZPUIT73I`; 23 core works held in the group under
+other collections (the keyed copy with a PDF where duplicates exist: `swales_levings1989RoleOffChannela`,
+`richter_kolmes2005MaximumTemperature`); Burnett et al. 2007 (`burnett_etal2007DISTRIBUTIONSALMONHABITAT`) and the
+Westworth 1996 Chilako–Nechako inventory (`westworthassociatesenvironmentalltd_20011996Reconnaissance`), both found
+in the group by the dedupe and moved from additions to members. Eight members have no PDF in the group (Holtby 1988,
+Bramblett et al. 2002, Donas & Newman 2006, 2007 and 2010, Swales et al. 1986, Brakensiek & Hankin 2007): they join
+the collection and stay out of the store until a PDF is attached.
+
+`data/coho_additions.csv`: 21 rows, 19 with a PDF (19 sources, 23.8 MB) and 2 abstract only:
+- Sandercock 1991, a `bookSection` (pp. 395–445 per the book's contents page; UBC Press 1991, ISBN 0-7748-0359-2;
+  the scan is a California hearing exhibit, its first page numbered 397, after the part title);
+- the DFO Interior Fraser coho series: Research Documents 2000/125, 2001/083, 2004/128, 2005/093, 2013/121, 2014/086
+  and 2020/025; Science Advisory Reports 2014/032 and 2019/043; Proceedings 2013/040 and 2021/040; metadata from each
+  document's "Correct citation" line or title page;
+- COSEWIC 2002 (the registry's main page and chapters 1–15 joined and printed, 44 pages, as #124 did; the 2016
+  assessment is already a member) and DFO's 2026 SARA management scenarios page (printed, 4 pages);
+- journal articles by DOI with open copies: Bustard & Narver 1975, Solazzi et al. 2000, Peterson 1982 (population
+  characteristics), Sharma & Hilborn 2001, Bradford et al. 1997;
+- abstract only (CrossRef holds an abstract): Peterson 1982 (immigration to ponds), Bradford & Irvine 2000.
+
+Dedupe (title and DOI over every library, trash included): no addition held anywhere except the two moved to members.
+The COSEWIC 2002 title normalizes to the 2017 report's (`WRZQU977`), but `0270`'s `group_copy()` also compares the
+first creator and year, which differ (Committee 2002 against Schweigert 2017).
+
+**Gap and download list** (no open copy found; for Al, or a later issue):
+- Bisson et al. 1988 (TAFS 117:262–273) and Beechie et al. 1994 (NAJFM 14:797–811): no PDF, and CrossRef holds no
+  abstract, so they cannot be filed abstract only;
+- not yet searched: Brett 1952, Konecki et al. 1995, Pess et al. 2002;
+- record sources: the 2004 consultative draft national recovery strategy for Interior Fraser coho (not public; DFO
+  Research Document 2004/128 reviews it); "Results of reconnaissance sampling for juvenile salmonids in the upper
+  Fraser River and selected tributaries, August and October, 1984" (UNBC archive holds a paper copy only); the 1996
+  Upper Fraser EEM cycle one interpretive report; the 1994 draft "Hydrology and water use for salmon streams in the
+  upper Fraser habitat management area"; "A reconnaissance survey of Ocock Lake" (1976); Triton's Ahbau Creek
+  Compensation 2014 and Marlim's 200 FSR culvert inventory 2018 (FDIS projects, no report found); Triton's Nechako
+  fry emergence 2010 report (nfcp.org answers a script with HTML; a browser may get it);
+- the eight members without a PDF above.

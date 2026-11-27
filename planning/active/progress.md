@@ -17,3 +17,10 @@
   Sandercock 1991, Decker & Irvine 2013, the 2019 RPA with its research document and proceedings, the 2014 SAR and
   research document, the 2013 proceedings, Bustard & Narver 1975, Solazzi et al. 2000, Peterson 1982 population
   characteristics)
+
+## Phase 2, 2026-11-27
+- Completed: core-literature inventory; `data/coho_members.csv` (40) and `data/coho_additions.csv` (21: 19 with a PDF,
+  23.8 MB; 2 abstract only); COSEWIC 2002 and the 2026 SARA scenarios page printed from the registry into the ignored
+  `data/rag/pdf/coho/`; dedupe moved Burnett et al. 2007 and the Westworth inventory to members; gap list in findings;
+  #284's body carries the decisions and the corrected premises
+- Next: Phase 3 needs Al: his downloads for the gap list (optional), then the live `0270` run (Web API writes)

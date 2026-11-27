@@ -73,31 +73,31 @@ What exploration settled (2026-11-26, from a copy of `zotero.sqlite` taken with 
 
 ## Phase 2: inventory, core literature, PDFs and the two CSVs (no Zotero writes)
 - [x] Re-measure `ZPUIT73I` from a guarded copy (`0270`'s `db()`): live items, keyed, PDF on disk
-- [ ] Core literature (decision 1): list the coho freshwater habitat and life-history works the field cites
+- [x] Core literature (decision 1): list the coho freshwater habitat and life-history works the field cites
       (Sandercock 1991; Bustard & Narver 1975; Nickelson et al. 1992 ×2; Quinn & Peterson 1996; Swales & Levings 1989;
       Peterson 1982; Solazzi et al. 2000; Rosenfeld et al. 2000; Ebersole et al. 2006; McMahon 1983 HSI; Bradford
       et al. on interior coho; Burnett et al. 2007 intrinsic potential; anything the IFC strategy and COSEWIC 2017 lean
       on for freshwater habitat), each marked held (key, PDF), held elsewhere in the group, or missing. Recorded in
       findings, and it becomes the life-history issue's starting list
-- [ ] Sandercock 1991: find an open copy (ResearchGate, title search, author or institution pages). If there is none,
+- [x] Sandercock 1991: find an open copy (ResearchGate, title search, author or institution pages). If there is none,
       list it for Al to download. The addition is a `bookSection` (decision 5), with its metadata taken from the
       chapter and the book's title and copyright pages
-- [ ] Interior Fraser series: Decker & Irvine 2013; DFO/CSAS IFC stock assessments and the recovery potential
+- [x] Interior Fraser series: Decker & Irvine 2013; DFO/CSAS IFC stock assessments and the recovery potential
       assessment; the IFC Recovery Team's reports; COSEWIC 2002 and 2016; the federal SARA registry pages (printed to
       PDF where no PDF is served, as #124 did)
-- [ ] Record sources (Phase 1's list), and the Bowron, Willow, Nechako, Stuart and Blackwater survey reports that
+- [x] Record sources (Phase 1's list), and the Bowron, Willow, Nechako, Stuart and Blackwater survey reports that
       record or look for coho, where public
-- [ ] Metadata for each addition from its own title page or "cite as" line, never a listing page or a sibling (#124
+- [x] Metadata for each addition from its own title page or "cite as" line, never a listing page or a sibling (#124
       round 3, #190's review)
-- [ ] Dedupe every addition by title and DOI against every library, trash included, from a guarded copy. A live group
+- [x] Dedupe every addition by title and DOI against every library, trash included, from a guarded copy. A live group
       copy elsewhere becomes a member row, the keyed copy that has a PDF where there are duplicates; the duplicates are
       listed in findings and not merged here. A trashed copy is restored, not recreated
-- [ ] Rows follow #190's rules: a member with no PDF has an empty `pdf`; an addition is in the CSV only with a PDF
+- [x] Rows follow #190's rules: a member with no PDF has an empty `pdf`; an addition is in the CSV only with a PDF
       source in hand, or as `none` with a DOI whose CrossRef record has an abstract (decision 5), and every other one
       goes on the gap or download list; URLs percent-encoded; no other library's name or key in any tracked file
-- [ ] Write `data/coho_members.csv` and `data/coho_additions.csv`, and record per-source counts and MB in findings
-- [ ] `inst/NOTICE.md`: confirm the CSVs need no row (our bibliography, not a source's data), as #190 did
-- [ ] #284's body: corrected premises (the file-named item is Sandercock 1991 with no file), the decided breadth and
+- [x] Write `data/coho_members.csv` and `data/coho_additions.csv`, and record per-source counts and MB in findings
+- [x] `inst/NOTICE.md`: confirm the CSVs need no row (our bibliography, not a source's data), as #190 did
+- [x] #284's body: corrected premises (the file-named item is Sandercock 1991 with no file), the decided breadth and
       decisions
 
 ## Phase 3: file the collection through `0270` (Al present for the live run)
