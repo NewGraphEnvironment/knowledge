@@ -83,3 +83,49 @@ Burnett et al. 2007 (intrinsic potential; the group holds other IP work but not 
 Group items with a file name for a title and no metadata (`HZ7U2NDV`, `2V3CHLXQ`, `MAZGC7MB`, `EP3EXP7M`,
 `VXSD95DA`) sit beside keyed copies of the same works; they are left as they are (the #126 attachment cleanup is the
 place for them).
+
+## Phase 1: the upper Fraser coho records (2026-11-27, `data-raw/coho_upper_fraser_records.R`)
+
+Log: `scripts/logs/coho/20261127_coho_upper_fraser_records.{txt,csv}` (30 records).
+
+- **The population is set by the network, not a latitude.** #284's body counted 36 bcfishobs records in 12 groups
+  "north of about Quesnel's latitude"; no single latitude gives that (41 north of 52.7°, 31 north of 52.8°), and its
+  12 groups include CARR and QUES, which lie in the Quesnel system. The script takes the Fraser upstream of the
+  Quesnel River's mouth (tributary code above `100.458399`, or the mainstem above measure 645,065 m): 24 records in
+  10 groups (BLAR, BOWR, CHES, COTR, FRAN, LCHL, NECR, STUL, STUR, WILL). The Quesnel system holds well over a hundred
+  coho records and is not in question.
+- **No `bcdata` join is needed.** bcfishobs carries the Province's layer's own fields (`source`, `source_ref`,
+  `agency_name`, `fish_observation_point_id`, `observation_key`), so the plan's join and its join rate (review finding
+  11) fall away. The log keeps those fields only (decision 4).
+- **The five 2004 entries rest on one compilation.** BLAR, BOWR, LCHL and STUR's 2004-01-01 records (survey ids
+  7501690, 7501691, 7503425, 7503426) cite "National recovery strategy for coho salmon (Oncorhynchus kisutch) in the
+  Interior Fraser watershed, British Columbia, Consultative Draft" (2004), two of them also "2001 Stock Status
+  Assessment of Coho Salmon from the Interior Fraser River". The issue's fifth (Swift, COTR) is a 1986 personal
+  communication from the Quesnel River Hatchery manager, not a 2004 entry; inside the network cut, four 2004 entries
+  remain.
+- **The 2018 FRAN coho fry** are FDIS collections 233885 and 245547 (Marlim Ecological Consulting, "200 FSR Culvert
+  Replacement Inventory - 2018", one site and date under two collection ids). `bcfishobs_fdis_match.csv` marks both
+  unmatched: they are not in the 2022 electrofishing extract, which holds electrofishing only, so they were most
+  likely caught another way (minnow traps are usual on a culvert inventory). The method is not recorded in bcfishobs.
+- **FDIS**: 7,813 visits upstream of the Quesnel's mouth in 32 groups; one caught coho (Ahbau Creek, 2014-09-16, one
+  fish, Triton's "Ahbau Creek Compensation - 2014"), which is also bcfishobs record `obs:94e4f8d30d`. The issue's
+  7,030 visits in 33 groups was another population.
+- **NuSEDS**: five populations, not three. Besides Ahbau Creek, West Road River and Nechako River: Nazko River
+  (1999 "0 spawners" with adults present; 2001 six spawners) and Swift River (one record, 2000, not inspected). Ahbau
+  Creek's population carries the Cottonwood River's mainstem code (`100-478686`), and the Nechako's and West Road's
+  are mainstem codes, so none is placed in a group by its code alone.
+
+Record sources to gather in Phase 2 (each judged record's own report, where public):
+- the 2004 consultative draft national recovery strategy for Interior Fraser coho, and the 2001 stock status
+  assessment of Interior Fraser coho (Irvine et al., CSAS);
+- "Results of reconnaissance sampling for juvenile salmonids in the upper Fraser River and selected tributaries,
+  August and October, 1984" (1985);
+- "Reconnaissance level fish and fish habitat inventory for portions of the Chilako and Nechako River watershed" (1998);
+- "Upper Fraser River Environmental Effects Monitoring (EEM) cycle one interpretive report" (1996);
+- "Hydrology and water use for salmon streams in the upper Fraser habitat management area" (draft, 1994);
+- "A reconnaissance survey of Ocock Lake" (1976);
+- the FDIS projects: Ahbau Creek Compensation 2014 (Triton), Nechako Fry Emergence Project 2010 (Triton), 200 FSR
+  Culvert Replacement Inventory 2018 (Marlim);
+- not documents: DFO fishery officers' stream files and personal communications (1986, 1989), the Quesnel River
+  Hatchery manager (1986), "Untitled" (1994), "SISS map information (source not indicated)" (1995), Community
+  Advisors' quarterly reports (1995), and two RAB records with no reference.
