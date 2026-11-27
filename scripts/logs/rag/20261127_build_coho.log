@@ -1,0 +1,26 @@
+6 of 61 members left out:
+  5K2QTAN5  peterson1982ImmigrationJuvenile  (no live PDF)
+  A63MWVKE  bramblett_etal2002SeasonalUse  (no live PDF)
+  DCBDX5ZE  bradford_irvine2000Landuse  (no live PDF)
+  JQ7AXPKG  brakensiek_hankin2007EstimatingOverwinter  (no live PDF)
+  LL5M9VTC  swales_etal1986Winterhabitat  (no live PDF)
+  UEG4KUPQ  holtby1988EffectsLogging  (no live PDF)
+55 keys across 1 collections
+Taking several PDFs for 1 item(s): irvine_etal2000StockStatus (2)
+duckdb keeps downloaded extensions and secrets in a temporary directory:
+ℹ /tmp/Rtmp1XyaxJ/duckdb
+This is removed when the R session ends.
+• Extensions are re-downloaded each session.
+• Secrets are lost.
+ℹ Run duckdb(shared_home = TRUE) (or create ~/.duckdb) to keep them (suitable for most users).
+ℹ Run duckdb(shared_home = FALSE) to accept the temporary directory (and silence this message).
+ℹ See ?duckdb_storage for details and alternatives.
+Ingesting 55 PDF(s) into data/rag/coho.duckdb
+Store built: data/rag/coho.duckdb | docs: 53 | chunks: 10059 | model: nomic-embed-text
+Built data/rag/coho.duckdb. It is not in the bucket until ACTION=push.
+Warning messages:
+1: Skipping 1 missing file(s): irvine_etal2000StockStatus 
+2: Skipped 2 PDF(s):
+  departmentoffisheriesandoceans1996Fraserriver (department_of_fisheries_and_oceans_1996-fraser_river_coho_sa.pdf): no text (markdown reader: no text; pdftools: no text)
+  donas_newman2007BulkleyRiver (donas_newman_2007_bulkley_river_watershed_overwintering_study_2006_-_2007.pdf): no text (markdown reader: no text; pdftools: no text) 
+exit=0

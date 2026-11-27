@@ -13,10 +13,8 @@
 #    crd_store_update(): new and changed PDFs are ingested, documents whose source no
 #    longer resolves are dropped, the rest are kept unread. COLLECTIONS must be the
 #    store's whole build list, as in scripts/README.md: a document outside it is dropped.
-#    Pull the store first (ACTION=query VERIFY=TRUE). An update leaves the space it frees in the
-#    file (NewGraphEnvironment/cred#48), so until that is fixed rebuild the store with
-#    ACTION=build OVERWRITE=TRUE and the same COLLECTIONS before pushing it, and read the dropped
-#    list the rebuild prints.)
+#    Pull the store first (ACTION=query VERIFY=TRUE). update needs cred >= 0.8.1, the first whose
+#    update writes a compacted file, the size of a fresh build (NewGraphEnvironment/cred#48).)
 #   ACTION=query STORE=fraser QUERY="beaver dam culvert" TOPK=5           Rscript scripts/0150-store.R
 #   (query needs cred >= 0.4.0, the first whose crd_search() works under ragnar 0.3)
 #   (query opens an existing local store unverified; VERIFY=TRUE re-checks it
@@ -223,9 +221,10 @@ if (action %in% c("build", "update")) {
     })
   }
   if (action == "update") {
-    if (!exists("crd_store_update", envir = asNamespace("cred"), inherits = FALSE)) {
-      stop("ACTION=update needs a cred with crd_store_update() (0.7.0 has it), not ", utils::packageVersion("cred"),
-           ": pak::pak(\"NewGraphEnvironment/cred\")")
+    # Before 0.8.1 an update left the space it freed in the file, 32 to 76 % of it (cred#48, #194).
+    if (utils::packageVersion("cred") < "0.8.1") {
+      stop("ACTION=update needs cred >= 0.8.1, whose update compacts the store (NewGraphEnvironment/cred#48), not ",
+           utils::packageVersion("cred"), ": pak::pak(\"NewGraphEnvironment/cred\")")
     }
     if (!file.exists(store_path)) {
       stop(store_path, " is not here to update: pull it first with ACTION=query STORE=", store, " VERIFY=TRUE")
@@ -264,11 +263,6 @@ if (action %in% c("build", "update")) {
     if (length(setdiff(before, after))) message("dropped:\n  ", paste(setdiff(before, after), collapse = "\n  "))
   }
   message(if (action == "build") "Built " else "Updated ", store_path, ". It is not in the bucket until ACTION=push.")
-  if (action == "update") {
-    message("An update leaves the space it frees in the file (NewGraphEnvironment/cred#48): rebuild it with ",
-            "ACTION=build OVERWRITE=TRUE and the same COLLECTIONS before the push, and read the rebuild's ",
-            "dropped list: it drops PDFs it finds no text in, which this update kept (scripts/README.md).")
-  }
 } else if (action == "query") {
   # cred 0.3.0's crd_search() fails on every store under ragnar 0.3.0 (cred#27).
   if (utils::packageVersion("cred") < "0.4.0") {

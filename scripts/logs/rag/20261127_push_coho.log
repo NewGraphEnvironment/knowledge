@@ -1,0 +1,20 @@
+[dry run] would upload data/rag/coho.duckdb -> s3://fresh-bc/rag/coho.duckdb
+[dry run] merged manifest would hold: fraser, vca_refs, peace, pine, habitat_modelling, temperature, flow, bull_trout_grayling, sturgeon, statistics, westslope_cutthroat, bull_trout, fish_passage, coho
+    "coho": {
+      "documents": 53,
+      "chunks": 10059,
+      "embedding_size": 768,
+      "embedding_model": "nomic-embed-text",
+      "ragnar_version": "0.4.0",
+      "store_schema": "0.4.0",
+      "store_name": "store_001",
+      "bytes": 139735040,
+      "md5": "ff810881567f0c4dfcab9488ee873608",
+      "repo": "NewGraphEnvironment/knowledge",
+      "branch": "284-coho-store-grow-species-coho-build-and-p",
+      "head_sha": "57c458bdd365397f677ce2430e3ac7e4627d6c06",
+      "built_by": "cred::crd_store_push()",
+      "date_completed": "2026-11-27T15:18:43Z"
+    },
+Uploading coho.duckdb (133 MB)
+Manifest updated — now holds: fraser, vca_refs, peace, pine, habitat_modelling, temperature, flow, bull_trout_grayling, sturgeon, statistics, westslope_cutthroat, bull_trout, fish_passage, coho

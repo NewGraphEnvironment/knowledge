@@ -1,0 +1,39 @@
+bcfishobs coho in the Fraser drainage: 5488; north of 52.7 deg 41, of 52.8 deg 31 (#284's body: 36)
+bcfishobs coho upstream of the Quesnel's mouth: 25 in 10 groups (BLAR, BOWR, CHES, COTR, FRAN, LCHL, NECR, STUL, STUR, WILL)
+FDIS visits upstream of the Quesnel's mouth: 7855 in 32 groups; 1 caught coho
+NuSEDS knowledge/nuseds/v1 release 20260601 published from knowledge 3e4e83f 
+ nuseds_records.parquet sha256 ecc4716f46d85e7625a2e98e0bfbc677962fba83fdb52c5e0419a2fc0dfeaee4 (the manifest's), 421001 rows
+NuSEDS coho records upstream of the Quesnel's mouth: 14, in 5 populations
+   record_id       watershed_group_code waterbody                    date       source                                        
+1  obs:2a6ba27160  BLAR                 BAEZAEKO RIVER               1989-01-01 FISS Database: survey_id 160468               
+2  obs:354c34e58c  BLAR                 WEST ROAD (BLACKWATER) RIVER 1994-01-01 FISS Database: survey_id 103326               
+3  obs:d8994c8816  BLAR                 WEST ROAD (BLACKWATER) RIVER 1994-01-01 FISS Database: survey_id 98295                
+4  obs:75f445dfc9  BLAR                 WEST ROAD (BLACKWATER) RIVER 1995-01-01 FISS Database: survey_id 89251                
+5  obs:93f8af4399  BLAR                 WEST ROAD (BLACKWATER) RIVER 2004-01-01 FISS Database: survey_id 7501690              
+6  obs:59bce25800  BOWR                 BOWRON RIVER                 2004-01-01 FISS Database: survey_id 7503425              
+7  obs:ce739e353a  CHES                 (unnamed stream)             1994-01-01 FISS Database: survey_id 76470                
+8  obs:83623c516c  COTR                 SWIFT RIVER                  1986-01-01 FISS Database: survey_id 114911               
+9  obs:2739278381  COTR                 NAVER CREEK                  1994-01-01 FISS Database: survey_id 92821                
+10 obs:c1262aeb8a  COTR                 FRASER RIVER                 1996-06-01 FISS Database: survey_id 89154                
+11 obs:c51f92359e  COTR                 SWIFT RIVER                  2004-01-01 FISS Database: survey_id 7503424              
+12 obs:94e4f8d30d  COTR                 AHBAU CREEK                  2014-09-16 FDIS Database: fshclctn_id 172649             
+13 obs:026afad5a5  FRAN                 (unnamed stream)             2018-07-26 FDIS Database: fshclctn_id 245547             
+14 obs:785aff6b11  FRAN                 (unnamed stream)             2018-07-26 FDIS Database: fshclctn_id 233885             
+15 obs:c3caf22396  LCHL                 NECHAKO RIVER                1986-01-01 FISS Database: survey_id 92839                
+16 obs:2cd410cabc  LCHL                 DAHL CREEK                   1998-12-01 FISS Database: survey_id 166729               
+17 obs:75afbf2f4b  LCHL                 DAHL CREEK                   1998-12-01 FISS Database: survey_id 116023               
+18 obs:f1f6bf3008  LCHL                 NECHAKO RIVER                2004-01-01 FISS Database: survey_id 7501691              
+19 obs:bb1787d1bf  NECR                 GREER CREEK                  1978-08-25 RAB Database: survey_id 176771, date 25-AUG-78
+20 obs:8bdec2064b  NECR                 GREER CREEK                  1986-01-01 FISS Database: survey_id 76490                
+21 obs:02652e805d  NECR                 NECHAKO RIVER                2010-07-15 FDIS Database: fshclctn_id 205033             
+22 obs:50524cd88f  NECR                 MICKS CREEK                  <NA>       RAB Database: survey_id 176775, date          
+23 obs:7a98d34717  STUL                 OCOCK LAKE                   1976-06-16 BC Lakes Database: survey_id 5964             
+24 obs:d578bf599c  STUR                 STUART RIVER                 2004-01-01 FISS Database: survey_id 7503426              
+25 obs:ad92d4930e  WILL                 SLADE CREEK                  1995-03-01 FISS Database: survey_id 191230               
+26 fdis:172649_1_1 COTR                 Ahbau Creek                  2014-09-16 FDIS electrofishing extract, FDS              
+27 nuseds:1812     <NA>                 NECHAKO RIVER                2004-2004  NuSEDS knowledge/nuseds/v1                    
+28 nuseds:2487     <NA>                 SWIFT RIVER                  2000-2000  NuSEDS knowledge/nuseds/v1                    
+29 nuseds:287      <NA>                 AHBAU CREEK                  2001-2003  NuSEDS knowledge/nuseds/v1                    
+30 nuseds:44756    <NA>                 NAZKO RIVER                  1999-2004  NuSEDS knowledge/nuseds/v1                    
+31 nuseds:45985    <NA>                 WEST ROAD (BLACKWATER) RIVER 1996-2003  NuSEDS knowledge/nuseds/v1                    
+wrote 31 records to 20261127_coho_upper_fraser_records.csv 

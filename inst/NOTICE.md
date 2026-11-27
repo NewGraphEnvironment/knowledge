@@ -12,7 +12,10 @@ the **BC Freshwater Atlas** lakes, rivers and stream network in `inst/vignette-d
 streams in `inst/vignette-data/cut_points_places.rds`, and the watershed group outline, the province drawn from the
 watershed groups and the river names in `inst/vignette-data/bulk_context.rds` (all installed with the package), and the
 Atlas's streams, lakes, rivers and watershed groups drawn in `man/figures/readme-bulk.png` and the maps in
-`research/fig/`.
+`research/fig/`; and the fields of the Province's
+[Known BC Fish Observations](https://catalogue.data.gov.bc.ca/dataset/known-bc-fish-observations-and-bc-fish-distributions)
+(`WHSE_FISH.FISS_FISH_OBSRVTN_PNT_SP`, read as bcfishobs places it) in `scripts/logs/coho/*_upper_fraser_records.csv`,
+which `data-raw/coho_upper_fraser_records.R` writes (#284).
 
 ## Canadian Geographical Names (Open Government Licence - Canada)
 
@@ -30,7 +33,8 @@ Oceans Canada's [NuSEDS](https://open.canada.ca/data/en/dataset/c48669a3-045b-40
 read through crate with one column added; `data/nuseds_release.csv` records each release built, and
 `data/nuseds_README.md` is the published set's README. `data-raw/timing_nuseds.R` writes spawning windows computed from
 those records to `scripts/logs/timing/` (`*_timing_nuseds.txt`, `*_timing_nuseds_windows.csv`), and
-`data/nuseds_reach_groups.csv` names NuSEDS reaches by DFO's `gfe_id` and reach name. Contains information licensed under the
+`data/nuseds_reach_groups.csv` names NuSEDS reaches by DFO's `gfe_id` and reach name. `data-raw/coho_upper_fraser_records.R`
+writes the upper Fraser coho populations' estimates to `scripts/logs/coho/` (#284). Contains information licensed under the
 [Open Government Licence - Canada](https://open.canada.ca/en/open-government-licence-canada).
 
 ## BC Geographical Names
@@ -56,14 +60,15 @@ The Province of British Columbia supplied FDIS electrofishing extracts (exported
 and agreed on 2026-10-16 to their publication with a note of when and from where they were received:
 [`fdis/README.md`](https://fresh-bc.s3.us-west-2.amazonaws.com/fdis/README.md), whose source is
 `data/fdis_README.md`. The tables built from those visits (`data/fdis_*.csv`, the use, tuning and comparison
-tables, `data/thresholds*.csv`, and the site visits in `inst/vignette-data/cut_points.rds`) are New Graph Environment's
+tables, `data/thresholds*.csv`, the site visits in `inst/vignette-data/cut_points.rds`, and the coho visit in
+`scripts/logs/coho/*_upper_fraser_records.csv`) are New Graph Environment's
 work under this repository's licence.
 
 ## Quotes from published sources
 
 `data/literature_evidence.csv` and `data/ip_model_registry.csv` quote short passages from the papers and reports
-each row cites, and `research/*_life_history.md` the passages each statement cites, so that every value and statement
-can be checked against its source. The quoted text remains its authors'.
+each row cites, and `research/*_life_history.md` and `research/coho_upper_fraser.md` the passages each statement
+cites, so that every value and statement can be checked against its source. The quoted text remains its authors'.
 
 ## Provincial Stream Crossing Information System (PSCIS)
 

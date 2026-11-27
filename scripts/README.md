@@ -21,7 +21,7 @@ wf_farm_priority.js                          farm priority/crossing tables out o
 0161  reconcile farmed rows -> PSCIS, stamp watershed_group_code
 0162  spatialize -> rag_priorities.gpkg
 0150  query the rag store            ACTION=query STORE=fraser QUERY="..."
-0150  update a store in place     ACTION=update STORE=sturgeon COLLECTIONS=WEUFTSDC  (its whole build list; cred >= 0.7.0; rebuild before the push while cred#48 is open)
+0150  update a store in place     ACTION=update STORE=sturgeon COLLECTIONS=WEUFTSDC  (its whole build list; cred >= 0.8.1, whose update compacts the file, cred#48)
 
 0154  content-tag the corpus (any time after 0152)
 0156  dedup the store        (before pushing it)
@@ -164,6 +164,7 @@ wf_farm_priority.js                          farm priority/crossing tables out o
       (--collection sturgeon --parent 9U54XAND: species/sturgeon, from data/sturgeon_members.csv and _additions.csv)
       (--collection westslope_cutthroat --parent 9U54XAND: species/westslope_cutthroat, from data/westslope_cutthroat_*.csv)
       (--collection bull_trout --parent 9U54XAND: species/bull_trout, from data/bull_trout_*.csv, #194)
+      (--collection coho --parent 9U54XAND: species/coho, from data/coho_*.csv, #284)
       (--collection statistics --parent top: the top-level statistics collection, from data/statistics_*.csv, #95)
       (--collection detection --parent LP4R4VYR: statistics/detection, from data/detection_*.csv, #216)
       (--collection passage_limits --parent ESNB4BQB: Fisheries/Fish Passage/passage_limits, from
@@ -173,13 +174,14 @@ wf_farm_priority.js                          farm priority/crossing tables out o
        removing an override leaves the held value, #216)
 0275  carry out data/zotero_attachment_verdicts.csv on the group's attachments   --dry-run first, then live
       (merge an item's report parts into one PDF, keep one copy, split a separate document to its own item, #126, #151)
-0150  ACTION=build STORE=habitat_modelling COLLECTIONS="U9ZCZ6RN,RXNFPBPH,VHWEK6RE,GELFSUTU,9U54XAND,SW2RXUJC,DQP29KU7,X29BX4U8,W4425VK5,545K8HP4"
-      (habitat_modelling, chinook, bull_trout, grayling, species, temperature, wedzin_kwa_chinook, hydrology and the
-      two salmon collections, by key)                                                    then ACTION=push
+0150  ACTION=build STORE=habitat_modelling COLLECTIONS="U9ZCZ6RN,RXNFPBPH,VHWEK6RE,GELFSUTU,9U54XAND,SW2RXUJC,DQP29KU7,X29BX4U8,W4425VK5,545K8HP4,ZPUIT73I"
+      (habitat_modelling, chinook, bull_trout, grayling, species, temperature, wedzin_kwa_chinook, hydrology, the
+      two salmon collections and coho (#284), by key)                                     then ACTION=push
 0150  ACTION=build STORE=bull_trout_grayling COLLECTIONS="VHWEK6RE,GELFSUTU"               then ACTION=push
 0150  ACTION=build STORE=bull_trout COLLECTIONS=VHWEK6RE                                   then ACTION=push
 0150  ACTION=build STORE=sturgeon COLLECTIONS=WEUFTSDC                                     then ACTION=push
 0150  ACTION=build STORE=westslope_cutthroat COLLECTIONS=TIDR3PNN                          then ACTION=push
+0150  ACTION=build STORE=coho COLLECTIONS=ZPUIT73I                                         then ACTION=push
 0150  ACTION=build STORE=temperature COLLECTIONS=SW2RXUJC                                  then ACTION=push
 0150  ACTION=build STORE=flow COLLECTIONS=FWTJDD8Z                                         then ACTION=push
 0150  ACTION=build STORE=fish_passage COLLECTIONS=HJZKI75D                                then ACTION=push
@@ -189,8 +191,7 @@ wf_farm_priority.js                          farm priority/crossing tables out o
       the detection, removal, eDNA, camera and diversity methods and the works their documentation cites (simulation
       studies, unmarked, circular densities, separation in logistic regression), #95, #216, #274; Wood's GAM book,
       the occupancy and hierarchical-modelling books and Seber 1982 join when a PDF is in hand)
-      (after a library change, ACTION=update with the same COLLECTIONS brings a store up to date instead; while
-       NewGraphEnvironment/cred#48 is open, rebuild it before the push, as the ACTION=update bullet says)
+      (after a library change, ACTION=update with the same COLLECTIONS brings a store up to date instead)
       (a rebuild over an existing local store needs OVERWRITE=TRUE; ACTION=push needs CONFIRM=TRUE to upload)
 0280  verify data/literature_evidence.csv and data/ip_model_registry.csv against their PDFs, and the
       model_id link between them (gate; read with knw_literature_read() / knw_ip_read()), and the quotes in
@@ -283,16 +284,13 @@ A report is reachable from more than one place; using only one axis misses repor
   collections left out are dropped. It needs the store local (`ACTION=query VERIFY=TRUE` pulls it) and the store's
   embedder answering, refuses a store holding any document from outside Zotero storage (`storage/<key>/`), which never
   resolves and would be dropped: all of `fraser`, `peace` and `pine`), and prints the document counts before and after and every document it dropped. The
-  file keeps the space the update freed (NewGraphEnvironment/cred#48): #194's updates left 32 to 76 % of their blocks
-  free (`pragma database_size`). While that is open, rebuild an updated store with `ACTION=build OVERWRITE=TRUE` and
-  the same `COLLECTIONS` before pushing it. The rule reaches only stores an update accepts, so never `fraser`, `peace`
-  or `pine`. A rebuild re-reads every PDF, so it also drops any the current reader finds no text in, which an update
-  would have kept (#194's dropped 1 and 10 image-only scans, #217). cred names those only in a warning R cuts at
-  1,000 characters, so `0150` prints a rebuild's whole dropped list, as it does an update's: read it before the push. The rule is repeated in `CLAUDE.md`,
-  in `0150`'s usage and its message after an update, and carried or pointed to from five other passages here: when cred#48 is
-  fixed, `git grep -n cred#48` finds every copy.
-- **Push after every local write** (`0152` ingest, `0156` dedup, a rebuild, or an update and, while cred#48 is open,
-  its rebuild). The next verified
+  update writes the store into a fresh file, the size a fresh build would be, from cred 0.8.1
+  (NewGraphEnvironment/cred#48; before it, #194's updates left 32 to 76 % of their blocks free and an updated store was
+  rebuilt before its push), and `0150` refuses an update on an older cred. A rebuild re-reads every PDF, so it drops
+  any the current reader finds no text in, which an update keeps (#194's dropped 1 and 10 image-only scans, #217).
+  cred names those only in a warning R cuts at 1,000 characters, so `0150` prints a rebuild's whole dropped list, as
+  it does an update's: read it before the push.
+- **Push after every local write** (`0152` ingest, `0156` dedup, a rebuild or an update). The next verified
   connect replaces a local file whose md5 no longer matches the manifest with the bucket copy —
   an unpushed ingest is simply gone
 - `COLLECTIONS` takes names or 8-character Zotero collection keys and resolves them **inside the NGE group
@@ -554,8 +552,12 @@ The cited basis for CH and BT habitat thresholds (#19). Not per watershed group.
   federal management plan), BC's 2023 management plan, Alberta's status report, the US recovery plan and critical
   habitat rule, the Williston, Peace and Columbia series and the reviews.
   Unlike sturgeon and cutthroat, `VHWEK6RE` is also in `habitat_modelling`'s list and in `bull_trout_grayling`'s, so a
-  change to the collection is followed by `ACTION=update` on all three, and, while NewGraphEnvironment/cred#48 is
-  open, their rebuild before the push (the `ACTION=update` bullet above).
+  change to the collection is followed by `ACTION=update` on all three.
+  The `coho` store is built from `species/coho` alone (`COLLECTIONS=ZPUIT73I`, #284): the core coho freshwater habitat
+  and life-history literature (Sandercock 1991, the Pacific Northwest rearing and overwinter papers), DFO's Interior
+  Fraser coho assessments from 2000 to 2021, COSEWIC 2002 and 2016, and the reports behind upper Fraser coho records.
+  `ZPUIT73I` is also in `habitat_modelling`'s list, so a change to the collection is followed by `ACTION=update` on
+  both.
   The `statistics` store is built from the whole `statistics` tree (#216): the top-level collection (`LP4R4VYR`,
   `--parent top`, #95), the texts the tuning method is read against (#185), and its subcollections `detection`
   (`73PNRGJF`, the methods literature for detection, occupancy, removal, eDNA, camera surveys and diversity, from
@@ -569,8 +571,7 @@ The cited basis for CH and BT habitat thresholds (#19). Not per watershed group.
   an attachment's type, an item's fields or its file; `merge-items` is the duplicate recipe under "Zotero access is
   local, except for filing" in CLAUDE.md. A row is done when its end state holds, so a re-run after a crash finishes
   the row. It prints the attachments it added and trashed: a cred-built store that holds one is brought up to date
-  with `0150 ACTION=update` (then rebuilt before its push while cred#48 is open, the `ACTION=update` bullet); a
-  harvest store waits for its next `0152` build.
+  with `0150 ACTION=update`; a harvest store waits for its next `0152` build.
 - `data/literature_evidence.csv` has one row per value a source gives: species, stage, form, variable, the
   model parameter it bears on, bound, value, unit, `metric`, kind, region, key, page, verbatim quote,
   `quote_source`, scale, cited source and `model_id`. `kind = none` records a search that found nothing.
